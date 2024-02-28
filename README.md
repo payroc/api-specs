@@ -1,6 +1,6 @@
 # Payroc API Specs
 
-The repository is home to releases of our Open API Specification and Postman Collection files.
+This repository is home to releases of our Open API Specification and Postman Collection files.
 
 Please see our:
 
