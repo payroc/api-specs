@@ -1,15 +1,8 @@
-# Welcome to your new Payroc repo!
-This is a *sample README.md* 
+# Payroc API Specs
 
-:toolbox: Your first act should be to replace this file with a README.md fitting for your project use case
+This repository is home to releases of our Open API Specification and Postman Collection files.
 
+Please see our:
 
-## Branching Strategy
-:octocat: This repo is subject to the following Branching strategy to enable a standard release process:
-
-https://payroc.atlassian.net/wiki/spaces/TEC/pages/2269512743/Standards+-+Branching+Strategy
-
-## Getting Started and DevOps standards
-:placard:	For guidance and templates refer to the DevOps example repo:
-
-https://github.com/payroc/devops-api-standard
+- [Releases](https://github.com/payroc/api-specs/releases)
+- [API Documentation](https://docs.payroc.com/)
