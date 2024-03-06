@@ -1,19 +1,33 @@
 # Obtain Postman API Key, if cannot be found request the user provides one
 if (-not [string]::IsNullOrEmpty($env:POSTMAN_API_KEY)) {
-    $apiKey = $env:POSTMAN_API_KEY;
+    $postmanApiKey = $env:POSTMAN_API_KEY;
 } 
 else {
-    $secureapiKey = Read-Host "Please enter your Postman API Key" -AsSecureString;
+    $secureapiKey = Read-Host "Please enter your Postman API Key (the one from your Postman account)" -AsSecureString;
     $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureapiKey);
-    $apiKey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR);
+    $postmanApiKey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR);
 }
+
+# Obtain Payroc API Key, if cannot be found request the user provides one
+if (-not [string]::IsNullOrEmpty($env:PAYROC_API_KEY)) {
+    $payrocApiKey = $env:PAYROC_API_KEY;
+} 
+else {
+    $secureapiKey = Read-Host "Please enter your Payroc API Key (the one provided to you by Payroc)" -AsSecureString;
+    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureapiKey);
+    $payrocApiKey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR);
+}
+
+# Write Payroc Key into Environment file
+$envPath = ".\environments\payroc-uat.postman_environment.json";
+(Get-Content -Path $envPath -Raw) -replace '{{PayrocApiKey}}', $payrocApiKey | Out-File -FilePath $envPath
 
 # Set the Postman API URL
 $postmanApiUrl = "https://api.postman.com";
 
 # Set the headers for authentication
 $headers = @{
-    "X-Api-Key" = $apiKey
+    "X-Api-Key" = $postmanApiKey
     "Content-Type" = "application/json"
 };
 
