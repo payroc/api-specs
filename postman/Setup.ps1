@@ -3,7 +3,7 @@ if (-not [string]::IsNullOrEmpty($env:POSTMAN_API_KEY)) {
     $postmanApiKey = $env:POSTMAN_API_KEY;
 } 
 else {
-    $secureapiKey = Read-Host "Please enter your Postman API Key (the one from your Postman account)" -AsSecureString;
+    $secureapiKey = Read-Host "Please enter your Postman API Key (the one from your Postman account settings, e.g. PMAK-xxxxxxxxxxxxxxxxxxxxxxxx-XXXX)" -AsSecureString;
     $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureapiKey);
     $postmanApiKey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR);
 }
