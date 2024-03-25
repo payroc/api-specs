@@ -1,8 +1,6 @@
-# Payroc API Specs
+# Payroc API Open API Specification
 
-This repository is home to releases of our Open API Specification and Postman Collection files.
+This repository is home to the Open API Specification for the Payroc API.
 
-Please see our:
-
-- [Releases](https://github.com/payroc/api-specs/releases)
 - [API Documentation](https://docs.payroc.com/)
+- [Contact our Integration Team](https://payroc.com/contacts/developers-isvs)
