@@ -2204,7 +2204,7 @@ paths:
                       - id: '5'
                         createdDate: '2020-09-22T09:00:00'
                         lastUpdatedDate: '2020-09-22T09:00:00'
-                        status: active
+                        status: pendingReview
                         key: base
                         country: US
                         version: '4.0'
@@ -2327,7 +2327,7 @@ paths:
                     id: '5'
                     createdDate: '2020-09-22T09:00:00'
                     lastUpdatedDate: '2020-09-22T09:00:00'
-                    status: active
+                    status: pendingReview
                     key: string
                     metadata:
                       internalReference: '2345'
