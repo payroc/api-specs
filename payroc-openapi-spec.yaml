@@ -1583,7 +1583,7 @@ paths:
                   value: &ref_34
                     ownerId: 1543
                     firstName: David
-                    middleName: scott
+                    middleName: Scott
                     lastName: Simpson
                     dateOfBirth: '1964-03-22'
                     address:
