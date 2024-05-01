@@ -2942,6 +2942,7 @@ paths:
                                                           minimum: 0
                                                     cardChargePercentage:
                                                       description: Percentage of the total transaction amount that the processor charges the cardholder.
+                                                      type: number
                                                       readOnly: true
                                                       default: 3
                                                       allOf:
@@ -2954,6 +2955,7 @@ paths:
                                                           example: 1.25
                                                     merchantChargePercentage:
                                                       description: Percentage of the total transaction amount that the processor charges the merchant.
+                                                      type: number
                                                       readOnly: true
                                                       default: 0.9
                                                       allOf:
@@ -3043,6 +3045,7 @@ paths:
                                                             - tipAdjust
                                                         cardChargePercentage:
                                                           description: Percentage of the total transaction amount that the processor charges the cardholder.
+                                                          type: number
                                                           readOnly: true
                                                           default: 3
                                                           allOf:
@@ -3055,6 +3058,7 @@ paths:
                                                               example: 1.25
                                                         merchantChargePercentage:
                                                           description: Percentage of the total transaction amount that the processor charges the merchant.
+                                                          type: number
                                                           readOnly: true
                                                           default: 0.9
                                                           allOf:
