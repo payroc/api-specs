@@ -80,7 +80,7 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_249
+              required: &ref_251
                 - address
                 - contactInformation
                 - recipientType
@@ -90,7 +90,7 @@ paths:
                 - doingBuinessAs
               type: object
               title: create funding recipient
-              properties: &ref_250
+              properties: &ref_252
                 recipientId:
                   type: integer
                   readOnly: true
@@ -195,12 +195,12 @@ paths:
                   description: Array of contactMethod objects that you can use to add contact methods for the funding recipient. You must provide at least an email address.
                   items:
                     oneOf: &ref_2
-                      - required: &ref_235
+                      - required: &ref_237
                           - type
                           - value
                         type: object
                         title: Email contact method
-                        properties: &ref_236
+                        properties: &ref_238
                           type:
                             type: string
                             description: Type of contact method.
@@ -211,12 +211,12 @@ paths:
                             description: Email address.
                             maxLength: 50
                             example: joe@example.com
-                      - required: &ref_237
+                      - required: &ref_239
                           - type
                           - value
                         type: object
                         title: Phone number contact method
-                        properties: &ref_238
+                        properties: &ref_240
                           type:
                             type: string
                             description: Type of contact method.
@@ -227,12 +227,12 @@ paths:
                             description: Phone Number.
                             maxLength: 15
                             example: 2025550138
-                      - required: &ref_239
+                      - required: &ref_241
                           - type
                           - value
                         type: object
                         title: Mobile number contact method
-                        properties: &ref_240
+                        properties: &ref_242
                           type:
                             type: string
                             description: Type of contact method.
@@ -243,12 +243,12 @@ paths:
                             description: Mobile Number.
                             maxLength: 15
                             example: 9876543210
-                      - required: &ref_241
+                      - required: &ref_243
                           - type
                           - value
                         type: object
                         title: Fax number contact method
-                        properties: &ref_242
+                        properties: &ref_244
                           type:
                             type: string
                             description: Type of contact method.
@@ -357,11 +357,11 @@ paths:
                       relationship:
                         description: Object that contains information about the owner's relationship to the business.
                         allOf:
-                          - required: &ref_244
+                          - required: &ref_246
                               - isControlProng
                             type: object
                             title: Owner relationship
-                            properties: &ref_245
+                            properties: &ref_247
                               equityPercentage:
                                 type: number
                                 description: Percentage of the business that the owner holds.
@@ -449,16 +449,16 @@ paths:
                         description: Array of paymentMethod objects.
                         uniqueItems: true
                         type: array
-                        xml: &ref_247
+                        xml: &ref_249
                           wrapped: true
-                        items: &ref_248
+                        items: &ref_250
                           title: payment method
                           xml:
                             name: paymentMethod
                           oneOf:
                             - type: object
                               title: ACH payment method
-                              properties: &ref_246
+                              properties: &ref_248
                                 type:
                                   type: string
                                   description: Payment method that we use to send funds to the account.
@@ -776,7 +776,7 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: &ref_223
+                properties: &ref_225
                   type:
                     type: string
                     description: URI reference identifying the problem type
@@ -793,7 +793,7 @@ paths:
                     type: string
                     description: Explanation of the problem
                     example: You do not have the required permissions to perform this action
-                required: &ref_224
+                required: &ref_226
                   - type
                   - title
                   - status
@@ -802,7 +802,7 @@ paths:
                 notAuthorized:
                   summary: Not Authorized
                   description: Your identity could not be verified
-                  value: &ref_444
+                  value: &ref_446
                     type: https://docs.payroc.com/api/errors#not-authorized
                     title: Not Authorized
                     status: 401
@@ -813,7 +813,7 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: &ref_225
+                properties: &ref_227
                   type:
                     type: string
                     description: URI reference identifying the problem type
@@ -838,7 +838,7 @@ paths:
                     type: string
                     description: Resource the action was attempted on
                     example: webhook
-                required: &ref_226
+                required: &ref_228
                   - type
                   - title
                   - status
@@ -847,7 +847,7 @@ paths:
                 forbidden:
                   summary: Forbidden
                   description: You do not have the required permission
-                  value: &ref_445
+                  value: &ref_447
                     type: https://docs.payroc.com/api/errors#forbidden
                     title: Forbidden
                     status: 403
@@ -860,7 +860,7 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: &ref_229
+                properties: &ref_231
                   type:
                     type: string
                     description: URI reference identifying the problem type
@@ -877,7 +877,7 @@ paths:
                     type: string
                     description: Explanation of the problem
                     example: Resource does not support the representation requested.
-                required: &ref_230
+                required: &ref_232
                   - type
                   - title
                   - status
@@ -886,7 +886,7 @@ paths:
                 notAcceptable:
                   summary: Not acceptable
                   description: Requested representation not supported
-                  value: &ref_447
+                  value: &ref_449
                     type: https://docs.payroc.com/api/errors#not-acceptable
                     title: Not acceptable
                     status: 406
@@ -938,7 +938,7 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: &ref_233
+                properties: &ref_235
                   type:
                     type: string
                     description: URI reference identifying the problem type
@@ -964,7 +964,7 @@ paths:
                           type: string
                           description: Error message
                           example: Service offline
-                required: &ref_234
+                required: &ref_236
                   - type
                   - title
                   - status
@@ -973,7 +973,7 @@ paths:
                 apiError:
                   summary: Api error
                   description: Unable to process your request.
-                  value: &ref_446
+                  value: &ref_448
                     type: https://docs.payroc.com/api/errors#api-error
                     title: Api error
                     status: 500
@@ -1017,7 +1017,7 @@ paths:
               schema:
                 type: object
                 title: paginated funding recipients
-                allOf: &ref_243
+                allOf: &ref_245
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: &ref_32
@@ -1063,7 +1063,7 @@ paths:
                 paginatedFundingRecipients:
                   summary: Paginated funding recipients.
                   description: Paginated list of funding recipients.
-                  value: &ref_443
+                  value: &ref_445
                     limit: 10
                     count: 1
                     hasMore: false
@@ -1170,7 +1170,7 @@ paths:
                 fundingRecipient:
                   summary: Funding recipient.
                   description: Funding recipients.
-                  value: &ref_448
+                  value: &ref_450
                     recipientId: 12345
                     status: approved
                     createdDate: '2020-09-08T12:00:00.000Z'
@@ -1223,7 +1223,7 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: &ref_227
+                properties: &ref_229
                   type:
                     type: string
                     description: URI reference identifying the problem type
@@ -1244,7 +1244,7 @@ paths:
                     type: string
                     description: Resource that was not found
                     example: Account
-                required: &ref_228
+                required: &ref_230
                   - type
                   - title
                   - status
@@ -1253,7 +1253,7 @@ paths:
                 notFound:
                   summary: Not found
                   description: Resource could not be found
-                  value: &ref_449
+                  value: &ref_451
                     type: https://docs.payroc.com/api/errors#not-found
                     title: Not found
                     status: 404
@@ -1382,7 +1382,7 @@ paths:
                 fundingAccounts:
                   summary: List of funding accounts
                   description: List of funding accounts.
-                  value: &ref_450
+                  value: &ref_452
                     - fundingAccountId: 123
                       createdDate: '2020-09-08T12:00:00.000Z'
                       lastModifiedDate: '2020-09-08T12:00:00.000Z'
@@ -1475,7 +1475,7 @@ paths:
                 fundingAccount:
                   summary: Funding account
                   description: Funding accounts.
-                  value: &ref_451
+                  value: &ref_453
                     fundingAccountId: 123
                     createdDate: '2020-09-08T12:00:00.000Z'
                     lastModifiedDate: '2020-09-08T12:00:00.000Z'
@@ -1744,7 +1744,7 @@ paths:
               schema:
                 type: object
                 title: paginated funding accounts
-                allOf: &ref_251
+                allOf: &ref_253
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -1763,7 +1763,7 @@ paths:
               examples:
                 fundingAccountExample:
                   summary: Paginated funding accounts
-                  value: &ref_452
+                  value: &ref_454
                     limit: 2
                     count: 2
                     hasMore: true
@@ -1814,7 +1814,7 @@ paths:
                 noResults:
                   summary: No results found
                   description: No results found
-                  value: &ref_453
+                  value: &ref_455
                     limit: 10
                     count: 0
                     hasMore: false
@@ -1864,7 +1864,7 @@ paths:
               examples:
                 fundingAccountExample:
                   summary: Masked funding account example.
-                  value: &ref_454
+                  value: &ref_456
                     fundingAccountId: 123
                     createdDate: '2020-09-08T12:00:00.000Z'
                     lastModifiedDate: '2020-09-08T12:00:00.000Z'
@@ -2154,7 +2154,7 @@ paths:
                 type: object
                 title: paginated pricing intents
                 description: Object that contains information about your pricing intents.
-                allOf: &ref_280
+                allOf: &ref_282
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -2171,11 +2171,11 @@ paths:
                             - type: object
                               title: pricing intent version 4.0
                               description: Object that contains information about a pricing intent for Merchant Processing Agreement (MPA) 4.0.
-                              allOf: &ref_279
+                              allOf: &ref_281
                                 - type: object
                                   title: base pricing intent
                                   description: Object that contains information about the base fees.
-                                  properties: &ref_252
+                                  properties: &ref_254
                                     id:
                                       type: string
                                       description: Unique identifier of the pricing intent.
@@ -2210,7 +2210,7 @@ paths:
                                       description: '[Metadata](/api/metadata) object that contains your custom data.'
                                       example:
                                         internalReference: '2345'
-                                  required: &ref_253
+                                  required: &ref_255
                                     - key
                                 - type: object
                                   title: US pricing agreement version 4.0
@@ -2235,7 +2235,7 @@ paths:
                                       type: object
                                       title: US base fees
                                       description: Object that contains information about U.S. base fees.
-                                      properties: &ref_254
+                                      properties: &ref_256
                                         addressVerification:
                                           description: Fee for each address verification request. The value is in the currency's lowest denomination, for example, cents.
                                           type: integer
@@ -2353,7 +2353,7 @@ paths:
                                           minimum: 0
                                           example: 57500
                                           default: 57500
-                                      required: &ref_255
+                                      required: &ref_257
                                         - addressVerification
                                         - annualFee
                                         - regulatoryAssistanceProgram
@@ -2365,7 +2365,7 @@ paths:
                                       type: object
                                       title: US processor fees
                                       description: Object that contains information about U.S. processor fees.
-                                      properties: &ref_276
+                                      properties: &ref_278
                                         card:
                                           type: object
                                           description: Object that contains information about card fees.
@@ -2373,7 +2373,7 @@ paths:
                                             - type: object
                                               title: Interchange Plus Plan
                                               description: Object that contains information about Interchange Plus.
-                                              properties: &ref_256
+                                              properties: &ref_258
                                                 planType:
                                                   type: string
                                                   description: Type of processing plan.
@@ -2516,13 +2516,13 @@ paths:
                                                               minimum: 0
                                                   required:
                                                     - mastercardVisaDiscover
-                                              required: &ref_257
+                                              required: &ref_259
                                                 - planType
                                                 - fees
                                             - type: object
                                               title: Interchange Plus with three tiers
                                               description: Object that contains information about Interchange Plus with three tiers.
-                                              properties: &ref_258
+                                              properties: &ref_260
                                                 planType:
                                                   type: string
                                                   description: Type of processing plan.
@@ -2602,13 +2602,13 @@ paths:
                                                       properties: *ref_46
                                                   required:
                                                     - mastercardVisaDiscover
-                                              required: &ref_259
+                                              required: &ref_261
                                                 - planType
                                                 - fees
                                             - type: object
                                               title: Tiered pricing with three tiers
                                               description: Object that contains information about tiered pricing with three tiers.
-                                              properties: &ref_260
+                                              properties: &ref_262
                                                 planType:
                                                   type: string
                                                   description: Type of processing plan.
@@ -2666,13 +2666,13 @@ paths:
                                                       properties: *ref_46
                                                   required:
                                                     - mastercardVisaDiscover
-                                              required: &ref_261
+                                              required: &ref_263
                                                 - planType
                                                 - fees
                                             - type: object
                                               title: Tiered pricing with four tiers
                                               description: Object that contains information about tiered pricing with four tiers.
-                                              properties: &ref_262
+                                              properties: &ref_264
                                                 planType:
                                                   type: string
                                                   description: Type of processing plan.
@@ -2741,13 +2741,13 @@ paths:
                                                       properties: *ref_46
                                                   required:
                                                     - mastercardVisaDiscover
-                                              required: &ref_263
+                                              required: &ref_265
                                                 - planType
                                                 - fees
                                             - type: object
                                               title: Tiered pricing with six tiers
                                               description: Object that contains information about tiered pricing with six tiers.
-                                              properties: &ref_265
+                                              properties: &ref_267
                                                 planType:
                                                   type: string
                                                   description: Type of processing plan.
@@ -2759,7 +2759,7 @@ paths:
                                                   properties:
                                                     mastercardVisaDiscover:
                                                       type: object
-                                                      allOf: &ref_264
+                                                      allOf: &ref_266
                                                         - type: object
                                                           allOf: *ref_47
                                                         - type: object
@@ -2821,13 +2821,13 @@ paths:
                                                       properties: *ref_46
                                                   required:
                                                     - mastercardVisaDiscover
-                                              required: &ref_266
+                                              required: &ref_268
                                                 - planType
                                                 - fees
                                             - type: object
                                               title: Flat Rate Plan
                                               description: Object that contains information about Flat Rate.
-                                              properties: &ref_267
+                                              properties: &ref_269
                                                 planType:
                                                   type: string
                                                   description: Type of processing plan.
@@ -2873,13 +2873,13 @@ paths:
                                                       properties: *ref_46
                                                   required:
                                                     - standardCards
-                                              required: &ref_268
+                                              required: &ref_270
                                                 - planType
                                                 - fees
                                             - type: object
                                               title: Consumer Choice Plan
                                               description: Object that contains information about ConsumerChoice.
-                                              properties: &ref_269
+                                              properties: &ref_271
                                                 planType:
                                                   type: string
                                                   description: Type of processing plan.
@@ -2919,13 +2919,13 @@ paths:
                                                   required:
                                                     - monthlySubscription
                                                     - volume
-                                              required: &ref_270
+                                              required: &ref_272
                                                 - planType
                                                 - fees
                                             - type: object
                                               title: RewardPay Plan
                                               description: Object that contains information about RewardPay.
-                                              properties: &ref_271
+                                              properties: &ref_273
                                                 planType:
                                                   description: Type of processing plan.
                                                   type: string
@@ -2985,13 +2985,13 @@ paths:
                                                   required:
                                                     - monthlySubscription
                                                     - tips
-                                              required: &ref_272
+                                              required: &ref_274
                                                 - planType
                                                 - fees
                                             - type: object
                                               title: RewardPayChoice Plan
                                               description: Object that contains information about RewardPayChoice.
-                                              properties: &ref_273
+                                              properties: &ref_275
                                                 planType:
                                                   description: Type of processing plan.
                                                   type: string
@@ -3082,12 +3082,12 @@ paths:
                                                     - monthlySubscription
                                                     - debit
                                                     - credit
-                                              required: &ref_274
+                                              required: &ref_276
                                                 - planType
                                                 - fees
                                         ach:
                                           type: object
-                                          properties: &ref_275
+                                          properties: &ref_277
                                             fees:
                                               type: object
                                               properties:
@@ -3160,7 +3160,7 @@ paths:
                                       type: object
                                       description: Object that contains information about the gateway fees.
                                       title: gateway fees
-                                      properties: &ref_277
+                                      properties: &ref_279
                                         fees:
                                           type: object
                                           description: Object that contains information about the gateway fees.
@@ -3196,13 +3196,13 @@ paths:
                                             - perTransaction
                                             - perDeviceMonthly
                                             - additionalServiceMonthly
-                                      required: &ref_278
+                                      required: &ref_280
                                         - fees
               examples:
                 paginatedResults:
                   summary: Paginated pricing intent
                   description: Example of a paginated pricing intent.
-                  value: &ref_455
+                  value: &ref_457
                     limit: 1
                     count: 1
                     hasMore: true
@@ -3577,10 +3577,10 @@ paths:
                   value: dog
               items: &ref_84
                 description: JSONPatch document, specified in RFC 6902.
-                required: &ref_281
+                required: &ref_283
                   - op
                   - path
-                properties: &ref_282
+                properties: &ref_284
                   op:
                     type: string
                     description: Action that you want to perform on the resource.
@@ -3828,7 +3828,7 @@ paths:
               examples:
                 newInstructions:
                   summary: New instruction accepted.
-                  value: &ref_457
+                  value: &ref_459
                     instructionId: 123
                     createdDate: '2021-09-05T13:15:00.000Z'
                     lastModifiedDate: null
@@ -3993,7 +3993,7 @@ paths:
               examples:
                 listSplitsExample:
                   summary: Paginated instructions list
-                  value: &ref_456
+                  value: &ref_458
                     limit: 2
                     count: 2
                     hasMore: true
@@ -4160,7 +4160,7 @@ paths:
         in: path
         required: true
         description: Unique identifier of the funding instruction.
-        schema: &ref_217
+        schema: &ref_219
           type: integer
           example: '124567'
     get:
@@ -4364,7 +4364,7 @@ paths:
                           type: object
                           description: Object that contains information about the total funds available to the merchant.
                           title: merchant balance
-                          properties: &ref_283
+                          properties: &ref_285
                             merchantId:
                               type: string
                               description: Unique Identifier of the merchant.
@@ -4391,7 +4391,7 @@ paths:
                 listSplitsExample:
                   summary: Paginated list of merchant balances
                   description: Paginated list of merchant balances.
-                  value: &ref_458
+                  value: &ref_460
                     limit: 2
                     count: 2
                     hasMore: true
@@ -4501,7 +4501,7 @@ paths:
                           type: object
                           description: Array of activityRecord objects.
                           title: activity record
-                          properties: &ref_284
+                          properties: &ref_286
                             id:
                               type: integer
                               description: Unique identifier of the activity record.
@@ -4536,7 +4536,7 @@ paths:
                               type: string
                               description: Currency of all values.
                               example: USD
-                          required: &ref_285
+                          required: &ref_287
                             - id
                             - date
                             - recipient
@@ -4551,7 +4551,7 @@ paths:
                 paginatedList:
                   summary: Paginated activity records
                   description: Valid payfac account with activity for date range.
-                  value: &ref_459
+                  value: &ref_461
                     limit: 10
                     count: 10
                     hasMore: true
@@ -4808,7 +4808,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated batches
-                  value: &ref_460
+                  value: &ref_462
                     limit: 2
                     count: 2
                     hasMore: true
@@ -4940,7 +4940,7 @@ paths:
           in: path
           required: true
           style: simple
-          schema: &ref_218
+          schema: &ref_220
             type: integer
             example: 12345
       responses:
@@ -5024,7 +5024,7 @@ paths:
           in: query
           required: false
           description: Type of transaction.
-          schema: &ref_219
+          schema: &ref_221
             type: string
             enum:
               - Capture
@@ -5140,7 +5140,7 @@ paths:
                               type: object
                               title: settlement summary
                               description: Object that contains information about the settlement.
-                              properties: &ref_286
+                              properties: &ref_288
                                 settledBy:
                                   type: string
                                   description: Processor that settled the transaction.
@@ -5217,7 +5217,7 @@ paths:
                               type: object
                               title: authorization summary
                               description: Object that contains information about the authorization.
-                              properties: &ref_287
+                              properties: &ref_289
                                 authorizationId:
                                   type: integer
                                   description: Unique identifier of the authorization.
@@ -5245,7 +5245,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated transactions
-                  value: &ref_461
+                  value: &ref_463
                     limit: 2
                     count: 1
                     hasMore: false
@@ -5346,7 +5346,7 @@ paths:
           in: path
           required: true
           style: simple
-          schema: &ref_220
+          schema: &ref_222
             type: integer
             example: 12345
       responses:
@@ -5371,7 +5371,7 @@ paths:
                 transactionIdError:
                   summary: Bad Request
                   description: One or more validation errors occurred
-                  value: &ref_462
+                  value: &ref_464
                     type: https://docs.payroc.com/api/errors#bad-request
                     title: Bad request
                     status: 400
@@ -5637,7 +5637,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated authorizations
-                  value: &ref_463
+                  value: &ref_465
                     limit: 2
                     count: 1
                     hasMore: false
@@ -5729,7 +5729,7 @@ paths:
           in: path
           required: true
           style: simple
-          schema: &ref_221
+          schema: &ref_223
             type: integer
             example: 12345
       responses:
@@ -5814,7 +5814,7 @@ paths:
                           type: object
                           title: dispute
                           description: Object that contains information about the dispute.
-                          properties: &ref_288
+                          properties: &ref_290
                             disputeId:
                               type: integer
                               description: Unique identifier of the dispute.
@@ -5930,7 +5930,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated disputes
-                  value: &ref_464
+                  value: &ref_466
                     limit: 2
                     count: 1
                     hasMore: false
@@ -6028,7 +6028,7 @@ paths:
           in: path
           required: true
           style: simple
-          schema: &ref_222
+          schema: &ref_224
             type: integer
             example: 12345
       responses:
@@ -6307,7 +6307,7 @@ paths:
                 setupOrder:
                   type: object
                   description: Object that contains information about the initial cost that a customer pays to set up the subscription.
-                  allOf: &ref_289
+                  allOf: &ref_291
                     - type: object
                       properties: &ref_79
                         amount:
@@ -6452,7 +6452,7 @@ paths:
               paymentPlanRequest:
                 summary: Payment Plan
                 description: Payment Plan
-                value: &ref_466
+                value: &ref_468
                   paymentPlanId: 1001_yearly_plan
                   name: 1001 yearly payment plan
                   description: 1001 yearly payment plan
@@ -6567,7 +6567,7 @@ paths:
                 resourceExists:
                   summary: Resource already exists
                   description: Resource already exists
-                  value: &ref_467
+                  value: &ref_469
                     type: https://docs.payroc.com/api/errors#resource-already-exists
                     title: Resource already exists
                     status: 409
@@ -6579,7 +6579,7 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: &ref_231
+                properties: &ref_233
                   type:
                     type: string
                     description: URI reference identifying the problem type
@@ -6596,7 +6596,7 @@ paths:
                     type: string
                     description: Explanation of the problem
                     example: You submitted a payload in an unsupported format.
-                required: &ref_232
+                required: &ref_234
                   - type
                   - title
                   - status
@@ -6605,7 +6605,7 @@ paths:
                 unsupportedMediaType:
                   summary: Unsupported media type
                   description: The payload is in an unsupported format.
-                  value: &ref_468
+                  value: &ref_470
                     type: https://docs.payroc.com/api/errors#unsupported-media-type
                     title: Unsupported media type
                     status: 415
@@ -6648,13 +6648,13 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_290
+                required: &ref_292
                   - count
                   - data
                   - hasMore
                   - limit
                 type: object
-                allOf: &ref_291
+                allOf: &ref_293
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -6671,7 +6671,7 @@ paths:
                 paginatedResults:
                   summary: Payment Plan
                   description: Payment Plan
-                  value: &ref_465
+                  value: &ref_467
                     limit: 2
                     count: 2
                     hasMore: true
@@ -6924,13 +6924,13 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_296
+              required: &ref_298
                 - paymentMethod
                 - paymentPlanId
                 - startDate
                 - subscriptionId
               type: object
-              properties: &ref_297
+              properties: &ref_299
                 subscriptionId:
                   maxLength: 48
                   minLength: 1
@@ -7052,7 +7052,7 @@ paths:
               createSubscription:
                 summary: Subscription
                 description: Subscription
-                value: &ref_470
+                value: &ref_472
                   subscriptionId: 11001_subscription_cinema
                   paymentPlanId: 1001_payment_plan_yearly
                   paymentMethod:
@@ -7112,11 +7112,11 @@ paths:
                     type: string
                     description: Unique identifier of the terminal that the subscription is linked to.
                   paymentPlan:
-                    required: &ref_292
+                    required: &ref_294
                       - name
                       - paymentPlanId
                     type: object
-                    properties: &ref_293
+                    properties: &ref_295
                       paymentPlanId:
                         maxLength: 48
                         minLength: 1
@@ -7651,13 +7651,13 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_294
+                required: &ref_296
                   - count
                   - data
                   - hasMore
                   - limit
                 type: object
-                allOf: &ref_295
+                allOf: &ref_297
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -7674,7 +7674,7 @@ paths:
                 paginatedResults:
                   summary: Paginated Subscription
                   description: Example of Paginated Subscription
-                  value: &ref_469
+                  value: &ref_471
                     limit: 2
                     count: 2
                     hasMore: true
@@ -7969,7 +7969,7 @@ paths:
                 deactivateSubscription:
                   summary: Deactivate subscription
                   description: Deactivate a subscription
-                  value: &ref_471
+                  value: &ref_473
                     subscriptionId: 1001_subscription_cinema
                     processingTerminalId: '1001'
                     paymentPlan:
@@ -8138,9 +8138,9 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_298
+              required: &ref_300
                 - order
-              properties: &ref_299
+              properties: &ref_301
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -8154,7 +8154,7 @@ paths:
               subscriptionPaymentRequest:
                 summary: Subscription manual payment
                 description: Subscription manual payment
-                value: &ref_472
+                value: &ref_474
                   operator: Giuseppe Green
                   order:
                     amount: 1010
@@ -8172,14 +8172,14 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_300
+                required: &ref_302
                   - subscriptionId
                   - processingTerminalId
                   - payment
                   - secureToken
                   - currentState
                 type: object
-                properties: &ref_301
+                properties: &ref_303
                   subscriptionId:
                     type: string
                     description: Unique identifier that the merchant assigned to the subscription.
@@ -8444,7 +8444,7 @@ paths:
                 subscriptionPaymentResponse:
                   summary: Subscription manual payment
                   description: Subscription manual payment
-                  value: &ref_473
+                  value: &ref_475
                     subscriptionId: 1017_subscription_metro
                     processingTerminalId: '1017'
                     payment:
@@ -8545,10 +8545,10 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_332
+              required: &ref_334
                 - source
               type: object
-              properties: &ref_333
+              properties: &ref_335
                 secureTokenId:
                   maxLength: 200
                   minLength: 1
@@ -8790,14 +8790,14 @@ paths:
                         cardDetails:
                           type: object
                           oneOf:
-                            - required: &ref_312
+                            - required: &ref_314
                                 - entryMethod
                                 - device
                                 - rawData
                               type: object
                               title: Raw
                               description: Object that contains information about the unencrypted card details.
-                              properties: &ref_313
+                              properties: &ref_315
                                 entryMethod:
                                   type: string
                                   description: Method that the device used to capture the card details.
@@ -8876,10 +8876,10 @@ paths:
                                       type: string
                                       description: Firmware version of the physical device.
                                     config:
-                                      required: &ref_310
+                                      required: &ref_312
                                         - quickChip
                                       type: object
-                                      properties: &ref_311
+                                      properties: &ref_313
                                         quickChip:
                                           type: boolean
                                           default: false
@@ -8895,14 +8895,14 @@ paths:
                                 cardholderSignature:
                                   type: string
                                   description: Cardholder's signature in the format described in the [Special Fields and Parameters](https://worldnet.payroc.com/selfcare:api_specification:special_fields_and_parameters#the_signature_field_format) section.
-                            - required: &ref_314
+                            - required: &ref_316
                                 - entryMethod
                                 - device
                                 - iccData
                               type: object
                               title: Chip
                               description: Object that contains information about the Integrated Circuit Card (ICC).
-                              properties: &ref_315
+                              properties: &ref_317
                                 entryMethod:
                                   type: string
                                   description: Method that the device used to capture the card details.
@@ -8948,13 +8948,13 @@ paths:
                                 cardholderSignature:
                                   type: string
                                   description: Cardholder’s signature. For more information about the format of the signature, see Special Fields and Parameters.
-                            - required: &ref_324
+                            - required: &ref_326
                                 - entryMethod
                                 - keyedData
                               type: object
                               title: Keyed
                               description: Object that contains information about the keyed card details.
-                              properties: &ref_325
+                              properties: &ref_327
                                 entryMethod:
                                   type: string
                                   description: Method that the device used to capture the card details.
@@ -8963,14 +8963,14 @@ paths:
                                 keyedData:
                                   type: object
                                   oneOf:
-                                    - required: &ref_316
+                                    - required: &ref_318
                                         - dataFormat
                                         - device
                                         - encryptedData
                                       type: object
                                       title: Encrypted
                                       description: Object that contains information about the encrypted card data for keyed transactions.
-                                      properties: &ref_317
+                                      properties: &ref_319
                                         dataFormat:
                                           type: string
                                           description: "Indicates the data format of the customer’s card data.\n-\t`plainText` – Data is not truncated and shows the raw data.\n-\t`fullyEncrypted` – Data is truncated to show only the first digit of the customer’s account number.\n-\t`partiallyEncrypted` – Data is truncated to show only the first six digits and the last four digits of the customer’s card number.\n"
@@ -8992,7 +8992,7 @@ paths:
                                           minLength: 1
                                           type: string
                                           description: First digit of the customer’s card number.
-                                    - required: &ref_318
+                                    - required: &ref_320
                                         - dataFormat
                                         - device
                                         - encryptedPan
@@ -9001,7 +9001,7 @@ paths:
                                       type: object
                                       title: Partially encrypted
                                       description: Object that contains information about the partially-encrypted card data for keyed transactions.
-                                      properties: &ref_319
+                                      properties: &ref_321
                                         dataFormat:
                                           type: string
                                           description: "Indicates the data format of the customer’s card data.\n-\t`plainText` – Data is not truncated and shows the raw data.\n-\t`fullyEncrypted` – Data is truncated to show only the first digit of the customer’s account number.\n-\t`partiallyEncrypted` – Data is truncated to show only the first six digits and the last four digits of the customer’s card number.\n"
@@ -9041,13 +9041,13 @@ paths:
                                           pattern: '[0-9]{1,2}'
                                           type: string
                                           description: Issue number of the customer’s card.
-                                    - required: &ref_320
+                                    - required: &ref_322
                                         - dataFormat
                                         - cardNumber
                                       type: object
                                       title: Unencrypted
                                       description: Object that contains information about the plain-text card data for keyed transactions.
-                                      properties: &ref_321
+                                      properties: &ref_323
                                         dataFormat:
                                           type: string
                                           description: "Indicates the data format of the customer’s card data.\n-\t`plainText` – Data is not truncated and shows the raw data.\n-\t`fullyEncrypted` – Data is truncated to show only the first digit of the customer’s account number.\n-\t`partiallyEncrypted` – Data is truncated to show only the first six digits and the last four digits of the customer’s card number.\n"
@@ -9143,11 +9143,11 @@ paths:
                                     - type: object
                                       properties:
                                         voucher:
-                                          required: &ref_322
+                                          required: &ref_324
                                             - approvalCode
                                             - serialNumber
                                           type: object
-                                          properties: &ref_323
+                                          properties: &ref_325
                                             approvalCode:
                                               maxLength: 6
                                               minLength: 6
@@ -9161,13 +9161,13 @@ paths:
                                           description: |
                                             Object that contains information about the EBT voucher.  
                                             **Note:** Voucher is available only for EBT Cash benefit accounts.
-                            - required: &ref_330
+                            - required: &ref_332
                                 - entryMethod
                                 - swipedData
                               type: object
                               title: Swiped
                               description: Object that contains information about the customer’s card details for swiped transactions.
-                              properties: &ref_331
+                              properties: &ref_333
                                 entryMethod:
                                   type: string
                                   description: Method that the device used to capture the card details.
@@ -9184,14 +9184,14 @@ paths:
                                 swipedData:
                                   type: object
                                   oneOf:
-                                    - required: &ref_326
+                                    - required: &ref_328
                                         - dataFormat
                                         - device
                                         - encryptedData
                                       type: object
                                       title: Encrypted
                                       description: Object that contains information about the encrypted swiped card data.
-                                      properties: &ref_327
+                                      properties: &ref_329
                                         dataFormat:
                                           type: string
                                           description: |
@@ -9225,14 +9225,14 @@ paths:
                                             - technical
                                             - repeatFallback
                                             - emptyCandidateList
-                                    - required: &ref_328
+                                    - required: &ref_330
                                         - dataFormat
                                         - device
                                         - trackData
                                       type: object
                                       title: Unencrypted
                                       description: Object that contains information about plain-text swiped card data.
-                                      properties: &ref_329
+                                      properties: &ref_331
                                         dataFormat:
                                           type: string
                                           description: |
@@ -9339,7 +9339,7 @@ paths:
               createSecureToken:
                 summary: Secure Token
                 description: Secure Token
-                value: &ref_475
+                value: &ref_477
                   operator: Adam Smith
                   mitAgreement: unscheduled
                   customer:
@@ -9428,7 +9428,7 @@ paths:
                     description: Object that contains information about the payment method that we tokenized.
                     type: object
                     oneOf:
-                      - required: &ref_302
+                      - required: &ref_304
                           - type
                           - nameOnAccount
                           - accountNumber
@@ -9436,7 +9436,7 @@ paths:
                         type: object
                         title: ACH account
                         description: Object that contains the customer's account details.
-                        properties: &ref_303
+                        properties: &ref_305
                           type:
                             type: string
                             enum:
@@ -9458,7 +9458,7 @@ paths:
                             pattern: ^[0-9]*$
                             type: string
                             description: Routing number of the customer's account.
-                      - required: &ref_304
+                      - required: &ref_306
                           - type
                           - nameOnAccount
                           - accountNumber
@@ -9467,7 +9467,7 @@ paths:
                         type: object
                         title: PAD account
                         description: Object that contains the customer's account details.
-                        properties: &ref_305
+                        properties: &ref_307
                           type:
                             type: string
                             enum:
@@ -9495,14 +9495,14 @@ paths:
                             pattern: ^[0-9]*$
                             type: string
                             description: Three-digit code that represents the customer's bank.
-                      - required: &ref_306
+                      - required: &ref_308
                           - type
                           - cardholderName
                           - cardNumber
                         type: object
                         title: Card
                         description: Object that contains the customer's card details.
-                        properties: &ref_307
+                        properties: &ref_309
                           type:
                             description: Type of payment.
                             type: string
@@ -9712,13 +9712,13 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_308
+                required: &ref_310
                   - count
                   - data
                   - hasMore
                   - limit
                 type: object
-                allOf: &ref_309
+                allOf: &ref_311
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -9736,7 +9736,7 @@ paths:
                 paginatedResults:
                   summary: Paginated Secure Token
                   description: Paginated Secure Token
-                  value: &ref_474
+                  value: &ref_476
                     limit: 2
                     count: 2
                     hasMore: true
@@ -10297,10 +10297,10 @@ paths:
                       type: boolean
                       description: Indicates if the card is a debit card.
                     surcharging:
-                      required: &ref_334
+                      required: &ref_336
                         - allowed
                       type: object
-                      properties: &ref_335
+                      properties: &ref_337
                         allowed:
                           type: boolean
                           description: Indicates if the merchant can add a surcharge when the customer uses this card.
@@ -10329,7 +10329,7 @@ paths:
               singleUseToken:
                 summary: Single Use Token
                 description: Single Use Token
-                value: &ref_476
+                value: &ref_478
                   operator: Carol Smith
                   paymentMethod:
                     type: card
@@ -10355,7 +10355,7 @@ paths:
                 singleUseToken:
                   summary: Single Use Token
                   description: Single Use Token
-                  value: &ref_477
+                  value: &ref_479
                     processingTerminalId: '1005'
                     token: c96cb928e39c34bd05022cd821d2cbba2349f047ce0cef4f77cd2b5762be7608fb7c23e673bf014d58c64672928eb8256e38aa26911a22853143d22dd48ac9aa
                     expiresAt: '2023-05-19T00:17:34.844+01:00'
@@ -10431,13 +10431,13 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_359
+              required: &ref_361
                 - channel
                 - order
                 - paymentMethod
                 - processingTerminalId
               type: object
-              properties: &ref_360
+              properties: &ref_362
                 channel:
                   type: string
                   description: Channel that the merchant used to receive the payment details.
@@ -10930,7 +10930,7 @@ paths:
                                 surcharge:
                                   description: Object that contains surcharge information for the transaction.
                                   type: object
-                                  properties: &ref_336
+                                  properties: &ref_338
                                     bypass:
                                       type: boolean
                                       description: |
@@ -10957,10 +10957,10 @@ paths:
                                       description: If the merchant added a surcharge fee, this value indicates the surcharge percentage.
                                 dualPricing:
                                   description: Object that contains dual pricing information for the transaction.
-                                  required: &ref_339
+                                  required: &ref_341
                                     - offered
                                   type: object
-                                  properties: &ref_340
+                                  properties: &ref_342
                                     offered:
                                       type: boolean
                                       description: Indicates if the merchant offers dual pricing to the customer.
@@ -10968,13 +10968,13 @@ paths:
                                       description: |
                                         Object that contains information about the choice rate.  
                                         **Note:** For requests, if the value for **offered** is `true`, you must send this object in the request.
-                                      required: &ref_337
+                                      required: &ref_339
                                         - applied
                                         - rate
                                         - amount
                                       type: object
                                       readOnly: true
-                                      properties: &ref_338
+                                      properties: &ref_340
                                         applied:
                                           type: boolean
                                           description: |
@@ -11023,12 +11023,12 @@ paths:
                                   description: |
                                     Amount for shipping in the currency's lowest denomination, for example, cents.
                                 convenienceFee:
-                                  required: &ref_341
+                                  required: &ref_343
                                     - amount
                                   type: object
                                   readOnly: true
                                   description: Object that contains convenience fee information for the transaction.
-                                  properties: &ref_342
+                                  properties: &ref_344
                                     amount:
                                       minimum: 0
                                       exclusiveMinimum: true
@@ -11041,11 +11041,11 @@ paths:
                                   type: array
                                   items:
                                     description: Array of 'lineItem' objects. Each object contains information about the items in the transaction.
-                                    required: &ref_343
+                                    required: &ref_345
                                       - quantity
                                       - unitPrice
                                     type: object
-                                    properties: &ref_344
+                                    properties: &ref_346
                                       commodityCode:
                                         maxLength: 45
                                         minLength: 0
@@ -11536,12 +11536,12 @@ paths:
                               description: Source that the DCC provider uses to get the foreign exchange rates.
                           description: Object that contains the exchange rates offer for a foreign card.
                         standingInstructions:
-                          required: &ref_346
+                          required: &ref_348
                             - processingModel
                             - sequence
                           type: object
                           description: If you don't use our Subscriptions mechanism, include this section to configure your standing/recurring orders.
-                          properties: &ref_347
+                          properties: &ref_349
                             sequence:
                               type: string
                               description: Position of the transaction in the payment plan sequence.
@@ -11563,7 +11563,7 @@ paths:
                             referenceDataOfFirstTxn:
                               description: Object that contains information about the initial payment for the payment instruction.
                               type: object
-                              properties: &ref_345
+                              properties: &ref_347
                                 paymentId:
                                   maxLength: 10
                                   minLength: 10
@@ -11674,13 +11674,13 @@ paths:
                               title: Encrypted
                               description: Object that contains information about encrypted PIN details.
                               properties: *ref_101
-                            - required: &ref_355
+                            - required: &ref_357
                                 - dataFormat
                                 - pin
                               type: object
                               title: Unencrypted
                               description: Object that contains information about the unencrypted PIN details.
-                              properties: &ref_356
+                              properties: &ref_358
                                 dataFormat:
                                   type: string
                                   description: Indicates the format of the PIN data.
@@ -11743,11 +11743,11 @@ paths:
                         - recurring
                         - installment
                 offlineProcessing:
-                  required: &ref_357
+                  required: &ref_359
                     - operation
                   type: object
                   description: Object that contains information about the transaction if the merchant ran it when the terminal was offline.
-                  properties: &ref_358
+                  properties: &ref_360
                     operation:
                       type: string
                       description: Status of the transaction.
@@ -11784,7 +11784,7 @@ paths:
               paymentRequest:
                 summary: Payment
                 description: Payment
-                value: &ref_479
+                value: &ref_481
                   channel: web
                   processingTerminalId: '1023'
                   operator: Postman
@@ -11910,7 +11910,7 @@ paths:
                         properties: *ref_93
                       securityChecks:
                         type: object
-                        properties: &ref_348
+                        properties: &ref_350
                           cvvResult:
                             type: string
                             description: |
@@ -11963,12 +11963,12 @@ paths:
                         uniqueItems: true
                         description: Array of emvTag objects.
                         items:
-                          required: &ref_349
+                          required: &ref_351
                             - hex
                             - value
                           type: object
                           description: Object that contains information about the EMV tag.
-                          properties: &ref_350
+                          properties: &ref_352
                             hex:
                               type: string
                               description: Hex code of the EMV tag.
@@ -11982,12 +11982,12 @@ paths:
                           Our gateway returns this array only when the customer uses an Electronic Benefit Transfer (EBT) card.  
                           **Note:** This field reflects the remaining balance on the card after deducting the amount of this transaction.
                         items:
-                          required: &ref_351
+                          required: &ref_353
                             - amount
                             - benefitCategory
                             - currency
                           type: object
-                          properties: &ref_352
+                          properties: &ref_354
                             benefitCategory:
                               type: string
                               enum:
@@ -12964,13 +12964,13 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_353
+                required: &ref_355
                   - count
                   - data
                   - hasMore
                   - limit
                 type: object
-                allOf: &ref_354
+                allOf: &ref_356
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -12987,7 +12987,7 @@ paths:
                 paginatedResults:
                   summary: Payment
                   description: Payment
-                  value: &ref_478
+                  value: &ref_480
                     limit: 2
                     count: 2
                     hasMore: true
@@ -13165,11 +13165,11 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_366
+              required: &ref_368
                 - adjustments
               type: object
               description: Object that contains the transaction adjustment object.
-              properties: &ref_367
+              properties: &ref_369
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -13181,13 +13181,13 @@ paths:
                   uniqueItems: true
                   items:
                     oneOf:
-                      - required: &ref_362
+                      - required: &ref_364
                           - type
                           - amount
                         type: object
                         title: Order
                         description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the order details.
-                        properties: &ref_363
+                        properties: &ref_365
                           type:
                             type: string
                             description: Type of adjustment.
@@ -13202,7 +13202,7 @@ paths:
                           breakdown:
                             type: object
                             description: Object that contains information about the tip amount of a transaction.
-                            properties: &ref_361
+                            properties: &ref_363
                               tip:
                                 required: *ref_127
                                 type: object
@@ -13248,7 +13248,7 @@ paths:
                             type: array
                             items:
                               oneOf: *ref_2
-                      - required: &ref_364
+                      - required: &ref_366
                           - type
                           - cardholderSignature
                         type: object
@@ -13256,7 +13256,7 @@ paths:
                         description: |
                           Object that contains the signature for the transaction.  
                           **Note:** If the merchant previously added a signature to the transaction, they can’t adjust or delete the signature.
-                        properties: &ref_365
+                        properties: &ref_367
                           type:
                             type: string
                             description: Type of adjustment.
@@ -13269,7 +13269,7 @@ paths:
               adjustPaymentRequest:
                 summary: Adjust Payment
                 description: Adjust Payment
-                value: &ref_480
+                value: &ref_482
                   adjustments:
                     - type: customer
                       shippingAddress:
@@ -13298,7 +13298,7 @@ paths:
                 adjustPaymentResponse:
                   summary: Adjust Payment
                   description: Adjust Payment
-                  value: &ref_481
+                  value: &ref_483
                     paymentId: HW986AQOBB
                     processingTerminalId: '1023'
                     order:
@@ -13420,7 +13420,7 @@ paths:
             schema:
               description: Object that contains the details of the payment that the merchant wants to capture.
               type: object
-              properties: &ref_368
+              properties: &ref_370
                 processingTerminalId:
                   maxLength: 50
                   minLength: 4
@@ -13524,7 +13524,7 @@ paths:
           application/json:
             schema:
               type: object
-              properties: &ref_369
+              properties: &ref_371
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -13540,7 +13540,7 @@ paths:
               reversalPayment:
                 summary: Reversal Payment
                 description: Reversal Payment
-                value: &ref_482
+                value: &ref_484
                   amount: 10
       responses:
         '200':
@@ -13555,7 +13555,7 @@ paths:
                 reversalPayment:
                   summary: Reversal Payment
                   description: Reversal Payment
-                  value: &ref_483
+                  value: &ref_485
                     paymentId: FRED4RL3GO
                     processingTerminalId: '1023'
                     order:
@@ -13676,11 +13676,11 @@ paths:
           application/json:
             schema:
               description: Object that contains the details of the payment that the merchant wants to refund.
-              required: &ref_370
+              required: &ref_372
                 - amount
                 - description
               type: object
-              properties: &ref_371
+              properties: &ref_373
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -13699,7 +13699,7 @@ paths:
               refundPaymentRequest:
                 summary: Refund Payment
                 description: Refund Payment
-                value: &ref_484
+                value: &ref_486
                   amount: 100
                   description: refund - defective item
         required: true
@@ -13716,7 +13716,7 @@ paths:
                 refundPayment:
                   summary: Refund Payment
                   description: Refund Payment
-                  value: &ref_485
+                  value: &ref_487
                     paymentId: JTWWI49L6U
                     processingTerminalId: '1023'
                     operator: Adam Smith
@@ -13842,12 +13842,12 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_374
+              required: &ref_376
                 - order
                 - processingTerminalId
               type: object
               description: Object that contains the instructions for initiating a payment on a physical device.
-              properties: &ref_375
+              properties: &ref_377
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -13859,13 +13859,13 @@ paths:
                   type: string
                   description: Unique identifier that our gateway assigned to the terminal.
                 order:
-                  required: &ref_372
+                  required: &ref_374
                     - amount
                     - currency
                     - orderId
                   type: object
                   description: Object that contains information about the payment.
-                  allOf: &ref_373
+                  allOf: &ref_375
                     - required: *ref_132
                       type: object
                       description: Object that contains details about the transaction.
@@ -13930,7 +13930,7 @@ paths:
               paymentInstructionRequest:
                 summary: Payment Instruction
                 description: Submit an instruction for initiating a payment on a physical device.
-                value: &ref_486
+                value: &ref_488
                   operator: jbloggs
                   processingTerminalId: '1021'
                   order:
@@ -13988,7 +13988,7 @@ paths:
                 paymentInstruction:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
-                  value: &ref_487
+                  value: &ref_489
                     paymentInstructionId: 3743a9165d134678a9100ebba3b29597
                     status: inProgress
                     link:
@@ -14062,7 +14062,7 @@ paths:
                 paymentInstruction:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
-                  value: &ref_488
+                  value: &ref_490
                     paymentInstructionId: 3743a9165d134678a9100ebba3b29597
                     status: completed
                     link:
@@ -14104,14 +14104,14 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_378
+              required: &ref_380
                 - channel
                 - order
                 - processingTerminalId
                 - refundMethod
               type: object
               description: Refund a payment that is not linked to a previous transaction. Unreferenced refunds are available only on certain accounts.
-              properties: &ref_379
+              properties: &ref_381
                 channel:
                   type: string
                   description: Channel that the merchant used to request the refund.
@@ -14372,7 +14372,7 @@ paths:
               refund:
                 summary: Refund
                 description: Refund
-                value: &ref_490
+                value: &ref_492
                   processingTerminalId: '1023'
                   order:
                     orderId: 1023_refund_oa8
@@ -14654,14 +14654,14 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_376
+                required: &ref_378
                   - count
                   - data
                   - hasMore
                   - limit
                 type: object
                 description: Object that contains information about refund objects.
-                allOf: &ref_377
+                allOf: &ref_379
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -14679,7 +14679,7 @@ paths:
                 paginatedResults:
                   summary: Paginated Refund
                   description: Paginated Refund
-                  value: &ref_489
+                  value: &ref_491
                     limit: 2
                     count: 2
                     hasMore: true
@@ -14824,11 +14824,11 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_380
+              required: &ref_382
                 - adjustments
               type: object
               description: Object that contains information about the adjustment to the refund.
-              properties: &ref_381
+              properties: &ref_383
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -14854,7 +14854,7 @@ paths:
               refundRequest:
                 summary: Adjust Refund
                 description: Adjust Refund
-                value: &ref_491
+                value: &ref_493
                   operator: Adam Smith
                   adjustments:
                     - type: customer
@@ -14876,7 +14876,7 @@ paths:
                 refundResponse:
                   summary: Adjust Refund
                   description: Adjust Refund
-                  value: &ref_492
+                  value: &ref_494
                     refundId: I2HLYTVB81
                     processingTerminalId: '1023'
                     operator: Adam Smith
@@ -14980,7 +14980,7 @@ paths:
                 refund:
                   summary: Reverse Refund
                   description: Reverse Refund
-                  value: &ref_493
+                  value: &ref_495
                     refundId: IH83EP2SRN
                     processingTerminalId: '1001'
                     order:
@@ -15069,12 +15069,12 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_384
+              required: &ref_386
                 - order
                 - processingTerminalId
               type: object
               description: Object that contains information about the instruction request to initiate a refund on a payment device.
-              properties: &ref_385
+              properties: &ref_387
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -15086,14 +15086,14 @@ paths:
                   type: string
                   description: Unique identifier that our gateway assigned to the terminal.
                 order:
-                  required: &ref_382
+                  required: &ref_384
                     - amount
                     - currency
                     - description
                     - orderId
                   type: object
                   description: Object that contains information about the refund.
-                  allOf: &ref_383
+                  allOf: &ref_385
                     - required: *ref_132
                       type: object
                       description: Object that contains details about the transaction.
@@ -15117,7 +15117,7 @@ paths:
               refundInstructionRequest:
                 summary: Refund instruction
                 description: Submit an instruction for initiating a refund on a physical device.
-                value: &ref_494
+                value: &ref_496
                   operator: jbloggs
                   processingTerminalId: '1021'
                   order:
@@ -15152,7 +15152,7 @@ paths:
                 refundInstruction:
                   summary: Refund instruction
                   description: Object that contains information about the progress of the refund instruction.
-                  value: &ref_495
+                  value: &ref_497
                     refundInstructionId: 3743a9165d134678a9100ebba3b29597
                     status: inProgress
                     link:
@@ -15226,7 +15226,7 @@ paths:
                 refundInstruction:
                   summary: Refund instruction
                   description: Object that contains information about the progress of the refund instruction.
-                  value: &ref_496
+                  value: &ref_498
                     refundInstructionId: 3743a9165d134678a9100ebba3b29597
                     status: completed
                     link:
@@ -15268,11 +15268,11 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_386
+              required: &ref_388
                 - card
                 - processingTerminalId
               type: object
-              properties: &ref_387
+              properties: &ref_389
                 processingTerminalId:
                   maxLength: 50
                   minLength: 4
@@ -15301,7 +15301,7 @@ paths:
               cardVerificationRequest:
                 summary: Card Verification
                 description: Card Verification
-                value: &ref_497
+                value: &ref_499
                   operator: Mark Simpsons
                   processingTerminalId: '1001'
                   card:
@@ -15321,12 +15321,12 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_388
+                required: &ref_390
                   - card
                   - processingTerminalId
                   - verified
                 type: object
-                properties: &ref_389
+                properties: &ref_391
                   processingTerminalId:
                     maxLength: 50
                     minLength: 4
@@ -15376,7 +15376,7 @@ paths:
                 cardVerificationResponse:
                   summary: Card Verification
                   description: Card Verification
-                  value: &ref_498
+                  value: &ref_500
                     operator: Mark Simpsons
                     processingTerminalId: '1001'
                     card:
@@ -15444,12 +15444,12 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_390
+              required: &ref_392
                 - card
                 - currency
                 - processingTerminalId
               type: object
-              properties: &ref_391
+              properties: &ref_393
                 processingTerminalId:
                   maxLength: 50
                   minLength: 4
@@ -15659,7 +15659,7 @@ paths:
               cardBalanceRequest:
                 summary: Card Balance
                 description: Card Balance
-                value: &ref_499
+                value: &ref_501
                   operator: Mark Simpsons
                   processingTerminalId: '1024'
                   currency: USD
@@ -15692,11 +15692,11 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_392
+                required: &ref_394
                   - card
                   - processingTerminalId
                 type: object
-                properties: &ref_393
+                properties: &ref_395
                   processingTerminalId:
                     maxLength: 50
                     minLength: 4
@@ -15738,7 +15738,7 @@ paths:
                 cardBalanceResponse:
                   summary: Card Balance
                   description: Card Balance
-                  value: &ref_500
+                  value: &ref_502
                     operator: Mark Simpsons
                     processingTerminalId: '1024'
                     card:
@@ -15789,10 +15789,10 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_396
+              required: &ref_398
                 - card
               type: object
-              properties: &ref_397
+              properties: &ref_399
                 processingTerminalId:
                   maxLength: 50
                   minLength: 4
@@ -15993,14 +15993,14 @@ paths:
                       title: Card
                       description: Object that contains information about the customer’s payment card.
                       properties: *ref_109
-                    - required: &ref_394
+                    - required: &ref_396
                         - type
                         - bin
                       type: object
                       writeOnly: true
                       title: Card BIN
                       description: Object that contains information about the card's bank identification number (BIN).
-                      properties: &ref_395
+                      properties: &ref_397
                         type:
                           type: string
                           description: Method that the terminal used to take the payment.
@@ -16026,7 +16026,7 @@ paths:
               binLookupRequest:
                 summary: BIN lookup
                 description: BIN lookup
-                value: &ref_501
+                value: &ref_503
                   operator: Andrew White
                   processingTerminalId: '1005'
                   card:
@@ -16055,7 +16055,7 @@ paths:
                 binLookupResponse:
                   summary: BIN lookup
                   description: BIN lookup
-                  value: &ref_502
+                  value: &ref_504
                     type: MASTERCARD
                     cardNumber: 500165******0000
                     country: US
@@ -16099,14 +16099,14 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_398
+              required: &ref_400
                 - baseAmount
                 - baseCurrency
                 - channel
                 - paymentMethod
                 - processingTerminalId
               type: object
-              properties: &ref_399
+              properties: &ref_401
                 channel:
                   description: Channel that the merchant used to receive payment details for the transaction.
                   type: string
@@ -16331,7 +16331,7 @@ paths:
               fxRateRequest:
                 summary: Fx-Rate
                 description: Fx-Rate
-                value: &ref_503
+                value: &ref_505
                   channel: web
                   operator: Aaron
                   processingTerminalId: '1005'
@@ -16354,7 +16354,7 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_402
+                required: &ref_404
                   - baseAmount
                   - baseCurrency
                   - cardInfo
@@ -16362,7 +16362,7 @@ paths:
                   - processingTerminalId
                 type: object
                 description: Foreign exchange rate for the transaction.
-                properties: &ref_403
+                properties: &ref_405
                   processingTerminalId:
                     maxLength: 50
                     minLength: 4
@@ -16555,10 +16555,10 @@ paths:
                       - ZMW
                       - ZWL
                   inquiryResult:
-                    required: &ref_400
+                    required: &ref_402
                       - dccOffered
                     type: object
-                    properties: &ref_401
+                    properties: &ref_403
                       dccOffered:
                         type: boolean
                         default: false
@@ -16582,7 +16582,7 @@ paths:
                 fxRateResponse:
                   summary: Fx-Rate
                   description: Fx-Rate
-                  value: &ref_504
+                  value: &ref_506
                     processingTerminalId: '1005'
                     operator: Aaron
                     baseAmount: 10000
@@ -16644,13 +16644,13 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_410
+              required: &ref_412
                 - order
                 - paymentMethod
                 - processingTerminalId
               type: object
               description: Object that contains information about the sale and the customer's bank details.
-              properties: &ref_411
+              properties: &ref_413
                 processingTerminalId:
                   maxLength: 50
                   minLength: 4
@@ -16866,11 +16866,11 @@ paths:
                             - ZMW
                             - ZWL
                         breakdown:
-                          required: &ref_404
+                          required: &ref_406
                             - subtotal
                           type: object
                           description: Object that contains information about the taxes and tip amount on the transaction.
-                          properties: &ref_405
+                          properties: &ref_407
                             subtotal:
                               type: integer
                               format: int64
@@ -16938,7 +16938,7 @@ paths:
               createdBankTransferPaymentStoreToken:
                 summary: Store Token Bank Transfer Payment
                 description: Bank Transfer Payment with ACH payload and token storage
-                value: &ref_506
+                value: &ref_508
                   processingTerminalId: '1017'
                   order:
                     orderId: orderpop123
@@ -17107,7 +17107,7 @@ paths:
                     uniqueItems: true
                     description: List of returns issued against the payment
                     items:
-                      required: &ref_406
+                      required: &ref_408
                         - date
                         - paymentId
                         - represented
@@ -17115,7 +17115,7 @@ paths:
                         - returnReason
                       type: object
                       description: Object that contains information about a return.
-                      properties: &ref_407
+                      properties: &ref_409
                         paymentId:
                           maxLength: 10
                           minLength: 10
@@ -17570,13 +17570,13 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_408
+                required: &ref_410
                   - count
                   - data
                   - hasMore
                   - limit
                 type: object
-                allOf: &ref_409
+                allOf: &ref_411
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -17594,7 +17594,7 @@ paths:
                 paginatedResults:
                   summary: Bank Transfer Payment
                   description: Bank Transfer Payment
-                  value: &ref_505
+                  value: &ref_507
                     limit: 2
                     count: 2
                     hasMore: true
@@ -17779,7 +17779,7 @@ paths:
                 reverseBankTransferPayment:
                   summary: Reverse Bank Transfer Payment
                   description: Reverse Bank Transfer Payment
-                  value: &ref_507
+                  value: &ref_509
                     paymentId: JKNIJXNZAK
                     processingTerminalId: '1017'
                     order:
@@ -17881,12 +17881,12 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_412
+              required: &ref_414
                 - amount
                 - description
               type: object
               description: Object that contains information about the payment that you want to refund.
-              properties: &ref_413
+              properties: &ref_415
                 amount:
                   type: integer
                   format: int64
@@ -17900,7 +17900,7 @@ paths:
               refundBankTransferPayment:
                 summary: Refund Bank Transfer Payment
                 description: Refund Bank Transfer Payment
-                value: &ref_508
+                value: &ref_510
                   amount: 10000
                   description: amount to refund
         required: true
@@ -17918,7 +17918,7 @@ paths:
                 bankTransferPayment:
                   summary: Reverse Bank Transfer Payment
                   description: Reverse Bank Transfer Payment
-                  value: &ref_509
+                  value: &ref_511
                     paymentId: M12F8SUHGM
                     processingTerminalId: '1017'
                     order:
@@ -18030,11 +18030,11 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_414
+              required: &ref_416
                 - paymentMethod
               type: object
               description: Object that contains the paymentMethod object.
-              properties: &ref_415
+              properties: &ref_417
                 paymentMethod:
                   type: object
                   description: Object that contains information about the customer's payment details.
@@ -18049,7 +18049,7 @@ paths:
               representBankTransferPayment:
                 summary: Representment Bank Transfer Payment
                 description: Representment Bank Transfer Payment
-                value: &ref_510
+                value: &ref_512
                   paymentMethod:
                     type: ach
                     accountType: checking
@@ -18133,12 +18133,12 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_418
+              required: &ref_420
                 - order
                 - processingTerminalId
                 - refundMethod
               type: object
-              properties: &ref_419
+              properties: &ref_421
                 processingTerminalId:
                   maxLength: 50
                   minLength: 4
@@ -18374,7 +18374,7 @@ paths:
               bankTransferUnreferencedRefundRequest:
                 summary: Bank Transfer Unreferenced Refund
                 description: Bank Transfer Unreferenced Refund
-                value: &ref_512
+                value: &ref_514
                   processingTerminalId: '1017'
                   order:
                     orderId: 314
@@ -18636,13 +18636,13 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_416
+                required: &ref_418
                   - count
                   - data
                   - hasMore
                   - limit
                 type: object
-                allOf: &ref_417
+                allOf: &ref_419
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -18659,7 +18659,7 @@ paths:
                 paginatedResults:
                   summary: Paginated Bank Transfer Unreferenced Refund
                   description: Paginated Bank Transfer Unreferenced Refund
-                  value: &ref_511
+                  value: &ref_513
                     limit: 2
                     count: 2
                     hasMore: true
@@ -18828,7 +18828,7 @@ paths:
                 bankTransferUnreferencedRefund:
                   summary: Bank Transfer Unreferenced Refund
                   description: Bank Transfer Unreferenced Refund
-                  value: &ref_513
+                  value: &ref_515
                     refundId: B5FK0CBP2D
                     processingTerminalId: '1017'
                     order:
@@ -18916,11 +18916,11 @@ paths:
         content:
           application/json:
             schema:
-              required: &ref_420
+              required: &ref_422
                 - processingTerminalId
                 - bankAccount
               type: object
-              properties: &ref_421
+              properties: &ref_423
                 processingTerminalId:
                   maxLength: 50
                   minLength: 4
@@ -18946,7 +18946,7 @@ paths:
               bankAccountVerificationRequestPad:
                 summary: PAD Bank Account Verification Request
                 description: Bank Account Verification Request for PAD
-                value: &ref_514
+                value: &ref_516
                   processingTerminalId: '1017'
                   bankAccount:
                     type: pad
@@ -18959,7 +18959,7 @@ paths:
               bankAccountVerificationRequestAch:
                 summary: ACH Bank Account Verification Request
                 description: Bank Account Verification Request for ACH
-                value: &ref_515
+                value: &ref_517
                   processingTerminalId: '1017'
                   bankAccount:
                     type: ach
@@ -18975,11 +18975,11 @@ paths:
           content:
             application/json:
               schema:
-                required: &ref_422
+                required: &ref_424
                   - processingTerminalId
                   - verified
                 type: object
-                properties: &ref_423
+                properties: &ref_425
                   processingTerminalId:
                     maxLength: 50
                     minLength: 4
@@ -18995,7 +18995,7 @@ paths:
                 bankAccountVerificationResponse:
                   summary: Bank Account Verification Response
                   description: Bank Account Verification Response
-                  value: &ref_516
+                  value: &ref_518
                     processingTerminalId: '1017'
                     verified: true
         '400':
@@ -19060,10 +19060,10 @@ paths:
             schema:
               type: object
               title: create merchant platform
-              required: &ref_436
+              required: &ref_438
                 - business
                 - processingAccounts
-              properties: &ref_437
+              properties: &ref_439
                 business:
                   type: object
                   description: Object that contains information about the business.
@@ -19108,14 +19108,14 @@ paths:
                       items:
                         oneOf:
                           - title: Legal address
-                            required: &ref_424
+                            required: &ref_426
                               - type
                               - city
                               - country
                               - address1
                               - postalCode
                               - state
-                            allOf: &ref_425
+                            allOf: &ref_427
                               - type: object
                                 properties:
                                   type:
@@ -19466,7 +19466,7 @@ paths:
                                         maxLength: 50
                       funding:
                         type: object
-                        allOf: &ref_431
+                        allOf: &ref_433
                           - type: object
                             description: Object that contains information about the funding schedule of the processing account.
                             properties: &ref_203
@@ -19512,13 +19512,13 @@ paths:
                       pricing:
                         type: object
                         description: Object that contains pricing information.
-                        oneOf: &ref_435
+                        oneOf: &ref_437
                           - type: object
                             title: Pricing intent
-                            required: &ref_432
+                            required: &ref_434
                               - type
                               - pricingIntentId
-                            properties: &ref_433
+                            properties: &ref_435
                               type:
                                 type: string
                                 enum:
@@ -19528,7 +19528,7 @@ paths:
                                 description: Unique identifier of the pricing intent.
                           - type: object
                             title: Pricing agreement
-                            allOf: &ref_434
+                            allOf: &ref_436
                               - type: object
                                 properties:
                                   type:
@@ -19544,7 +19544,10 @@ paths:
                                 properties: *ref_193
                       signature:
                         type: string
-                        description: Method used to capture the owner's signature.
+                        description: |
+                          Method used to capture the owner's signature.  
+
+                          **Note:** If you request the owner’s signature by email and they don’t respond, use our Reminders endpoint to create a reminder and to send another email.
                         enum:
                           - requestedViaEmail
                           - requestedViaDirectLink
@@ -19728,9 +19731,9 @@ paths:
                             - title: Signature by direct link
                               description: We return a link to the pricing agreement in the response.
                               type: object
-                              required: &ref_426
+                              required: &ref_428
                                 - type
-                              properties: &ref_427
+                              properties: &ref_429
                                 type:
                                   type: string
                                   description: Method used to capture the owner's signature.
@@ -19753,9 +19756,9 @@ paths:
                             - title: Signature by email
                               description: Owner's signature by email.
                               type: object
-                              required: &ref_428
+                              required: &ref_430
                                 - type
-                              properties: &ref_429
+                              properties: &ref_431
                                 type:
                                   type: string
                                   description: Method used to capture the owner's signature.
@@ -19782,7 +19785,7 @@ paths:
                 created:
                   summary: Created merchant platform
                   description: New merchant platform created
-                  value: &ref_518
+                  value: &ref_520
                     merchantPlatformId: '12346'
                     createdDate: '2020-09-08T12:00:00.000Z'
                     lastModifiedDate: '2020-09-08T12:00:00.000Z'
@@ -19822,7 +19825,7 @@ paths:
                 partialSuccess:
                   summary: Failed processing account
                   description: We successfully created the merchant platform, but failed to add one or more processing accounts.
-                  value: &ref_519
+                  value: &ref_521
                     merchantPlatformId: '12346'
                     createdDate: '2020-09-08T12:00:00.000Z'
                     lastModifiedDate: '2020-09-08T12:00:00.000Z'
@@ -19929,7 +19932,7 @@ paths:
                 taxIdInUse:
                   summary: Tax ID in use
                   description: The tax ID supplied is already in use.
-                  value: &ref_520
+                  value: &ref_522
                     type: https://docs.payroc.com/api/errors#tax-id-in-use
                     title: Tax ID already in use
                     status: 409
@@ -19937,7 +19940,7 @@ paths:
                 nationalIdInUse:
                   summary: National ID in use
                   description: One or more supplied national IDs are not unique. All national IDs must be unique.
-                  value: &ref_521
+                  value: &ref_523
                     type: https://docs.payroc.com/api/errors#national-id-in-use
                     title: National ID in use
                     status: 409
@@ -19974,7 +19977,7 @@ paths:
               schema:
                 type: object
                 title: paginated merchant platforms
-                allOf: &ref_430
+                allOf: &ref_432
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -19992,7 +19995,7 @@ paths:
                 listMerchantPlatforms:
                   summary: Paginated list of merchant platforms
                   description: Retrieve a list of merchant platforms associated with your account.
-                  value: &ref_517
+                  value: &ref_519
                     limit: 2
                     count: 2
                     hasMore: true
@@ -20169,7 +20172,7 @@ paths:
               schema:
                 type: object
                 title: paginated processing accounts
-                allOf: &ref_440
+                allOf: &ref_442
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -20335,7 +20338,7 @@ paths:
                             funding:
                               type: object
                               description: Object that contains funding information.
-                              allOf: &ref_439
+                              allOf: &ref_441
                                 - type: object
                                   description: Object that contains information about the funding schedule of the processing account.
                                   properties: *ref_203
@@ -20349,7 +20352,7 @@ paths:
                                       items:
                                         type: object
                                         title: funding account summary
-                                        properties: &ref_438
+                                        properties: &ref_440
                                           fundingAccountId:
                                             type: integer
                                             readOnly: true
@@ -20453,7 +20456,7 @@ paths:
                 listProcessingAccounts:
                   summary: Paginated list of processing account
                   description: Retrieve processing accounts associated with a merchant platform.
-                  value: &ref_522
+                  value: &ref_524
                     limit: 2
                     count: 2
                     hasMore: true
@@ -20840,7 +20843,7 @@ paths:
                 fundingAccounts:
                   summary: List of funding accounts
                   description: List of funding accounts associated with a processing account.
-                  value: &ref_523
+                  value: &ref_525
                     - fundingAccountId: 123
                       createdDate: '2020-09-08T12:00:00.000Z'
                       lastModifiedDate: '2020-09-08T12:00:00.000Z'
@@ -20932,7 +20935,7 @@ paths:
               schema:
                 type: object
                 title: paginated Contacts
-                allOf: &ref_441
+                allOf: &ref_443
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -20950,7 +20953,7 @@ paths:
                 paginatedContacts:
                   summary: Paginated list of processing account contacts
                   description: List of contacts associated with a processing account.
-                  value: &ref_524
+                  value: &ref_526
                     limit: 2
                     count: 2
                     hasMore: true
@@ -21093,7 +21096,7 @@ paths:
               schema:
                 type: object
                 title: paginated Owners
-                allOf: &ref_442
+                allOf: &ref_444
                   - type: object
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: *ref_32
@@ -21111,7 +21114,7 @@ paths:
                 listProcessingAccountOwners:
                   summary: Paginated list of processing account owners
                   description: Retrieve owners associated with a processing account.
-                  value: &ref_525
+                  value: &ref_527
                     limit: 2
                     count: 2
                     hasMore: true
@@ -21194,6 +21197,99 @@ paths:
         '500':
           description: An error has occured
           content: *ref_13
+  /processing-accounts/{processingAccountId}/reminders:
+    post:
+      tags:
+        - Processing accounts
+      summary: Create reminder for processing account
+      description: |
+        When you create a processing account, we send a copy of the pricing agreement to the merchant to sign. You can choose to send them a copy of the pricing agreement by email, or you can generate a link to the pricing agreement.<br/>  
+        If you requested the merchant's signature by email and they don't respond, use our Reminders endpoint to create a reminder and to send another email.<br/>  
+        **Note:** You can use the Reminders endpoint only if you request the merchant's signature by email. If you generate a link to the pricing agreement, you can't use the Reminders endpoint.  
+      operationId: createReminder
+      parameters:
+        - name: processingAccountId
+          in: path
+          description: Unique identifier of the processing account.
+          required: true
+          style: simple
+          explode: false
+          schema: *ref_213
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  required: &ref_216
+                    - type
+                  properties: &ref_217
+                    reminderId:
+                      type: string
+                      description: Unique ID of the reminder.
+                      readOnly: true
+                      example: '1234567'
+                    type:
+                      type: string
+                      description: Type of reminder.
+                      enum:
+                        - pricingAgreement
+      responses:
+        '201':
+          description: Successful request. We sent the email to the merchant.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    required: *ref_216
+                    properties: *ref_217
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                badRequest:
+                  summary: Bad Request
+                  description: One or more validation errors occurred
+                  value: *ref_10
+                notRequestedByEmail:
+                  summary: Not requested by email
+                  description: We couldn't resend the email to the merchant because you didn't originally choose to send the information by email.
+                  value: &ref_528
+                    type: https://docs.payroc.com/api/errors#not-requested-by-email
+                    title: Not requested by email
+                    status: 400
+                    detail: You can use the Reminders endpoint only for documentation that we sent by email.
+                contractAlreadySigned:
+                  summary: Contract already signed
+                  description: We couldn’t resend the email because the merchant already signed the contract.
+                  value: &ref_529
+                    type: https://docs.payroc.com/api/errors#contract-already-signed
+                    title: Contract already signed
+                    status: 400
+                    detail: The merchant has already signed the contract.
+                noPricingAgreementExistsForTheProcessingAccount:
+                  summary: No pricing agreement exists for the processing account
+                  description: We couldn’t resend the email because there is no pricing agreement for the processing account.
+                  value: &ref_530
+                    type: https://docs.payroc.com/api/errors#no-pricing-agreement-exists-for-the-processing-account
+                    title: No pricing agreement exists
+                    status: 400
+                    detail: There is no pricing agreement linked to the processing account.
+        '403':
+          description: Do not have permissions to perform this action
+          content: *ref_12
+        '404':
+          description: Resource not found
+          content: *ref_17
+        '500':
+          description: An error has occured
+          content: *ref_13
   /contacts/{contactId}:
     get:
       tags:
@@ -21208,7 +21304,7 @@ paths:
           required: true
           style: simple
           explode: false
-          schema: &ref_216
+          schema: &ref_218
             type: integer
       responses:
         '200':
@@ -21224,7 +21320,7 @@ paths:
                 contact:
                   summary: Contact object
                   description: Contact object
-                  value: &ref_526
+                  value: &ref_531
                     contactId: 1543
                     type: manager
                     firstName: Joe
@@ -21268,7 +21364,7 @@ paths:
           required: true
           style: simple
           explode: false
-          schema: *ref_216
+          schema: *ref_218
       requestBody:
         content:
           application/json:
@@ -21321,7 +21417,7 @@ paths:
           required: true
           style: simple
           explode: false
-          schema: *ref_216
+          schema: *ref_218
       responses:
         '204':
           description: Successful request. We deleted the contact.
@@ -21418,7 +21514,7 @@ components:
       in: path
       required: true
       description: Unique identifier of the funding instruction.
-      schema: *ref_217
+      schema: *ref_219
     merchantId:
       name: merchantId
       in: query
@@ -21430,7 +21526,7 @@ components:
       in: path
       required: true
       style: simple
-      schema: *ref_218
+      schema: *ref_220
     keyDate:
       name: date
       in: query
@@ -21448,28 +21544,28 @@ components:
       in: query
       required: false
       description: Type of transaction.
-      schema: *ref_219
+      schema: *ref_221
     transactionId:
       name: transactionId
       description: Unique identifier of the transaction.
       in: path
       required: true
       style: simple
-      schema: *ref_220
+      schema: *ref_222
     authorizationId:
       name: authorizationId
       description: Unique identifier of the authorization.
       in: path
       required: true
       style: simple
-      schema: *ref_221
+      schema: *ref_223
     disputeId:
       name: disputeId
       description: Unique identifier of the dispute.
       in: path
       required: true
       style: simple
-      schema: *ref_222
+      schema: *ref_224
     merchantPlatformId:
       name: merchantPlatformId
       in: path
@@ -21493,7 +21589,7 @@ components:
       required: true
       style: simple
       explode: false
-      schema: *ref_216
+      schema: *ref_218
   schemas:
     '400':
       type: object
@@ -21501,32 +21597,32 @@ components:
       required: *ref_9
     '401':
       type: object
-      properties: *ref_223
-      required: *ref_224
-    '403':
-      type: object
       properties: *ref_225
       required: *ref_226
-    '404':
+    '403':
       type: object
       properties: *ref_227
       required: *ref_228
-    '406':
+    '404':
       type: object
       properties: *ref_229
       required: *ref_230
+    '406':
+      type: object
+      properties: *ref_231
+      required: *ref_232
     '409':
       type: object
       properties: *ref_24
       required: *ref_25
     '415':
       type: object
-      properties: *ref_231
-      required: *ref_232
-    '500':
-      type: object
       properties: *ref_233
       required: *ref_234
+    '500':
+      type: object
+      properties: *ref_235
+      required: *ref_236
     link:
       type: object
       description: Object that contains information about a HATEOAS link. If we can't match a dispute to a transaction, we don't return a 'link' object.
@@ -21544,25 +21640,25 @@ components:
       description: Object that contains information about the address.
       properties: *ref_1
     contactMethodEmail:
-      required: *ref_235
-      type: object
-      title: Email contact method
-      properties: *ref_236
-    contactMethodPhone:
       required: *ref_237
       type: object
-      title: Phone number contact method
+      title: Email contact method
       properties: *ref_238
-    contactMethodMobile:
+    contactMethodPhone:
       required: *ref_239
       type: object
-      title: Mobile number contact method
+      title: Phone number contact method
       properties: *ref_240
-    contactMethodFax:
+    contactMethodMobile:
       required: *ref_241
       type: object
-      title: Fax number contact method
+      title: Mobile number contact method
       properties: *ref_242
+    contactMethodFax:
+      required: *ref_243
+      type: object
+      title: Fax number contact method
+      properties: *ref_244
     contactMethod:
       oneOf: *ref_2
     fundingRecipient:
@@ -21573,17 +21669,17 @@ components:
     paginatedFundRecipients:
       type: object
       title: paginated funding recipients
-      allOf: *ref_243
+      allOf: *ref_245
     identifier:
       required: *ref_194
       type: object
       title: identifier
       properties: *ref_195
     ownerRelationship:
-      required: *ref_244
+      required: *ref_246
       type: object
       title: Owner relationship
-      properties: *ref_245
+      properties: *ref_247
       description: Object that contains information about the owner's relationship to the business.
     owner:
       type: object
@@ -21593,39 +21689,39 @@ components:
     PaymentMethodAch:
       type: object
       title: ACH payment method
-      properties: *ref_246
+      properties: *ref_248
     paymentMethods:
       uniqueItems: true
       type: array
       description: Array of PaymentMethodAch objects.
-      xml: *ref_247
-      items: *ref_248
+      xml: *ref_249
+      items: *ref_250
     fundingAccount:
       required: *ref_19
       type: object
       title: funding account
       properties: *ref_20
     createFundingRecipient:
-      required: *ref_249
+      required: *ref_251
       type: object
       title: create funding recipient
-      properties: *ref_250
+      properties: *ref_252
     listFundingAccounts:
       type: object
       title: paginated funding accounts
-      allOf: *ref_251
+      allOf: *ref_253
     baseIntent:
       type: object
       title: base pricing intent
       description: Object that contains information about the base fees.
-      properties: *ref_252
-      required: *ref_253
+      properties: *ref_254
+      required: *ref_255
     baseUs:
       type: object
       title: US base fees
       description: Object that contains information about U.S. base fees.
-      properties: *ref_254
-      required: *ref_255
+      properties: *ref_256
+      required: *ref_257
     percentage:
       description: Percentage value up to 2 decimal places.
       title: percentage
@@ -21662,8 +21758,8 @@ components:
       type: object
       title: Interchange Plus Plan
       description: Object that contains information about Interchange Plus.
-      properties: *ref_256
-      required: *ref_257
+      properties: *ref_258
+      required: *ref_259
     qualRates:
       type: object
       required: *ref_37
@@ -21672,14 +21768,14 @@ components:
       type: object
       title: Interchange Plus with three tiers
       description: Object that contains information about Interchange Plus with three tiers.
-      properties: *ref_258
-      required: *ref_259
+      properties: *ref_260
+      required: *ref_261
     tiered3:
       type: object
       title: Tiered pricing with three tiers
       description: Object that contains information about tiered pricing with three tiers.
-      properties: *ref_260
-      required: *ref_261
+      properties: *ref_262
+      required: *ref_263
     qualRatesWithPremium:
       type: object
       allOf: *ref_47
@@ -21687,55 +21783,55 @@ components:
       type: object
       title: Tiered pricing with four tiers
       description: Object that contains information about tiered pricing with four tiers.
-      properties: *ref_262
-      required: *ref_263
+      properties: *ref_264
+      required: *ref_265
     qualRatesWithPremiumAndRegulated:
       type: object
-      allOf: *ref_264
+      allOf: *ref_266
     tiered6:
       type: object
       title: Tiered pricing with six tiers
       description: Object that contains information about tiered pricing with six tiers.
-      properties: *ref_265
-      required: *ref_266
+      properties: *ref_267
+      required: *ref_268
     flatRate:
       type: object
       title: Flat Rate Plan
       description: Object that contains information about Flat Rate.
-      properties: *ref_267
-      required: *ref_268
+      properties: *ref_269
+      required: *ref_270
     consumerChoice:
       type: object
       title: Consumer Choice Plan
       description: Object that contains information about ConsumerChoice.
-      properties: *ref_269
-      required: *ref_270
+      properties: *ref_271
+      required: *ref_272
     rewardPay:
       type: object
       title: RewardPay Plan
       description: Object that contains information about RewardPay.
-      properties: *ref_271
-      required: *ref_272
+      properties: *ref_273
+      required: *ref_274
     rewardPayChoice:
       type: object
       title: RewardPayChoice Plan
       description: Object that contains information about RewardPayChoice.
-      properties: *ref_273
-      required: *ref_274
+      properties: *ref_275
+      required: *ref_276
     ach:
       type: object
-      properties: *ref_275
+      properties: *ref_277
     processorFeesUs:
       type: object
       title: US processor fees
       description: Object that contains information about U.S. processor fees.
-      properties: *ref_276
+      properties: *ref_278
     gatewayUs:
       type: object
       description: Object that contains information about the gateway fees.
       title: gateway fees
-      properties: *ref_277
-      required: *ref_278
+      properties: *ref_279
+      required: *ref_280
     pricingAgreementUs4.0:
       type: object
       title: US pricing agreement version 4.0
@@ -21746,7 +21842,7 @@ components:
       type: object
       title: pricing intent version 4.0
       description: Object that contains information about a pricing intent for Merchant Processing Agreement (MPA) 4.0.
-      allOf: *ref_279
+      allOf: *ref_281
     pricingIntent:
       type: object
       title: pricing intent
@@ -21756,11 +21852,11 @@ components:
       type: object
       title: paginated pricing intents
       description: Object that contains information about your pricing intents.
-      allOf: *ref_280
+      allOf: *ref_282
     patchDocument:
       description: JSONPatch document, specified in RFC 6902.
-      required: *ref_281
-      properties: *ref_282
+      required: *ref_283
+      properties: *ref_284
     patchRequest:
       type: array
       description: A JSONPatch document as defined by RFC 6902
@@ -21775,13 +21871,13 @@ components:
       type: object
       description: Object that contains information about the total funds available to the merchant.
       title: merchant balance
-      properties: *ref_283
+      properties: *ref_285
     activityRecord:
       type: object
       description: Array of activityRecord objects.
       title: activity record
-      properties: *ref_284
-      required: *ref_285
+      properties: *ref_286
+      required: *ref_287
     merchantSummary:
       type: object
       title: merchant summary
@@ -21796,7 +21892,7 @@ components:
       type: object
       title: settlement summary
       description: Object that contains information about the settlement.
-      properties: *ref_286
+      properties: *ref_288
     batchSummary:
       type: object
       title: batch summary
@@ -21812,7 +21908,7 @@ components:
       type: object
       title: authorization summary
       description: Object that contains information about the authorization.
-      properties: *ref_287
+      properties: *ref_289
     transaction:
       type: object
       title: transaction
@@ -21837,7 +21933,7 @@ components:
       type: object
       title: dispute
       description: Object that contains information about the dispute.
-      properties: *ref_288
+      properties: *ref_290
     tax:
       required: *ref_112
       type: object
@@ -21854,7 +21950,7 @@ components:
     setupOrder:
       type: object
       description: Object that contains information about the initial cost that a customer pays to set up the subscription.
-      allOf: *ref_289
+      allOf: *ref_291
     recurringOrder:
       type: object
       description: |
@@ -21866,13 +21962,13 @@ components:
       type: object
       properties: *ref_81
     paymentPlanPaginatedList:
-      required: *ref_290
-      type: object
-      allOf: *ref_291
-    paymentPlanSummary:
       required: *ref_292
       type: object
-      properties: *ref_293
+      allOf: *ref_293
+    paymentPlanSummary:
+      required: *ref_294
+      type: object
+      properties: *ref_295
     secureTokenSummary:
       required: *ref_92
       type: object
@@ -21892,9 +21988,9 @@ components:
       type: object
       properties: *ref_90
     subscriptionPaginatedList:
-      required: *ref_294
+      required: *ref_296
       type: object
-      allOf: *ref_295
+      allOf: *ref_297
     secureTokenPayload:
       required: *ref_116
       type: object
@@ -21903,21 +21999,21 @@ components:
       description: Object that contains information about the secure token that represents the customer’s payment details.
       properties: *ref_117
     subscriptionRequest:
-      required: *ref_296
-      type: object
-      properties: *ref_297
-    subscriptionPaymentRequest:
       required: *ref_298
+      type: object
       properties: *ref_299
+    subscriptionPaymentRequest:
+      required: *ref_300
+      properties: *ref_301
     paymentSummary:
       required: *ref_147
       type: object
       description: Object that contains information about a payment.
       properties: *ref_148
     subscriptionPayment:
-      required: *ref_300
+      required: *ref_302
       type: object
-      properties: *ref_301
+      properties: *ref_303
     shipping:
       description: Object that contains information about the customer and their shipping address.
       type: object
@@ -21927,32 +22023,32 @@ components:
       description: Customer contact and address details.
       properties: *ref_104
     achSource:
-      required: *ref_302
+      required: *ref_304
       type: object
       title: ACH account
       description: Object that contains the customer's account details.
-      properties: *ref_303
+      properties: *ref_305
     padSource:
-      required: *ref_304
+      required: *ref_306
       type: object
       title: PAD account
       description: Object that contains the customer's account details.
-      properties: *ref_305
+      properties: *ref_307
     cardSource:
-      required: *ref_306
+      required: *ref_308
       type: object
       title: Card
       description: Object that contains the customer's card details.
-      properties: *ref_307
+      properties: *ref_309
     secureToken:
       required: *ref_105
       type: object
       description: Object that contains information about the secure token.
       properties: *ref_106
     secureTokenPaginatedList:
-      required: *ref_308
+      required: *ref_310
       type: object
-      allOf: *ref_309
+      allOf: *ref_311
     ipAddress:
       required: *ref_114
       type: object
@@ -21974,9 +22070,9 @@ components:
       description: Object that contains information about the payment details for the customer’s preauthorized electronic debit (PAD) transactions.
       properties: *ref_172
     deviceConfig:
-      required: *ref_310
+      required: *ref_312
       type: object
-      properties: *ref_311
+      properties: *ref_313
       description: Object that contains information about the configuration of the POS terminal.
     device:
       required: *ref_96
@@ -21984,40 +22080,40 @@ components:
       properties: *ref_97
       description: Object that contains information about the physical device the merchant used to capture the customer’s card details.
     rawCardDetails:
-      required: *ref_312
+      required: *ref_314
       type: object
       title: Raw
       description: Object that contains information about the unencrypted card details.
-      properties: *ref_313
+      properties: *ref_315
     encryptionCapableDevice:
       required: *ref_98
       type: object
       description: Object that contains information about the encryption details of the POS terminal.
       allOf: *ref_99
     iccCardDetails:
-      required: *ref_314
+      required: *ref_316
       type: object
       title: Chip
       description: Object that contains information about the Integrated Circuit Card (ICC).
-      properties: *ref_315
+      properties: *ref_317
     fullyEncryptedKeyedDataFormat:
-      required: *ref_316
+      required: *ref_318
       type: object
       title: Encrypted
       description: Object that contains information about the encrypted card data for keyed transactions.
-      properties: *ref_317
+      properties: *ref_319
     partiallyEncryptedKeyedDataFormat:
-      required: *ref_318
+      required: *ref_320
       type: object
       title: Partially encrypted
       description: Object that contains information about the partially-encrypted card data for keyed transactions.
-      properties: *ref_319
+      properties: *ref_321
     plainTextKeyedDataFormat:
-      required: *ref_320
+      required: *ref_322
       type: object
       title: Unencrypted
       description: Object that contains information about the plain-text card data for keyed transactions.
-      properties: *ref_321
+      properties: *ref_323
     dukptPinDetails:
       required: *ref_100
       type: object
@@ -22030,9 +22126,9 @@ components:
       description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
       properties: *ref_138
     voucher:
-      required: *ref_322
+      required: *ref_324
       type: object
-      properties: *ref_323
+      properties: *ref_325
       description: |
         Object that contains information about the EBT voucher.  
         **Note:** Voucher is available only for EBT Cash benefit accounts.
@@ -22042,29 +22138,29 @@ components:
       description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
       allOf: *ref_103
     keyedCardDetails:
-      required: *ref_324
+      required: *ref_326
       type: object
       title: Keyed
       description: Object that contains information about the keyed card details.
-      properties: *ref_325
+      properties: *ref_327
     encryptedSwipedDataFormat:
-      required: *ref_326
+      required: *ref_328
       type: object
       title: Encrypted
       description: Object that contains information about the encrypted swiped card data.
-      properties: *ref_327
+      properties: *ref_329
     plainTextSwipedDataFormat:
-      required: *ref_328
+      required: *ref_330
       type: object
       title: Unencrypted
       description: Object that contains information about plain-text swiped card data.
-      properties: *ref_329
+      properties: *ref_331
     swipedCardDetails:
-      required: *ref_330
+      required: *ref_332
       type: object
       title: Swiped
       description: Object that contains information about the customer’s card details for swiped transactions.
-      properties: *ref_331
+      properties: *ref_333
     cardPayload:
       required: *ref_108
       type: object
@@ -22085,13 +22181,13 @@ components:
       description: Object that contains the 3-D Secure information from a third party.
       properties: *ref_121
     tokenizationRequest:
-      required: *ref_332
-      type: object
-      properties: *ref_333
-    surcharging:
       required: *ref_334
       type: object
       properties: *ref_335
+    surcharging:
+      required: *ref_336
+      type: object
+      properties: *ref_337
       description: Object that contains surcharge information. Our gateway returns this object only if the merchant adds a surcharge to transactions.
     cardInfo:
       required: *ref_167
@@ -22117,36 +22213,36 @@ components:
       type: object
       description: |
         Object that contains information about the surcharge.
-      properties: *ref_336
+      properties: *ref_338
     choiceRate:
-      required: *ref_337
+      required: *ref_339
       type: object
       readOnly: true
-      properties: *ref_338
+      properties: *ref_340
       description: |
         The choice rate.  
         **Note:** This field is required if dual pricing was offered.
     dualPricing:
-      required: *ref_339
+      required: *ref_341
       type: object
       description: Object that contains information about dual pricing.
-      properties: *ref_340
+      properties: *ref_342
     breakdown:
       required: *ref_134
       type: object
       description: Object that contains information about the breakdown of the transaction.
       properties: *ref_135
     convenienceFee:
-      required: *ref_341
+      required: *ref_343
       type: object
       readOnly: true
       description: Object that contains convenience fee information for the transaction.
-      properties: *ref_342
+      properties: *ref_344
     lineItem:
-      required: *ref_343
+      required: *ref_345
       type: object
       description: List of line items.
-      properties: *ref_344
+      properties: *ref_346
     itemizedBreakdown:
       required: *ref_130
       type: object
@@ -22160,12 +22256,12 @@ components:
     firstTxnReferenceData:
       type: object
       description: Object that contains information about the initial payment for the payment instruction.
-      properties: *ref_345
+      properties: *ref_347
     standingInstructions:
-      required: *ref_346
+      required: *ref_348
       type: object
       description: If you don't use our Subscriptions mechanism, include this section to configure your standing/recurring orders.
-      properties: *ref_347
+      properties: *ref_349
     paymentOrder:
       required: *ref_122
       type: object
@@ -22173,17 +22269,17 @@ components:
       allOf: *ref_123
     securityCheck:
       type: object
-      properties: *ref_348
+      properties: *ref_350
       description: Object that contains information about card verification and security checks.
     emvTag:
-      required: *ref_349
-      type: object
-      description: Object that contains information about the EMV tag.
-      properties: *ref_350
-    cardBalance:
       required: *ref_351
       type: object
+      description: Object that contains information about the EMV tag.
       properties: *ref_352
+    cardBalance:
+      required: *ref_353
+      type: object
+      properties: *ref_354
       description: Object that contains information about the total funds available in the card.
     card:
       required: *ref_145
@@ -22220,9 +22316,9 @@ components:
       type: object
       properties: *ref_125
     paymentPaginatedList:
-      required: *ref_353
+      required: *ref_355
       type: object
-      allOf: *ref_354
+      allOf: *ref_356
     digitalWalletPayload:
       required: *ref_165
       type: object
@@ -22231,11 +22327,11 @@ components:
       description: Object that contains information about the payment details in the customer’s digital wallet.
       properties: *ref_166
     rawPinDetails:
-      required: *ref_355
+      required: *ref_357
       type: object
       title: Unencrypted
       description: Object that contains information about the unencrypted PIN details.
-      properties: *ref_356
+      properties: *ref_358
     singleUseTokenPayload:
       required: *ref_163
       type: object
@@ -22248,24 +22344,24 @@ components:
       description: Object that contains information about saving the customer’s payment details.
       properties: *ref_136
     offlineProcessing:
-      required: *ref_357
-      type: object
-      description: Object that contains information about the transaction if the merchant ran it when the terminal was offline.
-      properties: *ref_358
-    paymentRequest:
       required: *ref_359
       type: object
+      description: Object that contains information about the transaction if the merchant ran it when the terminal was offline.
       properties: *ref_360
+    paymentRequest:
+      required: *ref_361
+      type: object
+      properties: *ref_362
     breakdownAdjustment:
       type: object
       description: Object that contains information about the tip amount of a transaction.
-      properties: *ref_361
+      properties: *ref_363
     orderAdjustment:
-      required: *ref_362
+      required: *ref_364
       type: object
       title: Order
       description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the order details.
-      properties: *ref_363
+      properties: *ref_365
     statusAdjustment:
       required: *ref_155
       type: object
@@ -22279,44 +22375,44 @@ components:
       description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the customer’s contact details.
       properties: *ref_158
     signatureAdjustment:
-      required: *ref_364
+      required: *ref_366
       type: object
       title: Signature
       description: |
         Object that contains the signature for the transaction.  
         **Note:** If the merchant previously added a signature to the transaction, they can’t adjust or delete the signature.
-      properties: *ref_365
+      properties: *ref_367
     paymentAdjustment:
-      required: *ref_366
+      required: *ref_368
       type: object
       description: Object that contains the transaction adjustment object.
-      properties: *ref_367
+      properties: *ref_369
     paymentCapture:
       description: Object that contains the details of the payment that the merchant wants to capture.
       type: object
-      properties: *ref_368
+      properties: *ref_370
     paymentReversal:
       type: object
-      properties: *ref_369
+      properties: *ref_371
     referencedRefund:
       description: Object that contains the details of the payment that the merchant wants to refund.
-      required: *ref_370
-      type: object
-      properties: *ref_371
-    paymentInstructionOrder:
       required: *ref_372
       type: object
+      properties: *ref_373
+    paymentInstructionOrder:
+      required: *ref_374
+      type: object
       description: Object that contains information about the payment.
-      allOf: *ref_373
+      allOf: *ref_375
     customizationOptions:
       type: object
       description: Object that contains available options to customize certain aspects of an instruction.
       properties: *ref_159
     paymentInstructionRequest:
-      required: *ref_374
+      required: *ref_376
       type: object
       description: Object that contains the instructions for initiating a payment on a physical device.
-      properties: *ref_375
+      properties: *ref_377
     deviceInstruction:
       type: object
       description: Object that contains information about the status of the instruction
@@ -22336,80 +22432,80 @@ components:
       description: Object that contains information about the refund.
       properties: *ref_153
     refundPaginatedList:
-      required: *ref_376
-      type: object
-      description: Object that contains information about refund objects.
-      allOf: *ref_377
-    unreferencedRefund:
       required: *ref_378
       type: object
-      description: Refund a payment that is not linked to a previous transaction. Unreferenced refunds are available only on certain accounts.
-      properties: *ref_379
-    refundAdjustment:
+      description: Object that contains information about refund objects.
+      allOf: *ref_379
+    unreferencedRefund:
       required: *ref_380
       type: object
-      description: Object that contains information about the adjustment to the refund.
+      description: Refund a payment that is not linked to a previous transaction. Unreferenced refunds are available only on certain accounts.
       properties: *ref_381
-    refundInstructionOrder:
+    refundAdjustment:
       required: *ref_382
       type: object
-      description: Object that contains information about the refund.
-      allOf: *ref_383
-    refundInstructionRequest:
+      description: Object that contains information about the adjustment to the refund.
+      properties: *ref_383
+    refundInstructionOrder:
       required: *ref_384
       type: object
+      description: Object that contains information about the refund.
+      allOf: *ref_385
+    refundInstructionRequest:
+      required: *ref_386
+      type: object
       description: Object that contains information about the instruction request to initiate a refund on a payment device.
-      properties: *ref_385
+      properties: *ref_387
     refundInstruction:
       required: *ref_161
       type: object
       allOf: *ref_162
     cardVerificationRequest:
-      required: *ref_386
-      type: object
-      properties: *ref_387
-    cardVerificationResult:
       required: *ref_388
       type: object
       properties: *ref_389
-    balanceInquiry:
+    cardVerificationResult:
       required: *ref_390
       type: object
       properties: *ref_391
-    balance:
+    balanceInquiry:
       required: *ref_392
       type: object
       properties: *ref_393
-    cardBinPayload:
+    balance:
       required: *ref_394
+      type: object
+      properties: *ref_395
+    cardBinPayload:
+      required: *ref_396
       type: object
       writeOnly: true
       title: Card BIN
       description: Object that contains information about the card's bank identification number (BIN).
-      properties: *ref_395
-    binLookup:
-      required: *ref_396
-      type: object
       properties: *ref_397
-    fxRateInquiry:
+    binLookup:
       required: *ref_398
       type: object
       properties: *ref_399
-    fxRateInquiryResult:
+    fxRateInquiry:
       required: *ref_400
       type: object
       properties: *ref_401
-      description: Object that contains information about the currency conversion rate.
-    fxRate:
+    fxRateInquiryResult:
       required: *ref_402
       type: object
-      description: Foreign exchange rate for the transaction.
       properties: *ref_403
-    bankTransferBreakdown:
+      description: Object that contains information about the currency conversion rate.
+    fxRate:
       required: *ref_404
       type: object
-      description: Object that contains information about the taxes and tip amount on the transaction.
+      description: Foreign exchange rate for the transaction.
       properties: *ref_405
+    bankTransferBreakdown:
+      required: *ref_406
+      type: object
+      description: Object that contains information about the taxes and tip amount on the transaction.
+      properties: *ref_407
     bankTransferPaymentOrder:
       required: *ref_173
       type: object
@@ -22432,10 +22528,10 @@ components:
       description: Object that contains the customer's account details.
       properties: *ref_186
     bankTransferReturnSummary:
-      required: *ref_406
+      required: *ref_408
       type: object
       description: Object that contains information about a return.
-      properties: *ref_407
+      properties: *ref_409
     bankTransferResult:
       required: *ref_187
       type: object
@@ -22448,24 +22544,24 @@ components:
       description: Object that contains information about the sale and the customer's bank details.
       properties: *ref_179
     bankTransferPaymentPaginatedList:
-      required: *ref_408
-      type: object
-      allOf: *ref_409
-    bankTransferPaymentRequest:
       required: *ref_410
       type: object
-      description: Object that contains information about the sale and the customer's bank details.
-      properties: *ref_411
-    bankTransferReferencedRefund:
+      allOf: *ref_411
+    bankTransferPaymentRequest:
       required: *ref_412
       type: object
-      description: Object that contains information about the payment that you want to refund.
+      description: Object that contains information about the sale and the customer's bank details.
       properties: *ref_413
-    representment:
+    bankTransferReferencedRefund:
       required: *ref_414
       type: object
-      description: Object that contains the paymentMethod object.
+      description: Object that contains information about the payment that you want to refund.
       properties: *ref_415
+    representment:
+      required: *ref_416
+      type: object
+      description: Object that contains the paymentMethod object.
+      properties: *ref_417
     bankTransferRefundOrder:
       description: Object that contains information about the order.
       required: *ref_181
@@ -22476,25 +22572,25 @@ components:
       type: object
       properties: *ref_190
     bankTransferRefundPaginatedList:
-      required: *ref_416
-      type: object
-      allOf: *ref_417
-    bankTransferUnreferencedRefund:
       required: *ref_418
       type: object
-      properties: *ref_419
-    bankAccountVerificationRequest:
+      allOf: *ref_419
+    bankTransferUnreferencedRefund:
       required: *ref_420
       type: object
       properties: *ref_421
-    bankAccountVerificationResult:
+    bankAccountVerificationRequest:
       required: *ref_422
       type: object
       properties: *ref_423
+    bankAccountVerificationResult:
+      required: *ref_424
+      type: object
+      properties: *ref_425
     legalAddress:
       title: Legal address
-      required: *ref_424
-      allOf: *ref_425
+      required: *ref_426
+      allOf: *ref_427
     business:
       type: object
       description: Object that contains information about the business.
@@ -22505,14 +22601,14 @@ components:
       title: Signature by direct link
       description: We return a link to the pricing agreement in the response.
       type: object
-      required: *ref_426
-      properties: *ref_427
+      required: *ref_428
+      properties: *ref_429
     signatureByEmail:
       title: Signature by email
       description: Owner's signature by email.
       type: object
-      required: *ref_428
-      properties: *ref_429
+      required: *ref_430
+      properties: *ref_431
     signature:
       type: object
       description: Object containing the method we used to capture the owner's signature.
@@ -22525,7 +22621,7 @@ components:
     paginatedMerchants:
       type: object
       title: paginated merchant platforms
-      allOf: *ref_430
+      allOf: *ref_432
     processing:
       type: object
       title: processing
@@ -22537,20 +22633,20 @@ components:
       properties: *ref_203
     createFunding:
       type: object
-      allOf: *ref_431
+      allOf: *ref_433
     pricingTemplate:
       type: object
       title: Pricing intent
-      required: *ref_432
-      properties: *ref_433
+      required: *ref_434
+      properties: *ref_435
     pricingAgreement:
       type: object
       title: Pricing agreement
-      allOf: *ref_434
+      allOf: *ref_436
     pricing:
       type: object
       description: Object that contains pricing information.
-      oneOf: *ref_435
+      oneOf: *ref_437
     contact:
       type: object
       title: contact
@@ -22563,16 +22659,16 @@ components:
     createMerchantAccount:
       type: object
       title: create merchant platform
-      required: *ref_436
-      properties: *ref_437
+      required: *ref_438
+      properties: *ref_439
     fundingAccountSummary:
       type: object
       title: funding account summary
-      properties: *ref_438
+      properties: *ref_440
     funding:
       type: object
       description: Object that contains funding information.
-      allOf: *ref_439
+      allOf: *ref_441
     processingAccount:
       required: *ref_207
       type: object
@@ -22580,20 +22676,24 @@ components:
     paginatedProcessingAccounts:
       type: object
       title: paginated processing accounts
-      allOf: *ref_440
+      allOf: *ref_442
     paginatedContacts:
       type: object
       title: paginated Contacts
-      allOf: *ref_441
+      allOf: *ref_443
     paginatedOwners:
       type: object
       title: paginated Owners
-      allOf: *ref_442
+      allOf: *ref_444
+    pricingAgreementReminder:
+      type: object
+      required: *ref_216
+      properties: *ref_217
   examples:
     paginatedFundRecipients:
       summary: Paginated funding recipients.
       description: Paginated list of funding recipients.
-      value: *ref_443
+      value: *ref_445
     noActivity:
       summary: No records found
       description: Valid request, but no records match the criteria.
@@ -22605,15 +22705,15 @@ components:
     notAuthorized:
       summary: Not Authorized
       description: Your identity could not be verified
-      value: *ref_444
+      value: *ref_446
     forbidden:
       summary: Forbidden
       description: You do not have the required permission
-      value: *ref_445
+      value: *ref_447
     apiError:
       summary: Api error
       description: Unable to process your request.
-      value: *ref_446
+      value: *ref_448
     idempotentKeyMissing:
       summary: Idempotency key missing
       description: Idempotency key must be supplied
@@ -22625,7 +22725,7 @@ components:
     notAcceptable:
       summary: Not acceptable
       description: Requested representation not supported
-      value: *ref_447
+      value: *ref_449
     idempotentKeyInUse:
       summary: Idempotency key in use
       description: Idempotency key in use
@@ -22633,44 +22733,44 @@ components:
     fundingRecipient:
       summary: Funding recipient.
       description: Funding recipients.
-      value: *ref_448
+      value: *ref_450
     notFound:
       summary: Not found
       description: Resource could not be found
-      value: *ref_449
+      value: *ref_451
     fundingAccounts:
       summary: List of funding accounts
       description: List of funding accounts.
-      value: *ref_450
+      value: *ref_452
     fundingAccount:
       summary: Funding account
       description: Funding accounts.
-      value: *ref_451
+      value: *ref_453
     owner:
       summary: Owner object
       description: Owner object
       value: *ref_34
     listFundingAccountExample:
       summary: Paginated funding accounts
-      value: *ref_452
+      value: *ref_454
     noResults:
       summary: No results found
       description: No results found
-      value: *ref_453
+      value: *ref_455
     fundingAccountExample:
       summary: Masked funding account example.
-      value: *ref_454
+      value: *ref_456
     paginatedPricingIntent:
       summary: Paginated pricing intent
       description: Example of a paginated pricing intent.
-      value: *ref_455
+      value: *ref_457
     pricingIntent:
       summary: Pricing intent
       description: Pricing intent
       value: *ref_50
     listInstructionsExample:
       summary: Paginated instructions list
-      value: *ref_456
+      value: *ref_458
     parameterError:
       summary: Bad request
       description: One or more validation errors occurred.
@@ -22685,7 +22785,7 @@ components:
       value: *ref_61
     newInstructionAccepted:
       summary: New instruction accepted.
-      value: *ref_457
+      value: *ref_459
     insufficientFunds:
       summary: Insufficient funds
       description: You do not have enough funds to complete the request.
@@ -22705,14 +22805,14 @@ components:
     listBalancesExample:
       summary: Paginated list of merchant balances
       description: Paginated list of merchant balances.
-      value: *ref_458
+      value: *ref_460
     paginatedList:
       summary: Paginated activity records
       description: Valid payfac account with activity for date range.
-      value: *ref_459
+      value: *ref_461
     paginatedBatches:
       summary: Paginated batches
-      value: *ref_460
+      value: *ref_462
     examples-parameterError:
       summary: Bad Request
       description: One or more validation errors occurred
@@ -22727,25 +22827,25 @@ components:
       value: *ref_63
     paginatedTransactions:
       summary: Paginated transactions
-      value: *ref_461
+      value: *ref_463
     transactionIdError:
       summary: Bad Request
       description: One or more validation errors occurred
-      value: *ref_462
+      value: *ref_464
     paginatedAuthorizations:
       summary: Paginated authorizations
-      value: *ref_463
+      value: *ref_465
     paginatedDisputes:
       summary: Paginated disputes
-      value: *ref_464
+      value: *ref_466
     paginatedPaymentPlan:
       summary: Payment Plan
       description: Payment Plan
-      value: *ref_465
+      value: *ref_467
     paymentPlanRequest:
       summary: Payment Plan
       description: Payment Plan
-      value: *ref_466
+      value: *ref_468
     paymentPlanResponse:
       summary: Payment Plan
       description: Payment Plan
@@ -22753,19 +22853,19 @@ components:
     resourceExists:
       summary: Resource already exists
       description: Resource already exists
-      value: *ref_467
+      value: *ref_469
     unsupportedMediaType:
       summary: Unsupported media type
       description: The payload is in an unsupported format.
-      value: *ref_468
+      value: *ref_470
     paginatedSubscription:
       summary: Paginated Subscription
       description: Example of Paginated Subscription
-      value: *ref_469
+      value: *ref_471
     subscriptionRequest:
       summary: Subscription
       description: Subscription
-      value: *ref_470
+      value: *ref_472
     subscriptionResponse:
       summary: Subscription
       description: Subscription
@@ -22773,23 +22873,23 @@ components:
     deactivateSubscription:
       summary: Deactivate subscription
       description: Deactivate a subscription
-      value: *ref_471
+      value: *ref_473
     subscriptionPaymentRequest:
       summary: Subscription manual payment
       description: Subscription manual payment
-      value: *ref_472
+      value: *ref_474
     subscriptionPaymentResponse:
       summary: Subscription manual payment
       description: Subscription manual payment
-      value: *ref_473
+      value: *ref_475
     paginatedSecureToken:
       summary: Paginated Secure Token
       description: Paginated Secure Token
-      value: *ref_474
+      value: *ref_476
     secureTokenRequest:
       summary: Secure Token
       description: Secure Token
-      value: *ref_475
+      value: *ref_477
     secureTokenResponse:
       summary: Secure Token
       description: Secure Token
@@ -22797,19 +22897,19 @@ components:
     singleUseTokenRequest:
       summary: Single Use Token
       description: Single Use Token
-      value: *ref_476
+      value: *ref_478
     singleUseTokenResponse:
       summary: Single Use Token
       description: Single Use Token
-      value: *ref_477
+      value: *ref_479
     paginatedPayment:
       summary: Payment
       description: Payment
-      value: *ref_478
+      value: *ref_480
     paymentRequest:
       summary: Payment
       description: Payment
-      value: *ref_479
+      value: *ref_481
     paymentResponse:
       summary: Payment
       description: Payment
@@ -22817,47 +22917,47 @@ components:
     adjustPaymentRequest:
       summary: Adjust Payment
       description: Adjust Payment
-      value: *ref_480
+      value: *ref_482
     adjustPaymentResponse:
       summary: Adjust Payment
       description: Adjust Payment
-      value: *ref_481
+      value: *ref_483
     reversalPaymentRequest:
       summary: Reversal Payment
       description: Reversal Payment
-      value: *ref_482
+      value: *ref_484
     reversalPaymentResponse:
       summary: Reversal Payment
       description: Reversal Payment
-      value: *ref_483
+      value: *ref_485
     refundPaymentRequest:
       summary: Refund Payment
       description: Refund Payment
-      value: *ref_484
+      value: *ref_486
     refundPaymentResponse:
       summary: Refund Payment
       description: Refund Payment
-      value: *ref_485
+      value: *ref_487
     paymentInstructionRequest:
       summary: Payment Instruction
       description: Submit an instruction for initiating a payment on a physical device.
-      value: *ref_486
+      value: *ref_488
     paymentInstructionInProgress:
       summary: Payment instruction
       description: Object that contains information about the progress of the payment instruction.
-      value: *ref_487
+      value: *ref_489
     paymentInstruction:
       summary: Payment instruction
       description: Object that contains information about the progress of the payment instruction.
-      value: *ref_488
+      value: *ref_490
     paginatedRefund:
       summary: Paginated Refund
       description: Paginated Refund
-      value: *ref_489
+      value: *ref_491
     refundRequest:
       summary: Refund
       description: Refund
-      value: *ref_490
+      value: *ref_492
     refundResponse:
       summary: Refund
       description: Refund
@@ -22865,67 +22965,67 @@ components:
     adjustRefundRequest:
       summary: Adjust Refund
       description: Adjust Refund
-      value: *ref_491
+      value: *ref_493
     adjustRefundResponse:
       summary: Adjust Refund
       description: Adjust Refund
-      value: *ref_492
+      value: *ref_494
     reverseRefund:
       summary: Reverse Refund
       description: Reverse Refund
-      value: *ref_493
+      value: *ref_495
     refundInstructionRequest:
       summary: Refund instruction
       description: Submit an instruction for initiating a refund on a physical device.
-      value: *ref_494
+      value: *ref_496
     refundInstructionInProgress:
       summary: Refund instruction
       description: Object that contains information about the progress of the refund instruction.
-      value: *ref_495
+      value: *ref_497
     refundInstruction:
       summary: Refund instruction
       description: Object that contains information about the progress of the refund instruction.
-      value: *ref_496
+      value: *ref_498
     cardVerificationRequest:
       summary: Card Verification
       description: Card Verification
-      value: *ref_497
+      value: *ref_499
     cardVerificationResponse:
       summary: Card Verification
       description: Card Verification
-      value: *ref_498
+      value: *ref_500
     cardBalanceRequest:
       summary: Card Balance
       description: Card Balance
-      value: *ref_499
+      value: *ref_501
     cardBalanceResponse:
       summary: Card Balance
       description: Card Balance
-      value: *ref_500
+      value: *ref_502
     binLookupRequest:
       summary: BIN lookup
       description: BIN lookup
-      value: *ref_501
+      value: *ref_503
     binLookupResponse:
       summary: BIN lookup
       description: BIN lookup
-      value: *ref_502
+      value: *ref_504
     fxRateRequest:
       summary: Fx-Rate
       description: Fx-Rate
-      value: *ref_503
+      value: *ref_505
     fxRateResponse:
       summary: Fx-Rate
       description: Fx-Rate
-      value: *ref_504
+      value: *ref_506
     paginatedBankTransferPayment:
       summary: Bank Transfer Payment
       description: Bank Transfer Payment
-      value: *ref_505
+      value: *ref_507
     bankTransferPaymentRequestStoreToken:
       summary: Store Token Bank Transfer Payment
       description: Bank Transfer Payment with ACH payload and token storage
-      value: *ref_506
+      value: *ref_508
     bankTransferPaymentResponseStoreToken:
       summary: Store Token Bank Transfer Payment
       description: Bank Transfer Payment with ACH payload and token storage
@@ -22933,27 +23033,27 @@ components:
     reverseBankTransferPayment:
       summary: Reverse Bank Transfer Payment
       description: Reverse Bank Transfer Payment
-      value: *ref_507
+      value: *ref_509
     refundBankTransferPaymentRequest:
       summary: Refund Bank Transfer Payment
       description: Refund Bank Transfer Payment
-      value: *ref_508
+      value: *ref_510
     refundBankTransferPaymentResponse:
       summary: Reverse Bank Transfer Payment
       description: Reverse Bank Transfer Payment
-      value: *ref_509
+      value: *ref_511
     representmentBankTransferPaymentRequest:
       summary: Representment Bank Transfer Payment
       description: Representment Bank Transfer Payment
-      value: *ref_510
+      value: *ref_512
     paginatedBankTransferUnreferencedRefund:
       summary: Paginated Bank Transfer Unreferenced Refund
       description: Paginated Bank Transfer Unreferenced Refund
-      value: *ref_511
+      value: *ref_513
     bankTransferUnreferencedRefundRequest:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
-      value: *ref_512
+      value: *ref_514
     bankTransferUnreferencedRefundResponse:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
@@ -22961,31 +23061,31 @@ components:
     reverseBankTransferUnreferencedRefund:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
-      value: *ref_513
+      value: *ref_515
     bankAccountVerificationRequestPad:
       summary: PAD Bank Account Verification Request
       description: Bank Account Verification Request for PAD
-      value: *ref_514
+      value: *ref_516
     bankAccountVerificationRequestAch:
       summary: ACH Bank Account Verification Request
       description: Bank Account Verification Request for ACH
-      value: *ref_515
+      value: *ref_517
     bankAccountVerificationResponse:
       summary: Bank Account Verification Response
       description: Bank Account Verification Response
-      value: *ref_516
+      value: *ref_518
     listMerchantPlatforms:
       summary: Paginated list of merchant platforms
       description: Retrieve a list of merchant platforms associated with your account.
-      value: *ref_517
+      value: *ref_519
     merchantPlatformCreated:
       summary: Created merchant platform
       description: New merchant platform created
-      value: *ref_518
+      value: *ref_520
     processingAccountFailed:
       summary: Failed processing account
       description: We successfully created the merchant platform, but failed to add one or more processing accounts.
-      value: *ref_519
+      value: *ref_521
     fundingAccountsLimitReached:
       summary: Funding accounts limit reached
       description: Funding accounts restricted. You can not have any more than two funding accounts attached to this entity
@@ -23005,31 +23105,43 @@ components:
     taxIdInUse:
       summary: Tax ID in use
       description: The tax ID supplied is already in use.
-      value: *ref_520
+      value: *ref_522
     nationalIdInUse:
       summary: National ID in use
       description: One or more supplied national IDs are not unique. All national IDs must be unique.
-      value: *ref_521
+      value: *ref_523
     listProcessingAccounts:
       summary: Paginated list of processing account
       description: Retrieve processing accounts associated with a merchant platform.
-      value: *ref_522
+      value: *ref_524
     examples-fundingAccounts:
       summary: List of funding accounts
       description: List of funding accounts associated with a processing account.
-      value: *ref_523
+      value: *ref_525
     paginatedContacts:
       summary: Paginated list of processing account contacts
       description: List of contacts associated with a processing account.
-      value: *ref_524
+      value: *ref_526
     listProcessingAccountOwners:
       summary: Paginated list of processing account owners
       description: Retrieve owners associated with a processing account.
-      value: *ref_525
+      value: *ref_527
+    notRequestedByEmail:
+      summary: Not requested by email
+      description: We couldn't resend the email to the merchant because you didn't originally choose to send the information by email.
+      value: *ref_528
+    contractAlreadySigned:
+      summary: Contract already signed
+      description: We couldn’t resend the email because the merchant already signed the contract.
+      value: *ref_529
+    noPricingAgreementExistsForTheProcessingAccount:
+      summary: No pricing agreement exists for the processing account
+      description: We couldn’t resend the email because there is no pricing agreement for the processing account.
+      value: *ref_530
     contact:
       summary: Contact object
       description: Contact object
-      value: *ref_526
+      value: *ref_531
   responses:
     '400':
       description: Invalid request
