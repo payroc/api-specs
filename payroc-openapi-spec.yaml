@@ -20188,7 +20188,7 @@ paths:
     get:
       tags:
         - Merchant platforms
-      summary: Paginated list of open processing accounts of a merchant platform
+      summary: List merchant platform's processing accounts
       description: Retrieve processing accounts associated with a merchant platform.
       operationId: listMerchantLocations
       parameters:
