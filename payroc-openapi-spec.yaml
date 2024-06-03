@@ -34,7 +34,16 @@ tags:
   - name: Funding recipients
     description: Entities that can receive funding but not take payments
   - name: Merchant platforms
-    description: Legal entity
+    description: |
+      A merchant platform is an entity that represents a business and includes its legal information and all processing accounts.<br/><br/>
+      After you create a merchant platform for a business, you can do the following:  
+        - [Create and add an additional processing account to a merchant platform.](#createProcessingAccount)  
+        - [Retrieve a merchant platform.](#getMerchantAcccounts)  
+        - [Retrieve a list of merchant platforms.](#listMerchantPlatforms)  
+        - [Retrieve a list of open processing accounts that are linked to a merchant platform.](#listMerchantLocations)  
+          
+          
+      For more information about boarding a merchant, go to our [Board a merchant](/guides/integrate/boarding) guide. 
   - name: Owners
     description: Individuals who own or control the business.
   - name: Payment instructions
@@ -19265,7 +19274,17 @@ paths:
       tags:
         - Merchant platforms
       summary: Create merchant platform
-      description: Create a merchant platform.
+      description: |
+        Use this method to create the entity that represents a business, including its legal information and all its processing accounts.  
+
+        > **Note**: To add a processing account to an existing merchant platform, go to [Create a processing account](#createProcessingAccount).  
+          
+        The response contains some fields that we require for other methods:  
+        - **merchantPlatformId** - Unique identifier that we assign to the merchant platform. Use the merchantPlatformId to retrieve and update information about the merchant platform.  
+          
+        - **processingAccountId**- Unique identifier that we assign to each processing account. Use the processingAccountId to retrieve and update information about the processing account.  
+          <br/>
+        For more information about how to create a merchant platform, go to [Create a merchant platform.](/guides/integrate/boarding/merchant-platform)
       operationId: createMerchant
       parameters:
         - name: Idempotency-Key
@@ -20359,7 +20378,7 @@ paths:
       tags:
         - Merchant platforms
       summary: List merchant platforms
-      description: Retrieve a list of merchant platforms associated with your account.
+      description: Use this method to retrieve a [paginated](/api/pagination) list of the merchant platforms that are linked to the ISV's account.
       operationId: listMerchantPlatforms
       parameters:
         - name: before
@@ -20378,7 +20397,7 @@ paths:
           schema: *ref_31
       responses:
         '200':
-          description: Successful request. Returns a list of merchant platforms associated with your account.
+          description: Successful request. Returns a list of merchant platforms associated with the ISV's account.
           content:
             application/json:
               schema:
@@ -20507,7 +20526,10 @@ paths:
       tags:
         - Merchant platforms
       summary: Retrieve merchant platform
-      description: Retrieve a specific merchant platform.
+      description: |
+        Use this method to retrieve information about a merchant platform, including its legal information and processing accounts.  
+          
+        Include the merchantPlatformId that we sent you when you created the merchant platform.  
       operationId: getMerchantAcccounts
       parameters:
         - name: merchantPlatformId
@@ -20594,7 +20616,12 @@ paths:
       tags:
         - Merchant platforms
       summary: List merchant platform's processing accounts
-      description: Retrieve processing accounts associated with a merchant platform.
+      description: |
+        Use this method to retrieve a paginated list of processing accounts associated with a merchant platform.  
+          
+        When you created the merchant platform, we sent you its merchantPlatformId in the response. Send this merchantPlatformId as a path parameter in your endpoint.  
+          
+        > **Note**: By default, we return only open processing accounts. To include closed processing accounts, send a value of `true` for the includeClosed query parameter.  
       operationId: listMerchantLocations
       parameters:
         - name: merchantPlatformId
@@ -21135,7 +21162,17 @@ paths:
       tags:
         - Merchant platforms
       summary: Create processing account
-      description: Create a new processing account.
+      description: |
+        Use this method to create a processing account and add it to a merchant platform.  
+            > **Note**: You can create and add a processing account only to an existing merchant platform. If you have not already created a merchant platform, go to [Create a merchant platform.](#createMerchant)  
+          
+        In the response we return a processingAccountId for the processing account, which you need for the following methods.  
+        - [Retrieve processing account](#getProcessingAcccounts)  
+        - [List processing account's funding accounts](#listProcessingAccountsFundingAccounts)  
+        - [List contacts](#listProcessingAccountContacts)  
+        - [Get a processing account pricing agreement](#retrieveProcessingAccountPricing)  
+        - [List owners](#listMerchantOwners)  
+        - [Create reminder for processing account](#createReminder)  
       operationId: createProcessingAccount
       parameters:
         - name: merchantPlatformId
