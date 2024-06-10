@@ -3446,15 +3446,15 @@ paths:
                           transaction: 5
                         pinDebit:
                           additionalDiscount: 1.25
-                          transaction: 0
-                          monthlyAccess: 0
+                          transaction: 10
+                          monthlyAccess: 1200
                         electronicBenefitsTransfer:
-                          transaction: 0
+                          transaction: 10
                         enhancedInterchange:
-                          enrollment: 0
-                          creditToMerchant: 1.25
+                          enrollment: 1000
+                          creditToMerchant: 5.25
                         specialityCards:
-                          transaction: 0
+                          transaction: 10
                     ach:
                       fees:
                         transaction: 50
@@ -3464,8 +3464,8 @@ paths:
                         statement: 800
                         monthlyMinimum: 20000
                         accountVerification: 100
-                        discountRateUnder10000: 1.25
-                        discountRateAbove10000: 1.25
+                        discountRateUnder10000: 5.25
+                        discountRateAbove10000: 10
                   gateway:
                     fees:
                       monthly: 2000
