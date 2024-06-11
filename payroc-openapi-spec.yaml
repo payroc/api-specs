@@ -5507,7 +5507,7 @@ paths:
                         currency: USD
                         merchant:
                           merchantId: '4525644354'
-                          doingBusinessAs: Joe Bloggs pizza
+                          doingBusinessAs: Pizza Doe
                           link:
                             rel: merchant
                             method: get
@@ -5892,7 +5892,7 @@ paths:
                         currency: USD
                         merchant:
                           merchantId: '4525644354'
-                          doingBusinessAs: Joe Bloggs pizza
+                          doingBusinessAs: Pizza Doe
                           link:
                             rel: merchant
                             method: get
@@ -6199,7 +6199,7 @@ paths:
                         currency: USD
                         merchant:
                           merchantId: '4525644354'
-                          doingBusinessAs: Joe Bloggs pizza
+                          doingBusinessAs: Pizza Doe
                           link:
                             rel: merchant
                             method: get
