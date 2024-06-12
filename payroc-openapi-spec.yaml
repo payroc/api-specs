@@ -24043,7 +24043,7 @@ x-tagGroups:
       - Owners
       - Pricing intents
       - Processing accounts
-  - name: Pay by cloud
+  - name: Payroc Cloud
     tags:
       - Payment instructions
       - Refund instructions
