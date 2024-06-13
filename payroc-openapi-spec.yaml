@@ -82,7 +82,7 @@ paths:
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: &ref_21
             type: string
-            example: 8e03978e-40d5-43e8-bc93-6894a57f9324
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -688,13 +688,13 @@ paths:
                         status: approved
                         link:
                           rel: fundingAccount
-                          herf: https://api.payroc.com/v1/funding-accounts/1
+                          href: https://api.payroc.com/v1/funding-accounts/1
                           method: get
                       - fundingAccountId: 2
                         status: rejected
                         link:
                           rel: fundingAccount
-                          herf: https://api.payroc.com/v1/funding-accounts/2
+                          href: https://api.payroc.com/v1/funding-accounts/2
                           method: get
           headers:
             location:
@@ -1005,21 +1005,21 @@ paths:
           explode: false
           schema: &ref_29
             type: string
-            example: '2571'
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: &ref_30
             type: string
-            example: '8516'
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: &ref_31
             type: integer
-            example: 25
             default: 10
             maximum: 100
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a paginated list of all funding recipients.
@@ -1464,6 +1464,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -1621,6 +1622,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -1708,14 +1710,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a paginated list of all funding accounts.
@@ -2172,14 +2177,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful response. Returns a list of pricing intents.
@@ -3398,6 +3406,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -3708,6 +3717,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -3875,6 +3885,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -4134,14 +4145,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
         - name: dateFrom
           in: query
           description: Retrieve activity that occured since `dateFrom`. We can return activity from only the last two years.
@@ -4529,14 +4543,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
         - name: merchantId
           in: query
           required: false
@@ -4664,14 +4681,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
         - name: dateFrom
           in: query
           description: Retrieve activity that occured since `dateFrom`. We can return activity from only the last two years.
@@ -4927,27 +4947,31 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
         - name: date
           in: query
           required: true
-          description: Date that the merchant submitted the batch.
+          description: Date that the merchant submitted the batch. The format of this value is **YYYY-MM-DD**.
           schema:
             type: string
-            example: '2021-09-05'
+            format: date
+          example: '2021-09-05'
         - name: merchantId
           in: query
           description: Unique identifier of the merchant.
           schema: &ref_58
             type: string
-            example: '4525644354'
+          example: '4525644354'
       responses:
         '200':
           description: Successful request. Returns a paginated list of batches.
@@ -4975,16 +4999,18 @@ paths:
                             date:
                               type: string
                               format: date
-                              description: Date that the merchant submitted the batch.
+                              description: Date that the merchant submitted the batch. The format of this value is **YYYY-MM-DD**.
                               example: '2021-09-05'
                             createdDate:
                               type: string
-                              format: datetime
-                              description: Date that we created a record for the batch.
+                              format: date
+                              description: Date that we created a record for the batch. The format of this value is **YYYY-MM-DD**.
+                              example: '2024-01-30'
                             lastModifiedDate:
                               type: string
-                              format: datetime
-                              description: Date that the batch was last changed.
+                              format: date
+                              description: Date that the batch was last changed. The format of this value is **YYYY-MM-DD**.
+                              example: '2024-01-30'
                             saleAmount:
                               type: integer
                               description: Total value of sales. We return the value in the currency's lowest denomination, for example, cents.
@@ -5060,8 +5086,8 @@ paths:
                     data:
                       - batchId: 65
                         date: '2021-01-01'
-                        createdDate: '2021-09-05T13:15:00.000Z'
-                        lastModifiedDate: '2021-09-06T18:00:00.000Z'
+                        createdDate: '2021-09-05'
+                        lastModifiedDate: '2021-09-06'
                         saleAmount: 100
                         heldAmount: 0
                         returnAmount: 0
@@ -5083,8 +5109,8 @@ paths:
                             href: https://api.payroc.com/v1/authorizations?batchId=65
                       - batchId: 66
                         date: '2021-01-01'
-                        createdDate: '2021-09-05T13:15:00.000Z'
-                        lastModifiedDate: '2021-09-06T18:00:00.000Z'
+                        createdDate: '2021-09-05'
+                        lastModifiedDate: '2021-09-06'
                         saleAmount: 76
                         heldAmount: 0
                         returnAmount: 12
@@ -5180,7 +5206,7 @@ paths:
           style: simple
           schema: &ref_215
             type: integer
-            example: 12345
+          example: 12345
       responses:
         '200':
           description: Successful request. Returns the requested batch.
@@ -5232,32 +5258,37 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
         - name: date
           in: query
           required: true
-          description: Date to retrieve results from. You must provide either the 'batchId' or the 'date'.
+          description: Date to retrieve results from. The format of this value is **YYYY-MM-DD**. You must provide either the 'batchId' or the 'date'.
           schema: &ref_64
             type: string
-            example: '2021-09-05'
+            format: date
+          example: '2021-09-05'
         - name: batchId
           in: query
           required: true
           description: Unique identifier of the batch. You must provide either the 'batchId' or the 'date'.
           schema: &ref_65
             type: integer
-            example: 12345
+          example: 12345
         - name: merchantId
           in: query
           description: Unique identifier of the merchant.
           schema: *ref_58
+          example: '4525644354'
         - name: transactionType
           in: query
           required: false
@@ -5301,9 +5332,9 @@ paths:
                                 - return
                             date:
                               type: string
-                              format: datetime
-                              description: Timestamp of the transaction.
-                              example: '2021-01-01T17:00:00.000Z'
+                              format: date
+                              description: Date of the transaction. The format of this value is **YYYY-MM-DD**.
+                              example: '2021-01-01'
                             amount:
                               type: integer
                               description: Transaction amount. We return the value in the currency's lowest denomination, for example, cents.
@@ -5328,12 +5359,14 @@ paths:
                                 - unknown
                             createdDate:
                               type: string
-                              format: datetime
-                              description: Date that we received the transaction.
+                              format: date
+                              description: Date that we received the transaction.  The format of this value is **YYYY-MM-DD**.
+                              example: '2024-01-30'
                             lastModifiedDate:
                               type: string
-                              format: datetime
-                              description: Date that the transaction was last changed.
+                              format: date
+                              description: Date that the transaction was last changed.  The format of this value is **YYYY-MM-DD**.
+                              example: '2024-01-30'
                             status:
                               type: string
                               description: Indicates the status of the transaction.
@@ -5385,7 +5418,7 @@ paths:
                                 achDate:
                                   type: string
                                   format: date
-                                  description: Date that the processor settled the transaction.
+                                  description: Date that the processor settled the transaction. The format of this value is **YYYY-MM-DD**.
                                   example: '2021-09-05'
                             batch:
                               type: object
@@ -5497,8 +5530,8 @@ paths:
                         date: '2021-01-01'
                         amount: 25000
                         entryMethod: ecommerce
-                        createdDate: '2021-09-05T13:15:00.000Z'
-                        lastModifiedDate: '2021-09-06T18:00:00.000Z'
+                        createdDate: '2021-09-05'
+                        lastModifiedDate: '2021-09-06'
                         status: paid
                         cashbackAmount: 0
                         interchange:
@@ -5514,7 +5547,7 @@ paths:
                             href: https://api.payroc.com/v1/merchants/4525644354
                         settled:
                           settledBy: 3rd party
-                          achDate: '2021-09-05T13:15:00.000Z'
+                          achDate: '2021-09-05'
                         batch:
                           batchId: 12
                           date: '2021-01-01'
@@ -5647,28 +5680,34 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
         - name: date
           in: query
           required: true
-          description: Date to retrieve results from. You must provide either the 'batchId' or the 'date'.
+          description: Date to retrieve results from. The format of this value is **YYYY-MM-DD**. You must provide either the 'batchId' or the 'date'.
           schema: *ref_64
+          example: '2021-09-05'
         - name: batchId
           in: query
           required: true
           description: Unique identifier of the batch. You must provide either the 'batchId' or the 'date'.
           schema: *ref_65
+          example: 12345
         - name: merchantId
           in: query
           description: Unique identifier of the merchant.
           schema: *ref_58
+          example: '4525644354'
       responses:
         '200':
           description: Successful request. Returns a paginated list of authorizations.
@@ -5696,12 +5735,14 @@ paths:
                               example: 12345
                             createdDate:
                               type: string
-                              format: datetime
-                              description: Date that we received the authorization.
+                              format: date
+                              description: Date that we received the authorization. The format of this value is **YYYY-MM-DD**.
+                              example: '2024-01-30'
                             lastModifiedDate:
                               type: string
-                              format: datetime
-                              description: Date that the authorization was last changed.
+                              format: date
+                              description: Date that the authorization was last changed. The format of this value is **YYYY-MM-DD**.
+                              example: '2024-01-30'
                             authorizationResponse:
                               type: string
                               description: Code that indicates the response for the authorization.
@@ -5839,9 +5880,9 @@ paths:
                                     - return
                                 date:
                                   type: string
-                                  format: datetime
-                                  description: Timestamp of the transaction.
-                                  example: '2021-01-01T17:00:00.000Z'
+                                  format: date
+                                  description: Date of the transaction. The format of this value is **YYYY-MM-DD**.
+                                  example: '2021-01-01'
                                 entryMethod:
                                   type: string
                                   description: Describes how the merchant received the payment details. If we can't match a dispute to a transaction, we don't return an 'entryMethod' object.
@@ -5885,8 +5926,8 @@ paths:
                         href: https://api.payroc.com/v1/authorizations?before=65&limit=2&date=2021-01-01
                     data:
                       - authorizationId: 65
-                        createdDate: '2021-09-05T13:15:00.000Z'
-                        lastModifiedDate: '2021-09-06T18:00:00.000Z'
+                        createdDate: '2021-09-05'
+                        lastModifiedDate: '2021-09-06'
                         authorizationResponse: successful
                         preauthorizationRequestAmount: 10000
                         currency: USD
@@ -6012,14 +6053,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
         - name: date
           in: query
           required: true
@@ -6032,6 +6076,7 @@ paths:
           in: query
           description: Unique identifier of the merchant.
           schema: *ref_58
+          example: '4525644354'
       responses:
         '200':
           description: Successful request. Returns a paginated list of disputes.
@@ -6103,8 +6148,9 @@ paths:
                                         - stand
                                     statusDate:
                                       type: string
-                                      format: datetime
-                                      description: Date that the status changed.
+                                      format: date
+                                      description: Date that the status changed. The format of this value is **YYYY-MM-DD**.
+                                      example: '2024-02-01'
                                 - type: object
                                   properties:
                                     link:
@@ -6115,16 +6161,19 @@ paths:
                                       example: *ref_5
                             createdDate:
                               type: string
-                              format: datetime
-                              description: Date that we received the dispute.
+                              format: date
+                              description: Date that we received the dispute. The format of this value is **YYYY-MM-DD**.
+                              example: '2024-02-20'
                             lastModifiedDate:
                               type: string
-                              format: datetime
-                              description: Date that the dispute was last changed.
+                              format: date
+                              description: Date that the dispute was last changed. The format of this value is **YYYY-MM-DD**.
+                              example: '2024-02-25'
                             receivedDate:
                               type: string
-                              format: datetime
-                              description: Date that the acquiring bank received the dispute.
+                              format: date
+                              description: Date that the acquiring bank received the dispute. The format of this value is **YYYY-MM-DD**.
+                              example: '2024-02-18'
                             description:
                               type: string
                               description: Description of the dispute.
@@ -6182,19 +6231,19 @@ paths:
                         currentStatus:
                           disputeStatusId: 123
                           status: new
-                          statusDate: ''
+                          statusDate: '2021-09-06'
                           link:
                             rel: statuses
                             method: get
                             href: https://api.payroc.com/v1/disputes/12345/statuses
-                        createdDate: '2021-09-05T13:15:00.000Z'
-                        lastModifiedDate: '2021-09-06T18:00:00.000Z'
+                        createdDate: '2021-09-05'
+                        lastModifiedDate: '2021-09-06'
                         receivedDate: ''
                         description: ''
                         referenceNumber: '35435435'
                         disputeAmount: 1000
                         feeAmount: 100
-                        firstdispute: true
+                        firstDispute: true
                         authorizationCode: '574254'
                         currency: USD
                         merchant:
@@ -6323,6 +6372,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
           in: path
           required: true
@@ -6872,14 +6922,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a paginated list of payment plans.
@@ -7031,6 +7084,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
           in: path
           required: true
@@ -7150,6 +7204,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
           in: path
           description: Unique identifier that our gateway assigned to the terminal.
@@ -7875,14 +7930,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a paginated list of subscriptions.
@@ -8089,6 +8147,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
           in: path
           required: true
@@ -8356,6 +8415,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
           in: path
           required: true
@@ -8771,6 +8831,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
           in: path
           required: true
@@ -9936,14 +9997,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a list of secure tokens that are currently saved on the terminal.
@@ -10143,6 +10207,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
           in: path
           description: Unique identifier that our gateway assigned to the terminal.
@@ -10285,6 +10350,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -12808,14 +12874,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a list of payments.
@@ -13011,6 +13080,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
           in: path
           required: true
@@ -13264,6 +13334,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
           description: Unique identifier of the payment that the merchant wants to capture.
           in: path
@@ -13369,6 +13440,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
           description: Unique identifier of the payment that the merchant wants to reverse.
           in: path
@@ -13521,6 +13593,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
           description: Unique identifier of the payment that the merchant wants to refund.
           in: path
@@ -13696,6 +13769,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -13958,6 +14032,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -14498,14 +14573,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a paginated list of refunds.
@@ -14670,6 +14748,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: refundId
           description: Unique identifier that our gateway assigned to the refund.
           in: path
@@ -14816,6 +14895,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: refundId
           description: Unique identifier that our gateway assigned to the refund.
           in: path
@@ -14923,6 +15003,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -15122,6 +15203,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -16718,6 +16800,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -17634,14 +17717,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a list of payments.
@@ -17835,6 +17921,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
           description: Unique identifier that our gateway assigned to the payment.
           in: path
@@ -17947,6 +18034,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
           description: Unique identifier that our gateway assigned to the payment.
           in: path
@@ -18096,6 +18184,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
           description: Unique identifier that our gateway assigned to the rejected payment.
           in: path
@@ -18204,6 +18293,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       description: |
         Send a refund to a customer's bank account. The refund transaction is not linked to the previous transaction.  
         *Note**: This function is available to only certain merchant accounts.
@@ -18700,14 +18790,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a list of refund transactions.
@@ -18885,6 +18978,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: refundId
           description: Unique identifier that our gateway assigned to the refund.
           in: path
@@ -18990,6 +19084,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -19142,6 +19237,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -20240,14 +20336,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a list of merchant platforms associated with the ISV's account.
@@ -20490,14 +20589,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
         - in: query
           name: includeClosed
           description: Indicates if you want to return closed processing accounts. This includes processing accounts that have a status of `terminated`, `cancelled`, or `rejected`.
@@ -21040,6 +21142,7 @@ paths:
           required: true
           description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
           schema: *ref_21
+          example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
         content:
           application/json:
@@ -21630,14 +21733,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a list of contacts associated with the processing account.
@@ -21856,14 +21962,17 @@ paths:
           description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
           explode: false
           schema: *ref_29
+          example: '2571'
         - name: after
           in: query
           description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
           schema: *ref_30
+          example: '8516'
         - name: limit
           in: query
           description: States the total amount of results the response is limited to.
           schema: *ref_31
+          example: 25
       responses:
         '200':
           description: Successful request. Returns a list of owners associated with the processing account.
@@ -22262,22 +22371,26 @@ components:
       description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
       explode: false
       schema: *ref_29
+      example: '2571'
     after:
       name: after
       in: query
       description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
       schema: *ref_30
+      example: '8516'
     limit:
       name: limit
       in: query
       description: States the total amount of results the response is limited to.
       schema: *ref_31
+      example: 25
     idempotencyKey:
       name: Idempotency-Key
       in: header
       required: true
       description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier.
       schema: *ref_21
+      example: 8e03978e-40d5-43e8-bc93-6894a57f9324
     recipientId:
       name: recipientId
       description: Unique identifier of the funding recipient.
@@ -22333,6 +22446,7 @@ components:
       in: query
       description: Unique identifier of the merchant.
       schema: *ref_58
+      example: '4525644354'
     batchId:
       name: batchId
       description: Unique identifier of the batch.
@@ -22340,18 +22454,21 @@ components:
       required: true
       style: simple
       schema: *ref_215
+      example: 12345
     keyDate:
       name: date
       in: query
       required: true
-      description: Date to retrieve results from. You must provide either the 'batchId' or the 'date'.
+      description: Date to retrieve results from. The format of this value is **YYYY-MM-DD**. You must provide either the 'batchId' or the 'date'.
       schema: *ref_64
+      example: '2021-09-05'
     batchIdQuery:
       name: batchId
       in: query
       required: true
       description: Unique identifier of the batch. You must provide either the 'batchId' or the 'date'.
       schema: *ref_65
+      example: 12345
     transactionType:
       name: transactionType
       in: query
