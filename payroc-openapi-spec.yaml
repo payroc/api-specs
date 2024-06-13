@@ -4719,7 +4719,7 @@ paths:
                             id:
                               type: integer
                               description: Unique identifier of the activity record.
-                              example: '12345'
+                              example: 12345
                             date:
                               type: string
                               format: datetime
@@ -5502,7 +5502,7 @@ paths:
                         status: paid
                         cashbackAmount: 0
                         interchange:
-                          basisPoint: 0,
+                          basisPoint: 0
                           transactionFee: 0
                         currency: USD
                         merchant:
