@@ -3145,8 +3145,6 @@ paths:
                                                         cardChargePercentage:
                                                           description: Percentage of the total transaction amount that the processor charges the cardholder.
                                                           type: number
-                                                          readOnly: true
-                                                          default: 3
                                                           allOf:
                                                             - description: Percentage value up to 2 decimal places.
                                                               title: percentage
@@ -3158,8 +3156,6 @@ paths:
                                                         merchantChargePercentage:
                                                           description: Percentage of the total transaction amount that the processor charges the merchant.
                                                           type: number
-                                                          readOnly: true
-                                                          default: 0.9
                                                           allOf:
                                                             - description: Percentage value up to 2 decimal places.
                                                               title: percentage
