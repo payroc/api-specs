@@ -743,10 +743,6 @@ paths:
                           type: string
                           description: Error message
                           example: Expected time, got '' for start_time
-                        fundingAccountId:
-                          type: integer
-                          description: Identifier for funding account.
-                          example: 1234
                 required: &ref_9
                   - type
                   - title
@@ -4106,7 +4102,7 @@ paths:
                     status: 400
                     detail: One or more funding accounts are restricted and can't receive funding instructions
                     errors:
-                      - fundingAccountId: 1234
+                      - parameter: fundingAccountId
                         message: Funding account on hold
         '401':
           description: Identity could not be verified
