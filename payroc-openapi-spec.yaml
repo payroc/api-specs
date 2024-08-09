@@ -6393,7 +6393,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
       requestBody:
         content:
           application/json:
@@ -6420,7 +6420,7 @@ paths:
                   type: string
                   readOnly: true
                   description: Unique identifier of the terminal that the payment plan is assigned to.
-                  example: TerminalId06888
+                  example: '1234001'
                 name:
                   maxLength: 128
                   minLength: 5
@@ -6774,29 +6774,29 @@ paths:
                 summary: Payment Plan
                 description: Payment Plan
                 value: &ref_474
-                  paymentPlanId: 1001_yearly_plan
-                  name: 1001 yearly payment plan
-                  description: 1001 yearly payment plan
-                  currency: EUR
+                  paymentPlanId: PlanRef8765
+                  name: Premium Club
+                  description: Monthly Premium Club subscription
+                  currency: USD
                   setupOrder:
-                    amount: 1010
-                    description: payment plan setup order
+                    amount: 4999
+                    description: Initial setup fee for Premium Club subscription
                     breakdown:
-                      subtotal: 1000
+                      subtotal: 4347
                       taxes:
-                        - name: VAT
-                          rate: 1
+                        - name: Sales Tax
+                          rate: 5
                   recurringOrder:
-                    amount: 1010
-                    description: payment plan setup order
+                    amount: 4999
+                    description: Monthly Premium Club subscription
                     breakdown:
-                      subtotal: 1000
+                      subtotal: 4347
                       taxes:
-                        - name: VAT
-                          rate: 1
-                  length: 5
+                        - name: Sales Tax
+                          rate: 5
+                  length: 12
                   type: automatic
-                  frequency: yearly
+                  frequency: monthly
                   onUpdate: continue
                   onDelete: complete
         required: true
@@ -6814,30 +6814,30 @@ paths:
                   summary: Payment Plan
                   description: Payment Plan
                   value: &ref_76
-                    paymentPlanId: 1001_yearly_plan
-                    processingTerminalId: '1001'
-                    name: 1001 yearly payment plan
-                    description: 1001 yearly payment plan
-                    currency: EUR
+                    paymentPlanId: PlanRef8765
+                    processingTerminalId: '1234001'
+                    name: Premium Club
+                    description: Monthly Premium Club subscription
+                    currency: USD
                     setupOrder:
-                      amount: 1010
-                      description: payment plan setup order
+                      amount: 4999
+                      description: Initial setup fee for Premium Club subscription
                       breakdown:
-                        subtotal: 1000
+                        subtotal: 4347
                         taxes:
-                          - name: VAT
-                            rate: 1
+                          - name: Sales Tax
+                            rate: 5
                     recurringOrder:
-                      amount: 1010
-                      description: payment plan recurring order
+                      amount: 4999
+                      description: Monthly Premium Club subscription
                       breakdown:
-                        subtotal: 1000
+                        subtotal: 4347
                         taxes:
-                          - name: VAT
-                            rate: 1
-                    length: 5
+                          - name: Sales Tax
+                            rate: 5
+                    length: 12
                     type: automatic
-                    frequency: yearly
+                    frequency: monthly
                     onUpdate: continue
                     onDelete: complete
           headers:
@@ -6949,7 +6949,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: before
           in: query
           required: false
@@ -7001,21 +7001,21 @@ paths:
                     count: 2
                     hasMore: true
                     data:
-                      - paymentPlanId: 1001_yearly_plan
-                        processingTerminalId: '1001'
-                        name: 1001 yearly plan
-                        description: payment plan, setup order with taxes
-                        currency: EUR
-                        length: 0
+                      - paymentPlanId: PlanRef8765
+                        processingTerminalId: '1234001'
+                        name: Premium Club
+                        description: Monthly Premium Club subscription
+                        currency: USD
+                        length: 12
                         type: automatic
-                        frequency: yearly
+                        frequency: monthly
                         onUpdate: continue
                         onDelete: complete
-                      - paymentPlanId: 1001_payment_plan_premium
-                        processingTerminalId: '1001'
-                        name: 1001 payment plan premium
-                        description: a template payment plan for premium users
-                        currency: EUR
+                      - paymentPlanId: PlanRef8766
+                        processingTerminalId: '1234001'
+                        name: Pie It Forward
+                        description: Pie It Forward charitable trust donation
+                        currency: USD
                         length: 0
                         type: automatic
                         frequency: yearly
@@ -7024,10 +7024,10 @@ paths:
                     links:
                       - rel: next
                         method: get
-                        href: https://api.payroc.com/v1/processing-terminals/1001/payment-plans?limit=2&after=M4MY49Z5JB
+                        href: https://api.payroc.com/v1/processing-terminals/1001/payment-plans?limit=2&after=PlanRef8766
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1/processing-terminals/1001/payment-plans?limit=2&before=GKB49GZ6DL
+                        href: https://api.payroc.com/v1/processing-terminals/1001/payment-plans?limit=2&before=PlanRef8765
                 noActivity:
                   summary: No records found
                   description: Valid request, but no records match the criteria.
@@ -7063,7 +7063,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: paymentPlanId
           in: path
           description: Unique identifier that the merchant assigned to the payment plan.
@@ -7129,7 +7129,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: paymentPlanId
           in: path
           description: Unique identifier that the merchant assigned to the payment plan.
@@ -7203,7 +7203,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: paymentPlanId
           in: path
           description: Unique identifier that the merchant assigned to the payment plan.
@@ -7253,7 +7253,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
       requestBody:
         content:
           application/json:
@@ -7460,7 +7460,7 @@ paths:
                     minLength: 4
                     type: string
                     description: Unique identifier of the terminal that the subscription is linked to.
-                    example: TerminalId06888
+                    example: '1234001'
                   paymentPlan:
                     required: &ref_291
                       - name
@@ -7773,7 +7773,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: customerName
           in: query
           description: Filter by the customer's name.
@@ -8006,7 +8006,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: subscriptionId
           in: path
           description: Unique identifier of the subscription that you want to view.
@@ -8072,7 +8072,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: subscriptionId
           in: path
           description: Unique identifier of the subscription that you want to update.
@@ -8163,7 +8163,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: subscriptionId
           in: path
           description: Unique identifier of the subscription that you want to deactivate.
@@ -8276,7 +8276,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: subscriptionId
           in: path
           description: Unique identifier of the subscription that you want to re-activate.
@@ -8346,7 +8346,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: subscriptionId
           in: path
           description: Unique identifier of the subscription that you want to make a payment to.
@@ -8409,7 +8409,7 @@ paths:
                   processingTerminalId:
                     type: string
                     description: Unique identifier of the terminal that the subscription is linked to.
-                    example: TerminalId06888
+                    example: '1234001'
                   payment:
                     required: &ref_140
                       - amount
@@ -8603,7 +8603,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
       requestBody:
         content:
           application/json:
@@ -9553,7 +9553,7 @@ paths:
                     minLength: 4
                     type: string
                     description: Unique identifier that our gateway assigned to the terminal.
-                    example: TerminalId06888
+                    example: '1234001'
                   mitAgreement:
                     type: string
                     description: |
@@ -9807,7 +9807,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: secureTokenId
           in: query
           description: Filter by the unique secure token.
@@ -10022,7 +10022,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: secureTokenId
           in: path
           required: true
@@ -10089,7 +10089,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: secureTokenId
           in: path
           required: true
@@ -10182,7 +10182,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: secureTokenId
           in: path
           required: true
@@ -10252,7 +10252,7 @@ paths:
                   minLength: 4
                   type: string
                   description: Unique identifier that our gateway assigned to the terminal.
-                  example: TerminalId06888
+                  example: '1234001'
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -11141,34 +11141,34 @@ paths:
                 description: Payment
                 value: &ref_485
                   channel: web
-                  processingTerminalId: '1023'
+                  processingTerminalId: '1234001'
                   operator: Postman
                   order:
-                    orderId: order123
-                    description: Example payment
+                    orderId: OrderRef6543
+                    description: Large Pepperoni Pizza
                     currency: USD
-                    amount: 100
+                    amount: 4999
                   customer:
-                    firstName: Robert
-                    lastName: Red
+                    firstName: Sarah
+                    lastName: Hopper
                     billingAddress:
-                      address1: billing address1
-                      address2: billing address2
-                      address3: billing address3
-                      city: Los Angeles
-                      state: California
+                      address1: 1 Example Ave.
+                      address2: Example Address Line 2
+                      address3: Example Address Line 3
+                      city: Chicago
+                      state: Illinois
                       country: US
-                      postalCode: 90005
+                      postalCode: '60056'
                     shippingAddress:
-                      recipientName: shipping recipientName
+                      recipientName: Sarah Hopper
                       address:
-                        address1: shipping address1
-                        address2: shipping address2
-                        address3: shipping address3
-                        city: San Diego
-                        state: California
+                        address1: 1 Example Ave.
+                        address2: Example Address Line 2
+                        address3: Example Address Line 3
+                        city: Chicago
+                        state: Illinois
                         country: US
-                        postalCode: 91911
+                        postalCode: '60056'
                   paymentMethod:
                     type: card
                     cardDetails:
@@ -11178,8 +11178,8 @@ paths:
                         device:
                           model: paxA80
                           serialNumber: WPC202833004712
-                        expiryDate: '0328'
-                        cardNumber: '5001650000000000'
+                        expiryDate: '1225'
+                        cardNumber: '4539858876047062'
         required: true
       responses:
         '201':
@@ -11206,7 +11206,7 @@ paths:
                     minLength: 4
                     type: string
                     description: Unique identifier of the terminal that initiated the transaction.
-                    example: TerminalId06888
+                    example: '1234001'
                   operator:
                     maxLength: 50
                     minLength: 0
@@ -11616,41 +11616,41 @@ paths:
                   summary: Payment
                   description: Payment
                   value: &ref_119
-                    paymentId: KP77BIWR96
-                    processingTerminalId: '1023'
+                    paymentId: M2MJOG6O2Y
+                    processingTerminalId: '1234001'
                     operator: Postman
                     order:
-                      orderId: order123
-                      dateTime: '2023-07-26T17:42:25.018+01:00'
-                      description: Example payment
-                      amount: 100
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Large Pepperoni Pizza
+                      amount: 4999
                       currency: USD
                     customer:
-                      firstName: Robert
-                      lastName: Red
+                      firstName: Sarah
+                      lastName: Hopper
                       billingAddress:
-                        address1: billing address
-                        address2: billing address2
-                        address3: billing address3
-                        city: Los Angeles
-                        state: California
+                        address1: 1 Example Ave.
+                        address2: Example Address Line 2
+                        address3: Example Address Line 3
+                        city: Chicago
+                        state: Illinois
                         country: US
-                        postalCode: '90005'
+                        postalCode: '60056'
                       shippingAddress:
-                        recipientName: shipping recipientName
+                        recipientName: Sarah Hopper
                         address:
-                          address1: shipping address1
-                          address2: shipping address2
-                          address3: shipping address3
-                          city: San Diego
-                          state: California
+                          address1: 1 Example Ave.
+                          address2: Example Address Line 2
+                          address3: Example Address Line 3
+                          city: Chicago
+                          state: Illinois
                           country: US
-                          postalCode: '91911'
+                          postalCode: '60056'
                     card:
                       type: MasterCard
                       entryMethod: keyed
-                      cardNumber: 500165******0000
-                      expiryDate: '0328'
+                      cardNumber: 453985******7062
+                      expiryDate: '1225'
                       securityChecks:
                         cvvResult: M
                         avsResult: 'Y'
@@ -11665,7 +11665,7 @@ paths:
                       type: sale
                       status: ready
                       approvalCode: OK3
-                      authorizedAmount: 100
+                      authorizedAmount: 4999
                       currency: USD
                       responseCode: A
                       responseMessage: OK3
@@ -11887,29 +11887,29 @@ paths:
                     count: 2
                     hasMore: true
                     data:
-                      - paymentId: IFA1T74OBS
-                        processingTerminalId: '1001'
+                      - paymentId: M2MJOG6O2Y
+                        processingTerminalId: '1234001'
                         operator: Automatic Payment
                         order:
-                          orderId: '684255528917'
-                          dateTime: '2023-05-16T17:45:29+01:00'
-                          description: recurring order
-                          amount: 100
-                          currency: EUR
+                          orderId: OrderRef6543
+                          dateTime: '2024-07-02T15:30:00Z'
+                          description: Monthly Premium Club subscription
+                          amount: 4999
+                          currency: USD
                         card:
                           type: Visa Credit
-                          cardholderName: Joe Bloggs
+                          cardholderName: Sarah Hopper
                           cardNumber: 453985******7062
-                          expiryDate: '0129'
+                          expiryDate: '1225'
                           secureToken:
-                            secureTokenId: FirefoxSecureCard1001
-                            customerName: Joe Bloggs
-                            token: '2967533500670317'
+                            secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                            customerName: Sarah Hopper
+                            token: '296753123456'
                             status: notValidated
                             link:
                               rel: self
                               method: GET
-                              href: https://api.payroc.com/v1/processing-terminals/1001/secure-tokens/FirefoxSecureCard1001
+                              href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
                           securityChecks:
                             cvvResult: M
                             avsResult: X
@@ -11919,34 +11919,34 @@ paths:
                         transactionResult:
                           type: sale
                           status: ready
-                          approvalCode: '475318'
-                          authorizedAmount: 100
-                          currency: EUR
+                          approvalCode: OK3
+                          authorizedAmount: 4999
+                          currency: USD
                           responseCode: A
                           responseMessage: APPROVAL
-                      - paymentId: CW4BA4MUH0
-                        processingTerminalId: '1001'
+                      - paymentId: E29U8OU8Q4
+                        processingTerminalId: '1234001'
                         operator: Automatic Payment
                         order:
-                          orderId: '684255528143'
-                          dateTime: '2023-05-16T17:45:28+01:00'
-                          description: yearly avant-gard cinema subscription
-                          amount: 1000
-                          currency: EUR
+                          orderId: OrderRef7654
+                          dateTime: '2024-07-02T15:30:00Z'
+                          description: Monthly Premium Club subscription
+                          amount: 4999
+                          currency: USD
                         card:
                           type: Visa Debit
-                          cardholderName: Joe Bloggs
-                          cardNumber: 400006******0006
-                          expiryDate: '0129'
+                          cardholderName: Sarah Hopper
+                          cardNumber: 453985******7062
+                          expiryDate: '1225'
                           secureToken:
-                            secureTokenId: FirefoxSecureCard1001
-                            customerName: Joe Bloggs
-                            token: '2967533500670317'
+                            secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                            customerName: Sarah Hopper
+                            token: '296753123456'
                             status: notValidated
                             link:
                               rel: self
                               method: GET
-                              href: https://api.payroc.com/v1/processing-terminals/1001/secure-tokens/FirefoxSecureCard1001
+                              href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
                           securityChecks:
                             cvvResult: M
                             avsResult: X
@@ -11964,10 +11964,10 @@ paths:
                     links:
                       - rel: next
                         method: get
-                        href: https://api.payroc.com/v1/payments?processingTerminalId=1001&limit=2&after=CW4BA4MUH0
+                        href: https://api.payroc.com/v1/payments?processingTerminalId=1234001&limit=2&after=E29U8OU8Q4
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1/payments?processingTerminalId=1001&limit=2&before=IFA1T74OBS
+                        href: https://api.payroc.com/v1/payments?processingTerminalId=1234001&limit=2&before=M2MJOG6O2Y
                 noActivity:
                   summary: No records found
                   description: Valid request, but no records match the criteria.
@@ -12176,17 +12176,17 @@ paths:
                   adjustments:
                     - type: customer
                       shippingAddress:
-                        recipientName: new recipientName
+                        recipientName: Sarah Hopper
                         address:
-                          address1: new address1
-                          address2: address2
-                          address3: address3
-                          city: Miami
-                          state: Florida
+                          address1: 1 Example Ave.
+                          address2: Example Address Line 2
+                          address3: Example Address Line 3
+                          city: Chicago
+                          state: Illinois
                           country: US
-                          postalCode: 33101
+                          postalCode: '60056'
                     - type: order
-                      amount: 1000
+                      amount: 3999
         required: true
       responses:
         '200':
@@ -12202,40 +12202,40 @@ paths:
                   summary: Adjust Payment
                   description: Adjust Payment
                   value: &ref_487
-                    paymentId: HW986AQOBB
-                    processingTerminalId: '1023'
+                    paymentId: M2MJOG6O2Y
+                    processingTerminalId: '1234001'
                     order:
-                      orderId: 6u6
-                      dateTime: '2023-07-27T10:28:44+01:00'
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
                       description: Example payment
-                      amount: 1000
+                      amount: 4999
                       currency: USD
                     customer:
-                      firstName: Robert
-                      lastName: Red
+                      firstName: Sarah
+                      lastName: Hopper
                       billingAddress:
-                        address1: billing address
-                        address2: billing address2
-                        address3: billing address3
-                        city: Los Angeles
-                        state: California
+                        address1: 1 Example Ave.
+                        address2: Example Address Line 2
+                        address3: Example Address Line 3
+                        city: Chicago
+                        state: Illinois
                         country: US
-                        postalCode: '90005'
+                        postalCode: '60056'
                       shippingAddress:
-                        recipientName: new recipientName
+                        recipientName: Sarah Hopper
                         address:
-                          address1: new address1
-                          address2: address2
-                          address3: address3
-                          city: Miami
-                          state: Florida
+                          address1: 1 Example Ave.
+                          address2: Example Address Line 2
+                          address3: Example Address Line 3
+                          city: Chicago
+                          state: Illinois
                           country: US
-                          postalCode: '33101'
+                          postalCode: '60056'
                     card:
                       type: MasterCard
                       entryMethod: keyed
-                      cardNumber: 500165******0000
-                      expiryDate: '0328'
+                      cardNumber: 453985******7062
+                      expiryDate: '1225'
                       securityChecks:
                         cvvResult: M
                         avsResult: 'Y'
@@ -12250,7 +12250,7 @@ paths:
                       type: sale
                       status: ready
                       approvalCode: OK6
-                      authorizedAmount: 1000
+                      authorizedAmount: 4999
                       currency: USD
                       responseCode: A
                       responseMessage: OK6
@@ -12448,7 +12448,7 @@ paths:
                 summary: Reversal Payment
                 description: Reversal Payment
                 value: &ref_488
-                  amount: 10
+                  amount: 4999
       responses:
         '200':
           description: Successful request. We reversed the payment.
@@ -12463,40 +12463,40 @@ paths:
                   summary: Reversal Payment
                   description: Reversal Payment
                   value: &ref_489
-                    paymentId: FRED4RL3GO
-                    processingTerminalId: '1023'
+                    paymentId: M2MJOG6O2Y
+                    processingTerminalId: '1234001'
                     order:
-                      orderId: MAPI_V2_PAY_23
-                      dateTime: '2023-05-18T10:29:25+01:00'
-                      description: Example payment
-                      amount: 100
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Large Pepperoni Pizza
+                      amount: 4999
                       currency: USD
                     customer:
-                      firstName: Giuseppe
-                      lastName: Verdi
+                      firstName: Sarah
+                      lastName: Hopper
                       billingAddress:
-                        address1: example street
-                        address2: example address2
-                        address3: example address3
-                        city: example city
-                        state: California
+                        address1: 1 Example Ave.
+                        address2: Example Address Line 2
+                        address3: Example Address Line 3
+                        city: Chicago
+                        state: Illinois
                         country: USA
-                        postalCode: '1'
+                        postalCode: '60056'
                       shippingAddress:
-                        recipientName: shipping recipientName
+                        recipientName: Sarah Hopper
                         address:
-                          address1: shipping address1
-                          address2: shipping address2
-                          address3: shipping address3
-                          city: shipping city
-                          state: shipping state
+                          address1: 1 Example Ave.
+                          address2: Example Address Line 2
+                          address3: Example Address Line 3
+                          city: Chicago
+                          state: Illinois
                           country: IT
-                          postalCode: '1'
+                          postalCode: '60056'
                     card:
                       type: MasterCard
                       entryMethod: keyed
-                      cardNumber: 500165******0000
-                      expiryDate: '0328'
+                      cardNumber: 453985******7062
+                      expiryDate: '1225'
                       securityChecks:
                         cvvResult: M
                         avsResult: 'Y'
@@ -12611,8 +12611,8 @@ paths:
                 summary: Refund Payment
                 description: Refund Payment
                 value: &ref_490
-                  amount: 100
-                  description: refund - defective item
+                  amount: 4999
+                  description: Refund for order OrderRef6543
         required: true
       responses:
         '200':
@@ -12628,48 +12628,48 @@ paths:
                   summary: Refund Payment
                   description: Refund Payment
                   value: &ref_491
-                    paymentId: JTWWI49L6U
-                    processingTerminalId: '1023'
-                    operator: Adam Smith
+                    paymentId: M2MJOG6O2Y
+                    processingTerminalId: '1234001'
+                    operator: Jane
                     order:
-                      orderId: 86f
-                      dateTime: '2024-01-16T16:57:18Z'
-                      description: Example payment
-                      amount: 100
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Large Pepperoni Pizza
+                      amount: 4999
                       currency: USD
                     customer:
-                      firstName: Robert
-                      lastName: Red
+                      firstName: Sarah
+                      lastName: Hopper
                       billingAddress:
-                        address1: billing address
-                        address2: billing address2
-                        address3: billing address3
-                        city: Los Angeles
-                        state: California
+                        address1: 1 Example Ave.
+                        address2: Example Address Line 2
+                        address3: Example Address Line 3
+                        city: Chicago
+                        state: Illinois
                         country: US
-                        postalCode: '90005'
+                        postalCode: '60056'
                       shippingAddress:
-                        recipientName: shipping recipientName
+                        recipientName: Sarah Hopper
                         address:
-                          address1: shipping address1
-                          address2: shipping address2
-                          address3: shipping address3
-                          city: San Diego
-                          state: California
+                          address1: 1 Example Ave.
+                          address2: Example Address Line 2
+                          address3: Example Address Line 3
+                          city: Chicago
+                          state: Illinois
                           country: US
-                          postalCode: '91911'
+                          postalCode: '60056'
                     card:
                       type: MasterCard
                       entryMethod: keyed
-                      cardNumber: 500165******0000
-                      expiryDate: '0328'
+                      cardNumber: 453985******7062
+                      expiryDate: '1225'
                       securityChecks:
                         cvvResult: M
                         avsResult: 'Y'
                     refunds:
                       - refundId: BI77XQFQ05
-                        dateTime: '2024-01-16T17:00:41Z'
-                        amount: -60
+                        dateTime: '2024-07-02T15:30:00Z'
+                        amount: -4999
                         currency: USD
                         status: ready
                         link:
@@ -12681,8 +12681,8 @@ paths:
                     transactionResult:
                       type: sale
                       status: complete
-                      approvalCode: OK13
-                      authorizedAmount: 100
+                      approvalCode: OK3
+                      authorizedAmount: 4999
                       currency: USD
                       responseCode: A
                       responseMessage: OK13
@@ -12772,7 +12772,7 @@ paths:
                   minLength: 4
                   type: string
                   description: Unique identifier that our gateway assigned to the terminal.
-                  example: TerminalId06888
+                  example: '1234001'
                 order:
                   required: &ref_370
                     - amount
@@ -12849,12 +12849,12 @@ paths:
                 summary: Payment Instruction
                 description: Submit an instruction for initiating a payment on a physical device.
                 value: &ref_492
-                  operator: jbloggs
-                  processingTerminalId: '1021'
+                  operator: Jane
+                  processingTerminalId: '1234001'
                   order:
-                    orderId: 4fd4-99bc
+                    orderId: OrderRef6543
                     currency: USD
-                    amount: 1000
+                    amount: 4999
                   customizationOptions:
                     entryMethod: deviceRead
                   autoCapture: true
@@ -12908,7 +12908,7 @@ paths:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
                   value: &ref_493
-                    paymentInstructionId: 3743a9165d134678a9100ebba3b29597
+                    paymentInstructionId: e743a9165d134678a9100ebba3b29597
                     status: inProgress
                     link:
                       rel: self
@@ -12982,12 +12982,12 @@ paths:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
                   value: &ref_494
-                    paymentInstructionId: 3743a9165d134678a9100ebba3b29597
+                    paymentInstructionId: e743a9165d134678a9100ebba3b29597
                     status: completed
                     link:
                       rel: payment
                       method: GET
-                      href: https://api.payroc.com/v1/payments/DD6ZDQU7L2
+                      href: https://api.payroc.com/v1/payments/M2MJOG6O2Y
         '400':
           description: Invalid request
           content: *ref_14
@@ -13044,7 +13044,7 @@ paths:
                   minLength: 4
                   type: string
                   description: Unique identifier that our gateway assigned to the terminal.
-                  example: TerminalId06888
+                  example: '1234001'
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -13176,7 +13176,7 @@ paths:
                     minLength: 4
                     type: string
                     description: Unique identifier that our gateway assigned to the terminal.
-                    example: TerminalId06888
+                    example: '1234001'
                   operator:
                     maxLength: 50
                     minLength: 0
@@ -14051,7 +14051,7 @@ paths:
                   minLength: 4
                   type: string
                   description: Unique identifier that our gateway assigned to the terminal.
-                  example: TerminalId06888
+                  example: '1234001'
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -14077,18 +14077,18 @@ paths:
                 summary: Card Verification
                 description: Card Verification
                 value: &ref_503
-                  operator: Mark Simpsons
-                  processingTerminalId: '1001'
+                  operator: Jane
+                  processingTerminalId: '1234001'
                   card:
                     type: card
                     cardDetails:
                       entryMethod: keyed
-                      cardholderName: Joe Bloggs
-                      cardholderSignature: 13ab
+                      cardholderName: Sarah Hazel Hopper
+                      cardholderSignature: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
                       keyedData:
                         dataFormat: plainText
                         cardNumber: '4539858876047062'
-                        expiryDate: '1230'
+                        expiryDate: '1225'
         required: true
       responses:
         '200':
@@ -14107,7 +14107,7 @@ paths:
                     minLength: 4
                     type: string
                     description: Unique identifier that our gateway assigned to the terminal.
-                    example: TerminalId06888
+                    example: '1234001'
                   operator:
                     maxLength: 50
                     minLength: 0
@@ -14159,15 +14159,15 @@ paths:
                   summary: Card Verification
                   description: Card Verification
                   value: &ref_504
-                    operator: Mark Simpsons
-                    processingTerminalId: '1001'
+                    operator: Jane
+                    processingTerminalId: '1234001'
                     card:
                       type: Visa Credit
                       entryMethod: keyed
-                      cardholderName: Joe Bloggs
-                      cardholderSignature: 13ab
+                      cardholderName: Sarah Hazel Hopper
+                      cardholderSignature: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
                       cardNumber: 453985******7062
-                      expiryDate: '1230'
+                      expiryDate: '1225'
                     verified: true
                     transactionResult:
                       status: ready
@@ -14237,7 +14237,7 @@ paths:
                   minLength: 4
                   type: string
                   description: Unique identifier that our gateway assigned to the terminal.
-                  example: TerminalId06888
+                  example: '1234001'
                 operator:
                   maxLength: 50
                   minLength: 0
@@ -14275,19 +14275,19 @@ paths:
                 summary: Card Balance
                 description: Card Balance
                 value: &ref_505
-                  operator: Mark Simpsons
-                  processingTerminalId: '1024'
+                  operator: Jane
+                  processingTerminalId: '1234001'
                   currency: USD
                   card:
                     type: card
                     cardDetails:
                       entryMethod: keyed
-                      cardholderName: Joe Bloggs
-                      cardholderSignature: 12ab
+                      cardholderName: Sarah Hazel Hopper
+                      cardholderSignature: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
                       keyedData:
                         dataFormat: plainText
-                        cardNumber: '6007602801003837967'
-                        expiryDate: '1229'
+                        cardNumber: '4539858876047062'
+                        expiryDate: '1225'
                         device:
                           type: PAX_A920_PRO
                           dataKsn: FFFF5B09910001000061
@@ -14317,7 +14317,7 @@ paths:
                     minLength: 4
                     type: string
                     description: Unique identifier that our gateway assigned to the terminal.
-                    example: TerminalId06888
+                    example: '1234001'
                   operator:
                     maxLength: 50
                     minLength: 0
@@ -14357,15 +14357,15 @@ paths:
                   summary: Card Balance
                   description: Card Balance
                   value: &ref_506
-                    operator: Mark Simpsons
-                    processingTerminalId: '1024'
+                    operator: Jane
+                    processingTerminalId: '1234001'
                     card:
                       type: Common Benefit Identification Card
                       entryMethod: keyed
-                      cardholderName: Joe Bloggs
-                      cardholderSignature: 12ab
-                      cardNumber: 600760*********7967
-                      expiryDate: '1229'
+                      cardholderName: Sarah Hazel Hopper
+                      cardholderSignature: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                      cardNumber: 453985******7062
+                      expiryDate: '1225'
                       balances:
                         - benefitCategory: cash
                           amount: 10000
@@ -14416,7 +14416,7 @@ paths:
                   minLength: 4
                   type: string
                   description: The terminal number assigned by the gateway.
-                  example: TerminalId06888
+                  example: '1234001'
                 amount:
                   minimum: 0
                   exclusiveMinimum: true
@@ -14477,17 +14477,17 @@ paths:
                 summary: BIN lookup
                 description: BIN lookup
                 value: &ref_507
-                  operator: Andrew White
-                  processingTerminalId: '1005'
+                  operator: Jane
+                  processingTerminalId: '1234001'
                   card:
                     type: card
                     cardDetails:
                       entryMethod: keyed
-                      cardholderName: Joe Bloggs
-                      cardholderSignature: 13ab
+                      cardholderName: Sarah Hazel Hopper
+                      cardholderSignature: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
                       keyedData:
                         dataFormat: plainText
-                        cardNumber: '5001650000000000'
+                        cardNumber: '4539858876047062'
                         expiryDate: '1225'
         required: true
       responses:
@@ -14562,7 +14562,7 @@ paths:
                   description: BIN lookup
                   value: &ref_508
                     type: MASTERCARD
-                    cardNumber: 500165******0000
+                    cardNumber: 453985******7062
                     country: US
                     currency: USD
                     debit: false
@@ -14625,7 +14625,7 @@ paths:
                   minLength: 4
                   type: string
                   description: Unique identifier that our gateway assigned to the terminal.
-                  example: TerminalId06888
+                  example: '1234001'
                 operator:
                   maxLength: 50
                   minLength: 1
@@ -14672,20 +14672,20 @@ paths:
                 description: Fx-Rate
                 value: &ref_509
                   channel: web
-                  operator: Aaron
-                  processingTerminalId: '1005'
+                  operator: Jane
+                  processingTerminalId: '1234001'
                   baseAmount: 10000
-                  baseCurrency: EUR
+                  baseCurrency: USD
                   paymentMethod:
                     type: card
                     accountType: checking
                     cardDetails:
                       entryMethod: keyed
-                      cardholderName: Joe Bloggs
+                      cardholderName: Sarah Hazel Hopper
                       keyedData:
                         dataFormat: plainText
-                        cardNumber: '5001650000000000'
-                        expiryDate: '0430'
+                        cardNumber: '4539858876047062'
+                        expiryDate: '1225'
         required: true
       responses:
         '200':
@@ -14707,7 +14707,7 @@ paths:
                     minLength: 4
                     type: string
                     description: Unique identifier that our gateway assigned to the terminal.
-                    example: TerminalId06888
+                    example: '1234001'
                   operator:
                     maxLength: 50
                     minLength: 0
@@ -14757,10 +14757,10 @@ paths:
                   summary: Fx-Rate
                   description: Fx-Rate
                   value: &ref_510
-                    processingTerminalId: '1005'
-                    operator: Aaron
+                    processingTerminalId: '1234001'
+                    operator: Jane
                     baseAmount: 10000
-                    baseCurrency: EUR
+                    baseCurrency: USD
                     inquiryResult:
                       dccOffered: true
                     dccOffer:
@@ -14776,7 +14776,7 @@ paths:
                       source: REUTERS WHOLESALE INTERBANK
                     cardInfo:
                       type: MASTERCARD
-                      cardNumber: 500165******0000
+                      cardNumber: 453985******7062
         '400':
           description: Invalid request
           content: *ref_14
@@ -14949,20 +14949,20 @@ paths:
                 summary: Store Token Bank Transfer Payment
                 description: Bank Transfer Payment with ACH payload and token storage
                 value: &ref_512
-                  processingTerminalId: '1017'
+                  processingTerminalId: '1234001'
                   order:
-                    orderId: orderpop123
-                    description: sample order
-                    amount: 11110
+                    orderId: OrderRef6543
+                    description: Large Pepperoni Pizza
+                    amount: 4999
                     currency: USD
                     breakdown:
-                      subtotal: 10000
+                      subtotal: 4347
                       tip:
                         type: percentage
                         percentage: 10
                       taxes:
-                        - name: VAT
-                          rate: 1
+                        - name: Sales Tax
+                          rate: 5
                   customer:
                     notificationLanguage: en
                     contactMethods:
@@ -14973,9 +14973,9 @@ paths:
                   paymentMethod:
                     type: ach
                     accountType: checking
-                    nameOnAccount: Joe Bloggs
-                    accountNumber: '11101010'
-                    routingNumber: '053200983'
+                    nameOnAccount: Sarah Hazel Hopper
+                    accountNumber: '32183159'
+                    routingNumber: '063100277'
                     secCode: web
         required: true
       responses:
@@ -15004,7 +15004,7 @@ paths:
                     minLength: 4
                     type: string
                     description: Unique identifier that our gateway assigned to the terminal.
-                    example: TerminalId06888
+                    example: '1234001'
                   order:
                     required: *ref_167
                     type: object
@@ -15239,46 +15239,46 @@ paths:
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1017'
                     order:
-                      orderId: orderpop123
-                      dateTime: '2023-07-25T14:08:45.179+01:00'
-                      description: sample order
-                      amount: 11110
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Large Pepperoni Pizza
+                      amount: 4999
                       currency: USD
                       breakdown:
-                        subtotal: 10000
+                        subtotal: 4347
                         tip:
                           type: percentage
-                          amount: 1010
+                          amount: 435
                           percentage: 10
                         taxes:
-                          - name: VAT
-                            rate: 1
-                            amount: 100
+                          - name: Sales Tax
+                            rate: 5
+                            amount: 217
                     customer:
                       contactMethods:
                         - type: email
-                          value: joe@blogssoftware.com
+                          value: sarah.hopper@example.com
                       notificationLanguage: en
                     bankAccount:
                       type: ach
                       secCode: web
                       accountType: checking
-                      nameOnAccount: Joe Bloggs
-                      accountNumber: '****1010'
-                      routingNumber: '053200983'
+                      nameOnAccount: Sarah Hazel Hopper
+                      accountNumber: '****3159'
+                      routingNumber: '063100277'
                       secureToken:
-                        secureTokenId: MREF_8d9b44e4-fd9c-45a7-b4b5-5e3d591dd385tK
-                        customerName: Joe Bloggs
-                        token: '2967534039611822'
+                        secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                        customerName: Sarah Hazel Hopper
+                        token: '296753123456'
                         status: notValidated
                         link:
                           rel: self
                           method: GET
-                          href: https://api.payroc.com/v1/processing-terminals/1017/secure-tokens/MREF_8d9b44e4-fd9c-45a7-b4b5-5e3d591dd385tK
+                          href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
                     transactionResult:
                       type: payment
                       status: ready
-                      authorizedAmount: 11110
+                      authorizedAmount: 4999
                       currency: USD
                       responseCode: A
                       responseMessage: NoError
@@ -15343,7 +15343,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: orderId
           in: query
           description: Filter payments by the order ID.
@@ -15478,83 +15478,83 @@ paths:
                     count: 2
                     hasMore: true
                     data:
-                      - paymentId: GTNOY9O4R4
-                        processingTerminalId: '1017'
+                      - paymentId: M2MJOG6O2Y
+                        processingTerminalId: '1234001'
                         order:
-                          orderId: '602'
-                          dateTime: '2023-05-16T11:53:18-04:00'
-                          description: sample order
-                          amount: 12100
-                          currency: CAD
+                          orderId: OrderRef6543
+                          dateTime: '2024-07-02T15:30:00Z'
+                          description: Large Pepperoni Pizza
+                          amount: 4999
+                          currency: USD
                           breakdown:
-                            subtotal: 10000
+                            subtotal: 4347
                             tip:
                               type: percentage
-                              amount: 1100
+                              amount: 435
                               percentage: 10
                             taxes:
-                              - name: VAT
-                                rate: 10
-                                amount: 1000
+                              - name: Sales Tax
+                                rate: 5
+                                amount: 217
                         customer:
                           contactMethods:
                             - type: email
-                              value: joe@bloggssoftware.com
+                              value: sarah.hopper@example.com
                           notificationLanguage: en
                         bankAccount:
                           type: pad
-                          nameOnAccount: Joe Bloggs
-                          accountNumber: '*******8909'
-                          transitNumber: '12345'
-                          institutionNumber: '123'
+                          nameOnAccount: Sarah Hazel Hopper
+                          accountNumber: '*******3159'
+                          transitNumber: '76543'
+                          institutionNumber: '543'
                         transactionResult:
                           type: payment
                           status: ready
-                          authorizedAmount: 12100
-                          currency: CAD
+                          authorizedAmount: 4999
+                          currency: USD
                           responseCode: A
                       - paymentId: E29U8OU8Q4
-                        processingTerminalId: '1017'
+                        processingTerminalId: '1234001'
                         order:
-                          orderId: '541'
-                          dateTime: '2023-05-16T11:52:56-04:00'
+                          orderId: OrderRef7654
+                          dateTime: '2024-07-02T15:30:00Z'
                           description: test
-                          amount: 12100
-                          currency: CAD
+                          amount: 3999
+                          currency: USD
                           breakdown:
-                            subtotal: 10000
+                            subtotal: 3477
                             tip:
                               type: percentage
-                              amount: 1100
+                              amount: 348
                               percentage: 10
                             taxes:
-                              - name: VAT
-                                rate: 10
-                                amount: 1000
+                              - name: Sales Tax
+                                rate: 5
+                                amount: 174
                         customer:
                           contactMethods:
                             - type: email
-                              value: joe@bloggssoftware.com
+                              value: sarah.hopper@example.com
                           notificationLanguage: en
                         bankAccount:
                           type: pad
-                          nameOnAccount: Joe Bloggs
-                          accountNumber: '*******8909'
-                          transitNumber: '12345'
-                          institutionNumber: '123'
+                          nameOnAccount: Sarah Hazel Hopper
+                          accountNumber: '*******7890'
+                          transitNumber: '76543'
+                          institutionNumber: '543'
                         transactionResult:
                           type: payment
                           status: ready
-                          authorizedAmount: 12100
-                          currency: CAD
+                          authorizedAmount: 3999
+                          currency: USD
                           responseCode: A
                     links:
                       - rel: next
                         method: get
-                        href: https://api.payroc.com/v1/bank-transfer-payments?limit=2&processingTerminalId=1017&after=E29U8OU8Q4
+                        href: https://api.payroc.com/v1/bank-transfer-payments?limit=2&processingTerminalId=1234001&after=E29U8OU8Q4
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1//bank-transfer-payments?limit=2&processingTerminalId=1017&before=GTNOY9O4R4
+                        href: https://api.payroc.com/v1//bank-transfer-payments?limit=2&processingTerminalId=1234001&before=M2MJOG6O2Y
                 noActivity:
                   summary: No records found
                   description: Valid request, but no records match the criteria.
@@ -15662,39 +15662,39 @@ paths:
                   summary: Reverse Bank Transfer Payment
                   description: Reverse Bank Transfer Payment
                   value: &ref_513
-                    paymentId: JKNIJXNZAK
-                    processingTerminalId: '1017'
+                    paymentId: M2MJOG6O2Y
+                    processingTerminalId: '1234001'
                     order:
-                      orderId: '157'
-                      dateTime: '2023-05-16T11:54:43-04:00'
-                      description: sample order
-                      amount: 12100
-                      currency: CAD
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Large Pepperoni Pizza
+                      amount: 4999
+                      currency: USD
                       breakdown:
-                        subtotal: 10000
+                        subtotal: 4347
                         tip:
                           type: percentage
                           percentage: 10
                         taxes:
                           - name: VAT
-                            rate: 10
-                            amount: 1000
+                            rate: 5
+                            amount: 217
                     customer:
                       contactMethods:
                         - type: email
-                          value: joe@bloggssoftware.com
+                          value: sarah.hopper@example.com
                       notificationLanguage: en
                     bankAccount:
                       type: pad
-                      nameOnAccount: Joe Bloggs
-                      accountNumber: '*******8909'
-                      transitNumber: '12345'
-                      institutionNumber: '123'
+                      nameOnAccount: Sarah Hazel Hopper
+                      accountNumber: '*******7890'
+                      transitNumber: '76543'
+                      institutionNumber: '543'
                     transactionResult:
                       type: payment
                       status: reversal
-                      authorizedAmount: 12100
-                      currency: CAD
+                      authorizedAmount: 4999
+                      currency: USD
                       responseCode: A
         '400':
           description: Validation error
@@ -15787,7 +15787,7 @@ paths:
                 summary: Refund Bank Transfer Payment
                 description: Refund Bank Transfer Payment
                 value: &ref_514
-                  amount: 10000
+                  amount: 4999
                   description: amount to refund
         required: true
       responses:
@@ -15805,49 +15805,49 @@ paths:
                   summary: Reverse Bank Transfer Payment
                   description: Reverse Bank Transfer Payment
                   value: &ref_515
-                    paymentId: M12F8SUHGM
-                    processingTerminalId: '1017'
+                    paymentId: M2MJOG6O2Y
+                    processingTerminalId: '1234001'
                     order:
-                      orderId: '243'
-                      dateTime: '2023-07-25T22:57:11+01:00'
-                      description: amount to refund
-                      amount: 11110
-                      currency: CAD
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Refund for order OrderRef6543
+                      amount: 4999
+                      currency: USD
                       breakdown:
-                        subtotal: 10000
+                        subtotal: 4347
                         tip:
                           type: percentage
-                          amount: 1010
+                          amount: 435
                           percentage: 10
                         taxes:
-                          - name: VAT
-                            rate: 1
-                            amount: 100
+                          - name: Sales Tax
+                            rate: 5
+                            amount: 217
                     customer:
                       contactMethods:
                         - type: email
-                          value: joe@blogssoftware.com
+                          value: sarah.hopper@example.com
                       notificationLanguage: en
                     bankAccount:
                       type: pad
-                      nameOnAccount: Joe Bloggs
-                      accountNumber: '****9031'
-                      transitNumber: '14574'
-                      institutionNumber: '644'
+                      nameOnAccount: Sarah Hazel Hopper
+                      accountNumber: '****7890'
+                      transitNumber: '76543'
+                      institutionNumber: '543'
                       secureToken:
-                        secureTokenId: MREF_465772d1-ab4e-4881-8052-5021a745ed18Df
-                        customerName: Joe Bloggs
-                        token: '2967536686508441'
+                        secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                        customerName: Sarah Hopper
+                        token: '296753123456'
                         status: notValidated
                         link:
                           rel: self
                           method: GET
-                          href: https://api.payroc.com/v1/processing-terminals/1017/secure-tokens/MREF_465772d1-ab4e-4881-8052-5021a745ed18Df
+                          href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
                     transactionResult:
                       type: payment
                       status: reversal
-                      authorizedAmount: 11110
-                      currency: CAD
+                      authorizedAmount: 4999
+                      currency: USD
                       responseCode: A
         '400':
           description: Validation error
@@ -15941,9 +15941,9 @@ paths:
                   paymentMethod:
                     type: ach
                     accountType: checking
-                    nameOnAccount: Joe Bloggs
-                    accountNumber: '49100130'
-                    routingNumber: '292735277'
+                    nameOnAccount: Sarah Hopper
+                    accountNumber: '32183159'
+                    routingNumber: '063100277'
                     secCode: TEL
       responses:
         '200':
@@ -16101,24 +16101,24 @@ paths:
                 summary: Bank Transfer Unreferenced Refund
                 description: Bank Transfer Unreferenced Refund
                 value: &ref_518
-                  processingTerminalId: '1017'
+                  processingTerminalId: '1234001'
                   order:
-                    orderId: 314
-                    description: refund example
-                    amount: 1000
+                    orderId: OrderRef6543
+                    description: Refund for order OrderRef6543
+                    amount: 4999
                     currency: USD
                   customer:
                     notificationLanguage: en
                     contactMethods:
                       - type: email
-                        value: joe@blogssoftware.com
+                        value: sarah.hopper@example.com
                   refundMethod:
                     type: ach
                     secCode: web
                     accountType: checking
-                    nameOnAccount: Joe Bloggs
-                    accountNumber: '32183159'
-                    routingNumber: '063100277'
+                    nameOnAccount: Sarah Hazel Hopper
+                    accountNumber: '1234567890'
+                    routingNumber: '123456789'
         required: true
       responses:
         '201':
@@ -16145,7 +16145,7 @@ paths:
                     minLength: 4
                     type: string
                     description: Unique identifier that our gateway assigned to the terminal.
-                    example: TerminalId06888
+                    example: '1234001'
                   order:
                     description: Object that contains information about the order.
                     required: *ref_175
@@ -16185,30 +16185,30 @@ paths:
                   summary: Bank Transfer Unreferenced Refund
                   description: Bank Transfer Unreferenced Refund
                   value: &ref_185
-                    refundId: JH58KQ5K5E
-                    processingTerminalId: '1017'
+                    refundId: CD3HN88U9F
+                    processingTerminalId: '1234001'
                     order:
-                      orderId: '314'
-                      dateTime: '2023-05-17T09:24:11.693-04:00'
-                      description: refund example
-                      amount: 50000
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Refund for order OrderRef6543
+                      amount: 4999
                       currency: USD
                     customer:
                       contactMethods:
                         - type: email
-                          value: joe@bloggssoftware.com
+                          value: sarah.hopper@example.com
                       notificationLanguage: en
                     bankAccount:
                       type: ach
                       secCode: web
                       accountType: checking
-                      nameOnAccount: Joe Bloggs
-                      accountNumber: '****3159'
-                      routingNumber: '*****0277'
+                      nameOnAccount: Sarah Hazel Hopper
+                      accountNumber: '****7890'
+                      routingNumber: '*****6789'
                     transactionResult:
                       type: unreferencedRefund
                       status: ready
-                      authorizedAmount: -50000
+                      authorizedAmount: -4999
                       currency: USD
                       responseCode: A
                       responseMessage: NoError
@@ -16273,7 +16273,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-          example: TerminalId06888
+          example: '1234001'
         - name: orderId
           in: query
           description: Filter by the order ID.
@@ -16407,58 +16407,58 @@ paths:
                     count: 2
                     hasMore: true
                     data:
-                      - refundId: DYDJ5KHRT4
-                        processingTerminalId: '1017'
+                      - refundId: CD3HN88U9F
+                        processingTerminalId: '1234001'
                         order:
-                          orderId: '304'
-                          dateTime: '2023-05-17T09:23:41-04:00'
+                          orderId: OrderRef6543
+                          dateTime: '2024-07-02T15:30:00Z'
                           description: refund example
-                          amount: 100000
+                          amount: 4999
                           currency: USD
                         customer:
                           contactMethods:
                             - type: email
-                              value: joe@joesoftware.com
+                              value: sarah.hopper@example.com
                           notificationLanguage: en
                         bankAccount:
                           type: ach
                           secCode: web
                           accountType: checking
-                          nameOnAccount: Joe Bloggs
+                          nameOnAccount: Sarah Hazel Hopper
                           accountNumber: '****3159'
                           routingNumber: '*****0277'
                         transactionResult:
                           type: unreferencedRefund
                           status: ready
-                          authorizedAmount: -100000
+                          authorizedAmount: -4999
                           currency: USD
                           responseCode: A
                           responseMessage: NoError
                           processorResponseCode: '0'
                       - refundId: B6ZOFZNVOP
-                        processingTerminalId: '1017'
+                        processingTerminalId: '1234001'
                         order:
-                          orderId: '355'
-                          dateTime: '2023-05-17T09:21:30-04:00'
-                          description: refund example
-                          amount: 12000
+                          orderId: OrderRef7654
+                          dateTime: '2024-07-02T15:30:00Z'
+                          description: Refund for order OrderRef7654
+                          amount: 3999
                           currency: USD
                         customer:
                           contactMethods:
                             - type: email
-                              value: joe@bloggssoftware.com
+                              value: sarah.hopper@example.com
                           notificationLanguage: en
                         bankAccount:
                           type: ach
                           secCode: web
                           accountType: checking
-                          nameOnAccount: Joe Bloggs
+                          nameOnAccount: Sarah Hazel Hopper
                           accountNumber: '****3159'
                           routingNumber: '*****0277'
                         transactionResult:
                           type: unreferencedRefund
                           status: ready
-                          authorizedAmount: -12000
+                          authorizedAmount: -3999
                           currency: USD
                           responseCode: A
                           responseMessage: NoError
@@ -16466,10 +16466,10 @@ paths:
                     links:
                       - rel: next
                         method: get
-                        href: https://api.payroc.com/v1/bank-transfer-refunds?limit=2&processingTerminalId=1017&after=B6ZOFZNVOP
+                        href: https://api.payroc.com/v1/bank-transfer-refunds?limit=2&processingTerminalId=1234001&after=B6ZOFZNVOP
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1/bank-transfer-refunds?processingTerminalId=1017&limit=2&before=DYDJ5KHRT4
+                        href: https://api.payroc.com/v1/bank-transfer-refunds?processingTerminalId=1234001&limit=2&before=CD3HN88U9F
                 noActivity:
                   summary: No records found
                   description: Valid request, but no records match the criteria.
@@ -16575,30 +16575,30 @@ paths:
                   summary: Bank Transfer Unreferenced Refund
                   description: Bank Transfer Unreferenced Refund
                   value: &ref_519
-                    refundId: B5FK0CBP2D
-                    processingTerminalId: '1017'
+                    refundId: CD3HN88U9F
+                    processingTerminalId: '1234001'
                     order:
-                      orderId: '622'
-                      dateTime: '2023-05-17T09:54:51-04:00'
-                      description: refund example
-                      amount: 1000
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Refund for order OrderRef6543
+                      amount: 4999
                       currency: USD
                     customer:
                       contactMethods:
                         - type: email
-                          value: joe@bloggssoftware.com
+                          value: sarah.hopper@example.com
                       notificationLanguage: en
                     bankAccount:
                       type: ach
                       secCode: web
                       accountType: checking
-                      nameOnAccount: Joe Bloggs
+                      nameOnAccount: Sarah Hazel Hopper
                       accountNumber: '****3159'
                       routingNumber: '*****0277'
                     transactionResult:
                       type: unreferencedRefund
                       status: reversal
-                      authorizedAmount: -1000
+                      authorizedAmount: -4999
                       currency: USD
                       responseCode: A
                       responseMessage: NoError
@@ -16673,7 +16673,7 @@ paths:
                   minLength: 4
                   type: string
                   description: Unique identifier that our gateway assigned to the terminal.
-                  example: TerminalId06888
+                  example: '1234001'
                 bankAccount:
                   description: Object that contains information about the bank account.
                   type: object
@@ -16695,24 +16695,24 @@ paths:
                 summary: PAD Bank Account Verification Request
                 description: Bank Account Verification Request for PAD
                 value: &ref_520
-                  processingTerminalId: '1017'
+                  processingTerminalId: '1234001'
                   bankAccount:
                     type: pad
                     accountType: checking
-                    nameOnAccount: Joe Bloggs
-                    accountNumber: '12345678909'
+                    nameOnAccount: Sarah Hazel Hopper
+                    accountNumber: '1234567890'
                     routingNumber: '123456789'
-                    transitNumber: '12345'
-                    institutionNumber: '123'
+                    transitNumber: '76543'
+                    institutionNumber: '543'
               bankAccountVerificationRequestAch:
                 summary: ACH Bank Account Verification Request
                 description: Bank Account Verification Request for ACH
                 value: &ref_521
-                  processingTerminalId: '1017'
+                  processingTerminalId: '1234001'
                   bankAccount:
                     type: ach
                     accountType: checking
-                    nameOnAccount: Joe Bloggs
+                    nameOnAccount: Sarah Hazel Hopper
                     accountNumber: '32183159'
                     routingNumber: '063100277'
                     secCode: web
@@ -16733,7 +16733,7 @@ paths:
                     minLength: 4
                     type: string
                     description: Unique identifier that our gateway assigned to the terminal.
-                    example: TerminalId06888
+                    example: '1234001'
                   verified:
                     type: boolean
                     description: |
@@ -16746,7 +16746,7 @@ paths:
                   summary: Bank Account Verification Response
                   description: Bank Account Verification Response
                   value: &ref_522
-                    processingTerminalId: '1017'
+                    processingTerminalId: '1234001'
                     verified: true
         '400':
           description: Validation error
