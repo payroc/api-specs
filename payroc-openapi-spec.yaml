@@ -2296,6 +2296,7 @@ paths:
                                               enum:
                                                 - june
                                                 - december
+                                              example: december
                                             amount:
                                               description: Annual fee. The value is in the currency's lowest denomination, for example, cents.
                                               type: integer
@@ -19375,7 +19376,7 @@ paths:
                             value: '8445557624'
                           - type: email
                             value: jane.doe@example.com
-                      - contactId: 12346
+                      - contactId: 87926
                         type: representative
                         firstName: Fred
                         middleName: Jim
@@ -19446,7 +19447,7 @@ paths:
                     base:
                       addressVerification: 5
                       annualFee:
-                        billInMonth: june
+                        billInMonth: december
                         amount: 100
                       regulatoryAssistanceProgram: 15
                       pciNonCompliance: 4995
