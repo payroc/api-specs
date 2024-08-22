@@ -13745,11 +13745,11 @@ paths:
                 summary: Refund
                 description: Refund
                 value: &ref_505
-                  processingTerminalId: '1023'
+                  processingTerminalId: '1234001'
                   order:
-                    orderId: 1023_refund_oa8
-                    description: refund example
-                    amount: 1000
+                    orderId: OrderRef6543
+                    description: Refund for order OrderRef6543
+                    amount: 4999
                     currency: USD
                   channel: web
                   refundMethod:
@@ -13759,10 +13759,10 @@ paths:
                       keyedData:
                         dataFormat: plainText
                         device:
-                          type: DATECS_BLUEPAD50
-                          serialNumber: WPC202833004712
-                        expiryDate: '0328'
-                        cardNumber: '5001650000000000'
+                          type: PAX_A920_PRO
+                          serialNumber: '1850010868'
+                        expiryDate: '1225'
+                        cardNumber: '4539858876047062'
         required: true
       responses:
         '201':
@@ -13843,23 +13843,23 @@ paths:
                   description: Refund
                   value: &ref_147
                     refundId: CD3HN88U9F
-                    processingTerminalId: '1023'
+                    processingTerminalId: '1234001'
                     order:
-                      orderId: 1023_refund_oa8
-                      dateTime: '2023-07-27T09:51:02.91+01:00'
-                      description: refund example
-                      amount: 1000
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Refund for order OrderRef6543
+                      amount: 4999
                       currency: USD
                     card:
-                      type: MasterCard
+                      type: Visa Credit
                       entryMethod: keyed
-                      cardNumber: 500165******0000
-                      expiryDate: '0328'
+                      cardNumber: 453985******7062
+                      expiryDate: '1225'
                     transactionResult:
                       type: refund
                       status: ready
                       approvalCode: '000000'
-                      authorizedAmount: -1000
+                      authorizedAmount: -4999
                       currency: USD
                       responseCode: A
                       responseMessage: OK5
@@ -14063,34 +14063,34 @@ paths:
                     count: 2
                     hasMore: true
                     data:
-                      - refundId: FPU8P48WN8
-                        processingTerminalId: '1001'
+                      - refundId: CD3HN88U9F
+                        processingTerminalId: '1234001'
                         order:
-                          orderId: 1001_refund_1
-                          dateTime: '2023-05-18T16:32:47+01:00'
-                          description: refund example
-                          amount: 1000
-                          currency: EUR
+                          orderId: OrderRef6543
+                          dateTime: '2024-07-02T15:30:00Z'
+                          description: Refund for order OrderRef6543
+                          amount: 4999
+                          currency: USD
                         card:
-                          type: MasterCard
-                          cardNumber: 500165******0000
-                          expiryDate: '0328'
+                          type: Visa Credit
+                          cardNumber: 453985******7062
+                          expiryDate: '1225'
                         transactionResult:
                           type: refund
                           status: ready
                           approvalCode: '000000'
-                          authorizedAmount: -1000
-                          currency: EUR
+                          authorizedAmount: -4999
+                          currency: USD
                           responseCode: A
                           responseMessage: APPROVAL
-                      - refundId: CYGDZJF0MH
-                        processingTerminalId: '1001'
+                      - refundId: B6ZOFZNVOP
+                        processingTerminalId: '1234001'
                         order:
-                          orderId: 1001_refund
-                          dateTime: '2023-05-18T16:22:43+01:00'
-                          description: refund example
-                          amount: 1000
-                          currency: EUR
+                          orderId: OrderRef7654
+                          dateTime: '2024-07-02T15:30:00Z'
+                          description: Refund for order OrderRef7654
+                          amount: 3999
+                          currency: USD
                         card:
                           type: MasterCard
                           cardNumber: 500165******0000
@@ -14099,17 +14099,17 @@ paths:
                           type: refund
                           status: reversal
                           approvalCode: '000000'
-                          authorizedAmount: -1000
-                          currency: EUR
+                          authorizedAmount: -3999
+                          currency: USD
                           responseCode: A
                           responseMessage: APPROVAL
                     links:
                       - rel: next
                         method: get
-                        href: https://api.payroc.com/v1/refunds?processingTerminalId=1001&limit=2&after=CYGDZJF0MH
+                        href: https://api.payroc.com/v1/refunds?processingTerminalId=1234001&limit=2&after=B6ZOFZNVOP
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1/refunds?processingTerminalId=1001&limit=2&before=FPU8P48WN8
+                        href: https://api.payroc.com/v1/refunds?processingTerminalId=1234001&limit=2&before=CD3HN88U9F
                 noActivity:
                   summary: No records found
                   description: Valid request, but no records match the criteria.
@@ -14236,12 +14236,12 @@ paths:
                 summary: Adjust Refund
                 description: Adjust Refund
                 value: &ref_506
-                  operator: Adam Smith
+                  operator: Jane
                   adjustments:
                     - type: customer
                       contactMethods:
                         - type: mobile
-                          value: '+14155556666'
+                          value: '8445558735'
         required: true
       responses:
         '200':
@@ -14258,29 +14258,29 @@ paths:
                   summary: Adjust Refund
                   description: Adjust Refund
                   value: &ref_507
-                    refundId: I2HLYTVB81
-                    processingTerminalId: '1023'
-                    operator: Adam Smith
+                    refundId: CD3HN88U9F
+                    processingTerminalId: '1234001'
+                    operator: Jane
                     order:
-                      orderId: 1023_refund_czz
-                      dateTime: '2023-07-28T09:44:35+01:00'
-                      description: refund example
-                      amount: 1000
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Refund for order OrderRef6543
+                      amount: 4999
                       currency: USD
                     customer:
                       contactMethods:
                         - type: mobile
-                          value: '+14155556666'
+                          value: '8445558735'
                     card:
-                      type: MasterCard
+                      type: Visa Credit
                       entryMethod: keyed
-                      cardNumber: 500165******0000
-                      expiryDate: '0328'
+                      cardNumber: 453985******7062
+                      expiryDate: '1225'
                     transactionResult:
                       type: refund
                       status: ready
                       approvalCode: '000000'
-                      authorizedAmount: -1000
+                      authorizedAmount: -4999
                       currency: USD
                       responseCode: A
                       responseMessage: OK13
@@ -14363,25 +14363,25 @@ paths:
                   summary: Reverse Refund
                   description: Reverse Refund
                   value: &ref_508
-                    refundId: IH83EP2SRN
-                    processingTerminalId: '1001'
+                    refundId: CD3HN88U9F
+                    processingTerminalId: '1234001'
                     order:
-                      orderId: 1001_refund_2
-                      dateTime: '2023-05-18T16:33:10+01:00'
-                      description: refund example
-                      amount: 1000
-                      currency: EUR
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Refund for order OrderRef6543
+                      amount: 4999
+                      currency: USD
                     card:
                       type: Visa Credit
                       entryMethod: keyed
                       cardNumber: 453985******7062
-                      expiryDate: '0328'
+                      expiryDate: '1225'
                     transactionResult:
                       type: refund
                       status: reversal
                       approvalCode: '000000'
-                      authorizedAmount: -1000
-                      currency: EUR
+                      authorizedAmount: -4999
+                      currency: USD
                       responseCode: A
                       responseMessage: APPROVAL
         '400':
