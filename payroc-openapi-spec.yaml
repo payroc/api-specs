@@ -13516,18 +13516,18 @@ paths:
                         minLength: 1
                         type: string
                         description: Unique identifier that our gateway assigned to the instruction.
-                        example: e743a9165d134678a9100ebba3b29597
+                        example: a37439165d134678a9100ebba3b29597
               examples:
                 paymentInstruction:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
                   value: &ref_502
-                    paymentInstructionId: e743a9165d134678a9100ebba3b29597
+                    paymentInstructionId: a37439165d134678a9100ebba3b29597
                     status: inProgress
                     link:
                       rel: self
                       method: GET
-                      href: https://api.payroc.com/v1/payment-instructions/3743a9165d134678a9100ebba3b29597
+                      href: https://api.payroc.com/v1/payment-instructions/a37439165d134678a9100ebba3b29597
         '400':
           description: Validation error
           content:
@@ -13596,7 +13596,7 @@ paths:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
                   value: &ref_503
-                    paymentInstructionId: e743a9165d134678a9100ebba3b29597
+                    paymentInstructionId: a37439165d134678a9100ebba3b29597
                     status: completed
                     link:
                       rel: payment
@@ -14463,11 +14463,13 @@ paths:
                   minLength: 0
                   type: string
                   description: Operator who initiated the request.
+                  example: Jane
                 processingTerminalId:
                   maxLength: 50
                   minLength: 4
                   type: string
                   description: Unique identifier that our gateway assigned to the terminal.
+                  example: '1234001'
                 order:
                   required: &ref_379
                     - amount
@@ -14501,12 +14503,12 @@ paths:
                 summary: Refund instruction
                 description: Submit an instruction for initiating a refund on a physical device.
                 value: &ref_509
-                  operator: jbloggs
-                  processingTerminalId: '1021'
+                  operator: Jane
+                  processingTerminalId: '1234001'
                   order:
-                    orderId: 4fd4-99bc
+                    orderId: OrderRef6543
                     currency: USD
-                    amount: 1000
+                    amount: 4999
                     description: Refund for order OrderRef6543
                   customizationOptions:
                     entryMethod: manualEntry
@@ -14532,18 +14534,18 @@ paths:
                         minLength: 1
                         type: string
                         description: Unique identifier that our gateway assigned to the instruction.
-                        example: CD3HN88U9F
+                        example: a37439165d134678a9100ebba3b29597
               examples:
                 refundInstruction:
                   summary: Refund instruction
                   description: Object that contains information about the progress of the refund instruction.
                   value: &ref_510
-                    refundInstructionId: 3743a9165d134678a9100ebba3b29597
+                    refundInstructionId: a37439165d134678a9100ebba3b29597
                     status: inProgress
                     link:
                       rel: self
                       method: GET
-                      href: https://api.payroc.com/v1/refund-instructions/3743a9165d134678a9100ebba3b29597
+                      href: https://api.payroc.com/v1/refund-instructions/a37439165d134678a9100ebba3b29597
         '400':
           description: Validation error
           content:
@@ -14613,12 +14615,12 @@ paths:
                   summary: Refund instruction
                   description: Object that contains information about the progress of the refund instruction.
                   value: &ref_511
-                    refundInstructionId: 3743a9165d134678a9100ebba3b29597
+                    refundInstructionId: a37439165d134678a9100ebba3b29597
                     status: completed
                     link:
                       rel: refund
                       method: GET
-                      href: https://api.payroc.com/v1/refunds/DD6ZDQU7L2
+                      href: https://api.payroc.com/v1/refunds/CD3HN88U9F
         '400':
           description: Invalid request
           content: *ref_14
