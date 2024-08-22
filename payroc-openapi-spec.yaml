@@ -8015,33 +8015,33 @@ paths:
                 summary: Subscription
                 description: Subscription
                 value: &ref_487
-                  subscriptionId: 11001_subscription_cinema
-                  paymentPlanId: 1001_payment_plan_yearly
+                  subscriptionId: SubRef7654
+                  paymentPlanId: PlanRef8765
                   paymentMethod:
                     type: secureToken
-                    token: '2967533500670317'
-                  name: subscription from postman
-                  description: created through postman for card token
+                    token: '296753123456'
+                  name: Premium Club
+                  description: Premium Club subscription
                   setupOrder:
-                    amount: 1010
-                    description: setup order
+                    amount: 4999
+                    description: Initial setup fee for Premium Club subscription
                     breakdown:
-                      subtotal: 1000
+                      subtotal: 4347
                       taxes:
-                        - name: VAT
-                          rate: 1
-                    orderId: setup order
+                        - name: Sales Tax
+                          rate: 5
+                    orderId: OrderRef6543
                   recurringOrder:
-                    amount: 1010
-                    description: recurring order
+                    amount: 4999
+                    description: Monthly Premium Club subscription
                     breakdown:
-                      subtotal: 1000
+                      subtotal: 4347
                       taxes:
-                        - name: VAT
-                          rate: 1
-                  startDate: '2023-07-01'
+                        - name: Sales Tax
+                          rate: 5
+                  startDate: '2024-07-02'
                   endDate: '2025-07-01'
-                  length: 2
+                  length: 12
                   pauseCollectionFor: 0
         required: true
       responses:
@@ -8276,54 +8276,54 @@ paths:
                   summary: Subscription
                   description: Subscription
                   value: &ref_85
-                    subscriptionId: 1001_subscription_cinema
-                    processingTerminalId: '1001'
+                    subscriptionId: SubRef7654
+                    processingTerminalId: '1234001'
                     paymentPlan:
-                      paymentPlanId: 1001_paymentplan_yearly
-                      name: yearly payment plan
+                      paymentPlanId: PlanRef8765
+                      name: Monthly Premium Club subscription
                       link:
                         rel: self
                         method: GET
-                        href: https://api.payroc.com/v1/processing-terminals/1001/payment-plans/1001_paymentplan_yearly
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/payment-plans/PlanRef8765
                     secureToken:
-                      secureTokenId: SecureCard1001
-                      customerName: Joe Bloggs
-                      token: '2967533500670317'
+                      secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                      customerName: Sarah Hazel Hopper
+                      token: '296753123456'
                       status: notValidated
                       link:
                         rel: self
                         method: GET
-                        href: https://api.payroc.com/v1/processing-terminals/1001/secure-tokens/SecureCard1001
-                    name: avant-garde
-                    description: avant-garde cinema subscription
-                    currency: EUR
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                    name: Premium Club
+                    description: Premium Club subscription
+                    currency: USD
                     setupOrder:
-                      orderId: setup-order
-                      amount: 1010
-                      description: setup order
+                      orderId: OrderRef6543
+                      amount: 4999
+                      description: Initial setup fee for Premium Club subscription
                       breakdown:
-                        subtotal: 1000
+                        subtotal: 4347
                         taxes:
-                          - name: VAT
-                            rate: 1
+                          - name: Sales Tax
+                            rate: 5
                     recurringOrder:
-                      amount: 1010
-                      description: recurring order
+                      amount: 4999
+                      description: Premium Club subscription
                       breakdown:
-                        subtotal: 1000
+                        subtotal: 4347
                         taxes:
-                          - name: VAT
-                            rate: 1
+                          - name: Sales Tax
+                            rate: 5
                     currentState:
                       status: active
-                      nextDueDate: '2023-04-25'
+                      nextDueDate: '2024-08-02'
                       paidInvoices: 0
                       outstandingInvoices: 3
-                    startDate: '2023-04-25'
-                    endDate: '2025-04-25'
-                    length: 24
+                    startDate: '2024-07-02'
+                    endDate: '2025-07-01'
+                    length: 12
                     type: automatic
-                    frequency: yearly
+                    frequency: monthly
                     pauseCollectionFor: 0
           headers:
             location:
@@ -8503,75 +8503,75 @@ paths:
                     count: 2
                     hasMore: true
                     data:
-                      - subscriptionId: subscription 6
-                        processingTerminalId: '1001'
+                      - subscriptionId: SubRef7654
+                        processingTerminalId: '1234001'
                         paymentPlan:
-                          paymentPlanId: '5'
-                          name: platinum plan
+                          paymentPlanId: PlanRef8765
+                          name: Monthly Premium Club subscription
                           link:
                             rel: self
                             method: GET
-                            href: https://api.payroc.com/v1/processing-terminals/1001/payment-plans/5
+                            href: https://api.payroc.com/v1/processing-terminals/1234001/payment-plans/PlanRef8765
                         secureToken:
-                          secureTokenId: SecureCard1001
-                          customerName: Joe Bloggs
-                          token: '2967533500670317'
+                          secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                          customerName: Sarah Hazel Hopper
+                          token: '296753123456'
                           status: notValidated
                           link:
                             rel: self
                             method: GET
-                            href: https://api.payroc.com/v1/processing-terminals/1001/secure-tokens/SecureCard1001
-                        name: subscription 6
-                        description: this is description
-                        currency: EUR
+                            href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                        name: Premium Club
+                        description: Monthly Premium Club subscription
+                        currency: USD
                         setupOrder:
-                          orderId: order 201
-                          amount: 1010
-                          description: payment plan setup order
+                          orderId: OrderRef6543
+                          amount: 4999
+                          description: Initial setup fee for Premium Club subscription
                         recurringOrder:
-                          amount: 100
+                          amount: 4999
                         currentState:
                           status: active
-                          nextDueDate: '2024-04-11'
+                          nextDueDate: '2024-08-02'
                           paidInvoices: 1
-                          outstandingInvoices: 10
-                        startDate: '2023-04-11'
-                        endDate: '2033-04-11'
+                          outstandingInvoices: 11
+                        startDate: '2024-07-02'
+                        endDate: '2025-08-01'
                         length: 0
                         type: automatic
-                        frequency: yearly
+                        frequency: monthly
                         pauseCollectionFor: 0
-                      - subscriptionId: subscripion 5
-                        processingTerminalId: '1001'
+                      - subscriptionId: SubRef6543
+                        processingTerminalId: '1234001'
                         paymentPlan:
-                          paymentPlanId: '1'
-                          name: gold plan
+                          paymentPlanId: PlanRef7654
+                          name: Pie it Forward charitable trust donation
                           link:
                             rel: self
                             method: GET
-                            href: https://api.payroc.com/v1/processing-terminals/1001/payment-plans/1
+                            href: https://api.payroc.com/v1/processing-terminals/1234001/payment-plans/PlanRef7654
                         secureToken:
-                          secureTokenId: SecureCard1001
-                          customerName: Joe Bloggs
-                          token: '2967533500670317'
+                          secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                          customerName: Sarah Hazel Hopper
+                          token: '296753123456'
                           status: notValidated
                           link:
                             rel: self
                             method: GET
-                            href: https://api.payroc.com/v1/processing-terminals/1001/secure-tokens/SecureCard1001
-                        name: subscription 5
-                        description: some description
-                        currency: EUR
+                            href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                        name: Pie It Forward
+                        description: Pie It Forward charitable trust donation
+                        currency: USD
                         setupOrder:
-                          orderId: order-509
-                          amount: 1010
+                          orderId: OrderRef7654
+                          amount: 3999
                         recurringOrder:
-                          amount: 100
+                          amount: 3999
                         currentState:
                           status: active
                           nextDueDate: '2024-04-11'
                           paidInvoices: 1
-                          outstandingInvoices: 10
+                          outstandingInvoices: 11
                         startDate: '2023-04-11'
                         endDate: '2033-04-11'
                         length: 0
@@ -8581,10 +8581,10 @@ paths:
                     links:
                       - rel: next
                         method: get
-                        href: https://api.payroc.com/v1/processing-terminals/1001/subscriptions?limit=2&after=LN3K88F1UH
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/subscriptions?limit=2&after=SubRef6543
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1/processing-terminals/1001/subscriptions?limit=2&before=DBDVNUL6RG
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/subscriptions?limit=2&before=SubRef7654
                 noActivity:
                   summary: No records found
                   description: Valid request, but no records match the criteria.
@@ -8801,54 +8801,54 @@ paths:
                   summary: Deactivate subscription
                   description: Deactivate a subscription
                   value: &ref_488
-                    subscriptionId: 1001_subscription_cinema
-                    processingTerminalId: '1001'
+                    subscriptionId: SubRef7654
+                    processingTerminalId: '1234001'
                     paymentPlan:
-                      paymentPlanId: 1001_paymentplan_yearly
-                      name: yearly payment plan
+                      paymentPlanId: PlanRef8765
+                      name: Monthly Premium Club subscription
                       link:
                         rel: self
                         method: GET
-                        href: https://api.payroc.com/v1/processing-terminals/1001/payment-plans/1001_paymentplan_yearly
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/payment-plans/PlanRef8765
                     secureToken:
-                      secureTokenId: SecureCard1001
-                      customerName: Joe Bloggs
-                      token: '2967533500670317'
+                      secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                      customerName: Sarah Hazel Hopper
+                      token: '296753123456'
                       status: notValidated
                       link:
                         rel: self
                         method: GET
-                        href: https://api.payroc.com/v1/processing-terminals/1001/secure-tokens/SecureCard1001
-                    name: avant-garde
-                    description: avant-garde cinema subscription
-                    currency: EUR
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                    name: Premium Club
+                    description: Monthly Premium Club subscription
+                    currency: USD
                     setupOrder:
-                      orderId: setup-order
-                      amount: 1010
-                      description: setup order
+                      orderId: OrderRef6543
+                      amount: 4999
+                      description: Initial setup fee for Premium Club subscription
                       breakdown:
-                        subtotal: 1000
+                        subtotal: 4347
                         taxes:
-                          - name: VAT
-                            rate: 1
+                          - name: Sales Tax
+                            rate: 5
                     recurringOrder:
-                      amount: 1010
-                      description: recurring order
+                      amount: 4999
+                      description: Monthly Premium Club subscription
                       breakdown:
-                        subtotal: 1000
+                        subtotal: 4347
                         taxes:
-                          - name: VAT
-                            rate: 1
+                          - name: Sales Tax
+                            rate: 5
                     currentState:
                       status: cancelled
-                      nextDueDate: '2023-04-25'
+                      nextDueDate: '2024-08-02'
                       paidInvoices: 0
                       outstandingInvoices: 3
-                    startDate: '2023-04-25'
-                    endDate: '2025-04-25'
-                    length: 24
+                    startDate: '2024-07-02'
+                    endDate: '2025-07-01'
+                    length: 12
                     type: automatic
-                    frequency: yearly
+                    frequency: monthly
                     pauseCollectionFor: 0
         '400':
           description: Invalid request
@@ -8991,16 +8991,16 @@ paths:
                 summary: Subscription manual payment
                 description: Subscription manual payment
                 value: &ref_489
-                  operator: Giuseppe Green
+                  operator: Jane
                   order:
-                    amount: 1010
-                    description: manual payment
+                    amount: 4999
+                    description: Monthly Premium Club subscription
                     breakdown:
-                      subtotal: 1000
+                      subtotal: 4999
                       taxes:
-                        - name: VAT
-                          rate: 1
-                    orderId: manual payment orderx12s
+                        - name: Sales Tax
+                          rate: 5
+                    orderId: OrderRef6543
         required: true
       responses:
         '201':
@@ -9120,31 +9120,31 @@ paths:
                   summary: Subscription manual payment
                   description: Subscription manual payment
                   value: &ref_490
-                    subscriptionId: 1017_subscription_metro
-                    processingTerminalId: '1017'
+                    subscriptionId: SubRef7654
+                    processingTerminalId: '1234001'
                     payment:
-                      paymentId: GTZH5WVXK9
-                      dateTime: '2023-07-27T23:36:03.506+01:00'
-                      amount: 1010
-                      currency: CAD
+                      paymentId: M2MJOG6O2Y
+                      dateTime: '2024-07-02T15:30:00Z'
+                      amount: 4999
+                      currency: USD
                       status: ready
                       responseCode: A
                       link:
                         rel: self
                         method: GET
-                        href: https://api.payroc.com/v1/bank-transfer-payments/GTZH5WVXK9
+                        href: https://api.payroc.com/v1/bank-transfer-payments/M2MJOG6O2Y
                     secureToken:
-                      secureTokenId: MREF_465772d1-ab4e-4881-8052-5021a745ed18Df
-                      customerName: Joe Bloggs
-                      token: '2967536686508441'
+                      secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                      customerName: Sarah Hazel Hopper
+                      token: '296753123456'
                       status: notValidated
                       link:
                         rel: self
                         method: GET
-                        href: https://api.payroc.com/v1/processing-terminals/1017/secure-tokens/MREF_465772d1-ab4e-4881-8052-5021a745ed18Df
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
                     currentState:
                       status: active
-                      nextDueDate: '2024-07-01'
+                      nextDueDate: '2024-08-02'
                       paidInvoices: 1
                       outstandingInvoices: 2
           headers:
