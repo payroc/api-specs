@@ -499,7 +499,7 @@ paths:
                           type: string
                         description: '[Metadata](/api/metadata) object you can use to include custom data with your request.'
                         example:
-                          internalRef: '2345'
+                          internalRef: abc123
                       links:
                         readOnly: true
                         type: array
@@ -1757,8 +1757,8 @@ paths:
                         href: https://api.payroc.com/v1/funding-accounts?after=124&limit=2
                     data:
                       - fundingAccountId: 123
-                        createdDate: '2020-09-08T12:00:00.000Z'
-                        lastModifiedDate: '2020-09-08T12:00:00.000Z'
+                        createdDate: '2024-07-02T15:30:00Z'
+                        lastModifiedDate: '2024-07-02T15:30:00Z'
                         status: approved
                         type: checking
                         use: credit
@@ -1769,14 +1769,14 @@ paths:
                               routingNumber: '*****6789'
                               accountNumber: '******7890'
                         metadata:
-                          internalRef: '2345'
+                          internalRef: abc123
                         links:
                           - rel: parent
-                            href: https://api.payroc.com/v1/merchants/1234
+                            href: https://api.payroc.com/v1/merchants/4525644354
                             method: get
                       - fundingAccountId: 124
-                        createdDate: '2021-01-08T12:00:00.000Z'
-                        lastModifiedDate: '2021-01-08T12:00:00.000Z'
+                        createdDate: '2024-07-02T15:30:00Z'
+                        lastModifiedDate: '2024-07-02T15:30:00Z'
                         status: pending
                         type: checking
                         use: debit
@@ -1787,10 +1787,10 @@ paths:
                               routingNumber: '*****8725'
                               accountNumber: '******3491'
                         metadata:
-                          internalRef: '2346'
+                          internalRef: abc123
                         links:
                           - rel: parent
-                            href: https://api.payroc.com/v1/funding-recipient/2
+                            href: https://api.payroc.com/v1/funding-recipient/234
                             method: get
                 noResults:
                   summary: No results found
@@ -1832,6 +1832,7 @@ paths:
           explode: false
           schema: &ref_33
             type: integer
+          example: 123
       responses:
         '200':
           description: Successful request. Returns the requested funding account.
@@ -1847,8 +1848,8 @@ paths:
                   summary: Masked funding account example.
                   value: &ref_454
                     fundingAccountId: 123
-                    createdDate: '2020-09-08T12:00:00.000Z'
-                    lastModifiedDate: '2020-09-08T12:00:00.000Z'
+                    createdDate: '2024-07-02T15:30:00Z'
+                    lastModifiedDate: '2024-07-02T15:30:00Z'
                     status: pending
                     type: checking
                     use: credit
@@ -1859,10 +1860,10 @@ paths:
                           routingNumber: '*****6789'
                           accountNumber: '******7890'
                     metadata:
-                      internalRef: '2345'
+                      internalRef: abc123
                     links:
                       - rel: parent
-                        href: https://api.payroc.com/v1/merchants/1234
+                        href: https://api.payroc.com/v1/merchants/4525644354
                         method: get
         '400':
           description: Invalid request
@@ -1893,6 +1894,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_33
+          example: 123
       requestBody:
         content:
           application/json:
@@ -1950,6 +1952,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_33
+          example: 123
       responses:
         '204':
           description: Successful request. We deleted the funding account.
@@ -20601,6 +20604,7 @@ components:
       style: simple
       explode: false
       schema: *ref_33
+      example: 123
     ownerId:
       name: ownerId
       in: path
