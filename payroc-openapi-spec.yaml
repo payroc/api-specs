@@ -6149,15 +6149,15 @@ paths:
                     links:
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1/transctions?before=65&limit=2&date=2021-01-01
+                        href: https://api.payroc.com/v1/transctions?before=442233&limit=2&date=2021-01-01
                     data:
-                      - transactionId: 65
+                      - transactionId: 442233
                         type: capture
-                        date: '2021-01-01'
-                        amount: 25000
+                        date: '2024-07-02'
+                        amount: 4999
                         entryMethod: ecommerce
-                        createdDate: '2021-09-05'
-                        lastModifiedDate: '2021-09-06'
+                        createdDate: '2024-07-02'
+                        lastModifiedDate: '2024-07-02'
                         status: paid
                         cashbackAmount: 0
                         interchange:
@@ -6173,30 +6173,30 @@ paths:
                             href: https://api.payroc.com/v1/merchants/4525644354
                         settled:
                           settledBy: 3rd party
-                          achDate: '2021-09-05'
+                          achDate: '2024-07-02'
                         batch:
                           batchId: 12
-                          date: '2021-01-01'
+                          date: '2024-07-02'
                           cycle: am
                           link:
                             rel: batch
                             method: get
                             href: https://api.payroc.com/v1/batches/12
                         card:
-                          cardNumber: 12456**********4124
+                          cardNumber: 453985******7062
                           type: visa
                           cvvPresenceIndicator: true
                           avsRequest: true
                           avsResponse: ''
                         authorization:
-                          authorizationId: 12345
-                          code: ABCDE
-                          amount: 100
+                          authorizationId: 303101
+                          code: A1B2C3
+                          amount: 4999
                           avsResponseCode: ''
                           link:
                             rel: authorization
                             method: get
-                            href: https://api.payroc.com/v1/authorizations/12345
+                            href: https://api.payroc.com/v1/authorizations/303101
                 noActivity:
                   summary: No records found
                   description: Valid request, but no records match the criteria.
