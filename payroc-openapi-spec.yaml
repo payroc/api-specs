@@ -5177,7 +5177,7 @@ paths:
           description: Unique identifier of the merchant.
           schema:
             type: string
-            example: '123456789'
+            example: '4525644354'
       responses:
         '200':
           description: Successful request. Returns the balance available for each merchant.
@@ -5202,7 +5202,7 @@ paths:
                             merchantId:
                               type: string
                               description: Unique Identifier of the merchant.
-                              example: '123'
+                              example: '4525644354'
                             funds:
                               type: integer
                               description: Value of funds in the currency's lowest denomination, for example, cents.
