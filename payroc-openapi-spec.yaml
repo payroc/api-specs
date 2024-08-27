@@ -105,20 +105,20 @@ paths:
                 status:
                   type: string
                   readOnly: true
-                  example: approved
                   enum:
                     - approved
                     - rejected
                     - pending
+                  example: approved
                 createdDate:
                   type: string
                   format: date-time
-                  example: '2020-09-08T12:00:00.000Z'
+                  example: '2024-07-02T15:30:00Z'
                   readOnly: true
                 lastModifiedDate:
                   type: string
                   format: date-time
-                  example: '2020-09-08T12:00:00.000Z'
+                  example: '2024-07-02T15:30:00Z'
                   readOnly: true
                 recipientType:
                   type: string
@@ -137,7 +137,7 @@ paths:
                 taxId:
                   type: string
                   description: Employer identification number (EIN) or Social Security number (SSN).
-                  example: '123456789'
+                  example: 12-3456789
                 charityId:
                   type: string
                   description: Government identifier of the charity.
@@ -268,14 +268,14 @@ paths:
                             example: '2025550110'
                   example:
                     - type: email
-                      value: david.smith@example.com
+                      value: jane.doe@example.com
                 metadata:
                   type: object
                   additionalProperties:
                     type: string
                   description: '[Metadata](/api/metadata) object you can use to include custom data with your request.'
                   example:
-                    customerId: '2345'
+                    internalRef: abc123
                 owners:
                   minItems: 1
                   description: Array of owner objects that you can use to add owners to the funding recipient.
@@ -543,31 +543,30 @@ paths:
                     type: integer
                     description: Unique identifier of the funding recipient.
                     readOnly: true
-                    example: 1
+                    example: 234
                   status:
                     type: string
                     description: Indicates if we have approved the funding recipient.
                     readOnly: true
-                    example: approved
                     enum:
                       - approved
                       - rejected
                       - pending
+                    example: approved
                   createdDate:
                     type: string
                     description: Date the funding recipient was created.
                     format: date-time
-                    example: '2020-09-08T12:00:00.000Z'
+                    example: '2024-07-02T15:30:00Z'
                     readOnly: true
                   lastModifiedDate:
                     type: string
                     description: Date the funding recipient was last modified.
                     format: date-time
-                    example: '2020-09-08T12:00:00.000Z'
+                    example: '2024-07-02T15:30:00Z'
                     readOnly: true
                   recipientType:
                     type: string
-                    example: privateCorporation
                     enum:
                       - privateCorporation
                       - publicCorporation
@@ -578,11 +577,12 @@ paths:
                       - privatePartnership
                       - publicPartnership
                       - soleProprietor
+                    example: privateCorporation
                     description: Type or legal structure of the funding recipient.
                   taxId:
                     type: string
                     description: Employer identification number (EIN) or Social Security number (SSN).
-                    example: '123456789'
+                    example: 12-3456789
                   charityId:
                     type: string
                     description: Government identifier of the charity.
@@ -608,14 +608,14 @@ paths:
                       oneOf: *ref_2
                     example:
                       - type: email
-                        value: david.smith@example.com
+                        value: jane.doe@example.com
                   metadata:
                     type: object
                     additionalProperties:
                       type: string
                     description: '[Metadata](/api/metadata) object you can use to include custom data with your request.'
                     example:
-                      customerId: '2345'
+                      internalRef: abc123
                   owners:
                     readOnly: true
                     description: Array of owner objects associated with the funding recipient.
@@ -660,16 +660,16 @@ paths:
                         fundingAccountId:
                           type: integer
                           description: Unique identifier of the funding account.
-                          example: 2
+                          example: 123
                         status:
                           type: string
-                          example: pending
                           description: Status of the funding account.
                           enum:
                             - approved
                             - rejected
                             - pending
                             - hold
+                          example: pending
                         link:
                           type: object
                           description: HATEOAS links for viewing the funding account.
@@ -679,22 +679,22 @@ paths:
                               example: fundingAccount
                             href:
                               type: string
-                              example: https://api.payroc.com/v1/funding-accounts/2
+                              example: https://api.payroc.com/v1/funding-accounts/123
                             method:
                               type: string
                               example: get
                     example:
-                      - fundingAccountId: 1
+                      - fundingAccountId: 123
                         status: approved
                         link:
                           rel: fundingAccount
-                          href: https://api.payroc.com/v1/funding-accounts/1
+                          href: https://api.payroc.com/v1/funding-accounts/123
                           method: get
-                      - fundingAccountId: 2
+                      - fundingAccountId: 124
                         status: rejected
                         link:
                           rel: fundingAccount
-                          href: https://api.payroc.com/v1/funding-accounts/2
+                          href: https://api.payroc.com/v1/funding-accounts/124
                           method: get
           headers:
             location:
@@ -1079,13 +1079,13 @@ paths:
                         method: get
                         href: https://api.payroc.com/v1/funding-recipients?before=12345&limit=10
                     data:
-                      - recipientId: 12345
+                      - recipientId: 234
                         status: approved
-                        createdDate: '2020-09-08T12:00:00.000Z'
-                        lastModifiedDate: '2020-09-08T12:00:00.000Z'
+                        createdDate: '2024-07-02T15:30:00Z'
+                        lastModifiedDate: '2024-07-02T15:30:00Z'
                         recipientType: privateCorporation
-                        taxId: '123456789'
-                        doingBuinessAs: Example llc
+                        taxId: 12-3456789
+                        doingBuinessAs: Pizza Doe
                         address:
                           address1: 1 Example Ave.
                           city: Chicago
@@ -1094,9 +1094,9 @@ paths:
                           postalCode: '60056'
                         contactMethods:
                           - type: phone
-                            value: 123 456 7890
+                            value: '2025550164'
                         metadata:
-                          customerId: '12345'
+                          internalRef: abc123
                         owners:
                           - ownerId: 4564
                             link:
@@ -1104,18 +1104,18 @@ paths:
                               method: get
                               href: https://api.payroc.com/v1/owners/4564
                         fundingAccounts:
-                          - fundingAccountId: 1
+                          - fundingAccountId: 123
                             status: approved
                             link:
                               rel: fundingAccount
                               method: get
-                              href: https://api.payroc.com/v1/funding-accounts/1
-                          - fundingAccountId: 2
+                              href: https://api.payroc.com/v1/funding-accounts/123
+                          - fundingAccountId: 124
                             status: hold
                             link:
                               rel: fundingAccount
                               method: get
-                              href: https://api.payroc.com/v1/funding-accounts/2
+                              href: https://api.payroc.com/v1/funding-accounts/124
                 noActivity:
                   summary: No records found
                   description: Valid request, but no records match the criteria.
@@ -1163,6 +1163,7 @@ paths:
           explode: false
           schema: &ref_15
             type: integer
+          example: 234
       responses:
         '200':
           description: Successful request. Returns the requested funding recipient.
@@ -1180,11 +1181,11 @@ paths:
                   value: &ref_450
                     recipientId: 12345
                     status: approved
-                    createdDate: '2020-09-08T12:00:00.000Z'
-                    lastModifiedDate: '2020-09-08T12:00:00.000Z'
+                    createdDate: '2024-07-02T15:30:00Z'
+                    lastModifiedDate: '2024-07-02T15:30:00Z'
                     recipientType: privateCorporation
-                    taxId: '123456789'
-                    doingBuinessAs: Example llc
+                    taxId: 12-3456789
+                    doingBuinessAs: Pizza Doe
                     address:
                       address1: 1 Example Ave.
                       city: Chicago
@@ -1193,9 +1194,9 @@ paths:
                       postalCode: '60056'
                     contactMethods:
                       - type: phone
-                        value: 123 456 7890
+                        value: '2025550164'
                     metadata:
-                      customerId: '12345'
+                      internalRef: abc123
                     owners:
                       - ownerId: 4564
                         link:
@@ -1203,18 +1204,18 @@ paths:
                           method: get
                           href: https://api.payroc.com/v1/owners/4564
                     fundingAccounts:
-                      - fundingAccountId: 1
+                      - fundingAccountId: 123
                         status: approved
                         link:
                           rel: fundingAccount
                           method: get
-                          href: https://api.payroc.com/v1/funding-accounts/1
-                      - fundingAccountId: 2
+                          href: https://api.payroc.com/v1/funding-accounts/123
+                      - fundingAccountId: 124
                         status: hold
                         link:
                           rel: fundingAccount
                           method: get
-                          href: https://api.payroc.com/v1/funding-accounts/2
+                          href: https://api.payroc.com/v1/funding-accounts/124
         '400':
           description: Invalid request
           content: *ref_14
@@ -1283,6 +1284,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_15
+          example: 234
       requestBody:
         content:
           application/json:
@@ -1340,6 +1342,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_15
+          example: 234
       responses:
         '204':
           description: Successful request. We deleted the funding recipient.
@@ -1373,6 +1376,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_15
+          example: 234
       responses:
         '200':
           description: Successful request. Returns a list of all funding accounts associated with the funding recipient.
@@ -1391,8 +1395,8 @@ paths:
                   description: List of funding accounts.
                   value: &ref_452
                     - fundingAccountId: 123
-                      createdDate: '2020-09-08T12:00:00.000Z'
-                      lastModifiedDate: '2020-09-08T12:00:00.000Z'
+                      createdDate: '2024-07-02T15:30:00Z'
+                      lastModifiedDate: '2024-07-02T15:30:00Z'
                       status: approved
                       type: checking
                       use: credit
@@ -1403,14 +1407,14 @@ paths:
                             routingNumber: '*****6789'
                             accountNumber: '******7890'
                       metadata:
-                        internalRef: '2345'
+                        internalRef: abc123
                       links:
                         - rel: parent
-                          href: https://api.payroc.com/v1/funding-recipient/2
+                          href: https://api.payroc.com/v1/funding-recipient/234
                           method: get
                     - fundingAccountId: 124
-                      createdDate: '2021-01-08T12:00:00.000Z'
-                      lastModifiedDate: '2021-01-08T12:00:00.000Z'
+                      createdDate: '2024-07-02T15:30:00Z'
+                      lastModifiedDate: '2024-07-02T15:30:00Z'
                       status: pending
                       type: checking
                       use: debit
@@ -1421,10 +1425,10 @@ paths:
                             routingNumber: '*****8725'
                             accountNumber: '******3491'
                       metadata:
-                        internalRef: '2346'
+                        internalRef: abc123
                       links:
                         - rel: parent
-                          href: https://api.payroc.com/v1/funding-recipient/2
+                          href: https://api.payroc.com/v1/funding-recipient/235
                           method: get
         '400':
           description: Invalid request
@@ -1455,6 +1459,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_15
+          example: 234
         - name: Idempotency-Key
           in: header
           required: true
@@ -1485,8 +1490,8 @@ paths:
                   description: Funding accounts.
                   value: &ref_453
                     fundingAccountId: 123
-                    createdDate: '2020-09-08T12:00:00.000Z'
-                    lastModifiedDate: '2020-09-08T12:00:00.000Z'
+                    createdDate: '2024-07-02T15:30:00Z'
+                    lastModifiedDate: '2024-07-02T15:30:00Z'
                     status: approved
                     type: checking
                     use: credit
@@ -1497,10 +1502,10 @@ paths:
                           routingNumber: '*****6789'
                           accountNumber: '******7890'
                     metadata:
-                      internalRef: '2345'
+                      internalRef: abc123
                     links:
                       - rel: parent
-                        href: https://api.payroc.com/v1/funding-recipient/2
+                        href: https://api.payroc.com/v1/funding-recipient/234
                         method: get
           headers:
             location:
@@ -1572,6 +1577,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_15
+          example: 234
       responses:
         '200':
           description: Successful request. Returns a list of all owners associated with the funding recipient.
@@ -1613,6 +1619,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_15
+          example: 234
         - name: Idempotency-Key
           in: header
           required: true
@@ -20607,6 +20614,7 @@ components:
       style: simple
       explode: false
       schema: *ref_15
+      example: 234
     fundingAccountId:
       name: fundingAccountId
       in: path
