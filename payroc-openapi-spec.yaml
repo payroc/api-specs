@@ -4183,10 +4183,10 @@ paths:
     parameters:
       - in: path
         name: pricingIntentId
-        schema: &ref_223
-          type: string
         required: true
         description: Unique identifier of the pricing intent.
+        schema: &ref_223
+          type: string
         example: '5'
     get:
       summary: Retrieve pricing intent
@@ -4791,7 +4791,7 @@ paths:
           schema: &ref_224
             type: string
             format: date
-            example: '2024-07-01'
+          example: '2024-07-01'
         - name: dateTo
           in: query
           required: true
@@ -4799,7 +4799,7 @@ paths:
           schema:
             type: string
             format: date
-            example: '2024-07-03'
+          example: '2024-07-03'
       responses:
         '200':
           description: Successful request. Returns a list of funding instructions.
@@ -5004,7 +5004,7 @@ paths:
         description: Unique identifier of the funding instruction.
         schema: &ref_226
           type: integer
-          example: 64643131
+        example: 64643131
     get:
       tags:
         - Funding instructions
@@ -5326,7 +5326,7 @@ paths:
           schema: &ref_227
             type: string
             format: date
-            example: '2024-07-02'
+          example: '2024-07-02'
         - name: dateTo
           in: query
           required: true
@@ -5334,7 +5334,7 @@ paths:
           schema: &ref_225
             type: string
             format: date
-            example: '2024-07-03'
+          example: '2024-07-03'
         - name: merchantId
           in: query
           description: Unique identifier of the merchant.
@@ -6653,7 +6653,7 @@ paths:
           style: simple
           schema: &ref_232
             type: integer
-            example: 12345
+          example: 12345
       responses:
         '200':
           description: Successful request. Returns the requested authorization.
@@ -6714,7 +6714,7 @@ paths:
           schema: &ref_233
             type: string
             format: date
-            example: '2024-07-02'
+          example: '2024-07-02'
         - name: merchantId
           in: query
           description: Unique identifier of the merchant.
@@ -6960,7 +6960,7 @@ paths:
           style: simple
           schema: &ref_234
             type: integer
-            example: 12345
+          example: 12345
       responses:
         '200':
           description: Successful request. Returns the status history for a specific dispute.
@@ -8446,7 +8446,7 @@ paths:
               - monthly
               - quarterly
               - yearly
-            example: monthly
+          example: monthly
         - name: status
           in: query
           description: Filter by the current status of the subscription.
@@ -8457,7 +8457,7 @@ paths:
               - completed
               - suspended
               - cancelled
-            example: active
+          example: active
         - name: endDate
           in: query
           description: |
@@ -13981,7 +13981,7 @@ paths:
             maxLength: 50
             minLength: 4
             type: string
-            example: '1234001'
+          example: '1234001'
         - name: orderId
           in: query
           description: Filter refunds by the unique identifier that the merchant assigned to the order.
@@ -17182,7 +17182,7 @@ paths:
             maxLength: 10
             minLength: 10
             type: string
-            example: CD3HN88U9F
+          example: CD3HN88U9F
       responses:
         '200':
           description: Successful request. Returns the specific refund.
@@ -17234,6 +17234,7 @@ paths:
           in: path
           required: true
           schema: *ref_195
+          example: CD3HN88U9F
       responses:
         '200':
           description: Successful request. We reversed the refund transaction.
@@ -18742,7 +18743,7 @@ paths:
           explode: false
           schema: &ref_204
             type: string
-            example: '12345'
+          example: '12345'
       responses:
         '200':
           description: Successful request. Returns the merchant platform.
@@ -18833,6 +18834,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_204
+          example: '12345'
         - name: before
           in: query
           required: false
@@ -18857,7 +18859,7 @@ paths:
           schema: &ref_303
             type: boolean
             default: false
-            example: false
+          example: false
       responses:
         '200':
           description: Successful request. Returns a list of processing accounts associated with the merchant platform.
@@ -19388,6 +19390,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_204
+          example: '12345'
         - name: Idempotency-Key
           in: header
           required: true
@@ -19732,7 +19735,7 @@ paths:
           explode: false
           schema: &ref_217
             type: string
-            example: '12345'
+          example: '12345'
       responses:
         '200':
           description: Successful request. Returns the processing account.
@@ -19891,6 +19894,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_217
+          example: '12345'
       responses:
         '200':
           description: Successful request. Returns a list of funding accounts associated with the processing account.
@@ -19978,6 +19982,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_217
+          example: '12345'
         - name: before
           in: query
           required: false
@@ -20097,6 +20102,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_217
+          example: '12345'
       responses:
         '200':
           description: Successful request. Returns the pricing agreement for the processing account.
@@ -20207,6 +20213,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_217
+          example: '12345'
         - name: before
           in: query
           required: false
@@ -20349,6 +20356,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_217
+          example: '12345'
       requestBody:
         content:
           application/json:
@@ -20672,9 +20680,9 @@ components:
     pricingIntentId:
       in: path
       name: pricingIntentId
-      schema: *ref_223
       required: true
       description: Unique identifier of the pricing intent.
+      schema: *ref_223
       example: '5'
     dateFrom:
       name: dateFrom
@@ -20682,18 +20690,21 @@ components:
       description: Retrieve activity that occured since `dateFrom`. We can return activity from only the last two years.
       required: true
       schema: *ref_224
+      example: '2024-07-01'
     dateTo:
       name: dateTo
       in: query
       required: true
       description: Retrieve activity that occured before `dateTo`.
       schema: *ref_225
+      example: '2024-07-03'
     instructionId:
       name: instructionId
       in: path
       required: true
       description: Unique identifier of the funding instruction.
       schema: *ref_226
+      example: 64643131
     merchantId:
       name: merchantId
       in: query
@@ -20706,6 +20717,7 @@ components:
       description: Retrieve activity that occured since `dateFrom`. We can return activity from only the last two years.
       required: true
       schema: *ref_227
+      example: '2024-07-02'
     date:
       name: date
       in: query
@@ -20757,12 +20769,14 @@ components:
       required: true
       style: simple
       schema: *ref_232
+      example: 12345
     parameters-date:
       name: date
       in: query
       required: true
       description: Date that the dispute was submitted.
       schema: *ref_233
+      example: '2024-07-02'
     disputeId:
       name: disputeId
       description: Unique identifier of the dispute.
@@ -20770,6 +20784,7 @@ components:
       required: true
       style: simple
       schema: *ref_234
+      example: 12345
     processingTerminalId:
       name: processingTerminalId
       in: path
@@ -20807,11 +20822,13 @@ components:
       in: query
       description: Filter by the frequency of subscription payments.
       schema: *ref_238
+      example: monthly
     status:
       name: status
       in: query
       description: Filter by the current status of the subscription.
       schema: *ref_239
+      example: active
     endDate:
       name: endDate
       in: query
@@ -20981,6 +20998,7 @@ components:
       in: query
       description: Filter refunds by the unique identifier that our gateway assigned to the terminal.
       schema: *ref_266
+      example: '1234001'
     parameters-orderId:
       name: orderId
       in: query
@@ -21190,6 +21208,7 @@ components:
       in: path
       required: true
       schema: *ref_195
+      example: CD3HN88U9F
     merchantPlatformId:
       name: merchantPlatformId
       in: path
@@ -21198,12 +21217,14 @@ components:
       style: simple
       explode: false
       schema: *ref_204
+      example: '12345'
     includeClosed:
       name: includeClosed
       in: query
       description: Indicates if you want to return closed processing accounts. This includes processing accounts that have a status of `terminated`, `cancelled`, or `rejected`.
       required: false
       schema: *ref_303
+      example: false
     processingAccountId:
       name: processingAccountId
       in: path
@@ -21212,6 +21233,7 @@ components:
       style: simple
       explode: false
       schema: *ref_217
+      example: '12345'
     contactId:
       name: contactId
       in: path
