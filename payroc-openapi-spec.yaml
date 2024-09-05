@@ -7944,7 +7944,16 @@ paths:
                           minLength: 12
                           type: string
                           description: Unique token that the gateway assigned to the payment details.
-                          example: '1234567890123456789'
+                          example: '296753123456'
+                        secCode:
+                          type: string
+                          description: |
+                            Indicates the type of authorization for the transaction. The field is mandatory for ACH secure token. 
+                            - `web` – Online transaction.  
+                            - `tel` – Telephone transaction.  
+                            - `ccd` – Corporate credit card or debit card transaction.  
+                            - `ppd` – Pre-arranged transaction.
+                          example: web
                 name:
                   maxLength: 128
                   minLength: 5
@@ -11697,6 +11706,15 @@ paths:
                           required: *ref_101
                           description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
                           allOf: *ref_102
+                        secCode:
+                          type: string
+                          description: |
+                            Indicates the type of authorization for the transaction. The field is mandatory for ACH secure token. 
+                            - `web` – Online transaction.  
+                            - `tel` – Telephone transaction.  
+                            - `ccd` – Corporate credit card or debit card transaction.  
+                            - `ppd` – Pre-arranged transaction.
+                          example: web
                 threeDSecure:
                   type: object
                   description: Object that contains information for an authentication check on the customer's payment details using the 3-D Secure protocol.
@@ -15630,6 +15648,12 @@ paths:
                       title: Secure token
                       description: Object that contains information about the secure token that represents the customer’s payment details.
                       properties: *ref_116
+                    - required: *ref_165
+                      type: object
+                      writeOnly: true
+                      title: Single-use token
+                      description: Object that contains information about the single-use token, which represents the customer’s payment details.
+                      properties: *ref_166
             examples:
               createdBankTransferPaymentStoreToken:
                 summary: Store Token Bank Transfer Payment
