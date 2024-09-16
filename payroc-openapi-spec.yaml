@@ -2320,8 +2320,8 @@ paths:
                                           type: integer
                                           description: Monthly fee for PCI noncompliance. The value is in the currency's lowest denomination, for example, cents.
                                           minimum: 0
-                                          example: 4995
-                                          default: 4995
+                                          example: 7495
+                                          default: 7495
                                         merchantAdvantage:
                                           type: integer
                                           description: Monthly fee for Payroc Advantage. The value is in the currency's lowest denomination, for example, cents.
@@ -2367,8 +2367,8 @@ paths:
                                         maintenance:
                                           type: integer
                                           description: Monthly fee for maintenance. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 0
-                                          example: 500
+                                          minimum: 500
+                                          example: 1995
                                         minimum:
                                           type: integer
                                           description: Monthly fee that we charge when the merchant doesn't meet the minimum fee amount. This monthly fee is in the currency's lowest denomination, for example, cents.
@@ -2396,7 +2396,7 @@ paths:
                                           type: integer
                                           description: Fee for each batch. The value is in the currency's lowest denomination, for example, cents.
                                           minimum: 0
-                                          example: 1500
+                                          example: 5
                                         earlyTermination:
                                           type: integer
                                           description: Fee for early termination. The value is in the currency's lowest denomination, for example, cents.
@@ -3436,7 +3436,7 @@ paths:
                     addressVerification: 5
                     annualFee:
                       billInMonth: june
-                      amount: 100
+                      amount: 9900
                     regulatoryAssistanceProgram: 15
                     pciNonCompliance: 4995
                     merchantAdvantage: 10
@@ -3454,41 +3454,12 @@ paths:
                       planType: interchangePlus
                       fees:
                         mastercardVisaDiscover:
-                          volume: 1.25
-                          transaction: 5
+                          volume: 0.12
+                          transaction: 0
                         amex:
                           type: optBlue
-                          volume: 1.25
-                          transaction: 5
-                        pinDebit:
-                          additionalDiscount: 1.25
-                          transaction: 10
-                          monthlyAccess: 1200
-                        electronicBenefitsTransfer:
-                          transaction: 10
-                        enhancedInterchange:
-                          enrollment: 1000
-                          creditToMerchant: 5.25
-                        specialityCards:
-                          transaction: 10
-                    ach:
-                      fees:
-                        transaction: 50
-                        batch: 1000
-                        returns: 400
-                        unauthorizedReturn: 1999
-                        statement: 800
-                        monthlyMinimum: 20000
-                        accountVerification: 100
-                        discountRateUnder10000: 5.25
-                        discountRateAbove10000: 10
-                  gateway:
-                    fees:
-                      monthly: 2000
-                      setup: 5000
-                      perTransaction: 2000
-                      perDeviceMonthly: 10
-                      additionalServiceMonthly: 10
+                          volume: 0.12
+                          transaction: 0
               interchangePlusTiered3:
                 summary: Interchange Plus Tiered 3
                 description: Create a pricing intent.
@@ -3502,7 +3473,7 @@ paths:
                     addressVerification: 5
                     annualFee:
                       billInMonth: june
-                      amount: 100
+                      amount: 9900
                     regulatoryAssistanceProgram: 15
                     pciNonCompliance: 4995
                     merchantAdvantage: 10
@@ -3521,25 +3492,25 @@ paths:
                       fees:
                         mastercardVisaDiscover:
                           qualifiedRate:
-                            volume: 1.25
-                            transaction: 5
+                            volume: 0.35
+                            transaction: 10
                           midQualRate:
-                            volume: 1.3
-                            transaction: 5
+                            volume: 0.35
+                            transaction: 10
                           nonQualRate:
-                            volume: 1.5
-                            transaction: 5
+                            volume: 0.35
+                            transaction: 10
                         amex:
                           type: optBlue
                           qualifiedRate:
-                            volume: 1.25
-                            transaction: 5
+                            volume: 0.5
+                            transaction: 10
                           midQualRate:
-                            volume: 1.3
-                            transaction: 5
+                            volume: 0.75
+                            transaction: 10
                           nonQualRate:
-                            volume: 1.5
-                            transaction: 5
+                            volume: 0.75
+                            transaction: 10
                         pinDebit:
                           additionalDiscount: 1.25
                           transaction: 10
@@ -3548,27 +3519,20 @@ paths:
                           transaction: 10
                         enhancedInterchange:
                           enrollment: 1000
-                          creditToMerchant: 5.25
+                          creditToMerchant: 50
                         specialityCards:
                           transaction: 10
                     ach:
                       fees:
                         transaction: 50
-                        batch: 1000
+                        batch: 5
                         returns: 400
-                        unauthorizedReturn: 1999
-                        statement: 800
-                        monthlyMinimum: 20000
-                        accountVerification: 100
-                        discountRateUnder10000: 5.25
-                        discountRateAbove10000: 10
-                  gateway:
-                    fees:
-                      monthly: 2000
-                      setup: 5000
-                      perTransaction: 2000
-                      perDeviceMonthly: 10
-                      additionalServiceMonthly: 10
+                        unauthorizedReturn: 500
+                        statement: 250
+                        monthlyMinimum: 500
+                        accountVerification: 10
+                        discountRateUnder10000: 0.5
+                        discountRateAbove10000: 1
               tiered3:
                 summary: Tiered 3
                 description: Create a pricing intent.
@@ -3582,7 +3546,7 @@ paths:
                     addressVerification: 5
                     annualFee:
                       billInMonth: june
-                      amount: 100
+                      amount: 9900
                     regulatoryAssistanceProgram: 15
                     pciNonCompliance: 4995
                     merchantAdvantage: 10
@@ -3601,44 +3565,36 @@ paths:
                       fees:
                         mastercardVisaDiscover:
                           qualifiedRate:
-                            volume: 1.25
-                            transaction: 5
+                            volume: 1.39
+                            transaction: 0
                           midQualRate:
-                            volume: 1.3
-                            transaction: 5
+                            volume: 1.75
+                            transaction: 0
                           nonQualRate:
-                            volume: 1.5
-                            transaction: 5
+                            volume: 3.84
+                            transaction: 0
                         amex:
                           type: optBlue
                           qualifiedRate:
-                            volume: 1.25
-                            transaction: 5
+                            volume: 1.39
+                            transaction: 0
                           midQualRate:
-                            volume: 1.3
-                            transaction: 5
+                            volume: 1.75
+                            transaction: 0
                           nonQualRate:
-                            volume: 1.5
-                            transaction: 5
-                        pinDebit:
-                          additionalDiscount: 1.25
-                          transaction: 10
-                          monthlyAccess: 1200
-                        electronicBenefitsTransfer:
-                          transaction: 10
-                        specialityCards:
-                          transaction: 10
+                            volume: 3.84
+                            transaction: 0
                     ach:
                       fees:
                         transaction: 50
-                        batch: 1000
+                        batch: 5
                         returns: 400
-                        unauthorizedReturn: 1999
-                        statement: 800
-                        monthlyMinimum: 20000
-                        accountVerification: 100
-                        discountRateUnder10000: 5.25
-                        discountRateAbove10000: 10
+                        unauthorizedReturn: 500
+                        statement: 250
+                        monthlyMinimum: 500
+                        accountVerification: 10
+                        discountRateUnder10000: 0.5
+                        discountRateAbove10000: 1
                   gateway:
                     fees:
                       monthly: 2000
@@ -3659,7 +3615,7 @@ paths:
                     addressVerification: 5
                     annualFee:
                       billInMonth: june
-                      amount: 100
+                      amount: 9900
                     regulatoryAssistanceProgram: 15
                     pciNonCompliance: 4995
                     merchantAdvantage: 10
@@ -3678,47 +3634,39 @@ paths:
                       fees:
                         mastercardVisaDiscover:
                           qualifiedRate:
-                            volume: 1.25
-                            transaction: 5
+                            volume: 1.39
+                            transaction: 0
                           midQualRate:
-                            volume: 1.3
-                            transaction: 5
+                            volume: 1.75
+                            transaction: 0
                           nonQualRate:
-                            volume: 1.5
-                            transaction: 5
+                            volume: 3.84
+                            transaction: 0
                           premiumRate:
-                            volume: 1.9
-                            transaction: 5
+                            volume: 3.84
+                            transaction: 0
                         amex:
                           type: optBlue
                           qualifiedRate:
-                            volume: 1.25
-                            transaction: 5
+                            volume: 1.39
+                            transaction: 0
                           midQualRate:
-                            volume: 1.3
-                            transaction: 5
+                            volume: 1.75
+                            transaction: 0
                           nonQualRate:
-                            volume: 1.5
-                            transaction: 5
-                        pinDebit:
-                          additionalDiscount: 1.25
-                          transaction: 10
-                          monthlyAccess: 1200
-                        electronicBenefitsTransfer:
-                          transaction: 10
-                        specialityCards:
-                          transaction: 10
+                            volume: 3.84
+                            transaction: 0
                     ach:
                       fees:
                         transaction: 50
-                        batch: 1000
+                        batch: 5
                         returns: 400
-                        unauthorizedReturn: 1999
-                        statement: 800
-                        monthlyMinimum: 20000
-                        accountVerification: 100
-                        discountRateUnder10000: 5.25
-                        discountRateAbove10000: 10
+                        unauthorizedReturn: 500
+                        statement: 250
+                        monthlyMinimum: 500
+                        accountVerification: 10
+                        discountRateUnder10000: 0.5
+                        discountRateAbove10000: 1
                   gateway:
                     fees:
                       monthly: 2000
@@ -3739,7 +3687,7 @@ paths:
                     addressVerification: 5
                     annualFee:
                       billInMonth: june
-                      amount: 100
+                      amount: 9900
                     regulatoryAssistanceProgram: 15
                     pciNonCompliance: 4995
                     merchantAdvantage: 10
@@ -3758,14 +3706,14 @@ paths:
                       fees:
                         mastercardVisaDiscover:
                           qualifiedRate:
-                            volume: 1.25
-                            transaction: 5
+                            volume: 1.39
+                            transaction: 0
                           midQualRate:
-                            volume: 1.3
-                            transaction: 5
+                            volume: 1.75
+                            transaction: 0
                           nonQualRate:
-                            volume: 1.5
-                            transaction: 5
+                            volume: 3.84
+                            transaction: 0
                           premiumRate:
                             volume: 1.9
                             transaction: 5
@@ -3778,33 +3726,25 @@ paths:
                         amex:
                           type: optBlue
                           qualifiedRate:
-                            volume: 1.25
-                            transaction: 5
+                            volume: 1.39
+                            transaction: 0
                           midQualRate:
-                            volume: 1.3
-                            transaction: 5
+                            volume: 1.75
+                            transaction: 0
                           nonQualRate:
-                            volume: 1.5
-                            transaction: 5
-                        pinDebit:
-                          additionalDiscount: 1.25
-                          transaction: 10
-                          monthlyAccess: 1200
-                        electronicBenefitsTransfer:
-                          transaction: 10
-                        specialityCards:
-                          transaction: 10
+                            volume: 3.84
+                            transaction: 0
                     ach:
                       fees:
                         transaction: 50
-                        batch: 1000
+                        batch: 5
                         returns: 400
-                        unauthorizedReturn: 1999
-                        statement: 800
-                        monthlyMinimum: 20000
-                        accountVerification: 100
-                        discountRateUnder10000: 5.25
-                        discountRateAbove10000: 10
+                        unauthorizedReturn: 500
+                        statement: 250
+                        monthlyMinimum: 500
+                        accountVerification: 10
+                        discountRateUnder10000: 0.5
+                        discountRateAbove10000: 1
                   gateway:
                     fees:
                       monthly: 2000
@@ -3825,55 +3765,34 @@ paths:
                     addressVerification: 5
                     annualFee:
                       billInMonth: june
-                      amount: 100
+                      amount: 9900
                     regulatoryAssistanceProgram: 15
                     pciNonCompliance: 4995
                     merchantAdvantage: 10
                     platinumSecurity:
                       billingFrequency: monthly
                     maintenance: 500
-                    minimum: 100
+                    minimum: 0
                     voiceAuthorization: 95
                     chargeback: 2500
                     retrieval: 1500
-                    batch: 1500
+                    batch: 0
                     earlyTermination: 57500
                   processor:
                     card:
                       planType: flatRate
                       fees:
                         standardCards:
-                          volume: 1.25
-                          transaction: 5
-                        amex:
-                          type: direct
-                          transaction: 5
+                          volume: 2.89
+                          transaction: 25
                         pinDebit:
                           additionalDiscount: 1.25
-                          transaction: 10
+                          transaction: 25
                           monthlyAccess: 1200
                         electronicBenefitsTransfer:
-                          transaction: 10
+                          transaction: 25
                         specialityCards:
-                          transaction: 10
-                    ach:
-                      fees:
-                        transaction: 50
-                        batch: 1000
-                        returns: 400
-                        unauthorizedReturn: 1999
-                        statement: 800
-                        monthlyMinimum: 20000
-                        accountVerification: 100
-                        discountRateUnder10000: 5.25
-                        discountRateAbove10000: 10
-                  gateway:
-                    fees:
-                      monthly: 2000
-                      setup: 5000
-                      perTransaction: 2000
-                      perDeviceMonthly: 10
-                      additionalServiceMonthly: 10
+                          transaction: 25
               consumerChoice:
                 summary: Consumer Choice
                 description: Create a pricing intent.
@@ -3887,7 +3806,7 @@ paths:
                     addressVerification: 5
                     annualFee:
                       billInMonth: june
-                      amount: 100
+                      amount: 9900
                     regulatoryAssistanceProgram: 15
                     pciNonCompliance: 4995
                     merchantAdvantage: 10
@@ -3904,34 +3823,8 @@ paths:
                     card:
                       planType: consumerChoice
                       fees:
-                        monthlySubscription: 5000
-                        volume: 1.25
-                        pinDebit:
-                          additionalDiscount: 1.25
-                          transaction: 10
-                          monthlyAccess: 1200
-                        electronicBenefitsTransfer:
-                          transaction: 10
-                        specialityCards:
-                          transaction: 10
-                    ach:
-                      fees:
-                        transaction: 50
-                        batch: 1000
-                        returns: 400
-                        unauthorizedReturn: 1999
-                        statement: 800
-                        monthlyMinimum: 20000
-                        accountVerification: 100
-                        discountRateUnder10000: 5.25
-                        discountRateAbove10000: 10
-                  gateway:
-                    fees:
-                      monthly: 2000
-                      setup: 5000
-                      perTransaction: 2000
-                      perDeviceMonthly: 10
-                      additionalServiceMonthly: 10
+                        monthlySubscription: 2500
+                        volume: 3.5
               rewardPay:
                 summary: Reward Pay
                 description: Create a pricing intent.
@@ -3945,7 +3838,7 @@ paths:
                     addressVerification: 5
                     annualFee:
                       billInMonth: june
-                      amount: 100
+                      amount: 9900
                     regulatoryAssistanceProgram: 15
                     pciNonCompliance: 4995
                     merchantAdvantage: 10
@@ -3966,24 +3859,6 @@ paths:
                         tips: noTips
                         specialityCards:
                           transaction: 10
-                    ach:
-                      fees:
-                        transaction: 50
-                        batch: 1000
-                        returns: 400
-                        unauthorizedReturn: 1999
-                        statement: 800
-                        monthlyMinimum: 20000
-                        accountVerification: 100
-                        discountRateUnder10000: 5.25
-                        discountRateAbove10000: 10
-                  gateway:
-                    fees:
-                      monthly: 2000
-                      setup: 5000
-                      perTransaction: 2000
-                      perDeviceMonthly: 10
-                      additionalServiceMonthly: 10
               rewardPayChoice:
                 summary: Reward Pay Choice
                 description: Create a pricing intent.
@@ -3997,7 +3872,7 @@ paths:
                     addressVerification: 5
                     annualFee:
                       billInMonth: june
-                      amount: 100
+                      amount: 9900
                     regulatoryAssistanceProgram: 15
                     pciNonCompliance: 4995
                     merchantAdvantage: 10
@@ -4017,33 +3892,15 @@ paths:
                         monthlySubscription: 5000
                         debit:
                           option: interchangePlus
-                          volume: 15.5
+                          volume: 0
                           transaction: 10
                         credit:
                           tips: noTips
-                          cardChargePercentage: 25.5
-                          merchantChargePercentage: 74.5
-                          merchantChargePerTransaction: 15
+                          cardChargePercentage: 3
+                          merchantChargePercentage: 0
+                          merchantChargePerTransaction: 10
                         specialityCards:
                           transaction: 10
-                    ach:
-                      fees:
-                        transaction: 50
-                        batch: 1000
-                        returns: 400
-                        unauthorizedReturn: 1999
-                        statement: 800
-                        monthlyMinimum: 20000
-                        accountVerification: 100
-                        discountRateUnder10000: 5.25
-                        discountRateAbove10000: 10
-                  gateway:
-                    fees:
-                      monthly: 2000
-                      setup: 5000
-                      perTransaction: 2000
-                      perDeviceMonthly: 10
-                      additionalServiceMonthly: 10
       responses:
         '201':
           description: Successful response. We created the pricing intent and it is waiting for approval.
@@ -4252,7 +4109,7 @@ paths:
                     addressVerification: 5
                     annualFee:
                       billInMonth: june
-                      amount: 100
+                      amount: 9900
                     regulatoryAssistanceProgram: 15
                     pciNonCompliance: 4995
                     merchantAdvantage: 10
@@ -4290,12 +4147,12 @@ paths:
                     ach:
                       fees:
                         transaction: 50
-                        batch: 1000
+                        batch: 5
                         returns: 400
                         unauthorizedReturn: 1999
                         statement: 800
                         monthlyMinimum: 20000
-                        accountVerification: 100
+                        accountVerification: 10
                         discountRateUnder10000: 5.25
                         discountRateAbove10000: 10
                   gateway:
@@ -18238,7 +18095,7 @@ paths:
                               merchantNumber: abc1234567
                             electronicBenefitsTransfer:
                               enabled: true
-                              fnsNumber: abc1234
+                              fnsNumber: '6789012'
                             other:
                               wexMerchantNumber: abc1234567
                               voyagerMerchantId: abc1234567
@@ -19517,7 +19374,7 @@ paths:
                           merchantNumber: abc1234567
                         electronicBenefitsTransfer:
                           enabled: true
-                          fnsNumber: abc1234
+                          fnsNumber: '6789012'
                         other:
                           wexMerchantNumber: abc1234567
                           voyagerMerchantId: abc1234567
@@ -19640,7 +19497,7 @@ paths:
                             merchantNumber: abc1234567
                           electronicBenefitsTransfer:
                             enabled: true
-                            fnsNumber: abc1234
+                            fnsNumber: '6789012'
                           other:
                             wexMerchantNumber: abc1234567
                             voyagerMerchantId: abc1234567
@@ -19847,7 +19704,7 @@ paths:
                             merchantNumber: abc1234567
                           electronicBenefitsTransfer:
                             enabled: true
-                            fnsNumber: abc1234
+                            fnsNumber: '6789012'
                           other:
                             wexMerchantNumber: abc1234567
                             voyagerMerchantId: abc1234567
@@ -20150,7 +20007,7 @@ paths:
                       addressVerification: 5
                       annualFee:
                         billInMonth: december
-                        amount: 100
+                        amount: 9900
                       regulatoryAssistanceProgram: 15
                       pciNonCompliance: 4995
                       merchantAdvantage: 10
@@ -20162,7 +20019,7 @@ paths:
                       voiceAuthorization: 95
                       chargeback: 2500
                       retrieval: 1500
-                      batch: 1500
+                      batch: 5
                       earlyTermination: 57500
                     processor:
                       card:
