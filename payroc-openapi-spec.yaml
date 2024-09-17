@@ -249,7 +249,7 @@ paths:
                             type: string
                             description: Mobile Number.
                             maxLength: 15
-                            example: '8447297624'
+                            example: '8445557624'
                       - required: &ref_322
                           - type
                           - value
@@ -275,7 +275,7 @@ paths:
                     type: string
                   description: '[Metadata](/api/metadata) object you can use to include custom data with your request.'
                   example:
-                    internalRef: abc123
+                    yourCustomField: abc123
                 owners:
                   minItems: 1
                   description: Array of owner objects that you can use to add owners to the funding recipient.
@@ -375,7 +375,7 @@ paths:
                                 type: number
                                 description: Percentage of the business that the owner holds.
                                 format: percentage
-                                example: 35.4
+                                example: 48.5
                                 default: 0
                               title:
                                 type: string
@@ -499,7 +499,7 @@ paths:
                           type: string
                         description: '[Metadata](/api/metadata) object you can use to include custom data with your request.'
                         example:
-                          internalRef: abc123
+                          yourCustomField: abc123
                       links:
                         readOnly: true
                         type: array
@@ -615,7 +615,7 @@ paths:
                       type: string
                     description: '[Metadata](/api/metadata) object you can use to include custom data with your request.'
                     example:
-                      internalRef: abc123
+                      yourCustomField: abc123
                   owners:
                     readOnly: true
                     description: Array of owner objects associated with the funding recipient.
@@ -703,6 +703,7 @@ paths:
               explode: false
               schema: &ref_22
                 type: string
+              example: <uri>
         '400':
           description: Validation errors
           content:
@@ -1096,7 +1097,7 @@ paths:
                           - type: phone
                             value: '2025550164'
                         metadata:
-                          internalRef: abc123
+                          yourCustomField: abc123
                         owners:
                           - ownerId: 4564
                             link:
@@ -1196,7 +1197,7 @@ paths:
                       - type: phone
                         value: '2025550164'
                     metadata:
-                      internalRef: abc123
+                      yourCustomField: abc123
                     owners:
                       - ownerId: 4564
                         link:
@@ -1407,7 +1408,7 @@ paths:
                             routingNumber: '*****6789'
                             accountNumber: '******7890'
                       metadata:
-                        internalRef: abc123
+                        yourCustomField: abc123
                       links:
                         - rel: parent
                           href: https://api.payroc.com/v1/funding-recipient/234
@@ -1425,7 +1426,7 @@ paths:
                             routingNumber: '*****8725'
                             accountNumber: '******3491'
                       metadata:
-                        internalRef: abc123
+                        yourCustomField: abc123
                       links:
                         - rel: parent
                           href: https://api.payroc.com/v1/funding-recipient/235
@@ -1502,7 +1503,7 @@ paths:
                           routingNumber: '*****6789'
                           accountNumber: '******7890'
                     metadata:
-                      internalRef: abc123
+                      yourCustomField: abc123
                     links:
                       - rel: parent
                         href: https://api.payroc.com/v1/funding-recipient/234
@@ -1513,6 +1514,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation errors
           content:
@@ -1650,6 +1652,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation errors
           content:
@@ -1776,7 +1779,7 @@ paths:
                               routingNumber: '*****6789'
                               accountNumber: '******7890'
                         metadata:
-                          internalRef: abc123
+                          yourCustomField: abc123
                         links:
                           - rel: parent
                             href: https://api.payroc.com/v1/merchants/4525644354
@@ -1794,7 +1797,7 @@ paths:
                               routingNumber: '*****8725'
                               accountNumber: '******3491'
                         metadata:
-                          internalRef: abc123
+                          yourCustomField: abc123
                         links:
                           - rel: parent
                             href: https://api.payroc.com/v1/funding-recipient/234
@@ -1867,7 +1870,7 @@ paths:
                           routingNumber: '*****6789'
                           accountNumber: '******7890'
                     metadata:
-                      internalRef: abc123
+                      yourCustomField: abc123
                     links:
                       - rel: parent
                         href: https://api.payroc.com/v1/merchants/4525644354
@@ -2030,7 +2033,7 @@ paths:
                       - type: email
                         value: jane.doe@example.com
                     relationship:
-                      equityPercentage: 35.4
+                      equityPercentage: 48.5
                       title: CFO
                       isControlProng: true
                       isAuthorizedSignatory: false
@@ -2096,7 +2099,7 @@ paths:
                     - type: email
                       value: jane.doe@example.com
                   relationship:
-                    equityPercentage: 35.4
+                    equityPercentage: 48.5
                     title: CFO
                     isControlProng: true
                     isAuthorizedSignatory: false
@@ -2258,7 +2261,7 @@ paths:
                                         type: string
                                       description: '[Metadata](/api/metadata) object that contains your custom data.'
                                       example:
-                                        internalReference: '2345'
+                                        yourCustomField: abc123
                                   required: &ref_334
                                     - key
                                 - type: object
@@ -2302,7 +2305,7 @@ paths:
                                               enum:
                                                 - june
                                                 - december
-                                              example: december
+                                              example: june
                                             amount:
                                               description: Annual fee. The value is in the currency's lowest denomination, for example, cents.
                                               type: integer
@@ -3330,7 +3333,7 @@ paths:
                         base:
                           addressVerification: 5
                           annualFee:
-                            billInMonth: december
+                            billInMonth: june
                             amount: 100
                           regulatoryAssistanceProgram: 15
                           pciNonCompliance: 4995
@@ -3429,7 +3432,7 @@ paths:
                 value: &ref_541
                   key: Your-Unique-Identifier
                   metadata:
-                    internalReference: '2345'
+                    yourCustomField: abc123
                   country: US
                   version: '4.0'
                   base:
@@ -3466,7 +3469,7 @@ paths:
                 value: &ref_542
                   key: Your-Unique-Identifier
                   metadata:
-                    internalReference: '2345'
+                    yourCustomField: abc123
                   country: US
                   version: '4.0'
                   base:
@@ -3539,7 +3542,7 @@ paths:
                 value: &ref_543
                   key: Your-Unique-Identifier
                   metadata:
-                    internalReference: '2345'
+                    yourCustomField: abc123
                   country: US
                   version: '4.0'
                   base:
@@ -3608,7 +3611,7 @@ paths:
                 value: &ref_544
                   key: Your-Unique-Identifier
                   metadata:
-                    internalReference: '2345'
+                    yourCustomField: abc123
                   country: US
                   version: '4.0'
                   base:
@@ -3680,7 +3683,7 @@ paths:
                 value: &ref_545
                   key: Your-Unique-Identifier
                   metadata:
-                    internalReference: '2345'
+                    yourCustomField: abc123
                   country: US
                   version: '4.0'
                   base:
@@ -3758,7 +3761,7 @@ paths:
                 value: &ref_546
                   key: Your-Unique-Identifier
                   metadata:
-                    internalReference: '2345'
+                    yourCustomField: abc123
                   country: US
                   version: '4.0'
                   base:
@@ -3799,7 +3802,7 @@ paths:
                 value: &ref_547
                   key: Your-Unique-Identifier
                   metadata:
-                    internalReference: '2345'
+                    yourCustomField: abc123
                   country: US
                   version: '4.0'
                   base:
@@ -3831,7 +3834,7 @@ paths:
                 value: &ref_548
                   key: Your-Unique-Identifier
                   metadata:
-                    internalReference: '2345'
+                    yourCustomField: abc123
                   country: US
                   version: '4.0'
                   base:
@@ -3865,7 +3868,7 @@ paths:
                 value: &ref_549
                   key: Your-Unique-Identifier
                   metadata:
-                    internalReference: '2345'
+                    yourCustomField: abc123
                   country: US
                   version: '4.0'
                   base:
@@ -3922,13 +3925,13 @@ paths:
                     status: pendingReview
                     key: string
                     metadata:
-                      internalReference: '2345'
+                      yourCustomField: abc123
                     country: US
                     version: '4.0'
                     base:
                       addressVerification: 5
                       annualFee:
-                        billInMonth: december
+                        billInMonth: june
                         amount: 100
                       regulatoryAssistanceProgram: 15
                       pciNonCompliance: 4995
@@ -3989,6 +3992,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation error
           content:
@@ -4102,7 +4106,7 @@ paths:
                 value: &ref_550
                   key: Your-Unique-Identifier
                   metadata:
-                    internalReference: '2345'
+                    yourCustomField: abc123
                   country: US
                   version: '4.0'
                   base:
@@ -4472,7 +4476,7 @@ paths:
                                 type: string
                               description: '[Metadata](/api/metadata) object you can use to include custom data with your request.'
                               example:
-                                internalRef: abc123
+                                yourCustomField: abc123
                             link:
                               readOnly: true
                               description: Array of HATEOAS links for viewing a funding account.
@@ -4510,7 +4514,7 @@ paths:
                     type: string
                   description: '[Metadata](/api/metadata) object you can use to include custom data with your request.'
                   example:
-                    internalInstructionRef: abc123
+                    yourCustomField: abc123
       responses:
         '201':
           description: Successful request. We accepted the instructions.
@@ -4539,7 +4543,7 @@ paths:
                               value: 120000
                               currency: USD
                             metadata:
-                              internalRef: abc123
+                              yourCustomField: abc123
                             link:
                               rel: fundingAccount
                               method: get
@@ -4556,6 +4560,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation error.
           content:
@@ -4718,7 +4723,7 @@ paths:
                                   value: 120000
                                   currency: USD
                                 metadata:
-                                  internalRef: abc123
+                                  yourCustomField: abc123
                                 link:
                                   rel: fundingAccount
                                   method: get
@@ -4730,7 +4735,7 @@ paths:
                                   value: 50050
                                   currency: USD
                                 metadata:
-                                  internalRef: abc123
+                                  yourCustomField: abc123
                                 link:
                                   rel: fundingAccount
                                   method: get
@@ -4740,7 +4745,7 @@ paths:
                               method: get
                               href: https://api.payroc.com/v1/merchants/4525644354
                         metadata:
-                          internalRef: abc123
+                          yourCustomField: abc123
                         link:
                           rel: fundingInstruction
                           method: get
@@ -4759,7 +4764,7 @@ paths:
                                   value: 5000
                                   currency: USD
                                 metadata:
-                                  internalRef: abc123
+                                  yourCustomField: abc123
                                 link:
                                   rel: fundingAccount
                                   method: get
@@ -4777,7 +4782,7 @@ paths:
                                   value: 1000
                                   currency: USD
                                 metadata:
-                                  internalRef: abc123
+                                  yourCustomField: abc123
                                 link:
                                   rel: fundingAccount
                                   method: get
@@ -4787,7 +4792,7 @@ paths:
                               method: get
                               href: https://api.payroc.com/v1/merchants/4525644354
                         metadata:
-                          internalRef: abc123
+                          yourCustomField: abc123
                         link:
                           rel: fundingInstruction
                           method: get
@@ -5099,17 +5104,17 @@ paths:
                     links:
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1/funding-balance?before=65&limit=2
+                        href: https://api.payroc.com/v1/funding-balance?before=4525644354&limit=2
                       - rel: next
                         method: get
-                        href: https://api.payroc.com/v1/funding-balance?after=66&limit=2
+                        href: https://api.payroc.com/v1/funding-balance?after=987654321&limit=2
                     data:
-                      - merchantId: '65'
+                      - merchantId: '4525644354'
                         funds: 120000
                         pending: 50050
                         available: 69950
                         currency: USD
-                      - merchantId: '66'
+                      - merchantId: '987654321'
                         funds: 50000
                         pending: 0
                         available: 50000
@@ -5281,7 +5286,7 @@ paths:
                         method: get
                         href: https://api.payroc.com/v1/funding-activity?after=20&limit=10&datefrom=2024-07-01&dateto=2024-07-03
                     data:
-                      - id: '11'
+                      - id: 11
                         date: '2024-07-02T17:00:00.000Z'
                         merchant: Pizza Doe
                         recipient: Pizza Doe
@@ -5289,7 +5294,7 @@ paths:
                         type: credit
                         amount: 4999
                         currency: USD
-                      - id: '12'
+                      - id: 12
                         date: '2024-07-02T19:32:00.000Z'
                         merchant: Pizza Doe
                         recipient: Pizza Doe
@@ -5297,7 +5302,7 @@ paths:
                         type: credit
                         amount: 3999
                         currency: USD
-                      - id: '13'
+                      - id: 13
                         date: '2024-07-02T17:00:00.000Z'
                         merchant: Pizza Doe
                         recipient: Pizza Doe
@@ -5305,7 +5310,7 @@ paths:
                         type: credit
                         amount: 3299
                         currency: USD
-                      - id: '14'
+                      - id: 14
                         date: '2024-07-02T17:00:00.000Z'
                         merchant: Pizza Doe
                         recipient: Payroc
@@ -5313,7 +5318,7 @@ paths:
                         type: debit
                         amount: 50
                         currency: USD
-                      - id: '15'
+                      - id: 15
                         date: '2024-07-02T09:10:00.000Z'
                         merchant: Pizza Doe
                         recipient: Pizza Doe
@@ -5321,7 +5326,7 @@ paths:
                         type: credit
                         amount: 4999
                         currency: USD
-                      - id: '16'
+                      - id: 16
                         date: '2024-07-02T17:00:00.000Z'
                         merchant: Doe Hot Dogs
                         recipient: Doe Hot Dogs
@@ -5329,7 +5334,7 @@ paths:
                         type: credit
                         amount: 750
                         currency: USD
-                      - id: '17'
+                      - id: 17
                         date: '2024-07-02T17:00:00.000Z'
                         merchant: Doe Hot Dogs
                         recipient: Payroc
@@ -5337,7 +5342,7 @@ paths:
                         type: debit
                         amount: 5
                         currency: USD
-                      - id: '18'
+                      - id: 18
                         date: '2024-07-02T17:00:00.000Z'
                         merchant: Pizza Doe
                         recipient: Payroc
@@ -5345,7 +5350,7 @@ paths:
                         type: debit
                         amount: 1000
                         currency: USD
-                      - id: '19'
+                      - id: 19
                         date: '2024-07-02T17:00:00.000Z'
                         merchant: Pizza Doe
                         recipient: Pizza Doe
@@ -5353,7 +5358,7 @@ paths:
                         type: credit
                         amount: 5999
                         currency: USD
-                      - id: '20'
+                      - id: 20
                         date: '2024-07-02T17:00:00.000Z'
                         merchant: Pizza Doe
                         recipient: Pizza Doe
@@ -5764,7 +5769,7 @@ paths:
           schema: &ref_63
             type: string
             format: date
-          example: '2021-09-05'
+          example: '2024-07-01'
         - name: batchId
           in: query
           required: true
@@ -6196,7 +6201,7 @@ paths:
           required: true
           description: Date to retrieve results from. The format of this value is **YYYY-MM-DD**. You must provide either the 'batchId' or the 'date'.
           schema: *ref_63
-          example: '2021-09-05'
+          example: '2024-07-01'
         - name: batchId
           in: query
           required: true
@@ -7334,6 +7339,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation error
           content:
@@ -7973,7 +7979,7 @@ paths:
                         minLength: 1
                         type: string
                         description: Unique identifier that the merchant assigns to the payment plan.
-                        example: premium-club-12
+                        example: PlanRef8765
                       name:
                         maxLength: 128
                         minLength: 5
@@ -8000,7 +8006,7 @@ paths:
                         minLength: 1
                         type: string
                         description: Unique identifier that the merchant assigned to the secure token.
-                        example: ABCDEF1234567890ABCDEF1234567890
+                        example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                       customerName:
                         maxLength: 50
                         minLength: 1
@@ -8173,14 +8179,14 @@ paths:
                         method: GET
                         href: https://api.payroc.com/v1/processing-terminals/1234001/payment-plans/PlanRef8765
                     secureToken:
-                      secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                      secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                       customerName: Sarah Hazel Hopper
                       token: '296753123456'
                       status: notValidated
                       link:
                         rel: self
                         method: GET
-                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                     name: Premium Club
                     description: Premium Club subscription
                     currency: USD
@@ -8218,6 +8224,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation error
           content:
@@ -8403,14 +8410,14 @@ paths:
                             method: GET
                             href: https://api.payroc.com/v1/processing-terminals/1234001/payment-plans/PlanRef8765
                         secureToken:
-                          secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                          secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                           customerName: Sarah Hazel Hopper
                           token: '296753123456'
                           status: notValidated
                           link:
                             rel: self
                             method: GET
-                            href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                            href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                         name: Premium Club
                         description: Monthly Premium Club subscription
                         currency: USD
@@ -8441,14 +8448,14 @@ paths:
                             method: GET
                             href: https://api.payroc.com/v1/processing-terminals/1234001/payment-plans/PlanRef7654
                         secureToken:
-                          secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                          secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                           customerName: Sarah Hazel Hopper
                           token: '296753123456'
                           status: notValidated
                           link:
                             rel: self
                             method: GET
-                            href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                            href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                         name: Pie It Forward
                         description: Pie It Forward charitable trust donation
                         currency: USD
@@ -8714,14 +8721,14 @@ paths:
                         method: GET
                         href: https://api.payroc.com/v1/processing-terminals/1234001/payment-plans/PlanRef8765
                     secureToken:
-                      secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                      secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                       customerName: Sarah Hazel Hopper
                       token: '296753123456'
                       status: notValidated
                       link:
                         rel: self
                         method: GET
-                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                     name: Premium Club
                     description: Monthly Premium Club subscription
                     currency: USD
@@ -9037,14 +9044,14 @@ paths:
                         method: GET
                         href: https://api.payroc.com/v1/bank-transfer-payments/M2MJOG6O2Y
                     secureToken:
-                      secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                      secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                       customerName: Sarah Hazel Hopper
                       token: '296753123456'
                       status: notValidated
                       link:
                         rel: self
                         method: GET
-                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                     currentState:
                       status: active
                       nextDueDate: '2024-08-02'
@@ -9056,6 +9063,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation error
           content:
@@ -9136,7 +9144,7 @@ paths:
                   description: |
                     Unique identifier that the merchant created for the secure token that represents the customer's payment details. 
                     If the merchant doesn't create a secureTokenId, the gateway generates one and returns it in the response.
-                  example: ABCDEF1234567890ABCDEF1234567890
+                  example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                 operator:
                   maxLength: 50
                   minLength: 1
@@ -9505,7 +9513,7 @@ paths:
                                 cardholderSignature:
                                   type: string
                                   description: Cardholder's signature in the format described in the [Special Fields and Parameters](https://worldnet.payroc.com/selfcare:api_specification:special_fields_and_parameters#the_signature_field_format) section.
-                                  example: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                                  example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                             - required: &ref_395
                                 - entryMethod
                                 - device
@@ -9718,7 +9726,7 @@ paths:
                                 cardholderSignature:
                                   type: string
                                   description: Cardholder’s signature. For more information about the format of the signature, see Special Fields and Parameters.
-                                  example: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                                  example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                                 pinDetails:
                                   type: object
                                   oneOf:
@@ -9921,7 +9929,7 @@ paths:
                                 cardholderSignature:
                                   type: string
                                   description: Cardholder’s signature. For more information about the format of the signature, see Special Fields and Parameters.
-                                  example: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                                  example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                                 pinDetails:
                                   type: object
                                   oneOf:
@@ -10064,7 +10072,7 @@ paths:
                     minLength: 0
                     type: string
                     description: Unique identifier that the merchant created for the secure token that represents the customer's payment details.
-                    example: ABCDEF1234567890ABCDEF1234567890
+                    example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                   processingTerminalId:
                     maxLength: 50
                     minLength: 4
@@ -10227,7 +10235,7 @@ paths:
                   summary: Secure Token
                   description: Secure Token
                   value: &ref_107
-                    secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                    secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                     processingTerminalId: '1234001'
                     mitAgreement: unscheduled
                     customer:
@@ -10270,6 +10278,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation error
           content:
@@ -10329,7 +10338,7 @@ paths:
             maxLength: 200
             minLength: 1
             type: string
-          example: ABCDEF1234567890ABCDEF1234567890
+          example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
         - name: customerName
           in: query
           description: Filter by the customer's name.
@@ -10428,7 +10437,7 @@ paths:
                     count: 2
                     hasMore: true
                     data:
-                      - secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                      - secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                         processingTerminalId: '1234001'
                         mitAgreement: unscheduled
                         customer:
@@ -10461,7 +10470,7 @@ paths:
                           expiryDate: '1225'
                         token: '296753123456'
                         status: notValidated
-                      - secureTokenId: FEDCBA1234567890ABCDEF1234567890
+                      - secureTokenId: MREF_fe0d9876-cba5-432f-e10d-9cb87654a3f2e1
                         processingTerminalId: '1234001'
                         mitAgreement: unscheduled
                         customer:
@@ -10497,10 +10506,10 @@ paths:
                     links:
                       - rel: next
                         method: get
-                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens?limit=2&after=FEDCBA1234567890ABCDEF1234567890
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens?limit=2&after=MREF_fe0d9876-cba5-432f-e10d-9cb87654a3f2e1
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens?limit=2&before=ABCDEF1234567890ABCDEF1234567890
+                        href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens?limit=2&before=MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                 noActivity:
                   summary: No records found
                   description: Valid request, but no records match the criteria.
@@ -10542,7 +10551,7 @@ paths:
             maxLength: 200
             minLength: 1
             type: string
-          example: ABCDEF1234567890ABCDEF1234567890
+          example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
       responses:
         '200':
           description: Successful request. Returns the secure token and its related payment details.
@@ -10603,7 +10612,7 @@ paths:
           required: true
           description: Filter by the unique secure token.
           schema: *ref_108
-          example: ABCDEF1234567890ABCDEF1234567890
+          example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
       requestBody:
         required: true
         content:
@@ -10712,7 +10721,7 @@ paths:
           required: true
           description: Filter by the unique secure token.
           schema: *ref_108
-          example: ABCDEF1234567890ABCDEF1234567890
+          example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
       responses:
         '204':
           description: Successful request. We deleted the secure token.
@@ -11530,7 +11539,7 @@ paths:
                           minLength: 128
                           type: string
                           description: Unique token that the gateway assigned to the payment details.
-                          example: 1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF
+                          example: abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
                         pinDetails:
                           type: object
                           oneOf:
@@ -11606,7 +11615,7 @@ paths:
                       description: |
                         Unique identifier that the merchant creates for the secure token that represents the customer’s payment details.  
                         **Note**: If you do not send a value for the **secureTokenId**, our gateway generates a unique identifier for the token.
-                      example: ABCDEF1234567890ABCDEF1234567890
+                      example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                     mitAgreement:
                       type: string
                       description: |
@@ -11785,7 +11794,7 @@ paths:
                       cardholderSignature:
                         type: string
                         description: Cardholder’s signature.
-                        example: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                        example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                       cardNumber:
                         maxLength: 19
                         minLength: 12
@@ -12205,6 +12214,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation error
           content:
@@ -12453,14 +12463,14 @@ paths:
                           cardNumber: 453985******7062
                           expiryDate: '1225'
                           secureToken:
-                            secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                            secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                             customerName: Sarah Hopper
                             token: '296753123456'
                             status: notValidated
                             link:
                               rel: self
                               method: GET
-                              href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                              href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                           securityChecks:
                             cvvResult: M
                             avsResult: X
@@ -12490,14 +12500,14 @@ paths:
                           cardNumber: 453985******7062
                           expiryDate: '1225'
                           secureToken:
-                            secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                            secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                             customerName: Sarah Hopper
                             token: '296753123456'
                             status: notValidated
                             link:
                               rel: self
                               method: GET
-                              href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                              href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                           securityChecks:
                             cvvResult: M
                             avsResult: X
@@ -12717,7 +12727,7 @@ paths:
                           cardholderSignature:
                             type: string
                             description: Cardholder’s signature. For more information about the format of the signature, see Special Fields and Parameters.
-                            example: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                            example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
             examples:
               adjustPaymentRequest:
                 summary: Adjust Payment
@@ -13211,7 +13221,7 @@ paths:
                         cvvResult: M
                         avsResult: 'Y'
                     refunds:
-                      - refundId: BI77XQFQ05
+                      - refundId: CD3HN88U9F
                         dateTime: '2024-07-02T15:30:00Z'
                         amount: -4999
                         currency: USD
@@ -13801,6 +13811,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation error
           content:
@@ -14545,7 +14556,7 @@ paths:
             maxLength: 36
             minLength: 1
             type: string
-          example: CD3HN88U9F
+          example: a37439165d134678a9100ebba3b29597
       responses:
         '200':
           description: Successful request. Returns the current status of the requested refund instruction.
@@ -14645,7 +14656,7 @@ paths:
                     cardDetails:
                       entryMethod: keyed
                       cardholderName: Sarah Hazel Hopper
-                      cardholderSignature: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                      cardholderSignature: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                       keyedData:
                         dataFormat: plainText
                         cardNumber: '4539858876047062'
@@ -14726,7 +14737,7 @@ paths:
                       type: Visa Credit
                       entryMethod: keyed
                       cardholderName: Sarah Hazel Hopper
-                      cardholderSignature: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                      cardholderSignature: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                       cardNumber: 453985******7062
                       expiryDate: '1225'
                     verified: true
@@ -14844,7 +14855,7 @@ paths:
                     cardDetails:
                       entryMethod: keyed
                       cardholderName: Sarah Hazel Hopper
-                      cardholderSignature: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                      cardholderSignature: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                       keyedData:
                         dataFormat: plainText
                         cardNumber: '4539858876047062'
@@ -14924,7 +14935,7 @@ paths:
                       type: Common Benefit Identification Card
                       entryMethod: keyed
                       cardholderName: Sarah Hazel Hopper
-                      cardholderSignature: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                      cardholderSignature: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                       cardNumber: 453985******7062
                       expiryDate: '1225'
                       balances:
@@ -15045,7 +15056,7 @@ paths:
                     cardDetails:
                       entryMethod: keyed
                       cardholderName: Sarah Hazel Hopper
-                      cardholderSignature: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                      cardholderSignature: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                       keyedData:
                         dataFormat: plainText
                         cardNumber: '4539858876047062'
@@ -15834,14 +15845,14 @@ paths:
                       accountNumber: '****3159'
                       routingNumber: '063100277'
                       secureToken:
-                        secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                        secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                         customerName: Sarah Hazel Hopper
                         token: '296753123456'
                         status: notValidated
                         link:
                           rel: self
                           method: GET
-                          href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                          href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                     transactionResult:
                       type: payment
                       status: ready
@@ -15856,6 +15867,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation error
           content:
@@ -16396,14 +16408,14 @@ paths:
                       transitNumber: '76543'
                       institutionNumber: '543'
                       secureToken:
-                        secureTokenId: ABCDEF1234567890ABCDEF1234567890
+                        secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                         customerName: Sarah Hopper
                         token: '296753123456'
                         status: notValidated
                         link:
                           rel: self
                           method: GET
-                          href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/ABCDEF1234567890ABCDEF1234567890
+                          href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                     transactionResult:
                       type: payment
                       status: reversal
@@ -16502,7 +16514,7 @@ paths:
                     nameOnAccount: Sarah Hopper
                     accountNumber: '32183159'
                     routingNumber: '063100277'
-                    secCode: TEL
+                    secCode: tel
       responses:
         '200':
           description: Successful request. We processed the payment.
@@ -16777,6 +16789,7 @@ paths:
               style: simple
               explode: false
               schema: *ref_22
+              example: <uri>
         '400':
           description: Validation error
           content:
@@ -18032,7 +18045,7 @@ paths:
                             - type: email
                               value: jane.doe@example.com
                           relationship:
-                            equityPercentage: 35.4
+                            equityPercentage: 48.5
                             title: CFO
                             isControlProng: true
                             isAuthorizedSignatory: false
@@ -18114,7 +18127,7 @@ paths:
                                   routingNumber: '123456789'
                                   accountNumber: '1234567890'
                             metadata:
-                              internalRef: '2345'
+                              yourCustomField: abc123
                       pricing:
                         type: intent
                         pricingIntentId: 6123
@@ -19311,7 +19324,7 @@ paths:
                         - type: email
                           value: jane.doe@example.com
                       relationship:
-                        equityPercentage: 35.4
+                        equityPercentage: 51.5
                         title: CFO
                         isControlProng: true
                         isAuthorizedSignatory: false
@@ -19393,7 +19406,7 @@ paths:
                               routingNumber: '123456789'
                               accountNumber: '1234567890'
                         metadata:
-                          internalRef: '2345'
+                          yourCustomField: abc123
                   pricing:
                     type: intent
                     pricingIntentId: 6123
@@ -19425,7 +19438,7 @@ paths:
                   summary: Retrieve merchant platform
                   description: Retrieve a merchant platform.
                   value: &ref_627
-                    processingAccountId: '12345'
+                    processingAccountId: '38765'
                     createdDate: '2020-09-08T12:00:00.000Z'
                     lastModifiedDate: '2020-09-08T12:00:00.000Z'
                     status: entered
@@ -19616,7 +19629,7 @@ paths:
           explode: false
           schema: &ref_217
             type: string
-          example: '12345'
+          example: '38765'
       responses:
         '200':
           description: Successful request. Returns the processing account.
@@ -19775,7 +19788,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_217
-          example: '12345'
+          example: '38765'
       responses:
         '200':
           description: Successful request. Returns a list of funding accounts associated with the processing account.
@@ -19807,7 +19820,7 @@ paths:
                             routingNumber: '*****6789'
                             accountNumber: '******7890'
                       metadata:
-                        internalRef: '2345'
+                        yourCustomField: abc123
                       links:
                         - rel: parent
                           href: https://api.payroc.com/v1/processing-accounts/38765
@@ -19825,7 +19838,7 @@ paths:
                             routingNumber: '*****8725'
                             accountNumber: '******3491'
                       metadata:
-                        internalRef: '2346'
+                        yourCustomField: abc123
                       links:
                         - rel: parent
                           href: https://api.payroc.com/v1/processing-accounts/38765
@@ -19863,7 +19876,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_217
-          example: '12345'
+          example: '38765'
         - name: before
           in: query
           required: false
@@ -19946,7 +19959,7 @@ paths:
                           - type: phone
                             value: '2025550110'
                           - type: mobile
-                            value: '85645787451'
+                            value: '85655587451'
                           - type: email
                             value: fred.nerk@example.com
                 noActivity:
@@ -19983,7 +19996,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_217
-          example: '12345'
+          example: '38765'
       responses:
         '200':
           description: Successful request. Returns the pricing agreement for the processing account.
@@ -20094,7 +20107,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_217
-          example: '12345'
+          example: '38765'
         - name: before
           in: query
           required: false
@@ -20172,7 +20185,7 @@ paths:
                           - type: phone
                             value: '2025550164'
                         relationship:
-                          equityPercentage: 49
+                          equityPercentage: 48.5
                           title: CFO
                           isControlProng: true
                           isAuthorizedSignatory: false
@@ -20196,7 +20209,7 @@ paths:
                           - type: email
                             value: fred.nerk@example.com
                         relationship:
-                          equityPercentage: 51
+                          equityPercentage: 51.5
                           title: CEO
                           isControlProng: false
                           isAuthorizedSignatory: true
@@ -20237,7 +20250,7 @@ paths:
           style: simple
           explode: false
           schema: *ref_217
-          example: '12345'
+          example: '38765'
       requestBody:
         content:
           application/json:
@@ -20279,8 +20292,8 @@ paths:
                     properties: *ref_221
               examples:
                 reminderCreated:
-                  summary: ''
-                  description: ''
+                  summary: Reminder created
+                  description: Reminder created.
                   value: &ref_634
                     reminderId: '1234567'
                     type: pricingAgreement
@@ -20620,7 +20633,7 @@ components:
       required: true
       description: Date to retrieve results from. The format of this value is **YYYY-MM-DD**. You must provide either the 'batchId' or the 'date'.
       schema: *ref_63
-      example: '2021-09-05'
+      example: '2024-07-01'
     batchIdQuery:
       name: batchId
       in: query
@@ -20738,7 +20751,7 @@ components:
       in: query
       description: Filter by the unique secure token.
       schema: *ref_242
-      example: ABCDEF1234567890ABCDEF1234567890
+      example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
     phone:
       name: phone
       in: query
@@ -20769,7 +20782,7 @@ components:
       required: true
       description: Filter by the unique secure token.
       schema: *ref_108
-      example: ABCDEF1234567890ABCDEF1234567890
+      example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
     parameters-processingTerminalId:
       name: processingTerminalId
       in: query
@@ -20953,7 +20966,7 @@ components:
       in: path
       required: true
       schema: *ref_278
-      example: CD3HN88U9F
+      example: a37439165d134678a9100ebba3b29597
     bankTransferPaymentsProcessingTerminalId:
       name: processingTerminalId
       in: query
@@ -21114,7 +21127,7 @@ components:
       style: simple
       explode: false
       schema: *ref_217
-      example: '12345'
+      example: '38765'
     contactId:
       name: contactId
       in: path
@@ -22774,8 +22787,8 @@ components:
         **Note:** You can use the Reminders endpoint only if you request the merchant's signature by email. If you generate a link to the pricing agreement, you can't use the Reminders endpoint.  
       value: *ref_633
     reminderCreated:
-      summary: ''
-      description: ''
+      summary: Reminder created
+      description: Reminder created.
       value: *ref_634
     notRequestedByEmail:
       summary: Not requested by email
@@ -22828,6 +22841,7 @@ components:
       style: simple
       explode: false
       schema: *ref_22
+      example: <uri>
 x-tagGroups:
   - name: Boarding
     tags:
