@@ -10870,12 +10870,12 @@ paths:
     post:
       tags:
         - Secure tokens
-      summary: Account Update
+      summary: Update account details
       description: |
         If you have a single-use token, use this method to update payment details that are represented by a secure token.
 
         If you don’t have a single-use token, and you want to update payment details represented by a secure token, go to 
-        [updateSecureToken](/#tag/Secure-tokens/operation/updateSecureToken).
+        [updateSecureToken](https://docs.payroc.com/api/resources#updateSecureToken).
 
         **Note**: For more information about tokenization, go to [tokenization](https://docs.payroc.com/knowledge/basic-concepts/tokenization).
       operationId: accountUpdate
