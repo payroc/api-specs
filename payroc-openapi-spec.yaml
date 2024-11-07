@@ -11390,7 +11390,12 @@ paths:
       tags:
         - Hosted Fields
       summary: Create session
-      description: Create a session for hosted fields.
+      description: |
+        Use this method to create a session token that you use to authenticate a Hosted Fields session. When you create an instance of Hosted Fields on a webpage, include the session token in the config object.  
+
+        For more information about how to set up Hosted Fields, see [Set up Hosted Fields](https://docs.payroc.com/guides/integrate/hosted-fields/set-up-hosted-fields).  
+
+        **Note:** You need to generate a new session token each time you load Hosted Fields on a webpage.
       operationId: createSession
       parameters:
         - name: Idempotency-Key
@@ -11417,27 +11422,34 @@ paths:
                 - scenario
               type: object
               title: Hosted Fields Initialization
-              description: Object that contains information about hosted fields initialization request.
+              description: Object that contains information about Hosted Fields initialization request.
               properties: &ref_445
                 libVersion:
                   type: string
                   pattern: ^\d{1,2}.\d{1,2}.\d{1,2}(?:-beta)?.\d+$
-                  description: the Hosted Fields java script library version used to handle the hosted fields client side.
+                  description: |
+                    Version of the Hosted Fields JavaScript library that you are using.  
+
+                    The current production version is `1.3.0.135534`.
                   example: 1.0.0.123
                 scenario:
                   type: string
                   enum:
                     - payment
                     - tokenization
-                  description: indicates the purpose for the creation of this session.
+                  description: |
+                    Indicates if a merchant wants to take a payment or tokenize a customer's payment details:  
+                    - `payment` - The merchant wants to take a payment immediately.  
+                    - `tokenization` - The merchant wants to save the customer's payment details to take a payment later or to update a customer's payment details that they've already saved.  
                   example: payment
                 secureTokenId:
                   maxLength: 200
                   minLength: 1
                   type: string
                   description: |
-                    Unique identifier that the merchant created for the secure token (or the gateway generated it) 
-                    that represents the customer's payment details.
+                    Unique identifier that represents a customer's payment details.  
+
+                    If a merchant wants to update a customer's payment details that are linked to a secure token, include the secureTokenId in your request.  
                   example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
             examples:
               createSessionRequest:
@@ -11449,7 +11461,7 @@ paths:
         required: true
       responses:
         '201':
-          description: Successful request. We created the session for the hosted fields.
+          description: Successful request. We created the session and returned a session token.
           content:
             application/json:
               schema:
@@ -11465,8 +11477,11 @@ paths:
                   token:
                     type: string
                     description: |
-                      Unique identifier that our gateway assigned to the hosted fields
-                      session.
+                      Token that our gateway assigned to the Hosted Fields session.  
+
+                      Include this session token in the config file for Hosted Fields.  
+
+                      The session token expires after 10 minutes.
                     example: abcdef1234567890abcdef1234567890
                   expiresAt:
                     type: string
@@ -22500,7 +22515,7 @@ components:
       required: *ref_444
       type: object
       title: Hosted Fields Initialization
-      description: Object that contains information about hosted fields initialization request.
+      description: Object that contains information about Hosted Fields initialization request.
       properties: *ref_445
     hostedFieldsCreateSessionResponse:
       required: *ref_446
