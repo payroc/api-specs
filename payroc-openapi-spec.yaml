@@ -34,7 +34,7 @@ tags:
   - name: Funding recipients
     description: Entities that can receive funding but not take payments
   - name: Hosted Fields
-    description: Hosted Feilds session.
+    description: Create a Hosted Fields session.
   - name: Merchant platforms
     description: |
       A merchant platform is an entity that represents a business and includes its legal information and all processing accounts.<br/><br/>
@@ -83,7 +83,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: &ref_21
             type: string
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
@@ -1468,7 +1468,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -1629,7 +1629,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -3418,7 +3418,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -4204,7 +4204,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -4475,7 +4475,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -6982,7 +6982,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
@@ -7688,7 +7688,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
@@ -7822,7 +7822,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
@@ -8429,7 +8429,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
@@ -8722,7 +8722,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
@@ -9018,7 +9018,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
@@ -9276,7 +9276,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
@@ -10876,7 +10876,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
@@ -11035,7 +11035,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: secureTokenId
@@ -11175,7 +11175,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
@@ -11401,7 +11401,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: processingTerminalId
@@ -11558,7 +11558,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -13320,7 +13320,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
@@ -13579,7 +13579,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
@@ -13685,7 +13685,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
@@ -13836,7 +13836,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
@@ -14014,7 +14014,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -14285,7 +14285,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -14860,7 +14860,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: refundId
@@ -15006,7 +15006,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: refundId
@@ -15113,7 +15113,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -15318,7 +15318,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -16069,7 +16069,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -16899,7 +16899,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
@@ -17010,7 +17010,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
@@ -17160,7 +17160,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: paymentId
@@ -17267,7 +17267,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       description: |
@@ -17805,7 +17805,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
         - name: refundId
@@ -17909,7 +17909,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -18065,7 +18065,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -19973,7 +19973,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_21
           example: 8e03978e-40d5-43e8-bc93-6894a57f9324
       requestBody:
@@ -21226,7 +21226,7 @@ components:
       name: Idempotency-Key
       in: header
       required: true
-      description: The idempotency key that is supplied as part of every POST request MUST be unique and MUST not be reused with another request with a different request payload. The value should be UUID v4 (RFC4122)
+      description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
       schema: *ref_21
       example: 8e03978e-40d5-43e8-bc93-6894a57f9324
     recipientId:
