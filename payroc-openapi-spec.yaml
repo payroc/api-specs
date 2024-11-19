@@ -8445,7 +8445,7 @@ paths:
             maxLength: 50
             minLength: 1
             type: string
-          example: Sarah Hazel Hopper
+          example: Sarah%20Hazel%20Hopper
         - name: last4
           in: query
           description: Filter by the last four digits of the card or account number.
@@ -8460,7 +8460,7 @@ paths:
             maxLength: 128
             minLength: 1
             type: string
-          example: Premium Club
+          example: Premium%20Club
         - name: frequency
           in: query
           description: Filter by the frequency of subscription payments.
@@ -10624,7 +10624,7 @@ paths:
             maxLength: 50
             minLength: 1
             type: string
-          example: Sarah Hazel Hopper
+          example: Sarah%20Hazel%20Hopper
         - name: phone
           in: query
           description: Filter by the customer's phone number.
@@ -13004,7 +13004,7 @@ paths:
             maxLength: 50
             minLength: 1
             type: string
-          example: Sarah Hazel Hopper
+          example: Sarah%20Hazel%20Hopper
         - name: first6
           in: query
           description: Filter payments by the first six digits of the card number that the customer used in the transaction.
@@ -14603,7 +14603,7 @@ paths:
             maxLength: 50
             minLength: 1
             type: string
-          example: Sarah Hazel Hopper
+          example: Sarah%20Hazel%20Hopper
         - name: first6
           in: query
           description: Filter refunds by the first six digits of the card number.
@@ -16623,7 +16623,7 @@ paths:
             maxLength: 50
             minLength: 1
             type: string
-          example: Sarah Hazel Hopper
+          example: Sarah%20Hazel%20Hopper
         - name: last4
           in: query
           description: Filter payments by the last four digits of the account number.
@@ -17545,7 +17545,7 @@ paths:
             maxLength: 50
             minLength: 1
             type: string
-          example: Sarah Hazel Hopper
+          example: Sarah%20Hazel%20Hopper
         - name: last4
           in: query
           description: Filter by the last four digits of the account number.
@@ -21383,7 +21383,7 @@ components:
       in: query
       description: Filter by the customer's name.
       schema: *ref_246
-      example: Sarah Hazel Hopper
+      example: Sarah%20Hazel%20Hopper
     last4:
       name: last4
       in: query
@@ -21395,7 +21395,7 @@ components:
       in: query
       description: Filter by the name of the payment plan.
       schema: *ref_248
-      example: Premium Club
+      example: Premium%20Club
     frequency:
       name: frequency
       in: query
@@ -21490,7 +21490,7 @@ components:
       in: query
       description: Filter payments by the cardholder’s name.
       schema: *ref_261
-      example: Sarah Hazel Hopper
+      example: Sarah%20Hazel%20Hopper
     parameters-first6:
       name: first6
       in: query
@@ -21595,7 +21595,7 @@ components:
       in: query
       description: Filter refunds by cardholder name.
       schema: *ref_280
-      example: Sarah Hazel Hopper
+      example: Sarah%20Hazel%20Hopper
     components-parameters-first6:
       name: first6
       in: query
@@ -21670,7 +21670,7 @@ components:
       in: query
       description: Filter payments by the account holder's name.
       schema: *ref_292
-      example: Sarah Hazel Hopper
+      example: Sarah%20Hazel%20Hopper
     bankTransferPaymentsLast4:
       name: last4
       in: query
@@ -21738,7 +21738,7 @@ components:
       in: query
       description: Filter by the account holder's name.
       schema: *ref_304
-      example: Sarah Hazel Hopper
+      example: Sarah%20Hazel%20Hopper
     bankTransferRefundLast4:
       name: last4
       in: query
