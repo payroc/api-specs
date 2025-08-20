@@ -25685,7 +25685,19 @@ paths:
         - Event Subscriptions
       summary: List event subscriptions
       description: |
-        Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of event subscriptions that are linked to the ISV's account. 
+        Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of event subscriptions that are linked to your ISV account.  
+
+        **Note:** If you want to view a specific event subscription and you have its id, use our [Retrieve Event Subscription](https://docs.payroc.com/api/schema/notifications/event-subscriptions/retrieve) method.  
+
+        Use query parameters to filter the list of results that we return, for example, to search for subscriptions with a specific status or an event type.  
+
+        Our gateway returns the following information about each subscription in the list:  
+        - Event types that you have subscribed to.  
+        - Whether you have enabled notifications for the subscription.  
+        - How we contact you when an event occurs, including the endpoint that send notifications to.  
+        - If there are any issues when we try to send you a notification, for example, if we can't contact your endpoint.  
+
+        For each event subscription, we also return its id, which you can use to perform follow-on actions.  
       operationId: listEventSubscriptions
       parameters:
         - name: status
@@ -25702,7 +25714,7 @@ paths:
               value: registered
         - name: event
           in: query
-          description: Filter event subscriptions by event type. For a complete list of events, go to [Events](#https://docs.payroc.com/knowledge/basic-concepts/events).
+          description: Filter event subscriptions by an event type. For a list of event types, go to [Events List](https://docs.payroc.com/knowledge/events/events-list).
           schema: &ref_480
             type: string
           examples: &ref_481
@@ -25737,7 +25749,7 @@ paths:
                             enabled:
                               type: boolean
                               description: |
-                                Indicates if we should notify you if the event occurs. The value is one of the following:  
+                                Indicates if we should notify you when the event occurs. The value is one of the following:  
                                 - `true` - We notify you when the event occurs.  
                                 - `false` - We don't notify you when the event occurs.  
                               example: true
@@ -25756,7 +25768,7 @@ paths:
                               example: registered
                             eventTypes:
                               type: array
-                              description: Array of eventTypes objects. Each object contains the events that you want to subscribe to. For a list of events that you can subscribe to, go to [Events list](https://docs.payroc.com/knowledge/events/events-list).
+                              description: Array of events that you want to subscribe to. For a list of events, go to [Events List](https://docs.payroc.com/knowledge/events/events-list).
                               items:
                                 type: string
                                 minLength: 1
@@ -27442,7 +27454,7 @@ components:
     event:
       name: event
       in: query
-      description: Filter event subscriptions by event type. For a complete list of events, go to [Events](#https://docs.payroc.com/knowledge/basic-concepts/events).
+      description: Filter event subscriptions by an event type. For a list of event types, go to [Events List](https://docs.payroc.com/knowledge/events/events-list).
       schema: *ref_480
       examples: *ref_481
     parameters-subscriptionId:
