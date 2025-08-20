@@ -109,7 +109,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: &ref_22
             type: string
             format: uuid
@@ -1512,7 +1512,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -1667,7 +1667,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -3306,6 +3306,7 @@ paths:
                                           description: Object that contains the fees for ACH transactions.
                                           properties: &ref_300
                                             fees:
+                                              description: Object that contains processing fees for ACH transactions.
                                               type: object
                                               properties:
                                                 transaction:
@@ -3549,7 +3550,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -4357,7 +4358,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -4635,7 +4636,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -7196,7 +7197,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -8208,7 +8209,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: paymentLinkId
@@ -8385,7 +8386,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: paymentLinkId
@@ -8667,7 +8668,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -9168,7 +9169,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -9318,7 +9319,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -10037,7 +10038,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -10366,7 +10367,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -10688,7 +10689,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -10970,7 +10971,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -12680,7 +12681,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -12841,7 +12842,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -12986,7 +12987,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -13230,7 +13231,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingTerminalId
@@ -13488,7 +13489,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -15386,7 +15387,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: paymentId
@@ -15655,7 +15656,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: paymentId
@@ -15783,7 +15784,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: paymentId
@@ -15949,7 +15950,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: paymentId
@@ -16139,7 +16140,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -16496,7 +16497,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -17156,7 +17157,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: refundId
@@ -17317,7 +17318,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: refundId
@@ -17434,7 +17435,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -17713,7 +17714,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -18474,7 +18475,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -19392,7 +19393,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: paymentId
@@ -19517,7 +19518,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: paymentId
@@ -19670,7 +19671,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: paymentId
@@ -19786,7 +19787,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       description: "Use this method to create an unreferenced refund. An unreferenced refund is a refund that isn’t linked to a bank transfer payment.  \n\n**Note:** If you have the paymentId of the payment you want to refund, use our [Refund Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/refund) method. If you use our Refund Payment method, our gateway sends the refund amount to the customer’s original payment method and links the refund to the payment.  \n\nIn the request, you must provide the customer’s payment method and information about the order including the refund amount.  \n\nIn the response, our gateway returns information about the refund and a refundId, which you need for the following methods:  \n\n-\t[Retrieve refund](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/retrieve) – View the details of the refund.  \n-\t[Reverse refund](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/reverse) – Cancel the refund if it’s in an open batch.  \n"
@@ -20396,7 +20397,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: refundId
@@ -20511,7 +20512,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -20676,7 +20677,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -22632,7 +22633,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -24029,7 +24030,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
         - name: processingAccountId
@@ -25867,7 +25868,7 @@ paths:
         - name: Idempotency-Key
           in: header
           required: true
-          description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
       requestBody:
@@ -26759,7 +26760,7 @@ components:
       name: Idempotency-Key
       in: header
       required: true
-      description: Unique identifier that you generate for each request. You must use the UUID v4 format for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+      description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
       schema: *ref_22
       examples: *ref_23
     recipientId:
