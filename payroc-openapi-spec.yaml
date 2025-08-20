@@ -14716,10 +14716,8 @@ paths:
                       - setAsDeclined
                   transactionResult:
                     required: &ref_208
-                      - type
                       - status
                       - responseCode
-                      - responseMessage
                     type: object
                     properties: &ref_209
                       type:
@@ -17791,18 +17789,23 @@ paths:
                   - verified
                 type: object
                 properties: &ref_696
-                  processingTerminalId:
-                    maxLength: 50
-                    minLength: 4
-                    type: string
-                    description: Unique identifier that we assigned to the terminal.
-                    example: '1234001'
                   operator:
                     maxLength: 50
                     minLength: 0
                     type: string
                     description: Operator who requested to verify the card.
                     example: Jane
+                  processingTerminalId:
+                    maxLength: 50
+                    minLength: 4
+                    type: string
+                    description: Unique identifier that we assigned to the terminal.
+                    example: '1234001'
+                  card:
+                    required: *ref_202
+                    type: object
+                    description: Object that contains the details of the payment card.
+                    properties: *ref_203
                   verified:
                     type: boolean
                     description: |
@@ -17810,39 +17813,11 @@ paths:
                       - `true` - The card details are valid.
                       - `false` - The card details are not valid.
                     example: true
-                  dateTime:
-                    type: string
-                    format: date-time
-                    description: Date and time that we processed the request. This format follows the ISO 8601 standard, for example, 2024-07-02T15:02:07+00:00.
-                    example: '2024-07-02T15:30:00Z'
-                  responseCode:
-                    type: string
-                    description: |
-                      Response from the processor.  
-                      - `A` - The processor approved the transaction.  
-                      - `D` - The processor declined the transaction.  
-                      - `E` - The processor received the transaction but will process the transaction later.  
-                      - `P` - The processor authorized a portion of the original amount of the transaction.  
-                      - `R` - The issuer declined the transaction and indicated that the customer should contact their bank.  
-                      - `C` - The issuer declined the transaction and indicated that the merchant should keep the card as it was reported lost or stolen.
-                    enum:
-                      - A
-                      - D
-                      - E
-                      - P
-                      - R
-                      - C
-                    example: A
-                  responseMessage:
-                    maxLength: 48
-                    minLength: 1
-                    type: string
-                    description: Response description from the payment processor. For example, "Refer to Card Issuer".
-                    example: Refer to Card Issuer
-                  processorResponseCode:
-                    type: string
-                    description: Response code from payment processor. This code is then mapped onto a `responseCode` enum.
-                    example: A
+                  transactionResult:
+                    required: *ref_208
+                    type: object
+                    properties: *ref_209
+                    description: Object that contains information about the transaction response details.
               examples:
                 cardVerificationResponse:
                   summary: Card Verification
@@ -17862,6 +17837,7 @@ paths:
                       status: ready
                       responseCode: A
                       responseMessage: APPROVAL
+                      processorResponseCode: '00'
         '400':
           description: Validation error
           content:
