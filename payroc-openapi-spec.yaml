@@ -14690,7 +14690,6 @@ paths:
                         - addSignature
                         - setAsReady
                         - setAsPending
-                        - setAsDeclined
                     description: |
                       Array of operations that you can perform on the transaction.
                       - `capture`                - Capture the payment.
@@ -14702,7 +14701,6 @@ paths:
                       - `addSignature`           - Add a signature to the payment.
                       - `setAsReady`             - Set the transaction’s status to `ready`.
                       - `setAsPending`           - Set the transaction’s status to `pending`.
-                      - `setAsDeclined`          - Set the transaction’s status to `declined`.
                     example: &ref_207
                       - capture
                       - refund
@@ -14713,7 +14711,6 @@ paths:
                       - addSignature
                       - setAsReady
                       - setAsPending
-                      - setAsDeclined
                   transactionResult:
                     required: &ref_208
                       - status
@@ -15473,7 +15470,6 @@ paths:
                             enum:
                               - ready
                               - pending
-                              - declined
                             example: ready
                       - required: &ref_219
                           - type
@@ -16716,7 +16712,6 @@ paths:
                       - `addSignature`           - Add a signature to the payment.
                       - `setAsReady`             - Set the transaction’s status to `ready`.
                       - `setAsPending`           - Set the transaction’s status to `pending`.
-                      - `setAsDeclined`          - Set the transaction’s status to `declined`.
                     example: *ref_207
                   transactionResult:
                     required: *ref_208
@@ -19855,6 +19850,10 @@ paths:
                           type: string
                           description: Currency of the transaction. The value for the currency follows the [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html) standard.
                           enum: *ref_82
+                customer:
+                  type: object
+                  description: Object that contains information about the customer.
+                  properties: *ref_235
                 refundMethod:
                   description: Object that contains information about how the merchant refunds the customer.
                   type: object
@@ -28428,7 +28427,6 @@ components:
         - `addSignature`           - Add a signature to the payment.
         - `setAsReady`             - Set the transaction’s status to `ready`.
         - `setAsPending`           - Set the transaction’s status to `pending`.
-        - `setAsDeclined`          - Set the transaction’s status to `declined`.
       example: *ref_207
     transactionResult:
       required: *ref_208
