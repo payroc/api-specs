@@ -9309,7 +9309,7 @@ paths:
         - [Pay Manual Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/pay) - Manually collect a payment for the subscription.
 
         The request includes the following settings:
-        - **paymentPlanId** - Unique identifier of the payment plan that the merchant wants to use.
+        - **paymentPlanId** - Unique identifier of the payment plan that the merchant wants to use. If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/payments/payment-plans/list) method to search for the payment plan.
         - **paymentMethod** - Object that contains information about the secure token, which represents the customer's card details or bank account details.
         - **startDate** - Date that you want to start to take payments.
 
@@ -22054,6 +22054,8 @@ paths:
 
         Use the query parameters to filter the list of results that we return, for example, to search for only closed processing accounts.  
 
+        To list the processing accounts for a merchant platform, you need its merchantPlatformId. If you don't have the merchantPlatformId, use our [List Merchant Platforms](https://docs.payroc.com/api/schema/boarding/merchant-platforms/list) method to search for the merchant platform.
+
         Our gateway returns the following information about eahc processing account in the list:  
         - Business details, including its status, time zone, and address.  
         - Owners' details, including their contact details.  
@@ -24604,6 +24606,8 @@ paths:
 
         Use the query parameters to filter the list of results that we return, for example, to search for terminal orders by their status.  
 
+        To list the terminal orders for a processing account, you need its processingAccountId. If you don't have the processingAccountId, use our [List Merchant Platforms](https://docs.payroc.com/api/schema/boarding/merchant-platforms/list) method to search for a merchant platform and its processing accounts.
+
         Our gateway returns the following information for each terminal order in the list:  
 
         - Status of the order  
@@ -24748,6 +24752,8 @@ paths:
         Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of processing terminals associated with a processing account.  
 
         **Note:** If you want to view the details of a specific processing terminal and you have its processingTerminalId, use our [Retrieve Processing Terminal](https://docs.payroc.com/api/schema/boarding/processing-terminals/retrieve) method.  
+
+        To list the terminals for a processing account, you need its processingAccountId. If you don't have the processingAccountId, use our [List Merchant Platforms](https://docs.payroc.com/api/schema/boarding/merchant-platforms/list) method to search for a merchant platform and its processing accounts.   
 
         Our gateway returns the following information for each processing terminal in the list:  
 
@@ -25236,6 +25242,8 @@ paths:
         - Processing terminals
       summary: Retrieve processing terminal
       description: |
+        **Important:** You can retrieve a processing terminal only if the terminal order was created using the Payroc API.
+
         Use this method to retrieve information about a processing terminal.  
 
         To retrieve a processing terminal, you need its processingTerminalId. Our gateway returned the processingTerminalId in the response of the [Create Terminal Order](https://docs.payroc.com/api/schema/boarding/processing-accounts/create-terminal-order) method.  
