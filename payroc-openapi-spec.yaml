@@ -60,7 +60,7 @@ tags:
       A merchant platform is an entity that represents a business and includes its legal information and all processing accounts.<br/><br/>
       After you create a merchant platform for a business, you can do the following:  
         - [Create and add an additional processing account to a merchant platform.](#createProcessingAccount)  
-        - [Retrieve a merchant platform.](#getMerchantAcccounts)  
+        - [Retrieve a merchant platform.](#getMerchantAccounts)  
         - [Retrieve a list of merchant platforms.](#listMerchantPlatforms)  
         - [Retrieve a list of open processing accounts that are linked to a merchant platform.](#listMerchantLocations)  
           
@@ -21961,7 +21961,7 @@ paths:
         - Merchant platforms
       summary: Retrieve merchant platform
       description: "Use this method to retrieve information about a merchant platform.  \n\nTo retrieve a merchant platform, you need its merchantPlatformId. Our gateway returned the merchantPlatformId in the response of the [Create Merchant Platform](https://docs.payroc.com/api/schema/boarding/merchant-platforms/create) method.  \n\n**Note:** If you don't have the merchantPlatformId, use our [List Merchant Platforms](https://docs.payroc.com/api/schema/boarding/merchant-platforms/list) method to search for the merchant platform.\n\nOur gateway returns the following information about the merchant platform:\n-\tLegal information, including its legal name and address.\n-\tContact information, including the email address for the business. \n-\tProcessing account information, including the processingAccountId and status of each processing account that's linked to the merchant platform.  \n"
-      operationId: getMerchantAcccounts
+      operationId: getMerchantAccounts
       parameters:
         - name: merchantPlatformId
           in: path
@@ -22967,7 +22967,7 @@ paths:
         - Processing accounts
       summary: Retrieve processing account
       description: "Use this method to retrieve information about a specific processing account.  \n\nTo retrieve a processing account, you need its processingAccountId. Our gateway returned the processingAccountId in the response of the [Create Merchant Platform](https://docs.payroc.com/api/schema/boarding/merchant-platforms/create) method or the [Create Processing Account](https://docs.payroc.com/api/schema/boarding/merchant-platforms/create-processing-account) method.  \n\n**Note:** If you don't have the processingAccountId, use our [List Merchant Platform's Processing Accounts](https://docs.payroc.com/api/schema/boarding/merchant-platforms/list-processing-accounts) method to search for the processing account.  \n\nOur gateway returns the following information about the processing account:  \n\n-\tBusiness information, including the Merchant Category Code (MCC), status of the processing account, and address of the business.  \n-\tProcessing information, including the merchant’s refund policies and card types that the merchant accepts.  \n-\tFunding information, including funding schedules, funding fees, and details for the merchant’s funding accounts.  \n-\tPricing information, including [HATEOAS](https://docs.payroc.com/knowledge/basic-concepts/hypermedia-as-the-engine-of-application-state-hateoas) links to retrieve the pricing program for the processing account.  \n"
-      operationId: getProcessingAcccounts
+      operationId: getProcessingAccounts
       parameters:
         - name: processingAccountId
           in: path
@@ -24365,7 +24365,7 @@ paths:
                 summary: Terminal order
                 description: |
                   Use this method to order and configure terminals for a processing account. When you create an order, you specify the gateway settings, device settings, and application settings for the terminals. 
-                  **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](#getMerchantAcccounts)
+                  **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](#getMerchantAccounts)
                 value: &ref_938
                   trainingProvider: payroc
                   shipping:
@@ -29669,7 +29669,7 @@ components:
       summary: Terminal order
       description: |
         Use this method to order and configure terminals for a processing account. When you create an order, you specify the gateway settings, device settings, and application settings for the terminals. 
-        **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](#getMerchantAcccounts)
+        **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](#getMerchantAccounts)
       value: *ref_938
     terminalOrderCreated:
       summary: Terminal order
