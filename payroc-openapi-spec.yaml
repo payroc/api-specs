@@ -870,11 +870,11 @@ paths:
                   instance:
                     type: string
                     description: Resource path the action was attempted on
-                    example: https://api.payroc.com/v1/webhook/3
+                    example: https://api.payroc.com/v1/example/3
                   resource:
                     type: string
                     description: Resource the action was attempted on
-                    example: webhook
+                    example: exampleResource
                 required: &ref_493
                   - type
                   - title
@@ -889,8 +889,8 @@ paths:
                     title: Forbidden
                     status: 403
                     detail: You do not have the required permissions to perform this action
-                    instance: https://api.payroc.com/v1/webhook/3
-                    resource: webhook
+                    instance: https://api.payroc.com/v1/exampleResource/3
+                    resource: exampleResource
         '406':
           description: Not acceptable
           content: &ref_19
@@ -954,7 +954,7 @@ paths:
                   instance:
                     type: string
                     description: Resource path to the existing resource
-                    example: https://api.payroc.com/v1/webhook/3
+                    example: https://api.payroc.com/v1/example/3
                   errors:
                     type: array
                     items:
@@ -1304,11 +1304,11 @@ paths:
                   detail:
                     type: string
                     description: Explanation of the problem
-                    example: Specified account was not found
+                    example: Specified resource was not found
                   resource:
                     type: string
                     description: Resource that was not found
-                    example: Account
+                    example: exampleResource
                 required: &ref_308
                   - type
                   - title
