@@ -5315,7 +5315,7 @@ paths:
           examples: *ref_37
         - name: merchantId
           in: query
-          description: Unique identifier of the merchant.
+          description: Filter batches by the unique identifier that the processor assigned to the merchant.
           schema: &ref_63
             type: string
           examples: &ref_64
@@ -5472,7 +5472,7 @@ paths:
               value: '2024-07-03'
         - name: merchantId
           in: query
-          description: Unique identifier of the merchant.
+          description: Filter batches by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -5698,7 +5698,7 @@ paths:
       tags:
         - Settlement
       summary: List batches
-      description: Retrieve batch data for a specific date.
+      description: "Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of your merchants’ batches that were submitted to the processor on a specific date.  \n\n**Note:** If you want to view a specific batch and you have its batchId, use our [Retrieve Batch](https://docs.payroc.com/api/schema/reporting/settlement/retrieve-batch) method.  \n\nIn your request, include the date that the batch was submitted. You can also use a query parameter to view the batches of a specific merchant.  \n\nOur gateway returns the following information about each batch in the list:  \n\n-\tTransaction information, including the number of transactions and total value of sales.\n-\tMerchant information, including the merchant ID (MID) and the processing account that the batch is associated with. \n"
       operationId: getbatches
       parameters:
         - name: before
@@ -5719,7 +5719,7 @@ paths:
         - name: date
           in: query
           required: true
-          description: Date that the merchant submitted the batch. The format of this value is **YYYY-MM-DD**.
+          description: Filter batches by the date that they were submitted. The format of this value is **YYYY-MM-DD**.
           schema: &ref_329
             type: string
             format: date
@@ -5728,7 +5728,7 @@ paths:
               value: '2027-07-02'
         - name: merchantId
           in: query
-          description: Unique identifier of the merchant.
+          description: Filter batches by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -5772,19 +5772,19 @@ paths:
                               example: '2024-07-02'
                             saleAmount:
                               type: integer
-                              description: Total value of sales. We return the value in the currency's lowest denomination, for example, cents.
+                              description: Total value of sales in the batch. We return the value in the currency's lowest denomination, for example, cents.
                             heldAmount:
                               type: integer
-                              description: Total value of authorizations. We return the value in the currency's lowest denomination, for example, cents.
+                              description: Total value of authorizations in the batch. We return the value in the currency's lowest denomination, for example, cents.
                             returnAmount:
                               type: integer
-                              description: Total value of returns. We return the value in the currency's lowest denomination, for example, cents.
+                              description: Total value of returns in the batch. We return the value in the currency's lowest denomination, for example, cents.
                             transactionCount:
                               type: integer
                               description: Total number of transactions in the batch.
                             currency:
                               type: string
-                              description: Currency of the transactions.
+                              description: Currency of the transactions in the batch. The value for the currency follows the [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html) standard.
                             merchant:
                               type: object
                               title: merchant summary
@@ -5792,15 +5792,15 @@ paths:
                               properties: &ref_67
                                 merchantId:
                                   type: string
-                                  description: Unique identifier of the merchant.
+                                  description: Unique identifier that the processor assigned to the merchant. .
                                   example: '4525644354'
                                 doingBusinessAs:
                                   type: string
-                                  description: Legal name that the business operates as.
+                                  description: Trading name of the business.
                                   example: Pizza Doe
                                 processingAccountId:
                                   type: string
-                                  description: Unique identifier of the processing account.
+                                  description: Unique identifier that we assigned to the processing account.
                                   example: '38765'
                                 link:
                                   type: object
@@ -6058,7 +6058,7 @@ paths:
               value: 12345
         - name: merchantId
           in: query
-          description: Unique identifier of the merchant.
+          description: Filter batches by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
         - name: transactionType
@@ -6519,7 +6519,7 @@ paths:
           examples: *ref_75
         - name: merchantId
           in: query
-          description: Unique identifier of the merchant.
+          description: Filter batches by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -6892,7 +6892,7 @@ paths:
               value: '2024-07-02'
         - name: merchantId
           in: query
-          description: Unique identifier of the merchant.
+          description: Filter batches by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -26340,7 +26340,7 @@ paths:
             example: '2024-07-02'
         - name: merchantId
           in: query
-          description: Unique identifier of the merchant.
+          description: Filter batches by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -26615,7 +26615,7 @@ paths:
               value: 99
         - name: merchantId
           in: query
-          description: Unique identifier of the merchant.
+          description: Filter batches by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -26839,7 +26839,7 @@ components:
     merchantId:
       name: merchantId
       in: query
-      description: Unique identifier of the merchant.
+      description: Filter batches by the unique identifier that the processor assigned to the merchant.
       schema: *ref_63
       examples: *ref_64
     parameters-dateFrom:
@@ -26853,7 +26853,7 @@ components:
       name: date
       in: query
       required: true
-      description: Date that the merchant submitted the batch. The format of this value is **YYYY-MM-DD**.
+      description: Filter batches by the date that they were submitted. The format of this value is **YYYY-MM-DD**.
       schema: *ref_329
       examples: *ref_330
     batchId:
