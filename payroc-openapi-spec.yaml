@@ -5753,7 +5753,7 @@ paths:
                           properties: &ref_65
                             batchId:
                               type: integer
-                              description: Unique identifier of the batch.
+                              description: Unique identifier that we assigned to the batch.
                               example: 123
                             date:
                               type: string
@@ -5964,13 +5964,13 @@ paths:
       tags:
         - Settlement
       summary: Retrieve batch
-      description: Retrieve a specific batch.
+      description: "Use this method to retrieve information about a batch.  \n\n**Note:** To retrieve a batch, you need its batchId. If you don't have the batchId, use our [List Batches](https://docs.payroc.com/api/schema/reporting/settlement/list-batches) method to search for the batch.  \n\nOur gateway returns the following information about the batch:  \n\n-\tTransaction information, including the number of transactions and total value of sales.  \n-\tMerchant information, including the merchant ID (MID) and the processing account that the batch is associated with.  \n"
       operationId: getbatch
       parameters:
         - name: batchId
           in: path
           required: true
-          description: Unique identifier of the batch.
+          description: Unique identifier that we assigned to the batch.
           style: simple
           schema: &ref_331
             type: integer
@@ -26867,7 +26867,7 @@ components:
       name: batchId
       in: path
       required: true
-      description: Unique identifier of the batch.
+      description: Unique identifier that we assigned to the batch.
       style: simple
       schema: *ref_331
       examples: *ref_332
