@@ -20824,10 +20824,10 @@ paths:
                     type: object
                     properties: &ref_273
                       processingAccountId:
-                        type: integer
+                        type: string
                         description: Unique identifier of the processing account.
                         readOnly: true
-                        example: 38765
+                        example: '38765'
                       doingBusinessAs:
                         type: string
                         description: Trading name of the business.
@@ -21250,9 +21250,9 @@ paths:
                                   - intent
                                 example: intent
                               pricingIntentId:
-                                type: integer
+                                type: string
                                 description: Unique identifier of the pricing intent.
-                                example: 6123
+                                example: '6123'
                           - type: object
                             title: Pricing agreement
                             allOf: &ref_742
@@ -21526,7 +21526,7 @@ paths:
                               yourCustomField: abc123
                       pricing:
                         type: intent
-                        pricingIntentId: 6123
+                        pricingIntentId: '6123'
                       signature:
                         type: requestedViaDirectLink
                       contacts:
@@ -22789,7 +22789,7 @@ paths:
                           yourCustomField: abc123
                   pricing:
                     type: intent
-                    pricingIntentId: 6123
+                    pricingIntentId: '6123'
                   signature:
                     type: requestedViaDirectLink
                   contacts:
