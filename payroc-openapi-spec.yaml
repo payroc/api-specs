@@ -6932,7 +6932,7 @@ paths:
                                   properties: &ref_81
                                     disputeStatusId:
                                       type: integer
-                                      description: Unique identifier of the dispute status.
+                                      description: Unique identifier that we assigned to the dispute status.
                                       example: 12345
                                     status:
                                       type: string
@@ -7123,7 +7123,12 @@ paths:
       tags:
         - Settlement
       summary: List dispute statuses
-      description: Retrieve the status history for a specific dispute.
+      description: |
+        Use this method to return the status history of a dispute.  
+
+        To return the status history of a dispute, you need its disputeId. If you don't have the disputeId, use our [List Disputes](https://docs.payroc.com/api/schema/reporting/settlement/list-disputes) method to search for the dispute. 
+
+        Our gateway returns a list that contains each status change, the date it was changed, and its updated status.  
       operationId: getdisputesStatuses
       parameters:
         - name: disputeId
