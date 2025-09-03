@@ -4151,10 +4151,6 @@ paths:
                 properties: *ref_27
                 required: *ref_28
               examples:
-                idempotentKeyMissing:
-                  summary: Idempotency key missing
-                  description: Idempotency key must be supplied
-                  value: *ref_26
                 idempotentKeyInUse:
                   summary: Idempotency key in use
                   description: Idempotency key in use
