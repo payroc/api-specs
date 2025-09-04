@@ -5311,7 +5311,7 @@ paths:
           examples: *ref_37
         - name: merchantId
           in: query
-          description: Filter batches by the unique identifier that the processor assigned to the merchant.
+          description: Filter results by the unique identifier that the processor assigned to the merchant.
           schema: &ref_63
             type: string
           examples: &ref_64
@@ -5468,7 +5468,7 @@ paths:
               value: '2024-07-03'
         - name: merchantId
           in: query
-          description: Filter batches by the unique identifier that the processor assigned to the merchant.
+          description: Filter results by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -5724,7 +5724,7 @@ paths:
               value: '2027-07-02'
         - name: merchantId
           in: query
-          description: Filter batches by the unique identifier that the processor assigned to the merchant.
+          description: Filter results by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -5788,7 +5788,7 @@ paths:
                               properties: &ref_67
                                 merchantId:
                                   type: string
-                                  description: Unique identifier that the processor assigned to the merchant. .
+                                  description: Unique identifier that the processor assigned to the merchant.
                                   example: '4525644354'
                                 doingBusinessAs:
                                   type: string
@@ -6054,7 +6054,7 @@ paths:
               value: 12345
         - name: merchantId
           in: query
-          description: Filter batches by the unique identifier that the processor assigned to the merchant.
+          description: Filter results by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
         - name: transactionType
@@ -6252,13 +6252,16 @@ paths:
                               properties: &ref_78
                                 cardNumber:
                                   type: string
-                                  description: Card number. We mask the number except for the first six digits and the last four digits.
-                                  example: 123456**********4124
+                                  description: Masked card number. Our gateway shows only the first six digits and the last four digits of the card number, for example, `500165******0000`.
+                                  example: 453985******7062
                                 type:
                                   type:
                                     - string
                                     - 'null'
-                                  description: Card type. If we can't match a dispute to a transaction, we don't return a 'type' object.
+                                  description: |
+                                    Card type, for example, Visa.  
+
+                                    **Note:** If we can’t match a dispute to a transaction, we don’t return a type object. 
                                   enum:
                                     - visa
                                     - masterCard
@@ -6278,13 +6281,13 @@ paths:
                                     - unknown
                                 cvvPresenceIndicator:
                                   type: boolean
-                                  description: Indicates if the cardholder provided the CVV.
+                                  description: Indicates whether the cardholder provided the Card Verification Value (CVV).
                                 avsRequest:
                                   type: boolean
-                                  description: Indicates if the AVS was used to verify the cardholder's address.
+                                  description: Indicates whether the merchant used the Address Verification Service (AVS) to verify the cardholder's address.
                                 avsResponse:
                                   type: string
-                                  description: Response from the AVS.
+                                  description: Response from the Address Verification Service (AVS).
                             authorization:
                               type: object
                               title: authorization summary
@@ -6515,7 +6518,7 @@ paths:
           examples: *ref_75
         - name: merchantId
           in: query
-          description: Filter batches by the unique identifier that the processor assigned to the merchant.
+          description: Filter results by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -6674,13 +6677,13 @@ paths:
                             transaction:
                               type: object
                               title: transaction summary
-                              description: Object that contains summary information about the transaction.
+                              description: Object that contains summary information about the transaction that the dispute is linked to.
                               properties: &ref_80
                                 transactionId:
                                   type:
                                     - integer
                                     - 'null'
-                                  description: Unique identifier of the transaction. If we can't match a dispute to a transaction, we don't return 'transactionID' or a 'link' object.
+                                  description: Unique identifier of the transaction. If we can't match a dispute to a transaction, we don't return the transactionId or link object.
                                   example: 12345
                                 type:
                                   type: string
@@ -6697,7 +6700,7 @@ paths:
                                   type:
                                     - string
                                     - 'null'
-                                  description: Describes how the merchant received the payment details. If we can't match a dispute to a transaction, we don't return an 'entryMethod' object.
+                                  description: Describes how the merchant received the payment details. If we can't match a dispute to a transaction, we don't return an entryMethod object.
                                   enum:
                                     - barcodeRead
                                     - smartChipRead
@@ -6714,7 +6717,7 @@ paths:
                                     - unknown
                                 amount:
                                   type: integer
-                                  description: Transaction amount. We return the value in the currency's lowest denomination, for example, cents.
+                                  description: Total amount of the transaction. The value is in the currency's lowest denomination, for example, cents.
                                   example: 25000
                                 link:
                                   type: object
@@ -6858,7 +6861,16 @@ paths:
       tags:
         - Settlement
       summary: List disputes
-      description: Retrieve a list of disputes.
+      description: |
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of disputes.  
+
+        Use query parameters to filter the list of results that we return, for example, to search for disputes linked to a specific merchant.  
+
+        > **Important:** You must provide a value for the date query parameter.  
+
+        Our gateway returns the following information about each dispute in the list:  
+        - Its status, type, and description.  
+        - Transaction that the dispute is linked to, including the transaction date, merchant who ran the transaction, and the payment method that the cardholder used.  
       operationId: getdisputes
       parameters:
         - name: before
@@ -6879,7 +6891,7 @@ paths:
         - name: date
           in: query
           required: true
-          description: Date that the dispute was submitted.
+          description: Filter results by the date that the dispute was submitted.
           schema: &ref_339
             type: string
             format: date
@@ -6888,7 +6900,7 @@ paths:
               value: '2024-07-02'
         - name: merchantId
           in: query
-          description: Filter batches by the unique identifier that the processor assigned to the merchant.
+          description: Filter results by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -6914,7 +6926,7 @@ paths:
                           properties: &ref_578
                             disputeId:
                               type: integer
-                              description: Unique identifier of the dispute.
+                              description: Unique identifier that we assigned to the dispute.
                               example: 12345
                             disputeType:
                               type: string
@@ -6925,6 +6937,7 @@ paths:
                                 - firstDisputeWithReversal
                                 - firstDispute
                             currentStatus:
+                              description: Object that contains information about the current status of the dispute.
                               allOf:
                                 - type: object
                                   title: dispute status
@@ -6932,11 +6945,14 @@ paths:
                                   properties: &ref_81
                                     disputeStatusId:
                                       type: integer
-                                      description: Unique identifier that we assigned to the dispute status.
+                                      description: Unique identifier that we assigned to the status of the dispute.
                                       example: 12345
                                     status:
                                       type: string
-                                      description: Status of the dispute.
+                                      description: |
+                                        Status of the dispute.  
+
+                                        **Note:** If you want to view the status history of the dispute, use our [List Dispute Statuses](https://docs.payroc.com/api/schema/reporting/settlement/list-disputes-statuses) method.  
                                       enum:
                                         - prearbitrationInProcess
                                         - prearbitrationAccepted
@@ -6963,7 +6979,7 @@ paths:
                                     statusDate:
                                       type: string
                                       format: date
-                                      description: Date that the status changed. The format of this value is **YYYY-MM-DD**.
+                                      description: Date that the status of the dispute was last changed. The format of this value is **YYYY-MM-DD**.
                                       example: '2024-02-01'
                                 - type: object
                                   properties:
@@ -7007,10 +7023,10 @@ paths:
                               example: true
                             authorizationCode:
                               type: string
-                              description: Authorization code.
+                              description: Authorization code of the transaction that the dispute is linked to.
                             currency:
                               type: string
-                              description: Currency of the dispute.
+                              description: Currency of the transaction that the dispute is linked to. The value for the currency follows the [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html) standard.
                             card:
                               type: object
                               title: card summary
@@ -7025,7 +7041,7 @@ paths:
                             transaction:
                               type: object
                               title: transaction summary
-                              description: Object that contains summary information about the transaction.
+                              description: Object that contains summary information about the transaction that the dispute is linked to.
                               properties: *ref_80
                     required:
                       - data
@@ -26372,7 +26388,7 @@ paths:
             example: '2024-07-02'
         - name: merchantId
           in: query
-          description: Filter batches by the unique identifier that the processor assigned to the merchant.
+          description: Filter results by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -26647,7 +26663,7 @@ paths:
               value: 99
         - name: merchantId
           in: query
-          description: Filter batches by the unique identifier that the processor assigned to the merchant.
+          description: Filter results by the unique identifier that the processor assigned to the merchant.
           schema: *ref_63
           examples: *ref_64
       responses:
@@ -26871,7 +26887,7 @@ components:
     merchantId:
       name: merchantId
       in: query
-      description: Filter batches by the unique identifier that the processor assigned to the merchant.
+      description: Filter results by the unique identifier that the processor assigned to the merchant.
       schema: *ref_63
       examples: *ref_64
     parameters-dateFrom:
@@ -26934,7 +26950,7 @@ components:
       name: date
       in: query
       required: true
-      description: Date that the dispute was submitted.
+      description: Filter results by the date that the dispute was submitted.
       schema: *ref_339
       examples: *ref_340
     disputeId:
@@ -27968,7 +27984,7 @@ components:
     transactionSummary:
       type: object
       title: transaction summary
-      description: Object that contains summary information about the transaction.
+      description: Object that contains summary information about the transaction that the dispute is linked to.
       properties: *ref_80
     authorization:
       type: object
