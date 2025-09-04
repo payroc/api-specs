@@ -8237,6 +8237,10 @@ paths:
       description: |
         Use this method to partially update a payment link. Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
 
+        To update a payment link, you need its paymentLinkId, which we sent you in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/create) method.  
+
+        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payments/payment-links/list) method to search for the payment link.  
+
         You can update the following properties of a multi-use link:
         - **expiresOn parameter** - Expiration date of the link.
         - **customLabels object** - Label for the payment button.
@@ -8343,9 +8347,13 @@ paths:
         - Payment links
       summary: Deactivate payment link
       description: |
-        Use this method to deactivate a payment link. If the merchant deactivates a payment link, they can't reactivate it. To take payment, the merchant must create a new payment link.  
+        Use this method to deactivate a payment link.  
 
-        **Note:** After the merchant deactivates a payment link, a customer can't use the link to make a payment. 
+        To deactivate a payment link, you need its paymentLinkId. Our gateway returned the paymentLinkId in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/create) method.  
+
+        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payments/payment-links/list) method to search for the payment link.  
+
+        If your request is successful, our gateway deactivates the payment link. The customer can't use the link to make a payment, and you can't reactivate the payment link.    
       operationId: deactivatePaymentLink
       parameters:
         - name: paymentLinkId
