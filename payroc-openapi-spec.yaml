@@ -12278,7 +12278,7 @@ paths:
                             example: '1225'
                           cardType:
                             type: string
-                            description: Card brand of the payment card, for example, Visa.
+                            description: Card brand of the card, for example, Visa.
                           currency:
                             type: string
                             description: Currency of the transaction. The value for the currency follows the [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html) standard.
@@ -14513,7 +14513,7 @@ paths:
                     properties: &ref_203
                       type:
                         type: string
-                        description: Card brand that the card is linked to. For example, Visa.
+                        description: Card brand of the card, for example, Visa.
                         example: Visa
                       entryMethod:
                         type: string
@@ -14802,7 +14802,7 @@ paths:
                           - preAuthorizationCompletion
                       ebtType:
                         type: string
-                        description: Sub-type for EBT transactions
+                        description: Indicates the subtype of EBT in the transaction.
                         enum:
                           - cashPurchase
                           - cashPurchaseWithCashback
@@ -17781,9 +17781,14 @@ paths:
     post:
       tags:
         - Cards
-      summary: Verify a card
+      summary: Verify card
       operationId: verifyCard
-      description: Verify that a card is valid. For banks that do not support verification, we charge a micro deposit that we void immediately.
+      description: |
+        Use this method to verify a customer’s card details.  
+
+        In the request, send the customer’s card details.  
+
+        In the response, our gateway indicates if the card details are valid and if you should use them in follow-on actions.  
       parameters:
         - name: Idempotency-Key
           in: header
@@ -17879,9 +17884,10 @@ paths:
                   verified:
                     type: boolean
                     description: |
-                      Indicates if we have verified the card details.
-                      - `true` - The card details are valid.
-                      - `false` - The card details are not valid.
+                      Indicates if the card details are valid:  
+
+                      - `true` - Card details are valid.
+                      - `false` - Card details are not valid.
                     example: true
                   transactionResult:
                     required: *ref_208
@@ -18254,7 +18260,7 @@ paths:
                 properties: &ref_232
                   type:
                     type: string
-                    description: Card brand, for example, Visa.
+                    description: Card brand of the card, for example, Visa.
                   cardNumber:
                     maxLength: 19
                     minLength: 12
