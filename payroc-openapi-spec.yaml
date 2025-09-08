@@ -24997,14 +24997,13 @@ paths:
                                     mapping:
                                       'true': '#/components/schemas/tipProcessingEnabled'
                                       'false': '#/components/schemas/tipProcessingDisabled'
-                                  oneOf:
+                                  anyOf:
                                     - type: object
                                       description: Tip settings
                                       properties: &ref_782
                                         enabled:
                                           type: boolean
                                           description: Indicates if the terminal can accept tips.
-                                          default: false
                                         tipPrompt:
                                           type: boolean
                                           description: Indicates if the terminal prompts for tips.
