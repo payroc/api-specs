@@ -12817,7 +12817,7 @@ paths:
       tags:
         - Secure tokens
       summary: Retrieve secure token
-      description: "Use this method to retrieve information about a secure token.  \n\nTo retrieve a secure token, you need its secureTokenID, which you sent in the request of the [Create Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/create) method.  \n\n**Note:** If you don't have the secureTokenId, use our [List Secure Tokens](https://docs.payroc.com/api/schema/payments/secure-tokens/list) method to search for the secure token.  \n\nOur gateway returns information about the following for each secure token in the list:  \n\n  -\tPayment details that the secure token represents.  \n  -\tCustomer details, including shipping and billing addresses.  \n  -\tSecure token that you can use to carry out transactions.  \n"
+      description: "Use this method to retrieve information about a secure token.  \n\nTo retrieve a secure token, you need its secureTokenID, which you sent in the request of the [Create Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/create) method.  \n\n**Note:** If you don't have the secureTokenId, use our [List Secure Tokens](https://docs.payroc.com/api/schema/payments/secure-tokens/list) method to search for the secure token.  \n\nOur gateway returns the following information about the secure token:  \n\n  -\tPayment details that the secure token represents.  \n  -\tCustomer details, including shipping and billing addresses.  \n  -\tSecure token that you can use to carry out transactions.  \n"
       operationId: getSecureToken
       parameters:
         - name: processingTerminalId
