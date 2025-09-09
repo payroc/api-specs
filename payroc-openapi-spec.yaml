@@ -4576,8 +4576,22 @@ paths:
                   description: Pricing intent
                   value: *ref_57
         '400':
-          description: Invalid request
-          content: *ref_15
+          description: Validation error
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                properties: *ref_9
+                required: *ref_10
+              examples:
+                validationError:
+                  summary: Bad Request
+                  description: One or more validation errors occurred
+                  value: *ref_11
+                idempotentKeyMissing:
+                  summary: Idempotency key missing
+                  description: Idempotency key must be supplied
+                  value: *ref_26
         '401':
           description: Identity could not be verified
           content: *ref_12
@@ -4590,6 +4604,19 @@ paths:
         '406':
           description: Not acceptable
           content: *ref_19
+        '409':
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                properties: *ref_27
+                required: *ref_28
+              examples:
+                idempotentKeyInUse:
+                  summary: Idempotency key in use
+                  description: Idempotency key in use
+                  value: *ref_29
         '500':
           description: An error has occured
           content: *ref_14
@@ -26149,8 +26176,22 @@ paths:
                     metadata:
                       yourCustomField: abc123
         '400':
-          description: Invalid request
-          content: *ref_15
+          description: Validation error
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                properties: *ref_9
+                required: *ref_10
+              examples:
+                validationError:
+                  summary: Bad Request
+                  description: One or more validation errors occurred
+                  value: *ref_11
+                idempotentKeyMissing:
+                  summary: Idempotency key missing
+                  description: Idempotency key must be supplied
+                  value: *ref_26
         '401':
           description: Identity could not be verified
           content: *ref_12
@@ -26160,6 +26201,19 @@ paths:
         '406':
           description: Not acceptable
           content: *ref_19
+        '409':
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                properties: *ref_27
+                required: *ref_28
+              examples:
+                idempotentKeyInUse:
+                  summary: Idempotency key in use
+                  description: Idempotency key in use
+                  value: *ref_29
         '500':
           description: An error has occured
           content: *ref_14
@@ -26301,6 +26355,13 @@ paths:
         - **notifications** - Information about your endpoint and who we email if we can't contact your endpoint.  
         - **enabled** - Turn on or turn off notifications for the subscription.  
       operationId: patchEventSubscription
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          schema: *ref_22
+          examples: *ref_23
       requestBody:
         content:
           application/json:
@@ -26348,8 +26409,22 @@ paths:
                     metadata:
                       yourCustomField: abc123
         '400':
-          description: Invalid request
-          content: *ref_15
+          description: Validation error
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                properties: *ref_9
+                required: *ref_10
+              examples:
+                validationError:
+                  summary: Bad Request
+                  description: One or more validation errors occurred
+                  value: *ref_11
+                idempotentKeyMissing:
+                  summary: Idempotency key missing
+                  description: Idempotency key must be supplied
+                  value: *ref_26
         '401':
           description: Identity could not be verified
           content: *ref_12
@@ -26359,6 +26434,19 @@ paths:
         '406':
           description: Not acceptable
           content: *ref_19
+        '409':
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                properties: *ref_27
+                required: *ref_28
+              examples:
+                idempotentKeyInUse:
+                  summary: Idempotency key in use
+                  description: Idempotency key in use
+                  value: *ref_29
         '500':
           description: An error has occured
           content: *ref_14
