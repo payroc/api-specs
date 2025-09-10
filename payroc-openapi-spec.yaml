@@ -2037,7 +2037,7 @@ paths:
         Our gateway returns the following information about an owner:  
         - Name, date of birth, and address.  
         - Contact details, including their email address.  
-        - Relationship to the business, including whether they are a control prong.
+        - Relationship to the business, including whether they are a control prong or authorized signatory, and their equity stake in the business. 
       operationId: getOwner
       parameters:
         - name: ownerId
@@ -23986,7 +23986,18 @@ paths:
       tags:
         - Processing accounts
       summary: List owners
-      description: Retrieve owners associated with a processing account.
+      description: |
+        Use this method to return a list of owners of a processing account.  
+
+        **Note:** If you want to retrieve the details of a specific owner and you have the ownerId, go to our [Retrieve Owner](https://docs.payroc.com/api/schema/boarding/owners/retrieve) method.  
+
+        To list the owners of a processing account, you need its processingAccountId. If you don't have the processingAccountId, use our [List Merchant Platform's Processing Accounts](https://docs.payroc.com/api/schema/boarding/merchant-platforms/list-processing-accounts) method to search for the processing account.  
+
+        Our gateway returns the following information about each owner in the list: 
+
+        - Name, date of birth, and address.  
+        - Contact details, including their email address.  
+        - Relationship to the business, including whether they are a control prong or authorized signatory, and their equity stake in the business.  
       operationId: listMerchantOwners
       parameters:
         - name: processingAccountId
