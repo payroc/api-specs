@@ -65,7 +65,7 @@ tags:
         - [Retrieve a list of open processing accounts that are linked to a merchant platform.](#listMerchantLocations)  
           
           
-      For more information about boarding a merchant, go to our [Board a merchant](/guides/integrate/boarding) guide. 
+      For more information about boarding a merchant, go to our [Board a merchant](https://docs.payroc.com/guides/integrate/boarding) guide. 
   - name: Owners
     description: Individuals who own or control the business.
   - name: Payment instructions
@@ -8887,7 +8887,7 @@ paths:
       tags:
         - Payment plans
       summary: Create payment plan
-      description: "Use this method to create a payment schedule that you can assign customers to.  \n\n**Note:** This method is part of our Repeat Payments feature. To help you understand how this method works with our Subscriptions endpoints, go to [Repeat Payments](/guides/integrate/repeat-payments).  \n\nWhen you create a payment plan you need to provide a unique paymentPlanId that you use to run follow-on actions:  \n\n-\t[Retrieve Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/retrieve)  - View the details of the payment plan.  \n-\t[Update Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/partially-update)  - Update the details of the payment plan.  \n-\t[Delete Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/delete)  - Delete the payment plan.  \n-\t[Create Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/create)  - Subscribe a customer to the payment plan.  \n\nThe request includes the following settings:  \n\n-\t**type** - Indicates if our gateway or the merchant collects payments. If the merchant manually collects payments, integrate with the [Pay Manual Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/pay) method.  \n-\t**recurringOrder** - Amount of each payment if the gateway automatically collect payments.  \n-\t**setupOrder** - Setup fee that our gateway immediately collects from the customer's payment method.  \n-\t**onUpdate and onDelete** - Indicates what happens to associated subscriptions if the merchant updates or deletes the payment plan.  \n"
+      description: "Use this method to create a payment schedule that you can assign customers to.  \n\n**Note:** This method is part of our Repeat Payments feature. To help you understand how this method works with our Subscriptions endpoints, go to [Repeat Payments](https://docs.payroc.com/guides/integrate/repeat-payments).  \n\nWhen you create a payment plan you need to provide a unique paymentPlanId that you use to run follow-on actions:  \n\n-\t[Retrieve Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/retrieve)  - View the details of the payment plan.  \n-\t[Update Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/partially-update)  - Update the details of the payment plan.  \n-\t[Delete Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/delete)  - Delete the payment plan.  \n-\t[Create Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/create)  - Subscribe a customer to the payment plan.  \n\nThe request includes the following settings:  \n\n-\t**type** - Indicates if our gateway or the merchant collects payments. If the merchant manually collects payments, integrate with the [Pay Manual Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/pay) method.  \n-\t**recurringOrder** - Amount of each payment if the gateway automatically collect payments.  \n-\t**setupOrder** - Setup fee that our gateway immediately collects from the customer's payment method.  \n-\t**onUpdate and onDelete** - Indicates what happens to associated subscriptions if the merchant updates or deletes the payment plan.  \n"
       operationId: createPaymentPlan
       parameters:
         - name: Idempotency-Key
@@ -9523,7 +9523,7 @@ paths:
       description: |
         Use this method to assign a customer to a payment plan.  
 
-        **Note:** This method is part of our Repeat Payments feature. To help you understand how this method works with our Payment plans endpoints, go to [Repeat Payments](/guides/integrate/repeat-payments).  
+        **Note:** This method is part of our Repeat Payments feature. To help you understand how this method works with our Payment plans endpoints, go to [Repeat Payments](https://docs.payroc.com/guides/integrate/repeat-payments).  
 
         When you create a subscription you need to provide a unique subscriptionId that you use to run follow-on actions:  
 
@@ -11609,7 +11609,7 @@ paths:
                                   example: A1B2C3D4E5F67890ABCD1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF
                                 cardholderSignature:
                                   type: string
-                                  description: Cardholder's signature. For more information about how to format the signature, go to [How to send a signature to our gateway](/knowledge/basic-concepts/signature-capture).
+                                  description: Cardholder's signature. For more information about how to format the signature, go to [How to send a signature to our gateway](https://docs.payroc.com/knowledge/basic-concepts/signature-capture).
                                   example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                             - required: &ref_619
                                 - entryMethod
@@ -11668,7 +11668,7 @@ paths:
                                   example: '4'
                                 cardholderSignature:
                                   type: string
-                                  description: Cardholder's signature. For more information about how to format the signature, go to [How to send a signature to our gateway](/knowledge/basic-concepts/signature-capture).
+                                  description: Cardholder's signature. For more information about how to format the signature, go to [How to send a signature to our gateway](https://docs.payroc.com/knowledge/basic-concepts/signature-capture).
                                   example: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
                             - required: &ref_629
                                 - entryMethod
@@ -11828,7 +11828,7 @@ paths:
                                   example: Sarah Hazel Hopper
                                 cardholderSignature:
                                   type: string
-                                  description: Cardholder's signature. For more information about how to format the signature, go to [How to send a signature to our gateway](/knowledge/basic-concepts/signature-capture).
+                                  description: Cardholder's signature. For more information about how to format the signature, go to [How to send a signature to our gateway](https://docs.payroc.com/knowledge/basic-concepts/signature-capture).
                                   example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                                 pinDetails:
                                   type: object
@@ -12040,7 +12040,7 @@ paths:
                                   example: Sarah Hazel Hopper
                                 cardholderSignature:
                                   type: string
-                                  description: Cardholder's signature. For more information about how to format the signature, go to [How to send a signature to our gateway](/knowledge/basic-concepts/signature-capture).
+                                  description: Cardholder's signature. For more information about how to format the signature, go to [How to send a signature to our gateway](https://docs.payroc.com/knowledge/basic-concepts/signature-capture).
                                   example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                                 pinDetails:
                                   type: object
@@ -13108,7 +13108,7 @@ paths:
       description: |
         Use this method to update a secure token if you have a single-use token from Hosted Fields.  
 
-        **Note:** If you don't have a single-use token, you can update saved payment details with our [Update Secure Token](https://docs.payroc.com/api/resources#updateSecureToken) method. For more information about our two options to update a secure token, go to [Update saved payment details](/guides/integrate/update-saved-payment-details).  
+        **Note:** If you don't have a single-use token, you can update saved payment details with our [Update Secure Token](https://docs.payroc.com/api/resources#updateSecureToken) method. For more information about our two options to update a secure token, go to [Update saved payment details](https://docs.payroc.com/guides/integrate/update-saved-payment-details).  
       operationId: accountUpdate
       parameters:
         - name: Idempotency-Key
@@ -13756,7 +13756,7 @@ paths:
         - Payments
       summary: Create payment
       operationId: payment
-      description: "Use this method to run a sale or a pre-authorization with a customer's payment card. \n\nIn the response, our gateway returns information about the card payment and a paymentId, which you need for the following methods:\n\n-\t[Retrieve payment](https://docs.payroc.com/api/schema/payments/retrieve) - View the details of the card payment.\n-\t[Adjust payment](https://docs.payroc.com/api/schema/payments/adjust) - Update the details of the card payment.\n-\t[Capture payment](https://docs.payroc.com/api/schema/payments/capture)  - Capture the pre-authorization.\n-\t[Reverse payment](https://docs.payroc.com/api/schema/payments/reverse)  - Cancel the card payment if it's in an open batch.\n-\t[Refund payment](https://docs.payroc.com/api/schema/payments/refund)  - Run a referenced refund to return funds to the payment card.\n\n**Payment methods** \n\n- **Cards** - Credit, debit, and EBT\n- **Digital wallets** - [Apple Pay®](/guides/integrate/apple-pay) and [Google Pay®](/guides/integrate/google-pay) \n- **Tokens** - Secure tokens and single-use tokens\n\n**Features** \n\nOur Create Payment method also supports the following features: \n\n- [Repeat payments](/guides/integrate/repeat-payments/use-your-own-software) - Run multiple payments as part of a payment schedule that you manage with your own software. \n- **Offline sales** - Run a sale or a pre-authorization if the terminal loses its connection to our gateway. \n- [Tokenization](h/guides/integrate/save-payment-details) - Save card details to use in future transactions. \n- [3-D Secure](/guides/integrate/3-d-secure) - Verify the identity of the cardholder. \n- [Custom fields](/guides/integrate/add-custom-fields) - Add your own data to a payment. \n- **Tips** - Add tips to the card payment.  \n- **Taxes** - Add local taxes to the card payment. \n- **Surcharging** - Add a surcharge to the card payment. \n- **Dual pricing** - Offer different prices based on payment method, for example, if you use our RewardPay Choice pricing program. \n"
+      description: "Use this method to run a sale or a pre-authorization with a customer's payment card. \n\nIn the response, our gateway returns information about the card payment and a paymentId, which you need for the following methods:\n\n-\t[Retrieve payment](https://docs.payroc.com/api/schema/payments/retrieve) - View the details of the card payment.\n-\t[Adjust payment](https://docs.payroc.com/api/schema/payments/adjust) - Update the details of the card payment.\n-\t[Capture payment](https://docs.payroc.com/api/schema/payments/capture)  - Capture the pre-authorization.\n-\t[Reverse payment](https://docs.payroc.com/api/schema/payments/reverse)  - Cancel the card payment if it's in an open batch.\n-\t[Refund payment](https://docs.payroc.com/api/schema/payments/refund)  - Run a referenced refund to return funds to the payment card.\n\n**Payment methods** \n\n- **Cards** - Credit, debit, and EBT\n- **Digital wallets** - [Apple Pay®](https://docs.payroc.com/guides/integrate/apple-pay) and [Google Pay®](https://docs.payroc.com/guides/integrate/google-pay) \n- **Tokens** - Secure tokens and single-use tokens\n\n**Features** \n\nOur Create Payment method also supports the following features: \n\n- [Repeat payments](https://docs.payroc.com/guides/integrate/repeat-payments/use-your-own-software) - Run multiple payments as part of a payment schedule that you manage with your own software. \n- **Offline sales** - Run a sale or a pre-authorization if the terminal loses its connection to our gateway. \n- [Tokenization](https://docs.payroc.com/guides/integrate/save-payment-details) - Save card details to use in future transactions. \n- [3-D Secure](https://docs.payroc.com/guides/integrate/3-d-secure) - Verify the identity of the cardholder. \n- [Custom fields](https://docs.payroc.com/guides/integrate/add-custom-fields) - Add your own data to a payment. \n- **Tips** - Add tips to the card payment.  \n- **Taxes** - Add local taxes to the card payment. \n- **Surcharging** - Add a surcharge to the card payment. \n- **Dual pricing** - Offer different prices based on payment method, for example, if you use our RewardPay Choice pricing program. \n"
       parameters:
         - name: Idempotency-Key
           in: header
@@ -14046,7 +14046,7 @@ paths:
                                         example: Large Pepperoni Pizza
                                       unitOfMeasure:
                                         type: string
-                                        description: Unit of measurement for the item. For more information about units of measurement, go to [Units of measurement](/knowledge/basic-concepts/units-of-measurement).
+                                        description: Unit of measurement for the item. For more information about units of measurement, go to [Units of measurement](https://docs.payroc.com/knowledge/basic-concepts/units-of-measurement).
                                         example: QAN
                                         enum: &ref_661
                                           - ACR
@@ -14299,7 +14299,7 @@ paths:
                           description: |
                             Object that contains information about the dynamic currency conversion (DCC) offer.  
                               
-                            For more information about DCC, go to [Dynamic Currency Conversion](/knowledge/card-payments/dynamic-currency-conversion).
+                            For more information about DCC, go to [Dynamic Currency Conversion](https://docs.payroc.com/knowledge/card-payments/dynamic-currency-conversion).
                           properties: &ref_213
                             accepted:
                               type: boolean
@@ -14469,8 +14469,8 @@ paths:
                           type: string
                           description: |
                             Provider of the digital wallet. Send one of the following values:
-                            - `apple` - For more information about how to integrate with Apple Pay, go to [Apple Pay®](/guides/integrate/apple-pay).
-                            - `google` - For more information about how to integrate with google Pay, go to [Google Pay®](/guides/integrate/google-pay).
+                            - `apple` - For more information about how to integrate with Apple Pay, go to [Apple Pay®](https://docs.payroc.com/guides/integrate/apple-pay).
+                            - `google` - For more information about how to integrate with google Pay, go to [Google Pay®](https://docs.payroc.com/guides/integrate/google-pay).
                           enum:
                             - apple
                             - google
@@ -16078,7 +16078,7 @@ paths:
         - Payments
       summary: Capture payment
       operationId: capturePayment
-      description: "Use this method to capture a pre-authorization. \n\nTo capture a pre-authorization, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/payments/create) method.\n\n**Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/payments/list) method to search for the payment.\n\nDepending on the amount you want to capture, complete the following:\n-\t**Capture the full amount of the pre-authorization** - Don't send a value for the amount parameter in your request.\n-\t**Capture less than the amount of the pre-authorization** - Send a value for the amount parameter in your request. \n-\t**Capture more than the amount of the pre-authorization** - Adjust the pre-authorization before you capture it. For more information about adjusting a pre-authorization, go to [Adjust Payment](https://docs.payroc.com/api/schema/payments/adjust).\n\nIf your request is successful, our gateway takes the amount from the payment card. \n\n**Note:** For more information about pre-authorizations and captures, go to [Run a pre-authorization](/guides/integrate/run-a-pre-authorization).\n"
+      description: "Use this method to capture a pre-authorization. \n\nTo capture a pre-authorization, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/payments/create) method.\n\n**Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/payments/list) method to search for the payment.\n\nDepending on the amount you want to capture, complete the following:\n-\t**Capture the full amount of the pre-authorization** - Don't send a value for the amount parameter in your request.\n-\t**Capture less than the amount of the pre-authorization** - Send a value for the amount parameter in your request. \n-\t**Capture more than the amount of the pre-authorization** - Adjust the pre-authorization before you capture it. For more information about adjusting a pre-authorization, go to [Adjust Payment](https://docs.payroc.com/api/schema/payments/adjust).\n\nIf your request is successful, our gateway takes the amount from the payment card. \n\n**Note:** For more information about pre-authorizations and captures, go to [Run a pre-authorization](https://docs.payroc.com/guides/integrate/run-a-pre-authorization).\n"
       parameters:
         - name: Idempotency-Key
           in: header
@@ -17006,7 +17006,7 @@ paths:
                           description: |
                             Object that contains information about the dynamic currency conversion (DCC) offer.  
                               
-                            For more information about DCC, go to [Dynamic Currency Conversion](/knowledge/card-payments/dynamic-currency-conversion).
+                            For more information about DCC, go to [Dynamic Currency Conversion](https://docs.payroc.com/knowledge/card-payments/dynamic-currency-conversion).
                           properties: *ref_213
                 customer:
                   type: object
@@ -18508,7 +18508,7 @@ paths:
 
         - **Card details** - Information about the card, for example, the issuing bank and the masked card number.  
 
-        - **Surcharging information** - If you apply a surcharge to transactions, our gateway checks that the card supports surcharging and returns information about the surcharge. For more information about surcharging, go to [Credit card surcharging](/knowledge/card-payments/credit-card-surcharging). 
+        - **Surcharging information** - If you apply a surcharge to transactions, our gateway checks that the card supports surcharging and returns information about the surcharge. For more information about surcharging, go to [Credit card surcharging](https://docs.payroc.com/knowledge/card-payments/credit-card-surcharging). 
       operationId: binLookup
       requestBody:
         content:
@@ -18840,7 +18840,7 @@ paths:
                     description: |
                       Object that contains information about the dynamic currency conversion (DCC) offer.  
                         
-                      For more information about DCC, go to [Dynamic Currency Conversion](/knowledge/card-payments/dynamic-currency-conversion).
+                      For more information about DCC, go to [Dynamic Currency Conversion](https://docs.payroc.com/knowledge/card-payments/dynamic-currency-conversion).
                     properties: *ref_213
                   cardInfo:
                     required: *ref_241
@@ -25465,7 +25465,7 @@ paths:
                                   description: Indicates if the terminal prompts for cashback on PIN debit transactions.
                                 recurringPayments:
                                   type: boolean
-                                  description: Indicates if the terminal can run repeat payments. For more information about repeat payments, go to [Payment Plans](/guides/integrate/repeat-payments).
+                                  description: Indicates if the terminal can run repeat payments. For more information about repeat payments, go to [Payment Plans](https://docs.payroc.com/guides/integrate/repeat-payments).
                                 paymentLinks:
                                   type: object
                                   description: Object that contains details about payment links.
@@ -25488,7 +25488,7 @@ paths:
                                   description: Indicates if the terminal can run pre-authorizations.
                                 offlinePayments:
                                   type: boolean
-                                  description: Indicates if the terminal can accept payments when it can't connect to the gateway. For more information about offline processing, go to [Offline Processing](/knowledge/card-payments/offline-processing).
+                                  description: Indicates if the terminal can accept payments when it can't connect to the gateway. For more information about offline processing, go to [Offline Processing](https://docs.payroc.com/knowledge/card-payments/offline-processing).
                               required:
                                 - enhancedProcessing
                                 - pinDebitCashback
@@ -25521,7 +25521,7 @@ paths:
                               properties:
                                 tokenization:
                                   type: boolean
-                                  description: Indicates if the terminal can tokenize customer's payment details. For more information about tokenization, go to [Tokenization](/knowledge/basic-concepts/tokenization).
+                                  description: Indicates if the terminal can tokenize customer's payment details. For more information about tokenization, go to [Tokenization](https://docs.payroc.com/knowledge/basic-concepts/tokenization).
                                 avsPrompt:
                                   type: boolean
                                   description: Indicates if the terminal should prompt for Address Verification Service (AVS) details when running a transaction.
@@ -28919,7 +28919,7 @@ components:
       properties: *ref_204
     unitOfMeasure:
       type: string
-      description: Unit of measurement for the item. For more information about units of measurement, go to [Units of measurement](/knowledge/basic-concepts/units-of-measurement).
+      description: Unit of measurement for the item. For more information about units of measurement, go to [Units of measurement](https://docs.payroc.com/knowledge/basic-concepts/units-of-measurement).
       example: QAN
       enum: *ref_661
     lineItem:
@@ -28938,7 +28938,7 @@ components:
       description: |
         Object that contains information about the dynamic currency conversion (DCC) offer.  
           
-        For more information about DCC, go to [Dynamic Currency Conversion](/knowledge/card-payments/dynamic-currency-conversion).
+        For more information about DCC, go to [Dynamic Currency Conversion](https://docs.payroc.com/knowledge/card-payments/dynamic-currency-conversion).
       properties: *ref_213
     firstTxnReferenceData:
       type: object
