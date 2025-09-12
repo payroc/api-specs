@@ -1462,7 +1462,7 @@ paths:
                         yourCustomField: abc123
                       links:
                         - rel: parent
-                          href: https://api.payroc.com/v1/funding-recipient/234
+                          href: https://api.payroc.com/v1/funding-recipients/234
                           method: get
                     - fundingAccountId: 124
                       createdDate: '2024-07-02T15:30:00Z'
@@ -1480,7 +1480,7 @@ paths:
                         yourCustomField: abc123
                       links:
                         - rel: parent
-                          href: https://api.payroc.com/v1/funding-recipient/235
+                          href: https://api.payroc.com/v1/funding-recipients/235
                           method: get
         '400':
           description: Invalid request
@@ -1555,7 +1555,7 @@ paths:
                       yourCustomField: abc123
                     links:
                       - rel: parent
-                        href: https://api.payroc.com/v1/funding-recipient/234
+                        href: https://api.payroc.com/v1/funding-recipients/234
                         method: get
           headers:
             location:
@@ -1828,7 +1828,7 @@ paths:
                           yourCustomField: abc123
                         links:
                           - rel: parent
-                            href: https://api.payroc.com/v1/merchants/4525644354
+                            href: https://api.payroc.com/v1/processing-accounts/4525644354
                             method: get
                       - fundingAccountId: 124
                         createdDate: '2024-07-02T15:30:00Z'
@@ -1846,7 +1846,7 @@ paths:
                           yourCustomField: abc123
                         links:
                           - rel: parent
-                            href: https://api.payroc.com/v1/funding-recipient/234
+                            href: https://api.payroc.com/v1/funding-recipients/234
                             method: get
                 noResults:
                   summary: No results found
@@ -1919,7 +1919,7 @@ paths:
                       yourCustomField: abc123
                     links:
                       - rel: parent
-                        href: https://api.payroc.com/v1/merchants/4525644354
+                        href: https://api.payroc.com/v1/processing-accounts/4525644354
                         method: get
         '400':
           description: Invalid request
@@ -4796,7 +4796,7 @@ paths:
                             example: get
                           href:
                             type: string
-                            example: https://api.payroc.com/v1/merchants/4525644354
+                            example: https://api.payroc.com/v1/processing-accounts/4525644354
                     required:
                       - merchantId
                       - recipients
@@ -4843,7 +4843,7 @@ paths:
                         link:
                           rel: merchant
                           method: get
-                          href: https://api.payroc.com/v1/merchants/4525644354
+                          href: https://api.payroc.com/v1/processing-accounts/4525644354
                     metadata:
                       instructionRef: abc123
           headers:
@@ -5036,7 +5036,7 @@ paths:
                             link:
                               rel: merchant
                               method: get
-                              href: https://api.payroc.com/v1/merchants/4525644354
+                              href: https://api.payroc.com/v1/processing-accounts/4525644354
                         metadata:
                           yourCustomField: abc123
                         link:
@@ -5065,7 +5065,7 @@ paths:
                             link:
                               rel: merchant
                               method: get
-                              href: https://api.payroc.com/v1/merchants/4525644354
+                              href: https://api.payroc.com/v1/processing-accounts/4525644354
                           - merchantId: '4525644354'
                             recipients:
                               - status: accepted
@@ -5083,7 +5083,7 @@ paths:
                             link:
                               rel: merchant
                               method: get
-                              href: https://api.payroc.com/v1/merchants/4525644354
+                              href: https://api.payroc.com/v1/processing-accounts/4525644354
                         metadata:
                           yourCustomField: abc123
                         link:
