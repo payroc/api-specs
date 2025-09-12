@@ -26866,7 +26866,19 @@ paths:
       tags:
         - Settlement
       summary: List ACH deposits
-      description: Retrieve a list of ACH deposits.
+      description: |
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of ACH deposits that we paid to your merchants.  
+
+        **Note:** If you want to view the details of a specific ACH deposit and you have its achDepositId, use our [Retrieve ACH Deposit](https://docs.payroc.com/api/schema/reporting/settlement/retrieve-ach-deposit) method.  
+
+        Use query parameters to filter the list of results that we return, for example, to search for ACH deposits that we paid to a specific merchant.  
+
+        > **Important:** You must provide a value for the date query parameter.  
+
+        Our gateway returns the following information about each ACH deposit in the list: 
+        - Merchant that we sent the ACH deposit to.
+        - Total amount that we paid the merchant.
+        - Breakdown of sales, returns, and fees.
       operationId: getAchDeposits
       parameters:
         - name: before
@@ -26887,7 +26899,7 @@ paths:
         - name: date
           in: query
           required: true
-          description: Date to retrieve results from.
+          description: Filter results by the date that the merchant received the ACH deposit.
           schema:
             type: string
             format: date
@@ -26920,58 +26932,58 @@ paths:
                           properties: &ref_326
                             achDepositId:
                               type: integer
-                              description: Unique identifier of the ACH deposit.
+                              description: Unique identifier that we assigned to the ACH deposit.
                               example: 99
                             associationDate:
                               type: string
                               format: date
-                              description: Date that we sent the transaction to the cards brands for clearing. The format of this value is **YYYY-MM-DD**.
+                              description: Date that we sent the transactions to the card brands for clearing. The format of this value is **YYYY-MM-DD**.
                               example: '2024-07-02'
                             achDate:
                               type: string
                               format: date
-                              description: Date that the ACH deposit was processed. The format of this value is **YYYY-MM-DD**.
+                              description: Date that we sent the ACH deposit. The format of this value is **YYYY-MM-DD**.
                               example: '2024-07-02'
                             paymentDate:
                               type: string
                               format: date
-                              description: Date that the payment was made. The format of this value is **YYYY-MM-DD**.
+                              description: Date that the merchant received the ACH deposit. The format of this value is **YYYY-MM-DD**.
                               example: '2024-07-02'
                             transactions:
                               type: integer
-                              description: Number of transactions included in the ACH deposit.
+                              description: Number of transactions in the ACH deposit.
                               example: 20
                             sales:
                               type: integer
-                              description: Total value of sales. We return the value in the currency's lowest denomination, for example, cents.
+                              description: Amount of sales in the ACH deposit. We return the value in the currency's lowest denomination, for example, cents.
                               example: 5000
                             returns:
                               type: integer
-                              description: Total value of returns.
+                              description: Amount of returns in the ACH deposit. We return the value in the currency's lowest denomination, for example, cents.
                               example: 100
                             dailyFees:
                               type: integer
-                              description: Total value of daily Fees.
+                              description: Amount of fees that were applied to the transactions in the ACH deposit. We return the value in the currency's lowest denomination, for example cents.
                               example: 100
                             heldSales:
                               type: integer
-                              description: Total value of sales held for risk investigation.
+                              description: Amount of funds that we held if the merchant was in full suspense. We return the value in the currency's lowest denomination, for example, cents.
                               example: 100
                             achAdjustment:
                               type: integer
-                              description: Total value of adjustments made to the ACH deposit.
+                              description: Amount of adjustments that we made to the ACH deposit. We return the value in the currency's lowest denomination, for example, cents.
                               example: 100
                             holdback:
                               type: integer
-                              description: Total value of funds witheld from the settled batch.
+                              description: Amount of funds that we held as reserve from the ACH deposit. We return the value in the currency's lowest denomination, for example, cents.
                               example: 100
                             reserveRelease:
                               type: integer
-                              description: Total value of funds released from a hold.
+                              description: Amount of funds that we released from holdback. We return the value in the currency's lowest denomination, for example, cents.
                               example: 100
                             netAmount:
                               type: integer
-                              description: Net ACH deposit value.
+                              description: Total amount that we paid the merchant after fees and adjustments. We return the value in the currency's lowest denomination, for example, cents.
                               example: 5000
                             merchant:
                               type: object
@@ -27069,7 +27081,16 @@ paths:
       tags:
         - Settlement
       summary: Retrieve ACH deposit
-      description: Retrieve a specific ACH deposit.
+      description: |
+        Use this method to retrieve information about an ACH deposit that we paid to a merchant.  
+
+        **Note:** To retrieve an ACH deposit, you need its achDepositId. If you don't have the achDepositId, use our [List ACH Deposits](https://docs.payroc.com/api/schema/reporting/settlement/list-ach-deposits) method to search for the ACH deposit.  
+
+        Our gateway returns the following information about the ACH deposit:  
+
+        - Merchant that we sent the ACH deposit to.  
+        - Total amount that we paid the merchant.  
+        - Breakdown of sales, returns, and fees.  
       operationId: getAchDeposit
       parameters:
         - name: achDepositId
