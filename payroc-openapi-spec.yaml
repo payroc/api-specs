@@ -2247,7 +2247,7 @@ paths:
       description: |
         Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of pricing intents associated with the ISV.  
 
-        **Note:** If you want to view a specific pricing intent and you have its pricingIntentId, use our [Retrieve Pricing Intent](https://docs.payroc.com/api/schema/boarding/pricing-intents/retrieve) method.  
+        **Note:** If you want to view the details of a specific pricing intent and you have its pricingIntentId, use our [Retrieve Pricing Intent](https://docs.payroc.com/api/schema/boarding/pricing-intents/retrieve) method.  
 
         Our gateway returns the following information about each pricing intent in the list:  
 
@@ -7293,7 +7293,7 @@ paths:
       description: |
         Use this method to return the status history of a dispute.  
 
-        To return the status history of a dispute, you need its disputeId. If you don't have the disputeId, use our [List Disputes](https://docs.payroc.com/api/schema/reporting/settlement/list-disputes) method to search for the dispute. 
+        To view the status history of a dispute, you need its disputeId. If you don't have the disputeId, use our [List Disputes](https://docs.payroc.com/api/schema/reporting/settlement/list-disputes) method to search for the dispute. 
 
         Our gateway returns a list that contains each status change, the date it was changed, and its updated status.  
       operationId: getdisputesStatuses
@@ -8069,9 +8069,9 @@ paths:
         - Payment links
       summary: List payment links
       description: |
-        Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of payment links linked to a processing terminal.  
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of payment links linked to a processing terminal.  
 
-        **Note:** If you want to view a specific payment link and you have its paymentLinkId, use our [Retrieve Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/retrieve) method.  
+        **Note:** If you want to view the details of a specific payment link and you have its paymentLinkId, use our [Retrieve Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/retrieve) method.  
 
         Use query parameters to filter the list of results that we return, for example, to search for only active links or multi-use links.  
 
@@ -9210,7 +9210,7 @@ paths:
       tags:
         - Payment plans
       summary: List payment plans
-      description: "Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of payment plans for a processing terminal.  \n\n**Note:** If you want to view a specific payment plan and you have its paymentPlanId, use our [Retrieve Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/retrieve) method.  \n\nOur gateway returns the following information about each payment plan in the list:  \n\n  -\tName, length, and currency of the plan  \n  -\tHow often our gateway collects each payment  \n  -\tHow much our gateway collects for each payment  \n  -\tWhat happens if the merchant updates or deletes the plan  \n\nFor each payment plan, we return the paymentPlanId, which you can use to perform follow-on actions.\n"
+      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of payment plans for a processing terminal.  \n\n**Note:** If you want to view the details of a specific payment plan and you have its paymentPlanId, use our [Retrieve Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/retrieve) method.  \n\nOur gateway returns the following information about each payment plan in the list:  \n\n  -\tName, length, and currency of the plan  \n  -\tHow often our gateway collects each payment  \n  -\tHow much our gateway collects for each payment  \n  -\tWhat happens if the merchant updates or deletes the plan  \n\nFor each payment plan, we return the paymentPlanId, which you can use to perform follow-on actions.\n"
       operationId: listPaymentPlans
       parameters:
         - name: processingTerminalId
@@ -10257,7 +10257,7 @@ paths:
       tags:
         - Subscriptions
       summary: List subscriptions
-      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of subscriptions.  \n\nNote: If you want to view a specific subscription and you have its subscriptionId, use our [Retrieve subscription](https://docs.payroc.com/api/schema/payments/subscriptions/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for subscriptions for a customer, a payment plan, or frequency.  \n\nOur gateway returns information about the following for each subscription in the list:  \n\n-\tPayment plan the subscription is linked to.  \n-\tSecure token that represents cardholder’s payment details.  \n-\tCurrent state of the subscription, including its status, next due date, and invoices.  \n-\tFees for setup and the cost of the recurring order.  \n-\tSubscription length, end date, and frequency.  \n\nFor each subscription, we also return the subscriptionId, the paymentPlanId, and the secureTokenId, which you can use to perform follow-actions. \n"
+      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of subscriptions.  \n\nNote: If you want to view the details of a specific subscription and you have its subscriptionId, use our [Retrieve subscription](https://docs.payroc.com/api/schema/payments/subscriptions/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for subscriptions for a customer, a payment plan, or frequency.  \n\nOur gateway returns information about the following for each subscription in the list:  \n\n-\tPayment plan the subscription is linked to.  \n-\tSecure token that represents cardholder’s payment details.  \n-\tCurrent state of the subscription, including its status, next due date, and invoices.  \n-\tFees for setup and the cost of the recurring order.  \n-\tSubscription length, end date, and frequency.  \n\nFor each subscription, we also return the subscriptionId, the paymentPlanId, and the secureTokenId, which you can use to perform follow-actions. \n"
       operationId: listSubscriptions
       parameters:
         - name: Idempotency-Key
@@ -12591,7 +12591,7 @@ paths:
       tags:
         - Secure tokens
       summary: List secure tokens
-      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of secure tokens.  \n\n**Note:** If you want to view a specific seure token and you have its secureTokenId, use our [Retrieve Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for secure tokens by customer or by the first four digits of a card number.  \n\nOur gateway returns information about the following for each secure token in the list:  \n\n  -\tPayment details that the secure token represents.  \n  -\tCustomer details, including shipping and billing addresses.  \n  -\tSecure token that you can use to carry out transactions.  \n\n  For each secure token, we also return the secureTokenId, which you can use to perform follow-on actions.\n"
+      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of secure tokens.  \n\n**Note:** If you want to view the details of a specific secure token and you have its secureTokenId, use our [Retrieve Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for secure tokens by customer or by the first four digits of a card number.  \n\nOur gateway returns information about the following for each secure token in the list:  \n\n  -\tPayment details that the secure token represents.  \n  -\tCustomer details, including shipping and billing addresses.  \n  -\tSecure token that you can use to carry out transactions.  \n\n  For each secure token, we also return the secureTokenId, which you can use to perform follow-on actions.\n"
       operationId: listSecureTokens
       parameters:
         - name: processingTerminalId
@@ -15230,7 +15230,7 @@ paths:
       description: |
         Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of payments. 
 
-        **Note:** If you want to view a specific payment and you have its paymentId, use our [Retrieve Payment](https://docs.payroc.com/api/schema/payments/retrieve) method.  
+        **Note:** If you want to view the details of a specific payment and you have its paymentId, use our [Retrieve Payment](https://docs.payroc.com/api/schema/payments/retrieve) method.  
 
         Use query parameters to filter the list of results that we return, for example, to search for payments for a customer, a tip mode, or a date range.  
 
@@ -17234,7 +17234,7 @@ paths:
       description: |
         Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of refunds.  
 
-        **Note:** If you want to view a specific refund and you have its refundId, use our [Retrieve Refund](https://docs.payroc.com/api/schema/payments/refunds/retrieve) method.  
+        **Note:** If you want to view the details of a specific refund and you have its refundId, use our [Retrieve Refund](https://docs.payroc.com/api/schema/payments/refunds/retrieve) method.  
 
         Use query parameters to filter the list of results that we return, for example, to search for refunds for a customer, a tender type, or a date range.
         Our gateway returns the following information about each refund in the list:  
@@ -19472,7 +19472,7 @@ paths:
       description: |
         Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of payments.  
 
-        **Note:** If you want to view a specific payment and you have its paymentId, use our [Retrieve Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/retrieve) method.  
+        **Note:** If you want to view the details of a specific payment and you have its paymentId, use our [Retrieve Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/retrieve) method.  
 
         Use query parameters to filter the list of results that we return, for example, to search for payments for a customer, a date range, or a settlement state.  
 
@@ -20501,7 +20501,7 @@ paths:
       tags:
         - Bank transfer refunds
       summary: List refunds
-      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of bank transfer refunds.  \n\n**Note:** If you want to view a specific refund and you have its refundId, use our Retrieve Refund method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for refunds for a customer, an orderId, or a date range.  \n\nOur gateway returns the following information about each refund in the list:  \n\n-\tOrder details, including the refund amount and when it was processed.  \n-\tBank account details, including the customer’s name and account number.  \n\nFor referenced refunds, our gateway also returns details about the payment that the refund is linked to.\n"
+      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of bank transfer refunds.  \n\n**Note:** If you want to view the details of a specific refund and you have its refundId, use our [Retrieve Refund](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for refunds for a customer, an orderId, or a date range.  \n\nOur gateway returns the following information about each refund in the list:  \n\n-\tOrder details, including the refund amount and when it was processed.  \n-\tBank account details, including the customer’s name and account number.  \n\nFor referenced refunds, our gateway also returns details about the payment that the refund is linked to.\n"
       operationId: listBankTransferRefunds
       parameters:
         - name: processingTerminalId
@@ -21576,9 +21576,12 @@ paths:
                                         example: abc1234567
                       funding:
                         type: object
+                        description: |
+                          Object that contains information about the funding schedule of the processing account.  
+                          **Note**: You can subscribe to our processingAccount.funding.status.changed event to get notifications when we change the funding status of a processing account. For  more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).  
                         allOf: &ref_746
                           - type: object
-                            description: Object that contains information about the funding schedule of the processing account.
+                            description: null
                             properties: &ref_279
                               status:
                                 type: string
@@ -22014,7 +22017,7 @@ paths:
                             - `cancelled` - Merchant withdrew the application for the processing account.
                             - `failed` - An error occurred while we were setting up the processing account.  
 
-                            **Note**: You can subscribe to our processingAccount.status.changed event to get notifications when we update the status of a processing account. For more information about how to subscribe to events, go to [Events List](https://docs.payroc.com/knowledge/events/events-list).
+                            **Note**: You can subscribe to our processingAccount.status.changed event to get notifications when we change the status of a processing account. For more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).
                           readOnly: true
                           enum:
                             - entered
@@ -22235,7 +22238,7 @@ paths:
         - Merchant platforms
       summary: List merchant platforms
       description: |
-        Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of merchant platforms that are linked to your ISV account.  
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of merchant platforms that are linked to your ISV account.  
 
         **Note**: If you want to view the details of a specific merchant platform and you have its merchantPlatformId, use our [Retrieve Merchant Platform](https://docs.payroc.com/api/schema/boarding/merchant-platforms/retrieve) method.  
 
@@ -22481,7 +22484,7 @@ paths:
         - Merchant platforms
       summary: List merchant platform's processing accounts
       description: |
-        Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of processing accounts linked to a merchant platform.  
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of processing accounts linked to a merchant platform.  
 
         **Note**: If you want to view the details of a specific processing account and you have its processingAccountId, use our [Retrieve Processing Account](https://docs.payroc.com/api/schema/boarding/processing-accounts/retrieve) method.  
 
@@ -22592,6 +22595,7 @@ paths:
                                 - `rejected` - We rejected the application for the processing account.  
                                 - `terminated` - Processing account is closed.  
                                 - `cancelled` - Merchant withdrew the application for the processing account.  
+                                **Note**: You can subscribe to our processingAccount.status.changed event to get notifications when we change the status of a processing account. For more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).
                               readOnly: true
                               enum:
                                 - entered
@@ -22708,7 +22712,7 @@ paths:
                               description: Object that contains funding information for the processing account, including funding schedules, funding fees, and details of funding accounts.
                               allOf: &ref_755
                                 - type: object
-                                  description: Object that contains information about the funding schedule of the processing account.
+                                  description: null
                                   properties: *ref_279
                                 - type: object
                                   properties:
@@ -23654,11 +23658,11 @@ paths:
         - Processing accounts
       summary: List contacts
       description: |
-        Use this method to retrieve a list of contacts for a processing account.    
+        Use this method to return a list of contacts for a processing account.    
 
-        **Note:** If you want to view a specific contact and you have their contactId, go to our [Retrieve Contact](https://docs.payroc.com/api/schema/boarding/contacts/retrieve) method.  
+        **Note:** If you want to view the details of a specific contact and you have their contactId, use our [Retrieve Contact](https://docs.payroc.com/api/schema/boarding/contacts/retrieve) method.  
 
-        To retrieve a list of contacts for a processing account, you need the processingAccountId. Our gateway returned the processingAccountId in the response of the [Create Merchant Platform](https://docs.payroc.com/api/schema/boarding/merchant-platforms/create) method or the [Create Processing Account](https://docs.payroc.com/api/schema/boarding/merchant-platforms/create-processing-account) method.  
+        To list contacts for a processing account, you need the processingAccountId. Our gateway returned the processingAccountId in the response of the [Create Merchant Platform](https://docs.payroc.com/api/schema/boarding/merchant-platforms/create) method or the [Create Processing Account](https://docs.payroc.com/api/schema/boarding/merchant-platforms/create-processing-account) method.  
 
         Our gateway returns the following information about each contact:  
 
@@ -24192,7 +24196,7 @@ paths:
       description: |
         Use this method to return a list of owners of a processing account.  
 
-        **Note:** If you want to retrieve the details of a specific owner and you have the ownerId, go to our [Retrieve Owner](https://docs.payroc.com/api/schema/boarding/owners/retrieve) method.  
+        **Note:** If you want to view the details of a specific owner and you have the ownerId, go to our [Retrieve Owner](https://docs.payroc.com/api/schema/boarding/owners/retrieve) method.  
 
         To list the owners of a processing account, you need its processingAccountId. If you don't have the processingAccountId, use our [List Merchant Platform's Processing Accounts](https://docs.payroc.com/api/schema/boarding/merchant-platforms/list-processing-accounts) method to search for the processing account.  
 
@@ -25094,9 +25098,9 @@ paths:
     get:
       summary: List terminal orders
       description: |
-        Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of terminal orders associated with a processing account.  
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of terminal orders associated with a processing account.  
 
-        **Note:** If you want to view a specific terminal order and you have its terminalOrderId, use our [Retrieve Terminal Order](https://docs.payroc.com/api/schema/boarding/terminal-orders/retrieve) method.  
+        **Note:** If you want to view the details of a specific terminal order and you have its terminalOrderId, use our [Retrieve Terminal Order](https://docs.payroc.com/api/schema/boarding/terminal-orders/retrieve) method.  
 
         Use the query parameters to filter the list of results that we return, for example, to search for terminal orders by their status.  
 
@@ -25243,7 +25247,7 @@ paths:
     get:
       summary: List processing terminals
       description: |
-        Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of processing terminals associated with a processing account.  
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of processing terminals associated with a processing account.  
 
         **Note:** If you want to view the details of a specific processing terminal and you have its processingTerminalId, use our [Retrieve Processing Terminal](https://docs.payroc.com/api/schema/boarding/processing-terminals/retrieve) method.  
 
@@ -26178,9 +26182,9 @@ paths:
         - Event Subscriptions
       summary: List event subscriptions
       description: |
-        Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of event subscriptions that are linked to your ISV account.  
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of event subscriptions that are linked to your ISV account.  
 
-        **Note:** If you want to view a specific event subscription and you have its id, use our [Retrieve Event Subscription](https://docs.payroc.com/api/schema/notifications/event-subscriptions/retrieve) method.  
+        **Note:** If you want to view the details of a specific event subscription and you have its id, use our [Retrieve Event Subscription](https://docs.payroc.com/api/schema/notifications/event-subscriptions/retrieve) method.  
 
         Use query parameters to filter the list of results that we return, for example, to search for subscriptions with a specific status or an event type.  
 
@@ -29396,10 +29400,13 @@ components:
       properties: *ref_278
     commonFunding:
       type: object
-      description: Object that contains information about the funding schedule of the processing account.
+      description: null
       properties: *ref_279
     createFunding:
       type: object
+      description: |
+        Object that contains information about the funding schedule of the processing account.  
+        **Note**: You can subscribe to our processingAccount.funding.status.changed event to get notifications when we change the funding status of a processing account. For  more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).  
       allOf: *ref_746
     pricingTemplate:
       type: object
