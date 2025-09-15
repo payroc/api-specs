@@ -27242,10 +27242,6 @@ paths:
                           title: ACH deposit fee
                           description: Object that contains information about the ACH deposit fee.
                           properties: &ref_810
-                            achDepositId:
-                              type: integer
-                              description: Unique identifier of the ACH deposit.
-                              example: 99
                             associationDate:
                               type: string
                               format: date
