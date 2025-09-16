@@ -1051,7 +1051,10 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: &ref_32
             type: string
           examples: &ref_33
@@ -1059,7 +1062,10 @@ paths:
               value: '2571'
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: &ref_34
             type: string
           examples: &ref_35
@@ -1067,7 +1073,7 @@ paths:
               value: '8516'
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: &ref_36
             type: integer
             default: 10
@@ -1093,11 +1099,14 @@ paths:
                         example: 25
                       count:
                         type: number
-                        description: Number of results that we returned.
+                        description: |
+                          Number of results we returned on this page. 
+
+                          **Note:** This might not be the total number of results that match your query. 
                         example: 23
                       hasMore:
                         type: boolean
-                        description: Indicates that further results are available.
+                        description: Indicates whether there is another page of results available.
                         example: false
                       links:
                         type: array
@@ -1753,17 +1762,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -2261,17 +2276,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -4921,17 +4942,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
         - name: dateFrom
@@ -5324,17 +5351,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
         - name: merchantId
@@ -5461,17 +5494,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
         - name: dateFrom
@@ -5727,17 +5766,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
         - name: date
@@ -6075,17 +6120,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
         - name: date
@@ -6601,17 +6652,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
         - name: date
@@ -7026,17 +7083,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
         - name: date
@@ -8179,17 +8242,23 @@ paths:
               value: '2024-08-02'
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -8781,17 +8850,23 @@ paths:
           examples: *ref_110
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -9221,17 +9296,23 @@ paths:
           examples: *ref_96
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -10352,17 +10433,23 @@ paths:
               value: '2024-08-01'
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -12670,17 +12757,23 @@ paths:
               value: '7062'
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -15419,17 +15512,23 @@ paths:
               value: JZURRJBUPS
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -17373,17 +17472,23 @@ paths:
               value: '2024-07-02'
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -19609,17 +19714,23 @@ paths:
               value: JZURRJBUPS
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -20617,17 +20728,23 @@ paths:
               value: '2024-07-15'
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -22251,17 +22368,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -22507,17 +22630,23 @@ paths:
           examples: *ref_275
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
         - name: includeClosed
@@ -23678,17 +23807,23 @@ paths:
           examples: *ref_289
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -24213,17 +24348,23 @@ paths:
           examples: *ref_289
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -25271,17 +25412,23 @@ paths:
           examples: *ref_289
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
       responses:
@@ -26885,17 +27032,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
         - name: date
@@ -27188,17 +27341,23 @@ paths:
       parameters:
         - name: before
           in: query
-          description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+          description: |
+            Return the previous page of results before the value that you specify.  
+
+            You can’t send a before parameter in the same request as an after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
           in: query
-          description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+          description: |
+            Return the next page of results after the value that you specify.  
+
+            You can’t send an after parameter in the same request as a before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
           in: query
-          description: States the total amount of results the response is limited to.
+          description: Limit the maximum number of results that we return for each page.
           schema: *ref_36
           examples: *ref_37
         - name: date
@@ -27366,19 +27525,25 @@ components:
     before:
       name: before
       in: query
-      description: Points to the resource identifier that you want to receive your results before. Typically, this is the first resource on the previous page.
+      description: |
+        Return the previous page of results before the value that you specify.  
+
+        You can’t send a before parameter in the same request as an after parameter. 
       schema: *ref_32
       examples: *ref_33
     after:
       name: after
       in: query
-      description: Points to the resource identifier that you want to receive your results after. Typically, this is the last resource on the previous page.
+      description: |
+        Return the next page of results after the value that you specify.  
+
+        You can’t send an after parameter in the same request as a before parameter. 
       schema: *ref_34
       examples: *ref_35
     limit:
       name: limit
       in: query
-      description: States the total amount of results the response is limited to.
+      description: Limit the maximum number of results that we return for each page.
       schema: *ref_36
       examples: *ref_37
     idempotencyKey:
