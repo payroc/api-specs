@@ -6142,17 +6142,17 @@ paths:
         - name: date
           in: query
           required: true
-          description: Date to retrieve results from. The format of this value is **YYYY-MM-DD**. You must provide either the 'batchId' or the 'date'.
+          description: Return results for a specific date. The format of this value is **YYYY-MM-DD**. You must provide either the batchId or the date.
           schema: &ref_72
             type: string
             format: date
           examples: &ref_73
             example:
-              value: '2024-07-01'
+              value: '2024-07-02'
         - name: batchId
           in: query
           required: true
-          description: Unique identifier of the batch. You must provide either the 'batchId' or the 'date'.
+          description: Unique identifier of the batch. You must provide either the batchId or the date.
           schema: &ref_74
             type: integer
           examples: &ref_75
@@ -6647,7 +6647,18 @@ paths:
       tags:
         - Settlement
       summary: List authorizations
-      description: Retrieve a list of authorizations.
+      description: |
+        Use this method to retrieve a [paginated](https://docs.payroc.com/api/pagination) list of authorizations.  
+
+        Use query parameters to filter the list of results that we return, for example, to search for authorizations linked to a specific merchant.  
+
+        > **Important:** You must provide a value for either the date query parameter or the batchId query parameter.  
+
+        Our gateway returns the following information about each authorization in the list:
+        - Authorization response from the issuing bank.
+        - Amount that the issuing bank authorized.
+        - Merchant that ran the authorization.
+        - Details about the customer's card, the transaction, and the batch.
       operationId: getAuthorizations
       parameters:
         - name: before
@@ -6674,13 +6685,13 @@ paths:
         - name: date
           in: query
           required: true
-          description: Date to retrieve results from. The format of this value is **YYYY-MM-DD**. You must provide either the 'batchId' or the 'date'.
+          description: Return results for a specific date. The format of this value is **YYYY-MM-DD**. You must provide either the batchId or the date.
           schema: *ref_72
           examples: *ref_73
         - name: batchId
           in: query
           required: true
-          description: Unique identifier of the batch. You must provide either the 'batchId' or the 'date'.
+          description: Unique identifier of the batch. You must provide either the batchId or the date.
           schema: *ref_74
           examples: *ref_75
         - name: merchantId
@@ -6711,7 +6722,7 @@ paths:
                           properties: &ref_79
                             authorizationId:
                               type: integer
-                              description: Unique identifier of the authorization.
+                              description: Unique identifier that we assigned to the authorization.
                               example: 12345
                             createdDate:
                               type: string
@@ -6725,7 +6736,7 @@ paths:
                               example: '2024-01-30'
                             authorizationResponse:
                               type: string
-                              description: Code that indicates the response for the authorization.
+                              description: Response from the issuing bank for the authorization.
                               enum:
                                 - activityCountLimitExceeded
                                 - alreadyReversed
@@ -6824,7 +6835,7 @@ paths:
                               example: 10000
                             currency:
                               type: string
-                              description: Currency of the authorization.
+                              description: Currency of the authorization. The value for the currency follows the [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html) standard.
                             batch:
                               type: *ref_76
                               title: batch summary
@@ -27634,14 +27645,14 @@ components:
       name: date
       in: query
       required: true
-      description: Date to retrieve results from. The format of this value is **YYYY-MM-DD**. You must provide either the 'batchId' or the 'date'.
+      description: Return results for a specific date. The format of this value is **YYYY-MM-DD**. You must provide either the batchId or the date.
       schema: *ref_72
       examples: *ref_73
     batchIdQuery:
       name: batchId
       in: query
       required: true
-      description: Unique identifier of the batch. You must provide either the 'batchId' or the 'date'.
+      description: Unique identifier of the batch. You must provide either the batchId or the date.
       schema: *ref_74
       examples: *ref_75
     transactionType:
