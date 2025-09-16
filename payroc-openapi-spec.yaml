@@ -21581,7 +21581,6 @@ paths:
                           **Note**: You can subscribe to our processingAccount.funding.status.changed event to get notifications when we change the funding status of a processing account. For  more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).  
                         allOf: &ref_746
                           - type: object
-                            description: null
                             properties: &ref_279
                               status:
                                 type: string
@@ -22712,7 +22711,6 @@ paths:
                               description: Object that contains funding information for the processing account, including funding schedules, funding fees, and details of funding accounts.
                               allOf: &ref_755
                                 - type: object
-                                  description: null
                                   properties: *ref_279
                                 - type: object
                                   properties:
@@ -29400,7 +29398,6 @@ components:
       properties: *ref_278
     commonFunding:
       type: object
-      description: null
       properties: *ref_279
     createFunding:
       type: object
