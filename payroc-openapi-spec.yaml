@@ -16818,7 +16818,10 @@ paths:
                         example: completed
                       errorMessage:
                         type: string
-                        description: Description of the error that caused the instruction to fail.
+                        description: |
+                          Description of the error that caused the instruction to fail.
+
+                          **Note:** We return this field only if the status is `failure`.
                       link:
                         type: object
                         readOnly: true
@@ -16832,7 +16835,7 @@ paths:
                         maxLength: 36
                         minLength: 1
                         type: string
-                        description: Unique identifier that our gateway assigned to the instruction.
+                        description: Unique identifier that we assigned to the payment instruction.
                         example: a37439165d134678a9100ebba3b29597
               examples:
                 paymentInstruction:
@@ -16889,10 +16892,15 @@ paths:
         - Payment instructions
       summary: Retrieve payment instruction
       operationId: getPaymentInstruction
-      description: Retrieve the current status of a specific payment instruction.
+      description: |
+        Use this method to retrieve information about a payment instruction.  
+
+        To retrieve a payment instruction, you need its paymentInstructionId. Our gateway returned the paymentInstructionId in the response of the [Submit Payment Instruction](https://docs.payroc.com/api/schema/payroc-cloud/payment-instructions/submit) method.  
+
+        Our gateway returns the status of the payment instruction. If the payment device completed the payment instruction, the response also includes a link to the payment.
       parameters:
         - name: paymentInstructionId
-          description: Unique identifier of the payment instruction.
+          description: Unique identifier that we assigned to the payment instruction.
           in: path
           required: true
           schema: &ref_210
@@ -16951,7 +16959,7 @@ paths:
         To cancel a payment instruction, you need its paymentInstructionId. Our gateway returned the paymentInstructionId in the response of the [Submit payment instruction](https://docs.payroc.com/api/schema/payroc-cloud/payment-instructions/submit) method.
       parameters:
         - name: paymentInstructionId
-          description: Unique identifier of the payment instruction.
+          description: Unique identifier that we assigned to the payment instruction.
           in: path
           required: true
           schema: *ref_210
@@ -18066,7 +18074,7 @@ paths:
                         maxLength: 36
                         minLength: 1
                         type: string
-                        description: Unique identifier that our gateway assigned to the instruction.
+                        description: Unique identifier that we assigned to the refund instruction.
                         example: a37439165d134678a9100ebba3b29597
               examples:
                 refundInstruction:
@@ -18123,10 +18131,15 @@ paths:
         - Refund instructions
       summary: Retrieve refund instruction
       operationId: getRefundInstruction
-      description: Retrieve the current status of a specific refund instruction.
+      description: |
+        Use this method to retrieve information about a refund instruction.  
+
+        To retrieve a refund instruction, you need its refundInstructionId. Our gateway returned the refundInstructionId in the response of the [Submit Refund Instruction](https://docs.payroc.com/api/schema/payroc-cloud/refund-instructions/submit) method.  
+
+        Our gateway returns the status of the refund instruction. If the payment device completed the refund instruction, the response also includes a link to the refund.
       parameters:
         - name: refundInstructionId
-          description: Unique identifier of the refund instruction.
+          description: Unique identifier that we assigned to the refund instruction.
           in: path
           required: true
           schema: &ref_235
@@ -18185,7 +18198,7 @@ paths:
         To cancel a refund instruction, you need its refundInstructionId. Our gateway returned the refundInstructionId in the response of the [Submit Refund Instruction](https://docs.payroc.com/api/schema/payroc-cloud/refund-instructions/submit) method.   
       parameters:
         - name: refundInstructionId
-          description: Unique identifier of the refund instruction.
+          description: Unique identifier that we assigned to the refund instruction.
           in: path
           required: true
           schema: *ref_235
@@ -27964,7 +27977,7 @@ components:
       examples: *ref_418
     paymentInstructionId:
       name: paymentInstructionId
-      description: Unique identifier of the payment instruction.
+      description: Unique identifier that we assigned to the payment instruction.
       in: path
       required: true
       schema: *ref_210
@@ -28038,7 +28051,7 @@ components:
       examples: *ref_226
     refundInstructionId:
       name: refundInstructionId
-      description: Unique identifier of the refund instruction.
+      description: Unique identifier that we assigned to the refund instruction.
       in: path
       required: true
       schema: *ref_235
