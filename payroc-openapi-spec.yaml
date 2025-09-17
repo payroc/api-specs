@@ -5868,9 +5868,9 @@ paths:
                                   description: Trading name of the business.
                                   example: Pizza Doe
                                 processingAccountId:
-                                  type: string
+                                  type: integer
                                   description: Unique identifier that we assigned to the processing account.
-                                  example: '38765'
+                                  example: 38765
                                 link:
                                   type: object
                                   readOnly: true
@@ -5881,7 +5881,7 @@ paths:
                               example: &ref_68
                                 merchantId: '4525644354'
                                 doingBusinessAs: Pizza Doe
-                                processingAccountId: '38765'
+                                processingAccountId: 38765
                                 link:
                                   rel: processingAccount
                                   method: get
@@ -5931,7 +5931,7 @@ paths:
                         merchant:
                           merchantId: '4525644354'
                           doingBusinessAs: Pizza Doe
-                          processingAccountId: '38765'
+                          processingAccountId: 38765
                           link:
                             rel: processingAccount
                             method: get
@@ -5955,7 +5955,7 @@ paths:
                         merchant:
                           merchantId: '9876543219'
                           doingBusinessAs: Joe Bloggs Shoes
-                          processingAccountId: '68437'
+                          processingAccountId: 68437
                           link:
                             rel: processingAccount
                             method: get
@@ -6070,7 +6070,7 @@ paths:
                   merchant:
                     merchantId: '4525644354'
                     doingBusinessAs: Pizza Doe
-                    processingAccountId: '38765'
+                    processingAccountId: 38765
                     link:
                       rel: processingAccount
                       method: get
@@ -6455,7 +6455,7 @@ paths:
                         merchant:
                           merchantId: '4525644354'
                           doingBusinessAs: Pizza Doe
-                          processingAccountId: '38765'
+                          processingAccountId: 38765
                           link:
                             rel: processingAccount
                             method: get
@@ -6570,7 +6570,7 @@ paths:
                   merchant:
                     merchantId: '4525644354'
                     doingBusinessAs: Pizza Doe
-                    processingAccountId: '38765'
+                    processingAccountId: 38765
                     link:
                       rel: processingAccount
                       method: get
@@ -6927,7 +6927,7 @@ paths:
                         merchant:
                           merchantId: '4525644354'
                           doingBusinessAs: Pizza Doe
-                          processingAccountId: '38765'
+                          processingAccountId: 38765
                           link:
                             rel: processingAccount
                             method: get
@@ -7028,7 +7028,7 @@ paths:
                   merchant:
                     merchantId: '4525644354'
                     doingBusinessAs: Pizza Doe
-                    processingAccountId: '38765'
+                    processingAccountId: 38765
                     link:
                       rel: processingAccount
                       method: get
@@ -7305,7 +7305,7 @@ paths:
                         merchant:
                           merchantId: '4525644354'
                           doingBusinessAs: Pizza Doe
-                          processingAccountId: '38765'
+                          processingAccountId: 38765
                           link:
                             rel: merchant
                             method: get
@@ -27213,7 +27213,7 @@ paths:
                         merchant:
                           merchantId: '4525644354'
                           doingBusinessAs: Pizza Doe
-                          processingAccountId: '38765'
+                          processingAccountId: 38765
                           link:
                             rel: processingAccount
                             method: get
@@ -27310,7 +27310,7 @@ paths:
                   merchant:
                     merchantId: '4525644354'
                     doingBusinessAs: Pizza Doe
-                    processingAccountId: '38765'
+                    processingAccountId: 38765
                     link:
                       rel: processingAccount
                       method: get
@@ -27494,7 +27494,7 @@ paths:
                         merchant:
                           merchantId: '4525644354'
                           doingBusinessAs: Pizza Doe
-                          processingAccountId: '38765'
+                          processingAccountId: 38765
                           link:
                             rel: processingAccount
                             method: get
