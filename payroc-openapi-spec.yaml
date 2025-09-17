@@ -21719,7 +21719,6 @@ paths:
                         type: object
                         description: |
                           Object that contains information about the funding schedule of the processing account.  
-                          **Note**: You can subscribe to our processingAccount.funding.status.changed event to get notifications when we change the funding status of a processing account. For  more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).  
                         allOf: &ref_746
                           - type: object
                             properties: &ref_279
@@ -29592,7 +29591,6 @@ components:
       type: object
       description: |
         Object that contains information about the funding schedule of the processing account.  
-        **Note**: You can subscribe to our processingAccount.funding.status.changed event to get notifications when we change the funding status of a processing account. For  more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).  
       allOf: *ref_746
     pricingTemplate:
       type: object
