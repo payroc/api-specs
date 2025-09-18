@@ -1054,7 +1054,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: &ref_32
             type: string
           examples: &ref_33
@@ -1065,7 +1065,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: &ref_34
             type: string
           examples: &ref_35
@@ -1765,7 +1765,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -1773,7 +1773,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -2279,7 +2279,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -2287,7 +2287,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -4945,7 +4945,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -4953,7 +4953,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -5354,7 +5354,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -5362,7 +5362,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -5497,7 +5497,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -5505,7 +5505,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -5769,7 +5769,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -5777,7 +5777,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -6123,7 +6123,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -6131,7 +6131,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -6666,7 +6666,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -6674,7 +6674,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -7097,7 +7097,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -7105,7 +7105,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -8256,7 +8256,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -8264,7 +8264,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -8864,7 +8864,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -8872,7 +8872,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -9310,7 +9310,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -9318,7 +9318,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -10447,7 +10447,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -10455,7 +10455,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -12771,7 +12771,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -12779,7 +12779,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -15526,7 +15526,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -15534,7 +15534,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -17494,7 +17494,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -17502,7 +17502,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -19741,7 +19741,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -19749,7 +19749,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -20755,7 +20755,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -20763,7 +20763,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -22394,7 +22394,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -22402,7 +22402,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -22656,7 +22656,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -22664,7 +22664,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -23833,7 +23833,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -23841,7 +23841,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -24374,7 +24374,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -24382,7 +24382,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -25438,7 +25438,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -25446,7 +25446,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -27058,7 +27058,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -27066,7 +27066,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -27367,7 +27367,7 @@ paths:
           description: |
             Return the previous page of results before the value that you specify.  
 
-            You can’t send a before parameter in the same request as an after parameter. 
+            You can’t send the before parameter in the same request as the after parameter. 
           schema: *ref_32
           examples: *ref_33
         - name: after
@@ -27375,7 +27375,7 @@ paths:
           description: |
             Return the next page of results after the value that you specify.  
 
-            You can’t send an after parameter in the same request as a before parameter. 
+            You can’t send the after parameter in the same request as the before parameter. 
           schema: *ref_34
           examples: *ref_35
         - name: limit
@@ -27551,7 +27551,7 @@ components:
       description: |
         Return the previous page of results before the value that you specify.  
 
-        You can’t send a before parameter in the same request as an after parameter. 
+        You can’t send the before parameter in the same request as the after parameter. 
       schema: *ref_32
       examples: *ref_33
     after:
@@ -27560,7 +27560,7 @@ components:
       description: |
         Return the next page of results after the value that you specify.  
 
-        You can’t send an after parameter in the same request as a before parameter. 
+        You can’t send the after parameter in the same request as the before parameter. 
       schema: *ref_34
       examples: *ref_35
     limit:
