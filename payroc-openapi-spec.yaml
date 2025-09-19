@@ -16956,7 +16956,9 @@ paths:
       description: |
         Use this method to cancel a payment instruction.  
 
-        To cancel a payment instruction, you need its paymentInstructionId. Our gateway returned the paymentInstructionId in the response of the [Submit payment instruction](https://docs.payroc.com/api/schema/payroc-cloud/payment-instructions/submit) method.
+        You can cancel a payment instruction only if its status is `inProgress`. To retrieve the status of a payment instruction, use our [Retrieve Payment Instruction](https://docs.payroc.com/api/schema/payroc-cloud/payment-instructions/retrieve) method.  
+
+        To cancel a payment instruction, you need its paymentInstructionId. Our gateway returned the paymentInstructionId in the response of the [Submit Payment Instruction](https://docs.payroc.com/api/schema/payroc-cloud/payment-instructions/submit) method.
       parameters:
         - name: paymentInstructionId
           description: Unique identifier that we assigned to the payment instruction.
@@ -18195,7 +18197,9 @@ paths:
       description: |
         Use this method to cancel a refund instruction.  
 
-        To cancel a refund instruction, you need its refundInstructionId. Our gateway returned the refundInstructionId in the response of the [Submit Refund Instruction](https://docs.payroc.com/api/schema/payroc-cloud/refund-instructions/submit) method.   
+        You can cancel a refund instruction only if its status is `inProgress`. To retrieve the status of a refund instruction, use our [Retrieve Refund Instruction](https://docs.payroc.com/api/schema/payroc-cloud/refund-instructions/retrieve) method.  
+
+        To cancel a refund instruction, you need its refundInstructionId. Our gateway returned the refundInstructionId in the response of the [Submit Refund Instruction](https://docs.payroc.com/api/schema/payroc-cloud/refund-instructions/submit) method. 
       parameters:
         - name: refundInstructionId
           description: Unique identifier that we assigned to the refund instruction.
