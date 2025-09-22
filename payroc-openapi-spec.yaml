@@ -6999,7 +6999,16 @@ paths:
       tags:
         - Settlement
       summary: Retrieve authorization
-      description: Retrieve a specific authorization.
+      description: |
+        Use this method to retrieve information about an authorization.  
+
+        **Note:** To retrieve an authorization, you need its authorizationId. If you don't have the authorizationId, use our [List Authorizations](https://docs.payroc.com/api/schema/reporting/settlement/list-authorizations) method to search for the authorization.  
+
+        Our gateway returns the following information about the authorization:
+        - Authorization response from the issuing bank.
+        - Amount that the issuing bank authorized.
+        - Merchant that ran the authorization.
+        - Details about the customer's card, the transaction, and the batch.
       operationId: getAuthorization
       parameters:
         - name: authorizationId
