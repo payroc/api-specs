@@ -2425,9 +2425,10 @@ paths:
                                         pciNonCompliance:
                                           type: integer
                                           description: Fee that we apply each month if you aren't compliant with PCI standards. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 0
-                                          example: 7495
+                                          minimum: 3995
+                                          maximum: 10000
                                           default: 7495
+                                          example: 7495
                                         merchantAdvantage:
                                           type:
                                             - integer
@@ -2489,21 +2490,24 @@ paths:
                                         voiceAuthorization:
                                           type: integer
                                           description: Fee for each voice authorization. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 0
-                                          example: 95
+                                          minimum: 95
+                                          maximum: 200
                                           default: 95
+                                          example: 95
                                         chargeback:
                                           type: integer
                                           description: Fee for each chargeback. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 0
-                                          example: 2500
+                                          minimum: 750
+                                          maximum: 5000
                                           default: 2500
+                                          example: 2500
                                         retrieval:
                                           type: integer
                                           description: Fee for each retrieval. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 0
-                                          example: 1500
+                                          minimum: 275
+                                          maximum: 5000
                                           default: 1500
+                                          example: 1500
                                         batch:
                                           type: integer
                                           description: Fee for each batch. The value is in the currency's lowest denomination, for example, cents.
@@ -2512,9 +2516,10 @@ paths:
                                         earlyTermination:
                                           type: integer
                                           description: Fee for early termination. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 0
-                                          example: 57500
+                                          minimum: 19500
+                                          maximum: 59500
                                           default: 57500
+                                          example: 57500
                                       required: &ref_295
                                         - addressVerification
                                         - annualFee
