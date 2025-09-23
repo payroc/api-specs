@@ -19337,8 +19337,8 @@ paths:
                     type: ach
                     accountType: checking
                     nameOnAccount: Sarah Hazel Hopper
-                    accountNumber: '321831591'
-                    routingNumber: '063100277'
+                    accountNumber: '11101010'
+                    routingNumber: '053200983'
                     secCode: web
                   customFields:
                     - name: yourCustomField
@@ -19647,7 +19647,7 @@ paths:
                       accountType: checking
                       nameOnAccount: Sarah Hazel Hopper
                       accountNumber: '****3159'
-                      routingNumber: '063100277'
+                      routingNumber: '053200983'
                       secureToken:
                         secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                         customerName: Sarah Hazel Hopper
@@ -20403,8 +20403,8 @@ paths:
                     type: ach
                     accountType: checking
                     nameOnAccount: Sarah Hopper
-                    accountNumber: '321831591'
-                    routingNumber: '063100277'
+                    accountNumber: '11101010'
+                    routingNumber: '053200983'
                     secCode: tel
       responses:
         '200':
@@ -21266,8 +21266,8 @@ paths:
                     type: ach
                     accountType: checking
                     nameOnAccount: Sarah Hazel Hopper
-                    accountNumber: '321831591'
-                    routingNumber: '063100277'
+                    accountNumber: '11101010'
+                    routingNumber: '053200983'
                     secCode: web
         required: true
       responses:
