@@ -6120,7 +6120,7 @@ paths:
       tags:
         - Settlement
       summary: List transactions
-      description: Retrieve a list of transactions.
+      description: "Use this method to return a paginated list of your merchants’ transactions.  \n\n**Note:** If you want to view the details of a specific transaction and you have its transactionId, use our [Retrieve Transaction](https://docs.payroc.com/api/schema/reporting/settlement/retrieve-transaction) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for transactions for a specific merchant.  \n\n> **Important:** You must provide a value for either the date query parameter or the batchId query parameter.  \n\nOur gateway returns the following information about each transaction in the list:  \n\n-\tMerchant and processing account that ran the transaction.  \n-\tTransaction type, date, amount, and the payment method that the customer used.  \n-\tBatch that contains the transaction, and authorization details for the transaction.  \n-\tProcessor that settled the transaction and the ACH deposit containing the transaction.  \n"
       operationId: getTransactions
       parameters:
         - name: before
@@ -6147,7 +6147,10 @@ paths:
         - name: date
           in: query
           required: true
-          description: Return results for a specific date. The format of this value is **YYYY-MM-DD**. You must provide either the batchId or the date.
+          description: |
+            Filter transactions by the date that the merchant submitted the batch that contains the transaction. The format of this value is **YYYY-MM-DD**.  
+
+            You must provide either the batchId or the date. 
           schema: &ref_72
             type: string
             format: date
@@ -6157,7 +6160,10 @@ paths:
         - name: batchId
           in: query
           required: true
-          description: Unique identifier of the batch. You must provide either the batchId or the date.
+          description: |
+            Filter transactions by the unique identifier of the batch that contains the transaction.  
+
+            You must provide either the batchId or the date. 
           schema: &ref_74
             type: integer
           examples: &ref_75
@@ -6170,7 +6176,7 @@ paths:
           examples: *ref_64
         - name: transactionType
           in: query
-          description: Type of transaction.
+          description: Filter transactions by transaction type.
           schema: &ref_343
             type: string
             enum:
@@ -6204,11 +6210,15 @@ paths:
                               type:
                                 - integer
                                 - 'null'
-                              description: Unique identifier of the transaction. If we can't match a dispute to a transaction, we don't return 'transactionID' or a 'link' object.
+                              description: Unique identifier that we assigned to the transaction.
                               example: 442233
                             type:
                               type: string
-                              description: Indicates the type of transaction.
+                              description: |
+                                Indicates the type of transaction. The value is one of the following:  
+
+                                - `capture` - Transaction is a sale.  
+                                - `return` - Transaction is a refund. 
                               enum:
                                 - capture
                                 - return
@@ -6226,7 +6236,7 @@ paths:
                               type:
                                 - string
                                 - 'null'
-                              description: Describes how the merchant received the payment details. If we can't match a dispute to a transaction, we don't return an 'entryMethod' object.
+                              description: Indicates how the merchant received the payment details.
                               enum:
                                 - barcodeRead
                                 - smartChipRead
@@ -6254,7 +6264,7 @@ paths:
                               example: '2024-07-02'
                             status:
                               type: string
-                              description: Indicates the status of the transaction.
+                              description: "Indicates the status of the transaction. The value is one of the following:  \n\n-\t`fullSuspense` – Merchant ran the transaction while their account was in full suspense.  \n-\t`heldAudited` – We have moved a transaction from fullSuspense and placed it on hold.  \n-\t`heldReleasedAudited` – We audited and released the transaction that we had previously held.  \n-\t`holdForSettlement30Days` - We are holding the transaction for a maximum of 30 days.  \n-\t`holdForSettlementDuplicate` - We held the transaction because the transaction may be a duplicate.  \n-\t`holdLongTerm` - We are holding the transaction for an extended period.  \n-\t`paid` – We have paid the transaction funds to the merchant.  \n-\t`paidByThirdParty` - A third party has paid the transaction funds to the merchant.  \n-\t`partialRelease` – We partially released the transaction funds.  \n-\t`pull` - We pulled the transaction, and the merchant does not receive funds for the transaction.  \n-\t`release` - We released the transaction that we previously held.  \n-\t`new` – We have prepared the funds from the transaction to send to the merchant.  \n-\t`held` – We held the transaction.  \n-\t`unknown` – No transaction status available.  \n"
                               enum:
                                 - fullSuspense
                                 - heldAudited
@@ -6289,7 +6299,7 @@ paths:
                                   example: 50
                             currency:
                               type: string
-                              description: Currency of the transaction.
+                              description: Currency of the transaction. The value for the currency follows the [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html) standard.
                               example: USD
                             merchant:
                               type: object
@@ -6534,7 +6544,7 @@ paths:
       tags:
         - Settlement
       summary: Retrieve transaction
-      description: Retrieve a specific transaction.
+      description: "Use this method to retrieve information about a transaction.  \n\n**Note:** To retrieve a transaction, you need its transactionId. If you don't have the transactionId, use our [List Transactions](https://docs.payroc.com/api/schema/reporting/settlement/list-transactions) method to search for the transaction.  \n\nOur gateway returns the following information about the transaction:  \n\n-\tMerchant and processing account that ran the transaction.  \n-\tTransaction type, date, amount, and the payment method that the customer used.  \n-\tBatch that contains the transaction, and authorization details for the transaction.   \n-\tProcessor that settled the transaction and the ACH deposit containing the transaction.  \n"
       operationId: gettransaction
       parameters:
         - name: transactionId
@@ -6690,13 +6700,19 @@ paths:
         - name: date
           in: query
           required: true
-          description: Return results for a specific date. The format of this value is **YYYY-MM-DD**. You must provide either the batchId or the date.
+          description: |
+            Filter transactions by the date that the merchant submitted the batch that contains the transaction. The format of this value is **YYYY-MM-DD**.  
+
+            You must provide either the batchId or the date. 
           schema: *ref_72
           examples: *ref_73
         - name: batchId
           in: query
           required: true
-          description: Unique identifier of the batch. You must provide either the batchId or the date.
+          description: |
+            Filter transactions by the unique identifier of the batch that contains the transaction.  
+
+            You must provide either the batchId or the date. 
           schema: *ref_74
           examples: *ref_75
         - name: merchantId
@@ -27775,20 +27791,26 @@ components:
       name: date
       in: query
       required: true
-      description: Return results for a specific date. The format of this value is **YYYY-MM-DD**. You must provide either the batchId or the date.
+      description: |
+        Filter transactions by the date that the merchant submitted the batch that contains the transaction. The format of this value is **YYYY-MM-DD**.  
+
+        You must provide either the batchId or the date. 
       schema: *ref_72
       examples: *ref_73
     batchIdQuery:
       name: batchId
       in: query
       required: true
-      description: Unique identifier of the batch. You must provide either the batchId or the date.
+      description: |
+        Filter transactions by the unique identifier of the batch that contains the transaction.  
+
+        You must provide either the batchId or the date. 
       schema: *ref_74
       examples: *ref_75
     transactionType:
       name: transactionType
       in: query
-      description: Type of transaction.
+      description: Filter transactions by transaction type.
       schema: *ref_343
       examples: *ref_344
     transactionId:
