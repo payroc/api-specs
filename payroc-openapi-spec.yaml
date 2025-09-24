@@ -26541,7 +26541,8 @@ paths:
                           title: Event Subscription
                           properties: &ref_326
                             id:
-                              type: number
+                              type: integer
+                              format: int64
                               description: Unique identifier that we assigned to the event subscription.
                               readOnly: true
                               example: 2565435189324
