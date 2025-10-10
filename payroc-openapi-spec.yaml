@@ -1346,7 +1346,17 @@ paths:
       tags:
         - Funding recipients
       summary: Update funding recipient
-      description: Update a funding recipient. If you make significant changes, we may need to approve the funding recipient again.
+      description: |
+        Use this method to update the details of a funding recipient. If a request contains significant changes, we might need to re-approve the funding recipient.  
+
+        To update a funding recipient, you need it's recipientId. Our gateway returned the recipientId in the response of the [Create Funding Recipient](https://docs.payroc.com/api/schema/funding/funding-recipients/create) method.  
+
+        **Note**: If you don't have the recipientId, use our [List Funding Recipients](https://docs.payroc.com/api/schema/funding/funding-recipients/list) method to search for the funding recipient.  
+
+        You can update the following details of a funding recipient:  
+        - Doing Business As (DBA) name  
+        - Tax ID and charity ID  
+        - Address and contact methods  
       operationId: updateFundingRecipient
       parameters:
         - name: recipientId
@@ -1402,7 +1412,14 @@ paths:
       tags:
         - Funding recipients
       summary: Delete funding recipient
-      description: Delete a funding recipient. This includes funding accounts and owners linked to the funding recipient.
+      description: |
+        Use this method to delete a funding recipient, including its funding accounts and owners.  
+
+        To delete a funding recipient, you need its recipientId. Our gateway returned the recipientId in the response of the [Create Funding Recipient](https://docs.payroc.com/api/schema/funding/funding-recipients/create) method.   
+
+        **Note**: If you don't have the recipientId, use our [List Funding Recipients](https://docs.payroc.com/api/schema/funding/funding-recipients/list) method to search for the funding recipient.  
+
+        If you have a funding instruction for a deleted funding recipient, we still send the funds to the deleted funding recipient. To update the funding instruction, use our [Update Funding Instruction](https://docs.payroc.com/api/schema/funding/funding-instructions/update) method.  
       operationId: deleteFundingRecipient
       parameters:
         - name: recipientId
