@@ -1779,7 +1779,17 @@ paths:
       tags:
         - Funding accounts
       summary: List funding accounts
-      description: Retrieve a list of all funding accounts associated with the ISV.
+      description: |
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of funding accounts associated with your account.  
+
+        **Note:** If you want to view the details of a specific funding account and you have its fundingAccountId, use our [Retrieve Funding Account](https://docs.payroc.com/api/schema/funding/funding-accounts/retrieve) method.  
+
+        Our gateway returns the following information about each funding account in the list:  
+        - Name of the account holder and ACH details for the account.  
+        - Status of the account.  
+        - Whether we send funds to the account, withdraw funds from the account, or both.  
+
+        For each funding account, we also return the fundingAccountId, which you can use to perform follow-on actions.  
       operationId: listFundingAccount
       parameters:
         - name: before
@@ -1819,14 +1829,7 @@ paths:
                     properties:
                       data:
                         type: array
-                        description: |
-                          Array of funding account objects for the processing account. Each processing account must have:  
-
-                          - One funding account that accepts both credits to the account and debits from the account.  
-
-                          OR  
-
-                          - Two funding accounts - one for credits to the account, and another account for debits from the account.  
+                        description: Array of fundingAccount objects.
                         items:
                           required: *ref_20
                           type: object
@@ -1914,7 +1917,17 @@ paths:
       tags:
         - Funding accounts
       summary: Retrieve funding account
-      description: Retrieve a specific funding account.
+      description: |
+        Use this method to retrieve information about a funding account.  
+
+        To retrieve a funding account, you need its fundingAccountId. Our gateway returned the fundingAccountId in the response of the [Create Funding Account](https://docs.payroc.com/api/schema/funding/funding-recipients/create-account) method.  
+
+        **Note:** If you don't have the fundingAccountId, use our [List Funding Accounts](https://docs.payroc.com/api/schema/funding/funding-accounts/list) method to search for the account.  
+
+        Our gateway returns the following information about the funding account:  
+        - Name of the account holder and ACH details for the account.  
+        - Status of the account.  
+        - Whether we send funds to the account, withdraw funds from the account, or both.  
       operationId: getFundingAccount
       parameters:
         - name: fundingAccountId
