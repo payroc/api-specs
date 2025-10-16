@@ -1691,7 +1691,20 @@ paths:
       tags:
         - Funding recipients
       summary: Create funding recipient owner
-      description: Create a new owner, and add it to the funding recipient.
+      description: |
+        Use this method to add an additional owner to a funding recipient.  
+
+        To add an owner to a funding recipient, you need the recipientId. Our gateway returned the recipientId in the response of the [Create Funding Recipient](https://docs.payroc.com/api/schema/funding/funding-recipients/create) method.  
+
+        **Note:** If you don't have the recipientId, use our [List Funding Recipients](https://docs.payroc.com/api/schema/funding/funding-recipients/list) method to search for the funding recipient.  
+
+        In the request, include the following information about the owner:  
+
+        - Name, date of birth, and address.  
+        - Contact details, including their email address.  
+        - Relationship to the funding recipient, including whether they are a control prong.  
+
+        In the response, our gateway returns the ownerId, which you can use to run follow-on actions.  
       operationId: createFundRecipientOwner
       parameters:
         - name: recipientId
@@ -17138,9 +17151,9 @@ paths:
                       type: string
                       description: |
                         Indicates how you want the device to capture the card details.  
-                        - `deviceRead` - The cardholder taps, swipes, or inserts their card.
-                        - `manualEntry` - The merchant or cardholder manually enters the card details.
-                        - `deviceReadOrManualEntry` - The merchant or cardholder can either manually enter the card details or the cardholder can tap, swipe, or insert their card.
+                        - `deviceRead` - Device prompts the cardholder to tap, swipe, or insert their card.  
+                        - `manualEntry` - Device prompts the merchant or cardholder to manually enter card details.  
+                        - `deviceReadOrManualEntry` - Device prompts the cardholder to tap, swipe, or insert their card. The device also displays an option for the merchant or cardholder to manually enter card details.  
                       enum:
                         - deviceRead
                         - manualEntry
