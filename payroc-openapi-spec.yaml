@@ -90,10 +90,10 @@ tags:
     description: Save customers' payment details.
   - name: Settlement
     description: Settlement information
-  - name: Signatures
-    description: Retrieve signatures.
   - name: Signature instructions
     description: Submit instructions for capturing signatures on physical devices running semi-integrated apps.
+  - name: Signatures
+    description: Retrieve signatures.
   - name: Single use tokens
     description: Create temporary single-use tokens.
   - name: Subscriptions
