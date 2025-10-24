@@ -589,7 +589,7 @@ paths:
                 properties: &ref_8
                   recipientId:
                     type: integer
-                    description: Unique identifier of the funding recipient.
+                    description: Unique identifier that we assigned to the funding recipient.
                     readOnly: true
                     example: 234
                   status:
@@ -636,7 +636,7 @@ paths:
                     description: Government identifier of the charity.
                   doingBusinessAs:
                     type: string
-                    description: Legal name that the business operates under.
+                    description: Legal name of the business or organization.
                   address:
                     type: object
                     description: Address of the funding recipient.
@@ -677,17 +677,20 @@ paths:
                           example: 4564
                         link:
                           type: object
-                          description: Array of HATEOAS links for viewing the owner.
+                          description: Object that contains HATEOAS links for the resource.
                           properties:
                             rel:
                               type: string
                               example: owner
+                              description: Indicates the relationship between the current resource and the target resource.
                             href:
                               type: string
                               example: https://api.payroc.com/v1/owners/4564
+                              description: URL of the target resource.
                             method:
                               type: string
                               example: get
+                              description: HTTP method that you need to use with the target resource.
                   fundingAccounts:
                     readOnly: true
                     description: Array of fundingAccount objects associated with the funding recipient.
@@ -711,17 +714,20 @@ paths:
                           example: pending
                         link:
                           type: object
-                          description: HATEOAS links for viewing the funding account.
+                          description: Object that contains HATEOAS links for the resource.
                           properties:
                             rel:
                               type: string
                               example: fundingAccount
+                              description: Indicates the relationship between the current resource and the target resource.
                             href:
                               type: string
                               example: https://api.payroc.com/v1/funding-accounts/123
+                              description: URL of the target resource.
                             method:
                               type: string
                               example: get
+                              description: HTTP method that you need to use with the target resource.
                     example:
                       - fundingAccountId: 123
                         status: approved
@@ -1055,7 +1061,17 @@ paths:
       tags:
         - Funding recipients
       summary: List funding recipients
-      description: Retrieve a list of all funding recipients associated with the ISV.
+      description: |
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of funding recipients linked to your account.  
+
+        Note: If you want to view the details of a specific funding recipient and you have its recipientId, use our [Retrieve Funding Recipient](https://docs.payroc.com/api/schema/funding/funding-recipients/retrieve) method.  
+
+        Our gateway returns the following information about each funding recipient in the list:  
+        - Tax ID and Doing Business As (DBA) name.  
+        - Address and contact details.  
+        - Funding accounts linked to the funding recipient.  
+
+        For each funding recipient, we also return the recipientId, which you can use to perform follow-on actions.
       operationId: listFundingRecipients
       parameters:
         - name: before
@@ -1229,8 +1245,19 @@ paths:
     get:
       tags:
         - Funding recipients
-      summary: Retrieve a funding recipient
-      description: Retrieve a specific funding recipient.
+      summary: Retrieve funding recipient
+      description: |
+        Use this method to retrieve information about a funding recipient.  
+
+        To retrieve a funding recipient, you need its recipientId. Our gateway returned the recipientId in the response of the [Create Funding Recipient](https://docs.payroc.com/api/schema/funding/funding-recipients/create) method.  
+
+        **Note:** If you don't have the recipientId, use our [List Funding Recipients](https://docs.payroc.com/api/schema/funding/funding-recipients/list) method to search for the funding recipient.  
+
+        Our gateway returns the following information about the funding recipient:  
+
+        - Tax ID and Doing Business As (DBA) name.  
+        - Address and contact details.  
+        - Funding accounts linked to the funding recipient.  
       operationId: getFundingRecipient
       parameters:
         - name: recipientId
