@@ -107,7 +107,7 @@ paths:
       tags:
         - Funding recipients
       summary: Create funding recipient
-      description: Create a funding recipient.
+      description: "Use this method to create a funding recipient. \n\nA funding recipient is a business or organization that can receive funds but can't run transactions, for example, a charity.  \n\nIn the request, include the following information:  \n-\tLegal information, including its tax ID, Doing Business As (DBA) name, and address.  \n-\tContact information, including the email address.  \n-\tOwners' details, including their contact details. \n-\tFunding account details.  \n\nOur gateway returns the recipientId of the funding recipient, which you can use to run follow-on actions. \n"
       operationId: createFundingRecipient
       parameters:
         - name: Idempotency-Key
@@ -180,7 +180,7 @@ paths:
                   description: Government identifier of the charity.
                 doingBusinessAs:
                   type: string
-                  description: Legal name that the business operates under.
+                  description: Trading name of the business or organization.
                 address:
                   type: object
                   description: Address of the funding recipient.
@@ -320,7 +320,7 @@ paths:
                     yourCustomField: abc123
                 owners:
                   minItems: 1
-                  description: Array of owner objects that you can use to add owners to the funding recipient.
+                  description: Array of owner objects. Each object contains information about an individual who owns or manages the funding recipient.
                   type: array
                   items:
                     type: object
@@ -441,7 +441,7 @@ paths:
                     properties: &ref_21
                       fundingAccountId:
                         type: integer
-                        description: Unique identifier of the funding account.
+                        description: Unique identifier that we assigned to the funding account.
                         readOnly: true
                         example: 123
                       createdDate:
@@ -485,7 +485,9 @@ paths:
                           Indicates if we send funds or withdraw funds from the account.  
                           - `credit` - Send funds to the account.  
                           - `debit` - Withdraw funds from the account.  
-                          - `creditAndDebit` - Send funds and withdraw funds from the account.
+                          - `creditAndDebit` - Send funds and withdraw funds from the account.  
+
+                          **Note:** If the funding account is associated with a funding recipient, we accept only a value of `credit`.   
                         enum:
                           - credit
                           - debit
@@ -1481,8 +1483,8 @@ paths:
     get:
       tags:
         - Funding recipients
-      summary: List funding accounts
-      description: Retrieve all funding accounts associated with the funding recipient.
+      summary: List funding recipient's funding accounts
+      description: "Use  this method to return a list of funding accounts associated with a funding recipient.  \n\n**Note:** If you want to view the details of a specific funding account and you have its fundingAccountId, use our [Retrieve Funding Account](https://docs.payroc.com/api/schema/funding/funding-accounts/retrieve) method.  \n\nTo retrieve the funding accounts associated with a funding recipient, you need the recipientId. If you don't have the recipientId, use our [List Funding Recipients](https://docs.payroc.com/api/schema/funding/funding-recipients/list) method to search for the funding recipient.  \n        \nOur gateway returns the following information about each funding account:  \n-\tName of the account holder.  \n-\tACH details for the account.  \n-\tStatus of the account.  \n\nOur gateway also returns the fundingAccountId, which you can use to run follow-on actions.\n"
       operationId: listFundRecipientFundingAccounts
       parameters:
         - name: recipientId
@@ -1563,7 +1565,7 @@ paths:
       tags:
         - Funding recipients
       summary: Create funding account
-      description: Create a new funding account, and add it to the funding recipient.
+      description: "Use this method to create a funding account and add it to a funding recipient.  \n\nTo add a funding account to a funding recipient, you need the recipientId. Our gateway returned the recipientId in the response of the [Create Funding Recipient](https://docs.payroc.com/api/schema/funding/funding-recipients/create) method.  \n\n**Note:** If you don't have the recipientId, use our [List Funding Recipients](https://docs.payroc.com/api/schema/funding/funding-recipients/list) method to search for the funding recipient.  \n\nIn the request, include the following information:  \n-\tAccount type, for example, if the account is a checking or savings account.  \n-\tAccount holder's name.  \n-\tACH information, including the routing number and account number of the account.  \n\nOur gateway returns the fundingAccountId, which you can use to run follow-on actions.\n"
       operationId: createFundRecipientFundingAccount
       parameters:
         - name: recipientId
@@ -3362,7 +3364,7 @@ paths:
                                                           type: string
                                                           enum:
                                                             - noTips
-                                                            - prompt
+                                                            - tipPrompt
                                                             - tipAdjust
                                                         cardChargePercentage:
                                                           description: Percentage of the total transaction amount that the processor charges the cardholder.
@@ -24985,7 +24987,7 @@ paths:
                                         type: string
                                         enum:
                                           - noTips
-                                          - prompt
+                                          - tipPrompt
                                           - tipAdjust
                                       specialityCards:
                                         type: object
