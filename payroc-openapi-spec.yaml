@@ -3362,7 +3362,7 @@ paths:
                                                           type: string
                                                           enum:
                                                             - noTips
-                                                            - prompt
+                                                            - tipPrompt
                                                             - tipAdjust
                                                         cardChargePercentage:
                                                           description: Percentage of the total transaction amount that the processor charges the cardholder.
@@ -24985,7 +24985,7 @@ paths:
                                         type: string
                                         enum:
                                           - noTips
-                                          - prompt
+                                          - tipPrompt
                                           - tipAdjust
                                       specialityCards:
                                         type: object
