@@ -2036,7 +2036,7 @@ paths:
       tags:
         - Funding accounts
       summary: Update funding account
-      description: Update a funding account.
+      description: "> **Important:** You can't update the details of a funding account that is associated with a processing account.  \n\nUse this method to update the details of a funding account that is associated with a funding recipient.  \n\nTo update a funding account, you need its fundingAccountId. Our gateway returned the fundingAccountId when you created the funding account.  \n\n**Note:** If you don’t have the fundingAccountId, use our [List Funding Accounts](https://docs.payroc.com/api/schema/funding/funding-accounts/list) method to search for the funding account.  \n\nYou can update the following details about the funding account: \n-\tAccount type. \n-\tAccount holder's name. \n-\tACH information for the account. \n"
       operationId: updateFundingAccount
       parameters:
         - name: fundingAccountId
@@ -4761,7 +4761,7 @@ paths:
       tags:
         - Funding instructions
       summary: Create funding instruction
-      description: Create funding instructions to tell us how to divide funds between your funding recipients.
+      description: "Use this method to create a funding instruction that tells us how to distribute the funds from your merchants' transactions.  \n\n**Note:** Before you create a funding instruction, you can use our [Retrieve Funding Balance](https://docs.payroc.com/api/schema/funding/funding-activity/retrieve-balance) method to view the amount of available funds that a merchant has.  \n\nIn your request, include an array of merchantInstruction objects. Each merchantInstruction object contains the following:  \n-\tMerchant ID (MID) of the merchant whose funding balance you want to distribute.  \n-\tFunding account that you want to send funds to.  \n-\tAmount that you want to send to the funding account.  \n\nOur gateway returns the instructionId, which you can use to run follow-on actions.\n"
       operationId: createInstruction
       parameters:
         - name: Idempotency-Key
@@ -4780,7 +4780,7 @@ paths:
               properties: &ref_58
                 instructionId:
                   type: integer
-                  description: Unique identifier of the funding instruction.
+                  description: Unique identifier that we assigned to the funding instruction.
                   example: 64643131
                   readOnly: true
                 createdDate:
@@ -4814,11 +4814,11 @@ paths:
                     properties:
                       merchantId:
                         type: string
-                        description: Unique identifier of the merchant.
+                        description: Unique identifier that the processor assigned to the merchant.
                         example: '4525644354'
                       recipients:
                         type: array
-                        description: Array of target fundingAccount objects.
+                        description: Array of fundingAccount objects.
                         minItems: 1
                         items:
                           type: object
@@ -4835,22 +4835,22 @@ paths:
                               example: 123
                             paymentMethod:
                               type: string
-                              description: Method of payment.
+                              description: Payment method that we use to send funds to the funding account.
                               enum:
                                 - ACH
                               example: ACH
                             amount:
                               type: object
-                              description: Object that contains details about the funds.
+                              description: Object that contains information about the funds that we send to the funding account.
                               required:
                                 - value
                               properties:
                                 value:
                                   type: number
-                                  description: Value of funds in the currency's lowest denomination, for example, cents.
+                                  description: Amount of funds in the currency's lowest denomination, for example, cents.
                                   example: 120000
                                 currency:
-                                  description: Currency of the values. The default value is USD.
+                                  description: Currency of the value parameter.
                                   type: string
                                   default: USD
                                   enum:
@@ -4878,30 +4878,36 @@ paths:
                                 yourCustomField: abc123
                             link:
                               readOnly: true
-                              description: Array of HATEOAS links for viewing a funding account.
+                              description: Object that contains HATEOAS links for the resource.
                               type: object
                               properties:
                                 rel:
+                                  description: Indicates the relationship between the current resource and the target resource.
                                   type: string
                                   example: fundingAccount
                                 method:
+                                  description: HTTP method that you need to use with the target resource.
                                   type: string
                                   example: get
                                 href:
+                                  description: URL of the target resource.
                                   type: string
                                   example: https://api.payroc.com/v1/funding-accounts/123
                       link:
                         readOnly: true
-                        description: Array of HATEOAS links to view the merchant.
+                        description: Object that contains HATEOAS links for the resource.
                         type: object
                         properties:
                           rel:
+                            description: Indicates the relationship between the current resource and the target resource.
                             type: string
                             example: merchant
                           method:
+                            description: HTTP method that you need to use with the target resource.
                             type: string
                             example: get
                           href:
+                            description: URL of the target resource.
                             type: string
                             example: https://api.payroc.com/v1/processing-accounts/4525644354
                     required:
