@@ -1966,7 +1966,7 @@ paths:
       description: |
         Use this method to retrieve information about a funding account.  
 
-        To retrieve a funding account, you need its fundingAccountId. Our gateway returned the fundingAccountId in the response of the [Create Funding Account](https://docs.payroc.com/api/schema/funding/funding-recipients/create-account) method.  
+        To retrieve a funding account, you need its fundingAccountId. Our gateway returned the fundingAccountId when you created the funding account.  
 
         **Note:** If you don't have the fundingAccountId, use our [List Funding Accounts](https://docs.payroc.com/api/schema/funding/funding-accounts/list) method to search for the account.  
 
@@ -5437,9 +5437,17 @@ paths:
     get:
       tags:
         - Funding activity
-      summary: Retrieve funding balance
+      summary: List funding balances
       operationId: getFundingBalance
-      description: Retrieve the balance of funds that are available for each merchant.
+      description: |
+        Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of funding balances available for each merchant linked to your account.  
+
+        Use query parameters to filter the list of results we return, for example, to search for the funding balance for a specific merchant.  
+
+        Our gateway returns the following information about each merchant in the list:  
+        - Total funds for the merchant.  
+        - Available funds that you can use for funding instructions.  
+        - Pending funds that we have not yet sent to funding accounts.  
       parameters:
         - name: before
           in: query
@@ -5472,7 +5480,7 @@ paths:
               value: '4525644354'
       responses:
         '200':
-          description: Successful request. Returns the balance available for each merchant.
+          description: Successful request. Returns the funding balance available for each merchant.
           content:
             application/json:
               schema:
@@ -5493,23 +5501,23 @@ paths:
                           properties: &ref_603
                             merchantId:
                               type: string
-                              description: Unique Identifier of the merchant.
+                              description: Unique identifier that the processor assigned to the merchant.
                               example: '4525644354'
                             funds:
                               type: integer
-                              description: Value of funds in the currency's lowest denomination, for example, cents.
+                              description: Total funding balance for the merchant, including pending amounts. The value is in the currency's lowest denomination, for example, cents.
                               example: 120000
                             pending:
                               type: number
-                              description: Value of funds that we have not yet sent to funding recipients. We return this value in the currency's lowest denomination, for example, cents.
+                              description: Amount of the funding balance that we have not yet sent to funding accounts. The value is in the currency's lowest denomination, for example, cents.
                               example: 50050
                             available:
                               type: number
-                              description: Value of funds available for funding instructions. We return this value in the currency's lowest denomination, for example, cents.
+                              description: Amount of the funding balance that you can use in funding instructions. The value is in the currency's lowest denomination, for example, cents.
                               example: 69950
                             currency:
                               type: string
-                              description: Currency of the values. The default value is USD.
+                              description: Currency of the funding balance. We return a value of `USD`.
                               example: USD
                     required:
                       - data
