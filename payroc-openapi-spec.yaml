@@ -2090,7 +2090,14 @@ paths:
       tags:
         - Funding accounts
       summary: Delete funding account
-      description: Delete a funding account.
+      description: |
+        > **Important:** You can't delete a funding account that is associated with a processing account.  
+
+        Use this method to delete a funding account that is associated with a funding recipient.  
+
+        To delete a funding account, you need its fundingAccountId. Our gateway returned the fundingAccountId when you created the funding account.  
+
+        **Note:** If you don't have the fundingAccountId, use our [List Funding Accounts](https://docs.payroc.com/api/schema/funding/funding-accounts/list) method to search for the funding account.  
       operationId: deleteFundingAccount
       parameters:
         - name: fundingAccountId
