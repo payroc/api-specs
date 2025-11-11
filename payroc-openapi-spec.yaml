@@ -10577,12 +10577,6 @@ paths:
       description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of subscriptions.  \n\nNote: If you want to view the details of a specific subscription and you have its subscriptionId, use our [Retrieve subscription](https://docs.payroc.com/api/schema/payments/subscriptions/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for subscriptions for a customer, a payment plan, or frequency.  \n\nOur gateway returns information about the following for each subscription in the list:  \n\n-\tPayment plan the subscription is linked to.  \n-\tSecure token that represents cardholder’s payment details.  \n-\tCurrent state of the subscription, including its status, next due date, and invoices.  \n-\tFees for setup and the cost of the recurring order.  \n-\tSubscription length, end date, and frequency.  \n\nFor each subscription, we also return the subscriptionId, the paymentPlanId, and the secureTokenId, which you can use to perform follow-actions. \n"
       operationId: listSubscriptions
       parameters:
-        - name: Idempotency-Key
-          in: header
-          required: true
-          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
-          schema: *ref_22
-          examples: *ref_23
         - name: processingTerminalId
           in: path
           required: true
