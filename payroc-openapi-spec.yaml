@@ -4766,7 +4766,7 @@ paths:
       tags:
         - Funding instructions
       summary: Create funding instruction
-      description: "Use this method to create a funding instruction that tells us how to distribute the funds from your merchants' transactions.  \n\n**Note:** Before you create a funding instruction, you can use our [Retrieve Funding Balance](https://docs.payroc.com/api/schema/funding/funding-activity/retrieve-balance) method to view the amount of available funds that a merchant has.  \n\nIn your request, include an array of merchantInstruction objects. Each merchantInstruction object contains the following:  \n-\tMerchant ID (MID) of the merchant whose funding balance you want to distribute.  \n-\tFunding account that you want to send funds to.  \n-\tAmount that you want to send to the funding account.  \n\nOur gateway returns the instructionId, which you can use to run follow-on actions.\n"
+      description: "Use this method to create a funding instruction that tells us how to distribute the funds from your merchants' transactions.  \n\n**Note:** Before you create a funding instruction, you can use our [List Funding Balances](https://docs.payroc.com/api/schema/funding/funding-activity/retrieve-balance) method to view the amount of available funds that a merchant has.  \n\nIn your request, include an array of merchantInstruction objects. Each merchantInstruction object contains the following:  \n-\tMerchant ID (MID) of the merchant whose funding balance you want to distribute.  \n-\tFunding account that you want to send funds to.  \n-\tAmount that you want to send to the funding account.  \n\nOur gateway returns the instructionId, which you can use to run follow-on actions.\n"
       operationId: createInstruction
       parameters:
         - name: Idempotency-Key
@@ -4802,7 +4802,11 @@ paths:
                   readOnly: true
                 status:
                   type: string
-                  description: Status of the funding instruction.
+                  description: |
+                    Status of the funding instruction. Our gateway returns one of the following values:  
+                    - `accepted` - We have received the funding instruction but have not yet reviewed it.  
+                    - `pending` - We have received the funding instruction and we are reviewing it.  
+                    - `completed` - We have reviewed and processed the funding instruction.  
                   enum:
                     - accepted
                     - pending
@@ -4811,7 +4815,7 @@ paths:
                   example: accepted
                 merchants:
                   type: array
-                  description: Array of merchantInstruction objects.
+                  description: Array of merchants objects. Each object specifies the merchant whose funding balance we distribute and who you want to send the funds to.
                   items:
                     type: object
                     title: merchant instruction
@@ -4823,7 +4827,7 @@ paths:
                         example: '4525644354'
                       recipients:
                         type: array
-                        description: Array of fundingAccount objects.
+                        description: Array of recipients objects. Each object contains information about the funding account and the amount of funds we send to the funding account.
                         minItems: 1
                         items:
                           type: object
@@ -4864,7 +4868,7 @@ paths:
                             status:
                               readOnly: true
                               type: string
-                              description: Status of the funding instruction.
+                              description: "Status of the individual payment instruction. Our gateway returns one of the following values:    \n-\t`accepted` - We received the payment instruction, but we haven't reviewed it.  \n-\t`pending` - We are reviewing the payment instruction.  \n-\t`released` - We approved the payment instruction.  \n-\t`funded` - We sent the funds to the funding account by ACH.  \n-\t`failed` - The ACH payment to the funding account failed.  \n-\t`rejected` - We reviewed the payment instruction and rejected it.  \n- `onHold` - We have placed the payment instruction on hold.  \n"
                               enum:
                                 - accepted
                                 - pending
@@ -6246,7 +6250,6 @@ paths:
           examples: *ref_37
         - name: date
           in: query
-          required: true
           description: |
             Filter transactions by the date that the merchant submitted the batch that contains the transaction. The format of this value is **YYYY-MM-DD**.  
 
@@ -6259,7 +6262,6 @@ paths:
               value: '2024-07-02'
         - name: batchId
           in: query
-          required: true
           description: |
             Filter transactions by the unique identifier of the batch that contains the transaction.  
 
@@ -6799,7 +6801,6 @@ paths:
           examples: *ref_37
         - name: date
           in: query
-          required: true
           description: |
             Filter transactions by the date that the merchant submitted the batch that contains the transaction. The format of this value is **YYYY-MM-DD**.  
 
@@ -6808,7 +6809,6 @@ paths:
           examples: *ref_73
         - name: batchId
           in: query
-          required: true
           description: |
             Filter transactions by the unique identifier of the batch that contains the transaction.  
 
@@ -10577,12 +10577,6 @@ paths:
       description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of subscriptions.  \n\nNote: If you want to view the details of a specific subscription and you have its subscriptionId, use our [Retrieve subscription](https://docs.payroc.com/api/schema/payments/subscriptions/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for subscriptions for a customer, a payment plan, or frequency.  \n\nOur gateway returns information about the following for each subscription in the list:  \n\n-\tPayment plan the subscription is linked to.  \n-\tSecure token that represents cardholder’s payment details.  \n-\tCurrent state of the subscription, including its status, next due date, and invoices.  \n-\tFees for setup and the cost of the recurring order.  \n-\tSubscription length, end date, and frequency.  \n\nFor each subscription, we also return the subscriptionId, the paymentPlanId, and the secureTokenId, which you can use to perform follow-actions. \n"
       operationId: listSubscriptions
       parameters:
-        - name: Idempotency-Key
-          in: header
-          required: true
-          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
-          schema: *ref_22
-          examples: *ref_23
         - name: processingTerminalId
           in: path
           required: true
@@ -27278,7 +27272,7 @@ paths:
                                         type: string
                                         description: |
                                           String that we send with a notification so that you can ensure it is a valid notification from our gateway. We include the value in the Payroc-Secret header parameter in the webhook call.  
-                                          **Note:** In the response, we truncate the secret to the last 12 characters and mask the first 6 characters.  
+                                          **Note:** In the response, we truncate the secret to the last 16 characters and mask the first 10 characters.  
                                         minLength: 16
                                         maxLength: 64
                                         example: aBcD1234eFgH5678iJkL9012mNoP3456
@@ -27324,7 +27318,7 @@ paths:
                         notifications:
                           - type: webhook
                             uri: https://my-service/notification/endpoint
-                            secret: '**********NoP3456'
+                            secret: '**********oP3456'
                             supportEmailAddress: jane.doe@example.com
                         metadata:
                           yourCustomField: abc123
@@ -27336,7 +27330,7 @@ paths:
                         notifications:
                           - type: webhook
                             uri: https://my-service/notification/endpoint
-                            secret: '**********NoP3456'
+                            secret: '**********oP3456'
                             supportEmailAddress: jane.doe@example.com
                         metadata:
                           yourCustomField: abc123
@@ -27421,7 +27415,7 @@ paths:
                     notifications:
                       - type: webhook
                         uri: https://my-service/notification/endpoint
-                        secret: '**********NoP3456'
+                        secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
                       yourCustomField: abc123
@@ -27515,7 +27509,7 @@ paths:
                     notifications:
                       - type: webhook
                         uri: https://my-service/notification/endpoint
-                        secret: '**********NoP3456'
+                        secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
                       yourCustomField: abc123
@@ -27654,7 +27648,7 @@ paths:
                     notifications:
                       - type: webhook
                         uri: https://my-service/notification/endpoint
-                        secret: '**********NoP3456'
+                        secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
                       yourCustomField: abc123
@@ -28173,7 +28167,10 @@ paths:
       tags:
         - Settlement
       summary: List ACH deposit fees
-      description: Retrieve a list of ACH deposit fees.
+      description: |
+        Retrieve a list of ACH deposit fees.
+
+        > **Important:** You must provide a value for either the 'date' query parameter or the 'achDepositId' query parameter.
       operationId: getAchDepositFees
       parameters:
         - name: before
@@ -28199,7 +28196,6 @@ paths:
           examples: *ref_37
         - name: date
           in: query
-          required: true
           description: Date to retrieve results from. You must provide either the 'achDepositId' or the 'date'.
           schema:
             type: string
@@ -28208,7 +28204,6 @@ paths:
         - name: achDepositId
           description: Unique identifier of the ACH deposit. You must provide either the 'achDepositId' or the 'date'.
           in: query
-          required: true
           schema: &ref_520
             type: integer
           examples: &ref_521
@@ -28477,7 +28472,6 @@ components:
     keyDate:
       name: date
       in: query
-      required: true
       description: |
         Filter transactions by the date that the merchant submitted the batch that contains the transaction. The format of this value is **YYYY-MM-DD**.  
 
@@ -28487,7 +28481,6 @@ components:
     batchIdQuery:
       name: batchId
       in: query
-      required: true
       description: |
         Filter transactions by the unique identifier of the batch that contains the transaction.  
 
@@ -29125,7 +29118,6 @@ components:
       name: achDepositId
       description: Unique identifier of the ACH deposit. You must provide either the 'achDepositId' or the 'date'.
       in: query
-      required: true
       schema: *ref_520
       examples: *ref_521
   schemas:
