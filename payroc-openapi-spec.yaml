@@ -11939,14 +11939,14 @@ paths:
                                   type: string
                                   description: Cardholder's signature. For more information about how to format the signature, go to [How to send a signature to our gateway](https://docs.payroc.com/knowledge/basic-concepts/signature-capture).
                                   example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
-                            - required: &ref_654
+                            - required: &ref_656
                                 - entryMethod
                                 - device
                                 - iccData
                               type: object
                               title: Chip
                               description: Object that contains information about the Integrated Circuit Card (ICC).
-                              properties: &ref_655
+                              properties: &ref_657
                                 entryMethod:
                                   type: string
                                   description: Method that the terminal used to capture the card details.
@@ -11998,6 +11998,58 @@ paths:
                                   type: string
                                   description: Cardholder's signature. For more information about how to format the signature, go to [How to send a signature to our gateway](https://docs.payroc.com/knowledge/basic-concepts/signature-capture).
                                   example: 012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k1a1b1c0000
+                                ebtDetails:
+                                  type: object
+                                  required: &ref_145
+                                    - benefitCategory
+                                  description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
+                                  allOf: &ref_146
+                                    - type: object
+                                      required: &ref_220
+                                        - benefitCategory
+                                      description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
+                                      properties: &ref_221
+                                        benefitCategory:
+                                          type: string
+                                          description: |
+                                            Indicates if the balance relates to an EBT Cash account or an EBT SNAP account.  
+                                             - `cash` – EBT Cash  
+                                             - `foodStamp` – EBT SNAP
+                                          enum:
+                                            - cash
+                                            - foodStamp
+                                          example: cash
+                                        withdrawal:
+                                          type: boolean
+                                          description: |
+                                            Indicates whether the customer wants to withdraw cash.  
+
+                                            **Note:** Cash withdrawals are available only from EBT Cash accounts.
+                                          example: false
+                                    - type: object
+                                      properties:
+                                        voucher:
+                                          required: &ref_654
+                                            - approvalCode
+                                            - serialNumber
+                                          type: object
+                                          description: |
+                                            Object that contains information about the EBT voucher.  
+
+                                            **Note:** Vouchers are available only for EBT SNAP payments.
+                                          properties: &ref_655
+                                            approvalCode:
+                                              maxLength: 6
+                                              minLength: 6
+                                              type: string
+                                              description: Authorization code that the processor issued for the transaction.
+                                              example: '123456'
+                                            serialNumber:
+                                              maxLength: 15
+                                              minLength: 7
+                                              type: string
+                                              description: Serial number of the voucher.
+                                              example: SN123456789
                             - required: &ref_664
                                 - entryMethod
                                 - keyedData
@@ -12020,14 +12072,14 @@ paths:
                                       partiallyEncrypted: '#/components/schemas/partiallyEncryptedKeyedDataFormat'
                                       plainText: '#/components/schemas/plainTextKeyedDataFormat'
                                   oneOf:
-                                    - required: &ref_656
+                                    - required: &ref_658
                                         - dataFormat
                                         - device
                                         - encryptedData
                                       type: object
                                       title: Encrypted
                                       description: Object that contains information about the encrypted card data for keyed transactions.
-                                      properties: &ref_657
+                                      properties: &ref_659
                                         dataFormat:
                                           type: string
                                           description: "Indicates the data format of the customer’s card data.\n-\t`plainText` – Data is not truncated and shows the raw data.\n-\t`fullyEncrypted` – Data is truncated to show only the first digit of the customer’s account number.\n-\t`partiallyEncrypted` – Data is truncated to show only the first six digits and the last four digits of the customer’s card number.\n"
@@ -12052,7 +12104,7 @@ paths:
                                           type: string
                                           description: First digit of the customer’s card number.
                                           example: '4'
-                                    - required: &ref_658
+                                    - required: &ref_660
                                         - dataFormat
                                         - device
                                         - encryptedPan
@@ -12061,7 +12113,7 @@ paths:
                                       type: object
                                       title: Partially encrypted
                                       description: Object that contains information about the partially-encrypted card data for keyed transactions.
-                                      properties: &ref_659
+                                      properties: &ref_661
                                         dataFormat:
                                           type: string
                                           description: "Indicates the data format of the customer’s card data.\n-\t`plainText` – Data is not truncated and shows the raw data.\n-\t`fullyEncrypted` – Data is truncated to show only the first digit of the customer’s account number.\n-\t`partiallyEncrypted` – Data is truncated to show only the first six digits and the last four digits of the customer’s card number.\n"
@@ -12107,13 +12159,13 @@ paths:
                                           type: string
                                           description: Issue number of the customer’s card.
                                           example: '78'
-                                    - required: &ref_660
+                                    - required: &ref_662
                                         - dataFormat
                                         - cardNumber
                                       type: object
                                       title: Unencrypted
                                       description: Object that contains information about the plain-text card data for keyed transactions.
-                                      properties: &ref_661
+                                      properties: &ref_663
                                         dataFormat:
                                           type: string
                                           description: "Indicates the data format of the customer’s card data.\n-\t`plainText` – Data is not truncated and shows the raw data.\n-\t`fullyEncrypted` – Data is truncated to show only the first digit of the customer’s account number.\n-\t`partiallyEncrypted` – Data is truncated to show only the first six digits and the last four digits of the customer’s card number.\n"
@@ -12165,14 +12217,14 @@ paths:
                                     mapping:
                                       dukpt: '#/components/schemas/dukptPinDetails'
                                   oneOf:
-                                    - required: &ref_145
+                                    - required: &ref_147
                                         - dataFormat
                                         - pin
                                         - pinKsn
                                       type: object
                                       title: Encrypted
                                       description: Object that contains information about encrypted PIN details.
-                                      properties: &ref_146
+                                      properties: &ref_148
                                         dataFormat:
                                           type: string
                                           description: Indicates the format of the PIN data.
@@ -12197,56 +12249,9 @@ paths:
                                           example: 1234567890ABCDEF1234
                                 ebtDetails:
                                   type: object
-                                  required: &ref_147
-                                    - benefitCategory
+                                  required: *ref_145
                                   description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
-                                  allOf: &ref_148
-                                    - type: object
-                                      required: &ref_220
-                                        - benefitCategory
-                                      description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
-                                      properties: &ref_221
-                                        benefitCategory:
-                                          type: string
-                                          description: |
-                                            Indicates if the balance relates to an EBT Cash account or an EBT SNAP account.  
-                                             - `cash` – EBT Cash  
-                                             - `foodStamp` – EBT SNAP
-                                          enum:
-                                            - cash
-                                            - foodStamp
-                                          example: cash
-                                        withdrawal:
-                                          type: boolean
-                                          description: |
-                                            Indicates whether the customer wants to withdraw cash.  
-
-                                            **Note:** Cash withdrawals are available only from EBT Cash accounts.
-                                          example: false
-                                    - type: object
-                                      properties:
-                                        voucher:
-                                          required: &ref_662
-                                            - approvalCode
-                                            - serialNumber
-                                          type: object
-                                          description: |
-                                            Object that contains information about the EBT voucher.  
-
-                                            **Note:** Vouchers are available only for EBT SNAP payments.
-                                          properties: &ref_663
-                                            approvalCode:
-                                              maxLength: 6
-                                              minLength: 6
-                                              type: string
-                                              description: Authorization code that the processor issued for the transaction.
-                                              example: '123456'
-                                            serialNumber:
-                                              maxLength: 15
-                                              minLength: 7
-                                              type: string
-                                              description: Serial number of the voucher.
-                                              example: SN123456789
+                                  allOf: *ref_146
                             - required: &ref_670
                                 - entryMethod
                                 - swipedData
@@ -12377,16 +12382,16 @@ paths:
                                     mapping:
                                       dukpt: '#/components/schemas/dukptPinDetails'
                                   oneOf:
-                                    - required: *ref_145
+                                    - required: *ref_147
                                       type: object
                                       title: Encrypted
                                       description: Object that contains information about encrypted PIN details.
-                                      properties: *ref_146
+                                      properties: *ref_148
                                 ebtDetails:
                                   type: object
-                                  required: *ref_147
+                                  required: *ref_145
                                   description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
-                                  allOf: *ref_148
+                                  allOf: *ref_146
                     - required: &ref_180
                         - type
                         - token
@@ -12425,11 +12430,11 @@ paths:
                               dukpt: '#/components/schemas/dukptPinDetails'
                               raw: '#/components/schemas/rawPinDetails'
                           oneOf:
-                            - required: *ref_145
+                            - required: *ref_147
                               type: object
                               title: Encrypted
                               description: Object that contains information about encrypted PIN details.
-                              properties: *ref_146
+                              properties: *ref_148
                             - required: &ref_672
                                 - dataFormat
                                 - pin
@@ -12451,9 +12456,9 @@ paths:
                                   example: '4422'
                         ebtDetails:
                           type: object
-                          required: *ref_147
+                          required: *ref_145
                           description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
-                          allOf: *ref_148
+                          allOf: *ref_146
                         secCode:
                           type: string
                           description: |
@@ -29910,54 +29915,54 @@ components:
       type: object
       description: Object that contains information about the encryption details of the POS terminal.
       allOf: *ref_144
-    iccCardDetails:
-      required: *ref_654
-      type: object
-      title: Chip
-      description: Object that contains information about the Integrated Circuit Card (ICC).
-      properties: *ref_655
-    fullyEncryptedKeyedDataFormat:
-      required: *ref_656
-      type: object
-      title: Encrypted
-      description: Object that contains information about the encrypted card data for keyed transactions.
-      properties: *ref_657
-    partiallyEncryptedKeyedDataFormat:
-      required: *ref_658
-      type: object
-      title: Partially encrypted
-      description: Object that contains information about the partially-encrypted card data for keyed transactions.
-      properties: *ref_659
-    plainTextKeyedDataFormat:
-      required: *ref_660
-      type: object
-      title: Unencrypted
-      description: Object that contains information about the plain-text card data for keyed transactions.
-      properties: *ref_661
-    dukptPinDetails:
-      required: *ref_145
-      type: object
-      title: Encrypted
-      description: Object that contains information about encrypted PIN details.
-      properties: *ref_146
     ebtDetails:
       type: object
       required: *ref_220
       description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
       properties: *ref_221
     voucher:
-      required: *ref_662
+      required: *ref_654
       type: object
       description: |
         Object that contains information about the EBT voucher.  
 
         **Note:** Vouchers are available only for EBT SNAP payments.
-      properties: *ref_663
+      properties: *ref_655
     ebtDetailsWithVoucher:
       type: object
-      required: *ref_147
+      required: *ref_145
       description: Object that contains information about the Electronic Benefit Transfer (EBT) transaction.
-      allOf: *ref_148
+      allOf: *ref_146
+    iccCardDetails:
+      required: *ref_656
+      type: object
+      title: Chip
+      description: Object that contains information about the Integrated Circuit Card (ICC).
+      properties: *ref_657
+    fullyEncryptedKeyedDataFormat:
+      required: *ref_658
+      type: object
+      title: Encrypted
+      description: Object that contains information about the encrypted card data for keyed transactions.
+      properties: *ref_659
+    partiallyEncryptedKeyedDataFormat:
+      required: *ref_660
+      type: object
+      title: Partially encrypted
+      description: Object that contains information about the partially-encrypted card data for keyed transactions.
+      properties: *ref_661
+    plainTextKeyedDataFormat:
+      required: *ref_662
+      type: object
+      title: Unencrypted
+      description: Object that contains information about the plain-text card data for keyed transactions.
+      properties: *ref_663
+    dukptPinDetails:
+      required: *ref_147
+      type: object
+      title: Encrypted
+      description: Object that contains information about encrypted PIN details.
+      properties: *ref_148
     keyedCardDetails:
       required: *ref_664
       type: object
