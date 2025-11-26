@@ -13,7 +13,7 @@ servers:
   - url: https://api.uat.payroc.com/v1
     description: UAT
 security:
-  - bearerAuth: []
+  - OAuth: []
 tags:
   - name: Apple Pay session
     description: An Apple Pay session authenticates the merchant's domain with Apple. After you start an Apple Pay session, you can use the Apple Pay JS API to retrieve the cardholder's encrypted payment details.
@@ -28363,7 +28363,7 @@ paths:
           content: *ref_14
 components:
   securitySchemes:
-    bearerAuth:
+    OAuth:
       type: http
       description: 'Example: Authorization: Bearer <token>'
       scheme: bearer
