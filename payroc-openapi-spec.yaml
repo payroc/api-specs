@@ -28372,7 +28372,7 @@ paths:
           content: *ref_14
 components:
   securitySchemes:
-    OAuth:
+    bearerAuth:
       type: http
       description: 'Example: Authorization: Bearer <token>'
       scheme: bearer
