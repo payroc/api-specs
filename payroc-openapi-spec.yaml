@@ -10091,12 +10091,6 @@ paths:
                   setupOrder:
                     amount: 4999
                     description: Initial setup fee for Premium Club subscription
-                    breakdown:
-                      subtotal: 4347
-                      taxes:
-                        - type: rate
-                          name: Sales Tax
-                          rate: 5
                     orderId: OrderRef6543
                   recurringOrder:
                     amount: 4999
@@ -10111,9 +10105,6 @@ paths:
                   endDate: '2025-07-01'
                   length: 12
                   pauseCollectionFor: 0
-                  customFields:
-                    - name: yourCustomField
-                      value: abc123
         required: true
       responses:
         '201':
@@ -11289,16 +11280,7 @@ paths:
                   order:
                     amount: 4999
                     description: Monthly Premium Club subscription
-                    breakdown:
-                      subtotal: 4999
-                      taxes:
-                        - type: rate
-                          name: Sales Tax
-                          rate: 5
                     orderId: OrderRef6543
-                  customFields:
-                    - name: yourCustomField
-                      value: abc123
         required: true
       responses:
         '201':
