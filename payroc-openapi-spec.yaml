@@ -9113,7 +9113,7 @@ paths:
       tags:
         - Payment plans
       summary: Create payment plan
-      description: "Use this method to create a payment schedule that you can assign customers to.  \n\n**Note:** This method is part of our Repeat Payments feature. To help you understand how this method works with our Subscriptions endpoints, go to [Repeat Payments](https://docs.payroc.com/guides/integrate/repeat-payments).  \n\nWhen you create a payment plan you need to provide a unique paymentPlanId that you use to run follow-on actions:  \n\n-\t[Retrieve Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/retrieve)  - View the details of the payment plan.  \n-\t[Update Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/partially-update)  - Update the details of the payment plan.  \n-\t[Delete Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/delete)  - Delete the payment plan.  \n-\t[Create Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/create)  - Subscribe a customer to the payment plan.  \n\nThe request includes the following settings:  \n\n-\t**type** - Indicates if our gateway or the merchant collects payments. If the merchant manually collects payments, integrate with the [Pay Manual Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/pay) method.  \n-\t**recurringOrder** - Amount of each payment if the gateway automatically collect payments.  \n-\t**setupOrder** - Setup fee that our gateway immediately collects from the customer's payment method.  \n-\t**onUpdate and onDelete** - Indicates what happens to associated subscriptions if the merchant updates or deletes the payment plan.  \n"
+      description: "Use this method to create a payment schedule that you can assign customers to.  \n\n**Note:** This method is part of our Repeat Payments feature. To help you understand how this method works with our Subscriptions endpoints, go to [Repeat Payments](https://docs.payroc.com/guides/integrate/repeat-payments).  \n\nWhen you create a payment plan you need to provide a unique paymentPlanId that you use to run follow-on actions:  \n\n-\t[Retrieve Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/retrieve)  - View the details of the payment plan.  \n-\t[Update Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/partially-update)  - Update the details of the payment plan.  \n-\t[Delete Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/delete)  - Delete the payment plan.  \n-\t[Create Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/create)  - Subscribe a customer to the payment plan.  \n\nThe request includes the following settings:  \n\n-\t**type** - Indicates if our gateway or the merchant collects payments. If the merchant manually collects payments, integrate with the [Pay Manual Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/pay) method.  \n-\t**recurringOrder** - Amount of each payment if the gateway automatically collect payments.  \n-\t**setupOrder** - Setup fee that our gateway immediately collects from the customer's payment method.  \n-\t**onUpdate and onDelete** - Indicates what happens to associated subscriptions if the merchant updates or deletes the payment plan.  \n"
       operationId: createPaymentPlan
       parameters:
         - name: Idempotency-Key
@@ -9464,7 +9464,7 @@ paths:
       tags:
         - Payment plans
       summary: List payment plans
-      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of payment plans for a processing terminal.  \n\n**Note:** If you want to view the details of a specific payment plan and you have its paymentPlanId, use our [Retrieve Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/retrieve) method.  \n\nOur gateway returns the following information about each payment plan in the list:  \n\n  -\tName, length, and currency of the plan  \n  -\tHow often our gateway collects each payment  \n  -\tHow much our gateway collects for each payment  \n  -\tWhat happens if the merchant updates or deletes the plan  \n\nFor each payment plan, we return the paymentPlanId, which you can use to perform follow-on actions.\n"
+      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of payment plans for a processing terminal.  \n\n**Note:** If you want to view the details of a specific payment plan and you have its paymentPlanId, use our [Retrieve Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/retrieve) method.  \n\nOur gateway returns the following information about each payment plan in the list:  \n\n  -\tName, length, and currency of the plan  \n  -\tHow often our gateway collects each payment  \n  -\tHow much our gateway collects for each payment  \n  -\tWhat happens if the merchant updates or deletes the plan  \n\nFor each payment plan, we return the paymentPlanId, which you can use to perform follow-on actions.\n"
       operationId: listPaymentPlans
       parameters:
         - name: processingTerminalId
@@ -9581,7 +9581,7 @@ paths:
       tags:
         - Payment plans
       summary: Retrieve payment plan
-      description: "Use this method to retrieve information about a payment plan.  \n\nTo retrieve a payment plan, you need its paymentPlanId. Our gateway returned the paymentPlanId in the response of the [Create Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/create) method.  \n\n**Note:** If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/payments/payment-plans/list) method to search for the payment plan.  \n\nOur gateway returns the following information about the payment plan:  \n\n  -\tName, length, and currency of the plan  \n  -\tHow often our gateway collects each payment  \n  -\tHow much our gateway collects for each payment  \n  -\tWhat happens if the merchant updates or deletes the plan  \n"
+      description: "Use this method to retrieve information about a payment plan.  \n\nTo retrieve a payment plan, you need its paymentPlanId. Our gateway returned the paymentPlanId in the response of the [Create Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/create) method.  \n\n**Note:** If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/list) method to search for the payment plan.  \n\nOur gateway returns the following information about the payment plan:  \n\n  -\tName, length, and currency of the plan  \n  -\tHow often our gateway collects each payment  \n  -\tHow much our gateway collects for each payment  \n  -\tWhat happens if the merchant updates or deletes the plan  \n"
       operationId: getPaymentPlan
       parameters:
         - name: processingTerminalId
@@ -9640,9 +9640,9 @@ paths:
       description: |
         Use this method to partially update a payment plan. Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.  
 
-        To update a payment plan, you need its paymentPlanId, which you sent in the request of the [Create Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/create) method.  
+        To update a payment plan, you need its paymentPlanId, which you sent in the request of the [Create Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/create) method.  
 
-        **Note:** If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/payments/payment-plans/list) method to search for the payment plan.  
+        **Note:** If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/list) method to search for the payment plan.  
 
         You can update all of the properties of the payment plan except for the paymentPlanId.  
 
@@ -9742,7 +9742,7 @@ paths:
       tags:
         - Payment plans
       summary: Delete payment plan
-      description: "Use this method to delete a payment plan.  \n\n> **Important:** When you delete a payment plan, you can’t recover it. You also won’t be able to add subscriptions to the payment plan.  \n\nTo delete a payment plan, you need its paymentPlanId, which you sent in the request of the [Create Payment Plan](https://docs.payroc.com/api/schema/payments/payment-plans/create) method.  \n\n**Note:** If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/payments/payment-plans/list) method to search for the payment plan.  \n\nThe value you sent for the onDelete parameter when you created the payment plan indicates what happens to associated subscriptions when you delete the plan:  \n\n  -\t`complete` - Our gateway stops taking payments for the subscriptions associated with the payment plan.  \n  -\t`continue` - Our gateway continues to take payments for the subscriptions associated with the payment plan. To stop a subscription for a cancelled payment plan, go to the [Deactivate Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/deactivate) method.  \n"
+      description: "Use this method to delete a payment plan.  \n\n> **Important:** When you delete a payment plan, you can’t recover it. You also won’t be able to add subscriptions to the payment plan.  \n\nTo delete a payment plan, you need its paymentPlanId, which you sent in the request of the [Create Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/create) method.  \n\n**Note:** If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/list) method to search for the payment plan.  \n\nThe value you sent for the onDelete parameter when you created the payment plan indicates what happens to associated subscriptions when you delete the plan:  \n\n  -\t`complete` - Our gateway stops taking payments for the subscriptions associated with the payment plan.  \n  -\t`continue` - Our gateway continues to take payments for the subscriptions associated with the payment plan. To stop a subscription for a cancelled payment plan, go to the [Deactivate Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/deactivate) method.  \n"
       operationId: deletePaymentPlan
       parameters:
         - name: processingTerminalId
@@ -9787,14 +9787,14 @@ paths:
 
         When you create a subscription you need to provide a unique subscriptionId that you use to run follow-on actions:  
 
-        - [Retrieve Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/retrieve) - View the details of the subscription.
-        - [Update Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/partially-update) - Update the details of the subscription.
-        - [Deactivate Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/deactivate) - Stop taking payments for the subscription.
+        - [Retrieve Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/retrieve) - View the details of the subscription.
+        - [Update Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/partially-update) - Update the details of the subscription.
+        - [Deactivate Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/deactivate) - Stop taking payments for the subscription.
         - [Re-activate Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/reactivate) - Start taking payments again for the subscription.
-        - [Pay Manual Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/pay) - Manually collect a payment for the subscription.
+        - [Pay Manual Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/pay) - Manually collect a payment for the subscription.
 
         The request includes the following settings:
-        - **paymentPlanId** - Unique identifier of the payment plan that the merchant wants to use. If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/payments/payment-plans/list) method to search for the payment plan.
+        - **paymentPlanId** - Unique identifier of the payment plan that the merchant wants to use. If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/list) method to search for the payment plan.
         - **paymentMethod** - Object that contains information about the secure token, which represents the customer's card details or bank account details.
         - **startDate** - Date that you want to start to take payments.
 
@@ -10579,7 +10579,7 @@ paths:
       tags:
         - Subscriptions
       summary: List subscriptions
-      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of subscriptions.  \n\nNote: If you want to view the details of a specific subscription and you have its subscriptionId, use our [Retrieve subscription](https://docs.payroc.com/api/schema/payments/subscriptions/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for subscriptions for a customer, a payment plan, or frequency.  \n\nOur gateway returns information about the following for each subscription in the list:  \n\n-\tPayment plan the subscription is linked to.  \n-\tSecure token that represents cardholder’s payment details.  \n-\tCurrent state of the subscription, including its status, next due date, and invoices.  \n-\tFees for setup and the cost of the recurring order.  \n-\tSubscription length, end date, and frequency.  \n\nFor each subscription, we also return the subscriptionId, the paymentPlanId, and the secureTokenId, which you can use to perform follow-actions. \n"
+      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of subscriptions.  \n\nNote: If you want to view the details of a specific subscription and you have its subscriptionId, use our [Retrieve subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for subscriptions for a customer, a payment plan, or frequency.  \n\nOur gateway returns information about the following for each subscription in the list:  \n\n-\tPayment plan the subscription is linked to.  \n-\tSecure token that represents cardholder’s payment details.  \n-\tCurrent state of the subscription, including its status, next due date, and invoices.  \n-\tFees for setup and the cost of the recurring order.  \n-\tSubscription length, end date, and frequency.  \n\nFor each subscription, we also return the subscriptionId, the paymentPlanId, and the secureTokenId, which you can use to perform follow-actions. \n"
       operationId: listSubscriptions
       parameters:
         - name: processingTerminalId
@@ -10830,7 +10830,7 @@ paths:
       tags:
         - Subscriptions
       summary: Retrieve subscription
-      description: "Use this method to retrieve information about a subscription.  \n\nTo retrieve a subscription, you need its subscriptionId. You sent the subscriptionId in the request of the [Create subscription](https://docs.payroc.com/api/schema/payments/subscriptions/create) method.  \n\n**Note:** If you don't have the subscriptionId, use our [List subscriptions](https://docs.payroc.com/api/schema/payments/subscriptions/list) method to search for the subscription.  \n\nOur gateway returns information about the following for the subscription:  \n\n-\tPayment plan the subscription is linked to.  \n-\tSecure token that represents cardholder’s payment details.  \n-\tCurrent state of the subscription, including its status, next due date, and invoices.  \n-\tFees for setup and the cost of the recurring order.  \n-\tSubscription length, end date, and frequency.  \n\nWe also return the paymentPlanId and the secureTokenId, which you can use to perform follow-on actions.  \n"
+      description: "Use this method to retrieve information about a subscription.  \n\nTo retrieve a subscription, you need its subscriptionId. You sent the subscriptionId in the request of the [Create subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/create) method.  \n\n**Note:** If you don't have the subscriptionId, use our [List subscriptions](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/list) method to search for the subscription.  \n\nOur gateway returns information about the following for the subscription:  \n\n-\tPayment plan the subscription is linked to.  \n-\tSecure token that represents cardholder’s payment details.  \n-\tCurrent state of the subscription, including its status, next due date, and invoices.  \n-\tFees for setup and the cost of the recurring order.  \n-\tSubscription length, end date, and frequency.  \n\nWe also return the paymentPlanId and the secureTokenId, which you can use to perform follow-on actions.  \n"
       operationId: getSubscription
       parameters:
         - name: processingTerminalId
@@ -10893,9 +10893,9 @@ paths:
       description: |
         Use this method to partially update a subscription. Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.  
 
-        To update a subscription, you need its subscriptionId, which you sent in the request of the [Create subscription](https://docs.payroc.com/api/schema/payments/subscriptions/create) method.  
+        To update a subscription, you need its subscriptionId, which you sent in the request of the [Create subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/create) method.  
 
-        **Note:** If you don't have the subscriptionId, use our [List subscriptions](https://docs.payroc.com/api/schema/payments/subscriptions/list) method to search for the payment.  
+        **Note:** If you don't have the subscriptionId, use our [List subscriptions](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/list) method to search for the payment.  
 
         You can update all of the properties of the subscription except for the following:  
 
@@ -11028,9 +11028,9 @@ paths:
       description: |
         Use this method to deactivate a subscription.  
 
-        To deactivate a subscription, you need its subscriptionId, which you sent in the request of the [Create Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/create) method.  
+        To deactivate a subscription, you need its subscriptionId, which you sent in the request of the [Create Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/create) method.  
 
-        **Note:** If you don't have the subscriptionId, use our [List Subscriptions](https://docs.payroc.com/api/schema/payments/subscriptions/list) method to search for the subscription.  
+        **Note:** If you don't have the subscriptionId, use our [List Subscriptions](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/list) method to search for the subscription.  
 
         If your request is successful, our gateway stops taking payments from the customer.  
 
@@ -11153,13 +11153,13 @@ paths:
       description: |
         Use this method to reactivate a subscription.  
 
-        To reactivate a subscription, you need its subscriptionId, which you sent in the request of the [Create Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/create) method.  
+        To reactivate a subscription, you need its subscriptionId, which you sent in the request of the [Create Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/create) method.  
 
-        **Note:** If you don't have the subscriptionId, use our [List Subscriptions](https://docs.payroc.com/api/schema/payments/subscriptions/list) method to search for the subscription.  
+        **Note:** If you don't have the subscriptionId, use our [List Subscriptions](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/list) method to search for the subscription.  
 
         If your request is successful, our gateway restarts taking payments from the customer.  
 
-        To deactivate the subscription, use our [Deactivate Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/deactivate) method.
+        To deactivate the subscription, use our [Deactivate Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/deactivate) method.
       operationId: reactivateSubscription
       parameters:
         - name: processingTerminalId
@@ -11224,9 +11224,9 @@ paths:
       description: |
         Use this method to manually collect a payment linked to a subscription. You can manually collect a payment only if the merchant chose not to let our gateway automatically collect each payment.  
 
-        To manually collect a payment, you need the subscriptionId of the subscription that's linked to the payment. You sent the subscriptionId in the request of the [Create Subscription](https://docs.payroc.com/api/schema/payments/subscriptions/create) method.  
+        To manually collect a payment, you need the subscriptionId of the subscription that's linked to the payment. You sent the subscriptionId in the request of the [Create Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/create) method.  
 
-        **Note:** If you don't have the subscriptionId, use our [List Subscriptions](https://docs.payroc.com/api/schema/payments/subscriptions/list) method to search for the subscription.  
+        **Note:** If you don't have the subscriptionId, use our [List Subscriptions](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/list) method to search for the subscription.  
 
         The request includes an order object that contains information about the amount that you want to collect.  
 
@@ -11497,14 +11497,14 @@ paths:
         Use this method to create a secure token that represents a customer's payment details.  
 
         When you create a secure token, you need to generate and provide a secureTokenId that you use to run follow-on actions:  
-        - [Retrieve Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/retrieve) – View the details of the secure token.  
-        - [Delete Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/delete) – Delete the secure token.  
-        - [Update Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/partially-update) – Update the details of the secure token.  
-        - [Update Account Details](https://docs.payroc.com/api/schema/payments/secure-tokens/update-account) – Update the secure token with the details from a single-use token.  
+        - [Retrieve Secure Token](https://docs.payroc.com/api/schema/tokenization/secure-tokens/retrieve) – View the details of the secure token.  
+        - [Delete Secure Token](https://docs.payroc.com/api/schema/tokenization/secure-tokens/delete) – Delete the secure token.  
+        - [Update Secure Token](https://docs.payroc.com/api/schema/tokenization/secure-tokens/partially-update) – Update the details of the secure token.  
+        - [Update Account Details](https://docs.payroc.com/api/schema/tokenization/secure-tokens/update-account) – Update the secure token with the details from a single-use token.  
 
         **Note:** If you don't generate a secureTokenId to identify the token, our gateway generates a unique identifier and returns it in the response.  
 
-        If the request is successful, our gateway returns a token that the merchant can use in transactions instead of the customer's sensitive payment details, for example, when they [run a sale](https://docs.payroc.com/api/schema/payments/create).
+        If the request is successful, our gateway returns a token that the merchant can use in transactions instead of the customer's sensitive payment details, for example, when they [run a sale](https://docs.payroc.com/api/schema/card-payments/payments/create).
       operationId: createSecureToken
       parameters:
         - name: Idempotency-Key
@@ -13010,7 +13010,7 @@ paths:
       tags:
         - Secure tokens
       summary: List secure tokens
-      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of secure tokens.  \n\n**Note:** If you want to view the details of a specific secure token and you have its secureTokenId, use our [Retrieve Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for secure tokens by customer or by the first four digits of a card number.  \n\nOur gateway returns information about the following for each secure token in the list:  \n\n  -\tPayment details that the secure token represents.  \n  -\tCustomer details, including shipping and billing addresses.  \n  -\tSecure token that you can use to carry out transactions.  \n\n  For each secure token, we also return the secureTokenId, which you can use to perform follow-on actions.\n"
+      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of secure tokens.  \n\n**Note:** If you want to view the details of a specific secure token and you have its secureTokenId, use our [Retrieve Secure Token](https://docs.payroc.com/api/schema/tokenization/secure-tokens/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for secure tokens by customer or by the first four digits of a card number.  \n\nOur gateway returns information about the following for each secure token in the list:  \n\n  -\tPayment details that the secure token represents.  \n  -\tCustomer details, including shipping and billing addresses.  \n  -\tSecure token that you can use to carry out transactions.  \n\n  For each secure token, we also return the secureTokenId, which you can use to perform follow-on actions.\n"
       operationId: listSecureTokens
       parameters:
         - name: processingTerminalId
@@ -13293,7 +13293,7 @@ paths:
       tags:
         - Secure tokens
       summary: Retrieve secure token
-      description: "Use this method to retrieve information about a secure token.  \n\nTo retrieve a secure token, you need its secureTokenID, which you sent in the request of the [Create Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/create) method.  \n\n**Note:** If you don't have the secureTokenId, use our [List Secure Tokens](https://docs.payroc.com/api/schema/payments/secure-tokens/list) method to search for the secure token.  \n\nOur gateway returns the following information about the secure token:  \n\n  -\tPayment details that the secure token represents.  \n  -\tCustomer details, including shipping and billing addresses.  \n  -\tSecure token that you can use to carry out transactions.  \n"
+      description: "Use this method to retrieve information about a secure token.  \n\nTo retrieve a secure token, you need its secureTokenID, which you sent in the request of the [Create Secure Token](https://docs.payroc.com/api/schema/tokenization/secure-tokens/create) method.  \n\n**Note:** If you don't have the secureTokenId, use our [List Secure Tokens](https://docs.payroc.com/api/schema/tokenization/secure-tokens/list) method to search for the secure token.  \n\nOur gateway returns the following information about the secure token:  \n\n  -\tPayment details that the secure token represents.  \n  -\tCustomer details, including shipping and billing addresses.  \n  -\tSecure token that you can use to carry out transactions.  \n"
       operationId: getSecureToken
       parameters:
         - name: processingTerminalId
@@ -13350,9 +13350,9 @@ paths:
       description: |
         Use this method to partially update a secure token. Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.  
 
-        To update a secure token, you need its secureTokenId, which you sent in the request of the [Create Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/create) method.  
+        To update a secure token, you need its secureTokenId, which you sent in the request of the [Create Secure Token](https://docs.payroc.com/api/schema/tokenization/secure-tokens/create) method.  
 
-        **Note:** If you don't have the secureTokenId, use our [List Secure Tokens](https://docs.payroc.com/api/schema/payments/secure-tokens/list) method to search  for the payment.  
+        **Note:** If you don't have the secureTokenId, use our [List Secure Tokens](https://docs.payroc.com/api/schema/tokenization/secure-tokens/list) method to search  for the payment.  
 
         You can update all of the properties of the secure token, except the following:  
         - processingTerminalId  
@@ -13488,9 +13488,9 @@ paths:
       description: |
         Use this method to delete a secure token and its related payment details from our vault.  
 
-        To delete a secure token, you need its secureTokenId, which you sent in the request of the [Create Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/create) method.  
+        To delete a secure token, you need its secureTokenId, which you sent in the request of the [Create Secure Token](https://docs.payroc.com/api/schema/tokenization/secure-tokens/create) method.  
 
-        **Note:** If you don’t have the secureTokenId, use our [List Secure Tokens](https://docs.payroc.com/api/schema/payments/secure-tokens/list) method to search for the secure token.  
+        **Note:** If you don’t have the secureTokenId, use our [List Secure Tokens](https://docs.payroc.com/api/schema/tokenization/secure-tokens/list) method to search for the secure token.  
 
         When you delete a secure token, you can’t recover it, and you can’t reuse its identifier for a new token.  
       operationId: deleteSecureToken
@@ -13676,9 +13676,9 @@ paths:
 
         A single-use token expires after 30 minutes and merchants can use them only once.  
 
-        **Note:** To create a reusable permanent token, go to [Create Secure Token](https://docs.payroc.com/api/schema/payments/secure-tokens/create).  
+        **Note:** To create a reusable permanent token, go to [Create Secure Token](https://docs.payroc.com/api/schema/tokenization/secure-tokens/create).  
 
-        In the request, send the customer’s payment details. If the request is successful, our gateway returns a token that you can use in a follow-on action, for example, [run a sale](https://docs.payroc.com/api/schema/payments/create).
+        In the request, send the customer’s payment details. If the request is successful, our gateway returns a token that you can use in a follow-on action, for example, [run a sale](https://docs.payroc.com/api/schema/card-payments/payments/create).
       operationId: createSingleUseToken
       parameters:
         - name: Idempotency-Key
@@ -14181,7 +14181,7 @@ paths:
         - Payments
       summary: Create payment
       operationId: payment
-      description: "Use this method to run a sale or a pre-authorization with a customer's payment card. \n\nIn the response, our gateway returns information about the card payment and a paymentId, which you need for the following methods:\n\n-\t[Retrieve payment](https://docs.payroc.com/api/schema/payments/retrieve) - View the details of the card payment.\n-\t[Adjust payment](https://docs.payroc.com/api/schema/payments/adjust) - Update the details of the card payment.\n-\t[Capture payment](https://docs.payroc.com/api/schema/payments/capture)  - Capture the pre-authorization.\n-\t[Reverse payment](https://docs.payroc.com/api/schema/payments/reverse)  - Cancel the card payment if it's in an open batch.\n-\t[Refund payment](https://docs.payroc.com/api/schema/payments/refund)  - Run a referenced refund to return funds to the payment card.\n\n**Payment methods** \n\n- **Cards** - Credit, debit, and EBT\n- **Digital wallets** - [Apple Pay®](https://docs.payroc.com/guides/integrate/apple-pay) and [Google Pay®](https://docs.payroc.com/guides/integrate/google-pay) \n- **Tokens** - Secure tokens and single-use tokens\n\n**Features** \n\nOur Create Payment method also supports the following features: \n\n- [Repeat payments](https://docs.payroc.com/guides/integrate/repeat-payments/use-your-own-software) - Run multiple payments as part of a payment schedule that you manage with your own software. \n- **Offline sales** - Run a sale or a pre-authorization if the terminal loses its connection to our gateway. \n- [Tokenization](https://docs.payroc.com/guides/integrate/save-payment-details) - Save card details to use in future transactions. \n- [3-D Secure](https://docs.payroc.com/guides/integrate/3-d-secure) - Verify the identity of the cardholder. \n- [Custom fields](https://docs.payroc.com/guides/integrate/add-custom-fields) - Add your own data to a payment. \n- **Tips** - Add tips to the card payment.  \n- **Taxes** - Add local taxes to the card payment. \n- **Surcharging** - Add a surcharge to the card payment. \n- **Dual pricing** - Offer different prices based on payment method, for example, if you use our RewardPay Choice pricing program. \n"
+      description: "Use this method to run a sale or a pre-authorization with a customer's payment card. \n\nIn the response, our gateway returns information about the card payment and a paymentId, which you need for the following methods:\n\n-\t[Retrieve payment](https://docs.payroc.com/api/schema/card-payments/payments/retrieve) - View the details of the card payment.\n-\t[Adjust payment](https://docs.payroc.com/api/schema/card-payments/payments/adjust) - Update the details of the card payment.\n-\t[Capture payment](https://docs.payroc.com/api/schema/card-payments/payments/capture)  - Capture the pre-authorization.\n-\t[Reverse payment](https://docs.payroc.com/api/schema/card-payments/refunds/reverse)  - Cancel the card payment if it's in an open batch.\n-\t[Refund payment](https://docs.payroc.com/api/schema/card-payments/refunds/create-referenced-refund)  - Run a referenced refund to return funds to the payment card.\n\n**Payment methods** \n\n- **Cards** - Credit, debit, and EBT\n- **Digital wallets** - [Apple Pay®](https://docs.payroc.com/guides/integrate/apple-pay) and [Google Pay®](https://docs.payroc.com/guides/integrate/google-pay) \n- **Tokens** - Secure tokens and single-use tokens\n\n**Features** \n\nOur Create Payment method also supports the following features: \n\n- [Repeat payments](https://docs.payroc.com/guides/integrate/repeat-payments/use-your-own-software) - Run multiple payments as part of a payment schedule that you manage with your own software. \n- **Offline sales** - Run a sale or a pre-authorization if the terminal loses its connection to our gateway. \n- [Tokenization](https://docs.payroc.com/guides/integrate/save-payment-details) - Save card details to use in future transactions. \n- [3-D Secure](https://docs.payroc.com/guides/integrate/3-d-secure) - Verify the identity of the cardholder. \n- [Custom fields](https://docs.payroc.com/guides/integrate/add-custom-fields) - Add your own data to a payment. \n- **Tips** - Add tips to the card payment.  \n- **Taxes** - Add local taxes to the card payment. \n- **Surcharging** - Add a surcharge to the card payment. \n- **Dual pricing** - Offer different prices based on payment method, for example, if you use our RewardPay Choice pricing program. \n"
       parameters:
         - name: Idempotency-Key
           in: header
@@ -15767,7 +15767,7 @@ paths:
       description: |
         Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of payments. 
 
-        **Note:** If you want to view the details of a specific payment and you have its paymentId, use our [Retrieve Payment](https://docs.payroc.com/api/schema/payments/retrieve) method.  
+        **Note:** If you want to view the details of a specific payment and you have its paymentId, use our [Retrieve Payment](https://docs.payroc.com/api/schema/card-payments/payments/retrieve) method.  
 
         Use query parameters to filter the list of results that we return, for example, to search for payments for a customer, a tip mode, or a date range.  
 
@@ -16276,9 +16276,9 @@ paths:
       description: |
         Use this method to retrieve information about a card payment.  
 
-        To retrieve a payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/payments/create) method.  
+        To retrieve a payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/card-payments/payments/create) method.  
 
-        **Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/payments/list) method to search for the payment.  
+        **Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/card-payments/payments/list) method to search for the payment.  
 
         Our gateway returns the following information about the payment:  
 
@@ -16341,9 +16341,9 @@ paths:
       description: |
         Use this method to adjust a payment in an open batch. 
 
-        To adjust a payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/payments/create) method.
+        To adjust a payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/card-payments/payments/create) method.
 
-        **Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/payments/list) method to search for the payment. 
+        **Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/card-payments/payments/list) method to search for the payment. 
 
         You can adjust the following details of the payment:
         - Sale amount and tip amount
@@ -16620,7 +16620,7 @@ paths:
         - Payments
       summary: Capture payment
       operationId: capturePayment
-      description: "Use this method to capture a pre-authorization. \n\nTo capture a pre-authorization, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/payments/create) method.\n\n**Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/payments/list) method to search for the payment.\n\nDepending on the amount you want to capture, complete the following:\n-\t**Capture the full amount of the pre-authorization** - Don't send a value for the amount parameter in your request.\n-\t**Capture less than the amount of the pre-authorization** - Send a value for the amount parameter in your request. \n-\t**Capture more than the amount of the pre-authorization** - Adjust the pre-authorization before you capture it. For more information about adjusting a pre-authorization, go to [Adjust Payment](https://docs.payroc.com/api/schema/payments/adjust).\n\nIf your request is successful, our gateway takes the amount from the payment card. \n\n**Note:** For more information about pre-authorizations and captures, go to [Run a pre-authorization](https://docs.payroc.com/guides/integrate/run-a-pre-authorization).\n"
+      description: "Use this method to capture a pre-authorization. \n\nTo capture a pre-authorization, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/card-payments/payments/create) method.\n\n**Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/card-payments/payments/list) method to search for the payment.\n\nDepending on the amount you want to capture, complete the following:\n-\t**Capture the full amount of the pre-authorization** - Don't send a value for the amount parameter in your request.\n-\t**Capture less than the amount of the pre-authorization** - Send a value for the amount parameter in your request. \n-\t**Capture more than the amount of the pre-authorization** - Adjust the pre-authorization before you capture it. For more information about adjusting a pre-authorization, go to [Adjust Payment](https://docs.payroc.com/api/schema/card-payments/payments/adjust).\n\nIf your request is successful, our gateway takes the amount from the payment card. \n\n**Note:** For more information about pre-authorizations and captures, go to [Run a pre-authorization](https://docs.payroc.com/guides/integrate/run-a-pre-authorization).\n"
       parameters:
         - name: Idempotency-Key
           in: header
@@ -16744,9 +16744,9 @@ paths:
       description: |
         Use this method to cancel or to partially cancel a payment in an open batch. This is also known as voiding a payment.  
 
-        To cancel a payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/payments/create) method.  
+        To cancel a payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/card-payments/payments/create) method.  
 
-        **Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/payments/list) method to search for the payment.  
+        **Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/card-payments/payments/list) method to search for the payment.  
 
         If your request is successful, our gateway removes the payment from the merchant's open batch and no funds are taken from the cardholder's account. 
       parameters:
@@ -16900,21 +16900,21 @@ paths:
     post:
       tags:
         - Payments
-      summary: Refund payment
+      summary: Create referenced refund
       operationId: refundPayment
       description: |
         Use this method to refund a payment that is in a closed batch.  
 
-        To refund a payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/payments/create) method.  
+        To refund a payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/card-payments/payments/create) method.  
 
-        **Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/payments/list) method to search for the payment.  
+        **Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/card-payments/payments/list) method to search for the payment.  
 
         If your refund is successful, our gateway returns the payment amount to the cardholder's account.  
 
         **Things to consider**  
 
         - If the merchant refunds a payment that is in an open batch, our gateway reverses the payment.
-        - Some merchants can run unreferenced refunds, which means that they don't need a paymentId to return an amount to a customer. For more information about how to run an unreferenced refund, go to [Create Refund](https://docs.payroc.com/api/schema/payments/refunds/create).
+        - Some merchants can run unreferenced refunds, which means that they don't need a paymentId to return an amount to a customer. For more information about how to run an unreferenced refund, go to [Create Refund](https://docs.payroc.com/api/schema/card-payments/refunds/create-unreferenced-refund).
       parameters:
         - name: Idempotency-Key
           in: header
@@ -17473,20 +17473,20 @@ paths:
     post:
       tags:
         - Refunds
-      summary: Create refund
+      summary: Create unreferenced refund
       operationId: unreferencedRefund
       description: |
         Use this method to create an unreferenced refund. An unreferenced refund is a refund that isn't linked to a payment.  
 
-        **Note:** If you have the paymentId of the payment you want to refund, use our [Refund Payment](https://docs.payroc.com/api/schema/payments/refund) method. If you use our Refund Payment method, our gateway sends the refund amount to the customer's original payment method and links the refund to the payment.  
+        **Note:** If you have the paymentId of the payment you want to refund, use our [Refund Payment](https://docs.payroc.com/api/schema/card-payments/refunds/create-referenced-refund) method. If you use our Refund Payment method, our gateway sends the refund amount to the customer's original payment method and links the refund to the payment.  
 
         In the request, you must provide the customer's payment details and the refund amount.  
 
         In the response, our gateway returns information about the refund and a refundId, which you need for the following methods:  
 
-        - [Retrieve refund](https://docs.payroc.com/api/schema/payments/refunds/retrieve) - View the details of the refund.  
-        - [Adjust refund](https://docs.payroc.com/api/schema/payments/refunds/adjust) - Update the details of the refund.  
-        - [Reverse refund](https://docs.payroc.com/api/schema/payments/refunds/reverse) - Cancel the refund if it's in an open batch.  
+        - [Retrieve refund](https://docs.payroc.com/api/schema/card-payments/refunds/retrieve) - View the details of the refund.  
+        - [Adjust refund](https://docs.payroc.com/api/schema/card-payments/refunds/adjust) - Update the details of the refund.  
+        - [Reverse refund](https://docs.payroc.com/api/schema/card-payments/refunds/reverse-refund) - Cancel the refund if it's in an open batch.  
       parameters:
         - name: Idempotency-Key
           in: header
@@ -17801,7 +17801,7 @@ paths:
       description: |
         Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of refunds.  
 
-        **Note:** If you want to view the details of a specific refund and you have its refundId, use our [Retrieve Refund](https://docs.payroc.com/api/schema/payments/refunds/retrieve) method.  
+        **Note:** If you want to view the details of a specific refund and you have its refundId, use our [Retrieve Refund](https://docs.payroc.com/api/schema/card-payments/refunds/retrieve) method.  
 
         Use query parameters to filter the list of results that we return, for example, to search for refunds for a customer, a tender type, or a date range.
         Our gateway returns the following information about each refund in the list:  
@@ -18075,9 +18075,9 @@ paths:
       description: |
         Use this method to retrieve information about a refund.  
 
-        To retrieve a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/payments/refund) method or the [Create Refund](https://docs.payroc.com/api/schema/payments/refunds/create) method.  
+        To retrieve a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/card-payments/refunds/create-referenced-refund) method or the [Create Refund](https://docs.payroc.com/api/schema/card-payments/refunds/create-unreferenced-refund) method.  
 
-        **Note:** If you don't have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/payments/refunds/list) method to search for the refund.  
+        **Note:** If you don't have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/card-payments/refunds/list) method to search for the refund.  
 
         Our gateway returns the following information about the refund:  
         - Order details, including the refund amount and when we processed the refund.
@@ -18139,9 +18139,9 @@ paths:
       description: |
         Use this method to adjust a refund in an open batch.  
 
-        To adjust a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/payments/refund) method or the [Create Refund](https://docs.payroc.com/api/schema/payments/refunds/create) method.  
+        To adjust a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/card-payments/refunds/create-referenced-refund) method or the [Create Refund](https://docs.payroc.com/api/schema/card-payments/refunds/create-unreferenced-refund) method.  
 
-        **Note:** If you don’t have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/payments/refunds/list) method to search for the refund.  
+        **Note:** If you don’t have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/card-payments/refunds/list) method to search for the refund.  
 
         You can adjust the following details of the refund:
         - Customer details, including shipping address and contact information.
@@ -18309,9 +18309,9 @@ paths:
       description: |
         Use this method to cancel a refund in an open batch.  
 
-        To cancel a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/payments/refund) or [Create Refund](https://docs.payroc.com/api/schema/payments/refunds/create) method.  
+        To cancel a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/card-payments/refunds/create-referenced-refund) or [Create Refund](https://docs.payroc.com/api/schema/card-payments/refunds/create-unreferenced-refund) method.  
 
-        **Note:** If you don’t have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/payments/refunds/list) method to search for the refund.  
+        **Note:** If you don’t have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/card-payments/refunds/list) method to search for the refund.  
 
         If your request is successful, the gateway removes the refund from the merchant’s open batch and no funds are returned to the cardholder’s account.
       parameters:
@@ -19606,7 +19606,7 @@ paths:
         - **Payment method** - Card information, a secure token, or digital wallet.  
         - **Transaction information** - Amount and currency of the transaction in the merchant's currency.  
 
-        If the card is eligible for DCC, our gateway returns the transaction amount in the card's currency and a dccOffer object that contains information about the conversion rate. The dccOffer object contains the following fields that you need when you [run a sale](https://docs.payroc.com/api/schema/payments/create) or [unreferenced refund](https://docs.payroc.com/api/schema/payments/refunds/create) with DCC:  
+        If the card is eligible for DCC, our gateway returns the transaction amount in the card's currency and a dccOffer object that contains information about the conversion rate. The dccOffer object contains the following fields that you need when you [run a sale](https://docs.payroc.com/api/schema/card-payments/payments/create) or [unreferenced refund](https://docs.payroc.com/api/schema/card-payments/refunds/create-unreferenced-refund) with DCC:  
         - fxAmount  
         - fxCurrency  
         - fxRate  
@@ -19824,7 +19824,7 @@ paths:
         - Bank transfer payments
       summary: Create payment
       operationId: bankTransferPayment
-      description: "Use this method to run a sale with a customer's bank account details.  \n\nIn the response, our gateway returns information about the bank transfer payment and a paymentId, which you need for the following methods:  \n-\t[Retrieve payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/retrieve) - View the details of the bank transfer payment.\n-\t[Reverse payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/reverse) - Cancel the bank transfer payment if it's an open batch.\n-\t[Refund payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/refund) - Run a referenced refund to return funds to the customer's bank account.\n\n**Payment methods**  \n\nOur gateway accepts the following payment methods:  \n-\tAutomated clearing house (ACH) details\n-\tPre-authorized debit (PAD) details  \n\nYou can also use [secure tokens](https://docs.payroc.com/api/schema/payments/secure-tokens/overview) and [single-use tokens](https://docs.payroc.com/api/schema/payments/single-use-tokens/create) that you created from ACH details or PAD details. \n"
+      description: "Use this method to run a sale with a customer's bank account details.  \n\nIn the response, our gateway returns information about the bank transfer payment and a paymentId, which you need for the following methods:  \n-\t[Retrieve payment](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/retrieve) - View the details of the bank transfer payment.\n-\t[Reverse payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/reverse-payment) - Cancel the bank transfer payment if it's an open batch.\n-\t[Refund payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-referenced-refund) - Run a referenced refund to return funds to the customer's bank account.\n\n**Payment methods**  \n\nOur gateway accepts the following payment methods:  \n-\tAutomated clearing house (ACH) details\n-\tPre-authorized debit (PAD) details  \n\nYou can also use [secure tokens](https://docs.payroc.com/api/schema/payments/secure-tokens/overview) and [single-use tokens](https://docs.payroc.com/api/schema/tokenization/single-use-tokens/create) that you created from ACH details or PAD details. \n"
       parameters:
         - name: Idempotency-Key
           in: header
@@ -20436,7 +20436,7 @@ paths:
       description: |
         Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of payments.  
 
-        **Note:** If you want to view the details of a specific payment and you have its paymentId, use our [Retrieve Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/retrieve) method.  
+        **Note:** If you want to view the details of a specific payment and you have its paymentId, use our [Retrieve Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/retrieve) method.  
 
         Use query parameters to filter the list of results that we return, for example, to search for payments for a customer, a date range, or a settlement state.  
 
@@ -20731,7 +20731,7 @@ paths:
       tags:
         - Bank transfer payments
       summary: Retrieve payment
-      description: "Use this method to retrieve information about a bank transfer payment.  \n\nTo retrieve a payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/create) method.  \n\nNote: If you don’t have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/list) method to search for the payment.  \n\nOur gateway returns the following information about the payment:  \n\n-\tOrder details, including the transaction amount and when it was processed.  \n-\tBank account details, including the customer’s name and account number.  \n-\tCustomer’s details, including the customer’s phone number.  \n-\tTransaction details, including any refunds or re-presentments.  \n\nIf the merchant saved the customer’s bank account details, our gateway returns a secureTokenID, which you can use to perform follow-on actions.\n"
+      description: "Use this method to retrieve information about a bank transfer payment.  \n\nTo retrieve a payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/create) method.  \n\nNote: If you don’t have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/list) method to search for the payment.  \n\nOur gateway returns the following information about the payment:  \n\n-\tOrder details, including the transaction amount and when it was processed.  \n-\tBank account details, including the customer’s name and account number.  \n-\tCustomer’s details, including the customer’s phone number.  \n-\tTransaction details, including any refunds or re-presentments.  \n\nIf the merchant saved the customer’s bank account details, our gateway returns a secureTokenID, which you can use to perform follow-on actions.\n"
       operationId: getBankTransferPayment
       parameters:
         - name: paymentId
@@ -20786,9 +20786,9 @@ paths:
       description: |
         Use this method to cancel a bank transfer payment in an open batch. This is also known as voiding a payment.  
 
-        To cancel a bank transfer payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/create) method.  
+        To cancel a bank transfer payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/create) method.  
 
-        **Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/list) method to search for the bank transfer payment.  
+        **Note:** If you don't have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/list) method to search for the bank transfer payment.  
 
         If your request is successful, our gateway removes the bank transfer payment from the merchant’s open batch and no funds are taken from the customer's bank account.  
       operationId: reverseBankTransferPayment
@@ -20903,19 +20903,19 @@ paths:
     post:
       tags:
         - Bank transfer payments
-      summary: Refund payment
+      summary: Create referenced refund
       description: |
         Use this method to refund a bank transfer payment that is in a closed batch.  
 
-        To refund a bank transfer payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/create) method.  
+        To refund a bank transfer payment, you need its paymentId. Our gateway returned the paymentId in the response of the [Create Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/create) method.  
 
-        **Note:** If you don’t have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/list) method to search for the bank transfer payment.  
+        **Note:** If you don’t have the paymentId, use our [List Payments](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/list) method to search for the bank transfer payment.  
 
         If your refund is successful, our gateway returns the payment amount to the customer's account.  
 
         **Things to consider**  
         - If the merchant refunds a bank transfer payment that is in an open batch, our gateway reverses the bank transfer payment.  
-        - Some merchants can run unreferenced refunds, which means that they don’t need a paymentId to return an amount to a customer. For more information about how to run an unreferenced refund, go to [Create Refund](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/create).  
+        - Some merchants can run unreferenced refunds, which means that they don’t need a paymentId to return an amount to a customer. For more information about how to run an unreferenced refund, go to [Create Refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-unreferenced-refund).  
       operationId: refundBankTransferPayment
       parameters:
         - name: Idempotency-Key
@@ -21068,7 +21068,7 @@ paths:
       tags:
         - Bank transfer payments
       summary: Re-present payment
-      description: "Use this method to re-present an ACH payment.  \n\nTo re-present a payment, you need the paymentId of the return. To get the paymentId of the return, complete the following steps:  \n\n1.\tUse our [Retrieve Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/retrieve) method  to view the details of the original payment.  \n2.\tFrom the [returns object](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/retrieve#response.body.returns) in the response, get the paymentId of the return.  \n\nOur gateway uses the bank account details from the original payment. If you want to update the customer's bank account details, send the new bank account details in the request.  \n\nIf your request is successful, our gateway re-presents the payment.\n"
+      description: "Use this method to re-present an ACH payment.  \n\nTo re-present a payment, you need the paymentId of the return. To get the paymentId of the return, complete the following steps:  \n\n1.\tUse our [Retrieve Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/retrieve) method  to view the details of the original payment.  \n2.\tFrom the [returns object](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/retrieve#response.body.returns) in the response, get the paymentId of the return.  \n\nOur gateway uses the bank account details from the original payment. If you want to update the customer's bank account details, send the new bank account details in the request.  \n\nIf your request is successful, our gateway re-presents the payment.\n"
       operationId: representBankTransferPayment
       parameters:
         - name: Idempotency-Key
@@ -21184,7 +21184,7 @@ paths:
     post:
       tags:
         - Bank transfer refunds
-      summary: Create refund
+      summary: Create unreferenced refund
       operationId: bankTransferUnreferencedRefund
       parameters:
         - name: Idempotency-Key
@@ -21193,7 +21193,7 @@ paths:
           description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
-      description: "Use this method to create an unreferenced refund. An unreferenced refund is a refund that isn’t linked to a bank transfer payment.  \n\n**Note:** If you have the paymentId of the payment you want to refund, use our [Refund Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/refund) method. If you use our Refund Payment method, our gateway sends the refund amount to the customer’s original payment method and links the refund to the payment.  \n\nIn the request, you must provide the customer’s payment method and information about the order including the refund amount.  \n\nIn the response, our gateway returns information about the refund and a refundId, which you need for the following methods:  \n\n-\t[Retrieve refund](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/retrieve) – View the details of the refund.  \n-\t[Reverse refund](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/reverse) – Cancel the refund if it’s in an open batch.  \n"
+      description: "Use this method to create an unreferenced refund. An unreferenced refund is a refund that isn’t linked to a bank transfer payment.  \n\n**Note:** If you have the paymentId of the payment you want to refund, use our [Refund Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-referenced-refund) method. If you use our Refund Payment method, our gateway sends the refund amount to the customer’s original payment method and links the refund to the payment.  \n\nIn the request, you must provide the customer’s payment method and information about the order including the refund amount.  \n\nIn the response, our gateway returns information about the refund and a refundId, which you need for the following methods:  \n\n-\t[Retrieve refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/retrieve) – View the details of the refund.  \n-\t[Reverse refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/reverse-refund) – Cancel the refund if it’s in an open batch.  \n"
       requestBody:
         content:
           application/json:
@@ -21471,7 +21471,7 @@ paths:
       tags:
         - Bank transfer refunds
       summary: List refunds
-      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of bank transfer refunds.  \n\n**Note:** If you want to view the details of a specific refund and you have its refundId, use our [Retrieve Refund](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for refunds for a customer, an orderId, or a date range.  \n\nOur gateway returns the following information about each refund in the list:  \n\n-\tOrder details, including the refund amount and when it was processed.  \n-\tBank account details, including the customer’s name and account number.  \n\nFor referenced refunds, our gateway also returns details about the payment that the refund is linked to.\n"
+      description: "Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of bank transfer refunds.  \n\n**Note:** If you want to view the details of a specific refund and you have its refundId, use our [Retrieve Refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/retrieve) method.  \n\nUse query parameters to filter the list of results that we return, for example, to search for refunds for a customer, an orderId, or a date range.  \n\nOur gateway returns the following information about each refund in the list:  \n\n-\tOrder details, including the refund amount and when it was processed.  \n-\tBank account details, including the customer’s name and account number.  \n\nFor referenced refunds, our gateway also returns details about the payment that the refund is linked to.\n"
       operationId: listBankTransferRefunds
       parameters:
         - name: processingTerminalId
@@ -21734,9 +21734,9 @@ paths:
       description: |
         Use this method to retrieve information about a refund.  
 
-        To retrieve a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/refund) method or the [Create Refund](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/create) method.  
+        To retrieve a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-referenced-refund) method or the [Create Refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-unreferenced-refund) method.  
 
-        **Note:** If you don’t have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/list) method to search for the refund.  
+        **Note:** If you don’t have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/list) method to search for the refund.  
 
         Our gateway returns the following information about the refund:  
 
@@ -21797,9 +21797,9 @@ paths:
       description: |
         Use this method to cancel a bank transfer refund in an open batch.  
 
-        To cancel a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/payments/bank-transfer-payments/refund) or [Create Refund](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/create) method.  
+        To cancel a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-referenced-refund) or [Create Refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-unreferenced-refund) method.  
 
-        **Note:** If you don’t have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/payments/bank-transfer-refunds/list) method to search for the refund.  
+        **Note:** If you don’t have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/list) method to search for the refund.  
 
         If your request is successful, the gateway removes the refund from the merchant’s open batch, and no funds are returned to the cardholder’s account.  
       parameters:
