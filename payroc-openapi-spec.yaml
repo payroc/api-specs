@@ -7578,7 +7578,7 @@ paths:
 
         If your request is successful, our gateway returns a paymentLinkId, which you can use to perform follow-on actions.  
 
-        **Note:** To share the payment link with a customer, use our [Share Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/sharing-events/share) method.
+        **Note:** To share the payment link with a customer, use our [Share Payment Link](https://docs.payroc.com/api/schema/payment-links/sharing-events/share) method.
       operationId: createPaymentLink
       parameters:
         - name: Idempotency-Key
@@ -8285,7 +8285,7 @@ paths:
       description: |
         Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of payment links linked to a processing terminal.  
 
-        **Note:** If you want to view the details of a specific payment link and you have its paymentLinkId, use our [Retrieve Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/retrieve) method.  
+        **Note:** If you want to view the details of a specific payment link and you have its paymentLinkId, use our [Retrieve Payment Link](https://docs.payroc.com/api/schema/payment-links/retrieve) method.  
 
         Use query parameters to filter the list of results that we return, for example, to search for only active links or multi-use links.  
 
@@ -8537,9 +8537,9 @@ paths:
       description: |
         Use this method to retrieve information about a payment link.  
 
-        To retrieve a payment link, you need its paymentLinkId. Our gateway returned the paymentLinkId in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/create) method.  
+        To retrieve a payment link, you need its paymentLinkId. Our gateway returned the paymentLinkId in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payment-links/create) method.  
 
-        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payments/payment-links/list) method to search for the payment link.  
+        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payment-links/list) method to search for the payment link.  
 
         Our gateway returns the following information about the payment link:  
         - **type** - Indicates whether the link can be used only once or if it can be used multiple times.  
@@ -8608,9 +8608,9 @@ paths:
       description: |
         Use this method to partially update a payment link. Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
 
-        To update a payment link, you need its paymentLinkId, which we sent you in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/create) method.  
+        To update a payment link, you need its paymentLinkId, which we sent you in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payment-links/create) method.  
 
-        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payments/payment-links/list) method to search for the payment link.  
+        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payment-links/list) method to search for the payment link.  
 
         You can update the following properties of a multi-use link:
         - **expiresOn parameter** - Expiration date of the link.
@@ -8720,9 +8720,9 @@ paths:
       description: |
         Use this method to deactivate a payment link.  
 
-        To deactivate a payment link, you need its paymentLinkId. Our gateway returned the paymentLinkId in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/create) method.  
+        To deactivate a payment link, you need its paymentLinkId. Our gateway returned the paymentLinkId in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payment-links/create) method.  
 
-        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payments/payment-links/list) method to search for the payment link.  
+        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payment-links/list) method to search for the payment link.  
 
         If your request is successful, our gateway deactivates the payment link. The customer can't use the link to make a payment, and you can't reactivate the payment link.    
       operationId: deactivatePaymentLink
@@ -8808,13 +8808,13 @@ paths:
       description: |
         Use this method to email a payment link to a customer.  
 
-        To email a payment link, you need its paymentLinkId. Our gateway returned the paymentLinkId in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/create) method.  
+        To email a payment link, you need its paymentLinkId. Our gateway returned the paymentLinkId in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payment-links/create) method.  
 
-        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payments/payment-links/list) method to search for the payment link.  
+        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payment-links/list) method to search for the payment link.  
 
         In the request, you must provide the recipient's name and email address.  
 
-        In the response, our gateway returns a sharingEventId, which you can use to [List Payment Link Sharing Events](https://docs.payroc.com/api/schema/payments/payment-links/sharing-events/list).  
+        In the response, our gateway returns a sharingEventId, which you can use to [List Payment Link Sharing Events](https://docs.payroc.com/api/schema/payment-links/sharing-events/list).  
       operationId: sharePaymentLink
       parameters:
         - name: Idempotency-Key
@@ -8972,9 +8972,9 @@ paths:
       description: |
         Use this method to return a [paginated](https://docs.payroc.com/api/pagination) list of sharing events for a payment link. A sharing event occurs when a merchant shares a payment link with a customer.  
 
-        To list the sharing events for a payment link, you need its paymentLinkId. Our gateway returned the paymentLinkId in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payments/payment-links/create) method.  
+        To list the sharing events for a payment link, you need its paymentLinkId. Our gateway returned the paymentLinkId in the response of the [Create Payment Link](https://docs.payroc.com/api/schema/payment-links/create) method.  
 
-        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payments/payment-links/list) method to search for the payment link.  
+        **Note:** If you don't have the paymentLinkId, use our [List Payment Links](https://docs.payroc.com/api/schema/payment-links/list) method to search for the payment link.  
 
         Use query parameters to filter the list of results that we return, for example, to search for links sent to a specific customer.  
 
@@ -11230,7 +11230,7 @@ paths:
 
         The request includes an order object that contains information about the amount that you want to collect.  
 
-        In the response, our gateway returns information about the payment and a paymentId. You can use the paymentId in follow-on actions with the [Payments](https://docs.payroc.com/api/schema/payments) endpoints or [Bank Transfer Payments](https://docs.payroc.com/api/schema/payments/bank-transfer-payments) endpoints.  
+        In the response, our gateway returns information about the payment and a paymentId. You can use the paymentId in follow-on actions with the [Payments](https://docs.payroc.com/api/schema/card-payments/payments) endpoints or [Bank Transfer Payments](https://docs.payroc.com/api/schema/bank-transfer-payments/payments) endpoints.  
       operationId: paySubscription
       parameters:
         - name: Idempotency-Key
@@ -19824,7 +19824,7 @@ paths:
         - Bank transfer payments
       summary: Create payment
       operationId: bankTransferPayment
-      description: "Use this method to run a sale with a customer's bank account details.  \n\nIn the response, our gateway returns information about the bank transfer payment and a paymentId, which you need for the following methods:  \n-\t[Retrieve payment](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/retrieve) - View the details of the bank transfer payment.\n-\t[Reverse payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/reverse-payment) - Cancel the bank transfer payment if it's an open batch.\n-\t[Refund payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-referenced-refund) - Run a referenced refund to return funds to the customer's bank account.\n\n**Payment methods**  \n\nOur gateway accepts the following payment methods:  \n-\tAutomated clearing house (ACH) details\n-\tPre-authorized debit (PAD) details  \n\nYou can also use [secure tokens](https://docs.payroc.com/api/schema/payments/secure-tokens/overview) and [single-use tokens](https://docs.payroc.com/api/schema/tokenization/single-use-tokens/create) that you created from ACH details or PAD details. \n"
+      description: "Use this method to run a sale with a customer's bank account details.  \n\nIn the response, our gateway returns information about the bank transfer payment and a paymentId, which you need for the following methods:  \n-\t[Retrieve payment](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/retrieve) - View the details of the bank transfer payment.\n-\t[Reverse payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/reverse-payment) - Cancel the bank transfer payment if it's an open batch.\n-\t[Refund payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/refund) - Run a referenced refund to return funds to the customer's bank account.\n\n**Payment methods**  \n\nOur gateway accepts the following payment methods:  \n-\tAutomated clearing house (ACH) details\n-\tPre-authorized debit (PAD) details  \n\nYou can also use [secure tokens](https://docs.payroc.com/api/schema/payments/secure-tokens/overview) and [single-use tokens](https://docs.payroc.com/api/schema/tokenization/single-use-tokens/create) that you created from ACH details or PAD details. \n"
       parameters:
         - name: Idempotency-Key
           in: header
@@ -20915,7 +20915,7 @@ paths:
 
         **Things to consider**  
         - If the merchant refunds a bank transfer payment that is in an open batch, our gateway reverses the bank transfer payment.  
-        - Some merchants can run unreferenced refunds, which means that they don’t need a paymentId to return an amount to a customer. For more information about how to run an unreferenced refund, go to [Create Refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-unreferenced-refund).  
+        - Some merchants can run unreferenced refunds, which means that they don’t need a paymentId to return an amount to a customer. For more information about how to run an unreferenced refund, go to [Create Refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create).  
       operationId: refundBankTransferPayment
       parameters:
         - name: Idempotency-Key
@@ -21193,7 +21193,7 @@ paths:
           description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
           schema: *ref_22
           examples: *ref_23
-      description: "Use this method to create an unreferenced refund. An unreferenced refund is a refund that isn’t linked to a bank transfer payment.  \n\n**Note:** If you have the paymentId of the payment you want to refund, use our [Refund Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-referenced-refund) method. If you use our Refund Payment method, our gateway sends the refund amount to the customer’s original payment method and links the refund to the payment.  \n\nIn the request, you must provide the customer’s payment method and information about the order including the refund amount.  \n\nIn the response, our gateway returns information about the refund and a refundId, which you need for the following methods:  \n\n-\t[Retrieve refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/retrieve) – View the details of the refund.  \n-\t[Reverse refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/reverse-refund) – Cancel the refund if it’s in an open batch.  \n"
+      description: "Use this method to create an unreferenced refund. An unreferenced refund is a refund that isn’t linked to a bank transfer payment.  \n\n**Note:** If you have the paymentId of the payment you want to refund, use our [Refund Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/refund) method. If you use our Refund Payment method, our gateway sends the refund amount to the customer’s original payment method and links the refund to the payment.  \n\nIn the request, you must provide the customer’s payment method and information about the order including the refund amount.  \n\nIn the response, our gateway returns information about the refund and a refundId, which you need for the following methods:  \n\n-\t[Retrieve refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/retrieve) – View the details of the refund.  \n-\t[Reverse refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/reverse-refund) – Cancel the refund if it’s in an open batch.  \n"
       requestBody:
         content:
           application/json:
@@ -21734,7 +21734,7 @@ paths:
       description: |
         Use this method to retrieve information about a refund.  
 
-        To retrieve a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-referenced-refund) method or the [Create Refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-unreferenced-refund) method.  
+        To retrieve a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/refund) method or the [Create Refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create) method.  
 
         **Note:** If you don’t have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/list) method to search for the refund.  
 
@@ -21797,7 +21797,7 @@ paths:
       description: |
         Use this method to cancel a bank transfer refund in an open batch.  
 
-        To cancel a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-referenced-refund) or [Create Refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create-unreferenced-refund) method.  
+        To cancel a refund, you need its refundId. Our gateway returned the refundId in the response of the [Refund Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/refund) or [Create Refund](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/create) method.  
 
         **Note:** If you don’t have the refundId, use our [List Refunds](https://docs.payroc.com/api/schema/bank-transfer-payments/refunds/list) method to search for the refund.  
 
