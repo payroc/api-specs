@@ -14096,7 +14096,7 @@ paths:
               properties: &ref_693
                 appleDomainId:
                   type: string
-                  description: Unique identifier of the merchant's domain that we assigned when you added their domain to our Self-Care Portal.
+                  description: Unique appleDomainId of the merchant's domain that we assigned when you added their domain to our Self-Care Portal.
                   example: DUHDZJHGYY
                 appleValidationUrl:
                   type: string
