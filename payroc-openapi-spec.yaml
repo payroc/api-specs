@@ -22352,7 +22352,7 @@ paths:
                                 format: int32
                                 example: 3
                               ecommerce:
-                                description: Esimated percentage of e-Commerce transactions.
+                                description: Estimated percentage of e-Commerce transactions.
                                 type: integer
                                 format: int32
                                 example: 20
