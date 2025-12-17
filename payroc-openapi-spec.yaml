@@ -22337,21 +22337,15 @@ paths:
                             type: object
                             description: Object that contains information about the types of transactions ran by the processing account. The percentages for transaction types must total 100%.
                             required:
-                              - cardPresentKeyed
-                              - cardPresentSwiped
+                              - cardPresent
                               - mailOrTelephone
                               - ecommerce
                             properties:
-                              cardPresentKeyed:
-                                description: Estimated percentage of keyed card-present transactions.
+                              cardPresent:
+                                description: Estimated percentage of card-present transactions.
                                 type: integer
                                 format: int32
-                                example: 47
-                              cardPresentSwiped:
-                                description: Estimated percentage of swiped card-present transactions.
-                                type: integer
-                                format: int32
-                                example: 30
+                                example: 77
                               mailOrTelephone:
                                 description: Estimated percentage of mail order or telephone transactions.
                                 type: integer
@@ -22847,8 +22841,7 @@ paths:
                           average: 50000
                           highest: 100000
                         volumeBreakdown:
-                          cardPresentKeyed: 47
-                          cardPresentSwiped: 30
+                          cardPresent: 77
                           mailOrTelephone: 3
                           ecommerce: 20
                         isSeasonal: true
@@ -23868,8 +23861,7 @@ paths:
                             average: 1000000
                             highest: 200000000
                           volumeBreakdown:
-                            cardPresentKeyed: 47
-                            cardPresentSwiped: 30
+                            cardPresent: 77
                             mailOrTelephone: 3
                             ecommerce: 20
                           isSeasonal: true
@@ -23977,8 +23969,7 @@ paths:
                             average: 2000000
                             highest: 300000000
                           volumeBreakdown:
-                            cardPresentKeyed: 0
-                            cardPresentSwiped: 0
+                            cardPresent: 0
                             mailOrTelephone: 0
                             ecommerce: 100
                           isSeasonal: true
@@ -24122,8 +24113,7 @@ paths:
                       average: 50000
                       highest: 100000
                     volumeBreakdown:
-                      cardPresentKeyed: 47
-                      cardPresentSwiped: 30
+                      cardPresent: 77
                       mailOrTelephone: 3
                       ecommerce: 20
                     isSeasonal: true
@@ -24247,8 +24237,7 @@ paths:
                         average: 50000
                         highest: 100000
                       volumeBreakdown:
-                        cardPresentKeyed: 47
-                        cardPresentSwiped: 30
+                        cardPresent: 77
                         mailOrTelephone: 3
                         ecommerce: 20
                       isSeasonal: true
@@ -24453,8 +24442,7 @@ paths:
                         average: 50000
                         highest: 100000
                       volumeBreakdown:
-                        cardPresentKeyed: 47
-                        cardPresentSwiped: 30
+                        cardPresent: 77
                         mailOrTelephone: 3
                         ecommerce: 20
                       isSeasonal: true
