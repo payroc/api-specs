@@ -24537,7 +24537,16 @@ paths:
       tags:
         - Processing accounts
       summary: List processing account's funding accounts
-      description: Retrieve a list of funding accounts associated with a processing account.
+      description: |
+        Use this method to return a list of funding accounts linked to a processing acccount.  
+
+        To retrieve a list of funding accounts for a processing account, you need the processingAccountId. Our gateway returned the processingAccountId in the response of the [Create Merchant Platform](https://docs.payroc.com/api/schema/boarding/merchant-platforms/create) method or the [Create Proccessing Account](https://docs.payroc.com/api/schema/boarding/merchant-platforms/create-processing-account) method.  
+
+        Our gateway returns information about the following for each funding account in the list:  
+        - Account information, including the name on the account and payment methods.  
+        - Status, including whether we have approved or rejected the account.  
+
+        For each funding account, we also return its fundingAccountId, which you can use to perform follow-on actions.  
       operationId: listProcessingAccountsFundingAccounts
       parameters:
         - name: processingAccountId
