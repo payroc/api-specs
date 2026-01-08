@@ -65,7 +65,7 @@ tags:
         - [Retrieve a list of open processing accounts that are linked to a merchant platform.](#listMerchantLocations)  
           
           
-      For more information about boarding a merchant, go to our [Board a merchant](https://docs.payroc.com/guides/integrate/boarding) guide. 
+      For more information about boarding a merchant, go to our [Board a merchant](https://docs.payroc.com/guides/board-merchants/boarding) guide. 
   - name: Owners
     description: Individuals who own or control the business.
   - name: Payment instructions
@@ -9113,7 +9113,7 @@ paths:
       tags:
         - Payment plans
       summary: Create payment plan
-      description: "Use this method to create a payment schedule that you can assign customers to.  \n\n**Note:** This method is part of our Repeat Payments feature. To help you understand how this method works with our Subscriptions endpoints, go to [Repeat Payments](https://docs.payroc.com/guides/integrate/repeat-payments).  \n\nWhen you create a payment plan you need to provide a unique paymentPlanId that you use to run follow-on actions:  \n\n-\t[Retrieve Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/retrieve)  - View the details of the payment plan.  \n-\t[Update Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/partially-update)  - Update the details of the payment plan.  \n-\t[Delete Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/delete)  - Delete the payment plan.  \n-\t[Create Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/create)  - Subscribe a customer to the payment plan.  \n\nThe request includes the following settings:  \n\n-\t**type** - Indicates if our gateway or the merchant collects payments. If the merchant manually collects payments, integrate with the [Pay Manual Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/pay) method.  \n-\t**recurringOrder** - Amount of each payment if the gateway automatically collect payments.  \n-\t**setupOrder** - Setup fee that our gateway immediately collects from the customer's payment method.  \n-\t**onUpdate and onDelete** - Indicates what happens to associated subscriptions if the merchant updates or deletes the payment plan.  \n"
+      description: "Use this method to create a payment schedule that you can assign customers to.  \n\n**Note:** This method is part of our Repeat Payments feature. To help you understand how this method works with our Subscriptions endpoints, go to [Repeat Payments](https://docs.payroc.com/guides/take-payments/repeat-payments).  \n\nWhen you create a payment plan you need to provide a unique paymentPlanId that you use to run follow-on actions:  \n\n-\t[Retrieve Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/retrieve)  - View the details of the payment plan.  \n-\t[Update Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/partially-update)  - Update the details of the payment plan.  \n-\t[Delete Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/delete)  - Delete the payment plan.  \n-\t[Create Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/create)  - Subscribe a customer to the payment plan.  \n\nThe request includes the following settings:  \n\n-\t**type** - Indicates if our gateway or the merchant collects payments. If the merchant manually collects payments, integrate with the [Pay Manual Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/pay) method.  \n-\t**recurringOrder** - Amount of each payment if the gateway automatically collect payments.  \n-\t**setupOrder** - Setup fee that our gateway immediately collects from the customer's payment method.  \n-\t**onUpdate and onDelete** - Indicates what happens to associated subscriptions if the merchant updates or deletes the payment plan.  \n"
       operationId: createPaymentPlan
       parameters:
         - name: Idempotency-Key
@@ -9783,7 +9783,7 @@ paths:
       description: |
         Use this method to assign a customer to a payment plan.  
 
-        **Note:** This method is part of our Repeat Payments feature. To help you understand how this method works with our Payment plans endpoints, go to [Repeat Payments](https://docs.payroc.com/guides/integrate/repeat-payments).  
+        **Note:** This method is part of our Repeat Payments feature. To help you understand how this method works with our Payment plans endpoints, go to [Repeat Payments](https://docs.payroc.com/guides/take-payments/repeat-payments).  
 
         When you create a subscription you need to provide a unique subscriptionId that you use to run follow-on actions:  
 
@@ -13533,7 +13533,7 @@ paths:
       description: |
         Use this method to update a secure token if you have a single-use token from Hosted Fields.  
 
-        **Note:** If you don't have a single-use token, you can update saved payment details with our [Update Secure Token](https://docs.payroc.com/api/resources#updateSecureToken) method. For more information about our two options to update a secure token, go to [Update saved payment details](https://docs.payroc.com/guides/integrate/update-saved-payment-details).  
+        **Note:** If you don't have a single-use token, you can update saved payment details with our [Update Secure Token](https://docs.payroc.com/api/resources#updateSecureToken) method. For more information about our two options to update a secure token, go to [Update saved payment details](https://docs.payroc.com/guides/take-payments/update-saved-payment-details).  
       operationId: accountUpdate
       parameters:
         - name: Idempotency-Key
@@ -13922,7 +13922,7 @@ paths:
 
         In the response, our gateway returns the session token and the time that it expires. You need the session token when you configure the JavaScript for Hosted Fields.  
 
-        For more information about adding Hosted Fields to a webpage, go to [Hosted Fields](https://docs.payroc.com/guides/integrate/hosted-fields). 
+        For more information about adding Hosted Fields to a webpage, go to [Hosted Fields](https://docs.payroc.com/guides/take-payments/hosted-fields). 
       operationId: createSession
       parameters:
         - name: Idempotency-Key
@@ -14076,7 +14076,7 @@ paths:
 
         In the response, we return the startSessionObject that you send to Apple when you retrieve the cardholder's encrypted payment details.  
 
-        **Note:** For more information about how to integrate with Apple Pay, go to [Apple Pay](https://docs.payroc.com/guides/integrate/apple-pay).
+        **Note:** For more information about how to integrate with Apple Pay, go to [Apple Pay](https://docs.payroc.com/guides/take-payments/apple-pay).
       operationId: applePaySessions
       parameters:
         - name: processingTerminalId
@@ -14181,7 +14181,7 @@ paths:
         - Payments
       summary: Create payment
       operationId: payment
-      description: "Use this method to run a sale or a pre-authorization with a customer's payment card. \n\nIn the response, our gateway returns information about the card payment and a paymentId, which you need for the following methods:\n\n-\t[Retrieve payment](https://docs.payroc.com/api/schema/card-payments/payments/retrieve) - View the details of the card payment.\n-\t[Adjust payment](https://docs.payroc.com/api/schema/card-payments/payments/adjust) - Update the details of the card payment.\n-\t[Capture payment](https://docs.payroc.com/api/schema/card-payments/payments/capture)  - Capture the pre-authorization.\n-\t[Reverse payment](https://docs.payroc.com/api/schema/card-payments/refunds/reverse)  - Cancel the card payment if it's in an open batch.\n-\t[Refund payment](https://docs.payroc.com/api/schema/card-payments/refunds/create-referenced-refund)  - Run a referenced refund to return funds to the payment card.\n\n**Payment methods** \n\n- **Cards** - Credit, debit, and EBT\n- **Digital wallets** - [Apple Pay®](https://docs.payroc.com/guides/integrate/apple-pay) and [Google Pay®](https://docs.payroc.com/guides/integrate/google-pay) \n- **Tokens** - Secure tokens and single-use tokens\n\n**Features** \n\nOur Create Payment method also supports the following features: \n\n- [Repeat payments](https://docs.payroc.com/guides/integrate/repeat-payments/use-your-own-software) - Run multiple payments as part of a payment schedule that you manage with your own software. \n- **Offline sales** - Run a sale or a pre-authorization if the terminal loses its connection to our gateway. \n- [Tokenization](https://docs.payroc.com/guides/integrate/save-payment-details) - Save card details to use in future transactions. \n- [3-D Secure](https://docs.payroc.com/guides/integrate/3-d-secure) - Verify the identity of the cardholder. \n- [Custom fields](https://docs.payroc.com/guides/integrate/add-custom-fields) - Add your own data to a payment. \n- **Tips** - Add tips to the card payment.  \n- **Taxes** - Add local taxes to the card payment. \n- **Surcharging** - Add a surcharge to the card payment. \n- **Dual pricing** - Offer different prices based on payment method, for example, if you use our RewardPay Choice pricing program. \n"
+      description: "Use this method to run a sale or a pre-authorization with a customer's payment card. \n\nIn the response, our gateway returns information about the card payment and a paymentId, which you need for the following methods:\n\n-\t[Retrieve payment](https://docs.payroc.com/api/schema/card-payments/payments/retrieve) - View the details of the card payment.\n-\t[Adjust payment](https://docs.payroc.com/api/schema/card-payments/payments/adjust) - Update the details of the card payment.\n-\t[Capture payment](https://docs.payroc.com/api/schema/card-payments/payments/capture)  - Capture the pre-authorization.\n-\t[Reverse payment](https://docs.payroc.com/api/schema/card-payments/refunds/reverse)  - Cancel the card payment if it's in an open batch.\n-\t[Refund payment](https://docs.payroc.com/api/schema/card-payments/refunds/create-referenced-refund)  - Run a referenced refund to return funds to the payment card.\n\n**Payment methods** \n\n- **Cards** - Credit, debit, and EBT\n- **Digital wallets** - [Apple Pay®](https://docs.payroc.com/guides/take-payments/apple-pay) and [Google Pay®](https://docs.payroc.com/guides/take-payments/google-pay) \n- **Tokens** - Secure tokens and single-use tokens\n\n**Features** \n\nOur Create Payment method also supports the following features: \n\n- [Repeat payments](https://docs.payroc.com/guides/take-payments/repeat-payments/use-your-own-software) - Run multiple payments as part of a payment schedule that you manage with your own software. \n- **Offline sales** - Run a sale or a pre-authorization if the terminal loses its connection to our gateway. \n- [Tokenization](https://docs.payroc.com/guides/take-payments/save-payment-details) - Save card details to use in future transactions. \n- [3-D Secure](https://docs.payroc.com/guides/take-payments/3-d-secure) - Verify the identity of the cardholder. \n- [Custom fields](https://docs.payroc.com/guides/take-payments/add-custom-fields) - Add your own data to a payment. \n- **Tips** - Add tips to the card payment.  \n- **Taxes** - Add local taxes to the card payment. \n- **Surcharging** - Add a surcharge to the card payment. \n- **Dual pricing** - Offer different prices based on payment method, for example, if you use our RewardPay Choice pricing program. \n"
       parameters:
         - name: Idempotency-Key
           in: header
@@ -14940,8 +14940,8 @@ paths:
                           type: string
                           description: |
                             Provider of the digital wallet. Send one of the following values:
-                            - `apple` - For more information about how to integrate with Apple Pay, go to [Apple Pay®](https://docs.payroc.com/guides/integrate/apple-pay).
-                            - `google` - For more information about how to integrate with google Pay, go to [Google Pay®](https://docs.payroc.com/guides/integrate/google-pay).
+                            - `apple` - For more information about how to integrate with Apple Pay, go to [Apple Pay®](https://docs.payroc.com/guides/take-payments/apple-pay).
+                            - `google` - For more information about how to integrate with google Pay, go to [Google Pay®](https://docs.payroc.com/guides/take-payments/google-pay).
                           enum:
                             - apple
                             - google
@@ -22069,7 +22069,7 @@ paths:
       description: |
         Use this method to board a merchant with Payroc.  
 
-        **Note**: This method is part of our Boarding solution. To help you understand how this method works with other Boarding methods, go to [Board a Merchant](https://docs.payroc.com/guides/integrate/boarding).  
+        **Note**: This method is part of our Boarding solution. To help you understand how this method works with other Boarding methods, go to [Board a Merchant](https://docs.payroc.com/guides/board-merchants/boarding).  
 
         In the request, include the following information:  
         - Legal information, including its legal name and address.  
@@ -22984,7 +22984,7 @@ paths:
                             - `cancelled` - Merchant withdrew the application for the processing account.
                             - `failed` - An error occurred while we were setting up the processing account.  
 
-                            **Note**: You can subscribe to our processingAccount.status.changed event to get notifications when we change the status of a processing account. For more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).
+                            **Note**: You can subscribe to our processingAccount.status.changed event to get notifications when we change the status of a processing account. For more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/board-merchants/event-subscriptions).
                           readOnly: true
                           enum:
                             - entered
@@ -23574,7 +23574,7 @@ paths:
                                 - `rejected` - We rejected the application for the processing account.  
                                 - `terminated` - Processing account is closed.  
                                 - `cancelled` - Merchant withdrew the application for the processing account.  
-                                **Note**: You can subscribe to our processingAccount.status.changed event to get notifications when we change the status of a processing account. For more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).
+                                **Note**: You can subscribe to our processingAccount.status.changed event to get notifications when we change the status of a processing account. For more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/board-merchants/event-subscriptions).
                               readOnly: true
                               enum:
                                 - entered
@@ -25489,7 +25489,7 @@ paths:
 
         In the response, our gateway returns information about the terminal order including its status and terminalOrderId that you can use to [retrieve the terminal order](https://docs.payroc.com/api/schema/boarding/terminal-orders/retrieve).  
 
-        **Note**: You can subscribe to the terminalOrder.status.changed event to get notifications when we update the status of a terminal order. For more information about how to subscribe to events, go to [Events Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).  
+        **Note**: You can subscribe to the terminalOrder.status.changed event to get notifications when we update the status of a terminal order. For more information about how to subscribe to events, go to [Events Subscriptions](https://docs.payroc.com/guides/board-merchants/event-subscriptions).  
       operationId: createTerminalOrder
       tags:
         - Processing accounts
@@ -25898,7 +25898,7 @@ paths:
                     description: |
                       Status of the terminal order.  
 
-                      **Note**: You can subscribe to our terminalOrder.status.changed event to get notifications when we update the status of a terminal order. For more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).  
+                      **Note**: You can subscribe to our terminalOrder.status.changed event to get notifications when we update the status of a terminal order. For more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/board-merchants/event-subscriptions).  
                     enum:
                       - open
                       - held
@@ -26519,7 +26519,7 @@ paths:
                                   description: Indicates if the terminal prompts for cashback on PIN debit transactions.
                                 recurringPayments:
                                   type: boolean
-                                  description: Indicates if the terminal can run repeat payments. For more information about repeat payments, go to [Payment Plans](https://docs.payroc.com/guides/integrate/repeat-payments).
+                                  description: Indicates if the terminal can run repeat payments. For more information about repeat payments, go to [Payment Plans](https://docs.payroc.com/guides/take-payments/repeat-payments).
                                 paymentLinks:
                                   type: object
                                   description: Object that contains details about payment links.
@@ -27765,7 +27765,7 @@ paths:
         - Training provider  
         - Shipping information  
 
-        **Note**: You can subscribe to our terminalOrder.status.changed event to get notifications when we update the status of a terminal order. For more information about how to subscribe to events, go to [Events Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).  
+        **Note**: You can subscribe to our terminalOrder.status.changed event to get notifications when we update the status of a terminal order. For more information about how to subscribe to events, go to [Events Subscriptions](https://docs.payroc.com/guides/board-merchants/event-subscriptions).  
       operationId: getTerminalOrder
       parameters:
         - name: terminalOrderId
