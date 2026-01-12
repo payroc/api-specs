@@ -31519,7 +31519,7 @@ components:
       summary: Paginated list of Event subscriptions
       description: Example of a paginated list of event subscriptions
       value: *ref_1012
-    createWebhookEventSubscription:
+    createEventSubscription:
       summary: Create event subscription
       description: Create an event subscription
       value: *ref_1013
