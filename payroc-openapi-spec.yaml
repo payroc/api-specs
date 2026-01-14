@@ -12142,7 +12142,7 @@ paths:
                                           pattern: '[0-9]{4}'
                                           type: string
                                           description: Expiry date of the customer’s card.
-                                          example: '1225'
+                                          example: '1230'
                                         cvv:
                                           pattern: '[0-9]{3,4}'
                                           type: string
@@ -12187,7 +12187,7 @@ paths:
                                           description: |
                                             Expiry date of the customer’s card.  
                                             **Note:** We require you to send an expiry date for most BIN lookups and electronic voucher transactions.
-                                          example: '1225'
+                                          example: '1230'
                                         cvv:
                                           pattern: '[0-9]{3,4}'
                                           type: string
@@ -12591,7 +12591,7 @@ paths:
                       keyedData:
                         dataFormat: plainText
                         cardNumber: '4539858876047062'
-                        expiryDate: '1225'
+                        expiryDate: '1230'
                         cvv: '234'
                   customFields:
                     - name: yourCustomField
@@ -12857,7 +12857,7 @@ paths:
                             pattern: '[0-9]{4}'
                             type: string
                             description: Expiry date of the customer's card.
-                            example: '1225'
+                            example: '1230'
                           cardType:
                             type: string
                             description: Card brand of the card, for example, Visa.
@@ -12968,7 +12968,7 @@ paths:
                       type: card
                       cardholderName: Sarah Hazel Hopper
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                     token: '296753123456'
                     status: notValidated
                     customFields:
@@ -13235,7 +13235,7 @@ paths:
                           type: card
                           cardholderName: Sarah Hopper
                           cardNumber: 453985******7062
-                          expiryDate: '1225'
+                          expiryDate: '1230'
                         token: '296753123456'
                         status: notValidated
                       - secureTokenId: MREF_fe0d9876-cba5-432f-e10d-9cb87654a3f2e1
@@ -13776,7 +13776,7 @@ paths:
                       keyedData:
                         dataFormat: plainText
                         cardNumber: '4539858876047062'
-                        expiryDate: '1225'
+                        expiryDate: '1230'
                         cvv: '234'
         required: true
       responses:
@@ -13873,7 +13873,7 @@ paths:
                       type: card
                       cardholderName: Sarah Hazel Hopper
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                       cardType: Visa Credit
                       country: US
                       currency: USD
@@ -15122,7 +15122,7 @@ paths:
                         device:
                           model: paxA80
                           serialNumber: WPC202833004712
-                        expiryDate: '1225'
+                        expiryDate: '1230'
                         cardNumber: '4539858876047062'
                   customFields:
                     - name: yourCustomField
@@ -15671,7 +15671,7 @@ paths:
                       type: MasterCard
                       entryMethod: keyed
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                       securityChecks:
                         cvvResult: M
                         avsResult: 'Y'
@@ -16187,7 +16187,7 @@ paths:
                           type: Visa Credit
                           cardholderName: Sarah Hopper
                           cardNumber: 453985******7062
-                          expiryDate: '1225'
+                          expiryDate: '1230'
                           entryMethod: keyed
                           secureToken:
                             secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
@@ -16225,7 +16225,7 @@ paths:
                           type: Visa Debit
                           cardholderName: Sarah Hopper
                           cardNumber: 453985******7062
-                          expiryDate: '1225'
+                          expiryDate: '1230'
                           entryMethod: keyed
                           secureToken:
                             secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
@@ -16562,7 +16562,7 @@ paths:
                       type: MasterCard
                       entryMethod: keyed
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                       securityChecks:
                         cvvResult: M
                         avsResult: 'Y'
@@ -16844,7 +16844,7 @@ paths:
                       type: MasterCard
                       entryMethod: keyed
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                       securityChecks:
                         cvvResult: M
                         avsResult: 'Y'
@@ -17023,7 +17023,7 @@ paths:
                       type: MasterCard
                       entryMethod: keyed
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                       securityChecks:
                         cvvResult: M
                         avsResult: 'Y'
@@ -17647,7 +17647,7 @@ paths:
                         device:
                           model: paxA920
                           serialNumber: '1850010868'
-                        expiryDate: '1225'
+                        expiryDate: '1230'
                         cardNumber: '4539858876047062'
                   customFields:
                     - name: yourCustomField
@@ -17750,7 +17750,7 @@ paths:
                       type: Visa Credit
                       entryMethod: keyed
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                     transactionResult:
                       type: refund
                       status: ready
@@ -18019,7 +18019,7 @@ paths:
                           type: Visa Credit
                           entryMethod: keyed
                           cardNumber: 453985******7062
-                          expiryDate: '1225'
+                          expiryDate: '1230'
                         transactionResult:
                           type: refund
                           status: ready
@@ -18258,7 +18258,7 @@ paths:
                       type: Visa Credit
                       entryMethod: keyed
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                     transactionResult:
                       type: refund
                       status: ready
@@ -18366,7 +18366,7 @@ paths:
                       type: Visa Credit
                       entryMethod: keyed
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                     transactionResult:
                       type: refund
                       status: reversal
@@ -19137,7 +19137,7 @@ paths:
                       keyedData:
                         dataFormat: plainText
                         cardNumber: '4539858876047062'
-                        expiryDate: '1225'
+                        expiryDate: '1230'
         required: true
       responses:
         '200':
@@ -19193,7 +19193,7 @@ paths:
                       cardholderName: Sarah Hazel Hopper
                       cardholderSignature: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                     verified: true
                     transactionResult:
                       status: ready
@@ -19320,7 +19320,7 @@ paths:
                       keyedData:
                         dataFormat: plainText
                         cardNumber: '4539858876047062'
-                        expiryDate: '1225'
+                        expiryDate: '1230'
                         device:
                           model: paxA920
                           dataKsn: FFFF5B09910001000061
@@ -19398,7 +19398,7 @@ paths:
                       cardholderName: Sarah Hazel Hopper
                       cardholderSignature: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                       cardNumber: 453985******7062
-                      expiryDate: '1225'
+                      expiryDate: '1230'
                       balances:
                         - benefitCategory: cash
                           amount: 10000
@@ -19530,7 +19530,7 @@ paths:
                       keyedData:
                         dataFormat: plainText
                         cardNumber: '4539858876047062'
-                        expiryDate: '1225'
+                        expiryDate: '1230'
         required: true
       responses:
         '200':
@@ -19714,7 +19714,7 @@ paths:
                       keyedData:
                         dataFormat: plainText
                         cardNumber: '4539858876047062'
-                        expiryDate: '1225'
+                        expiryDate: '1230'
         required: true
       responses:
         '200':
