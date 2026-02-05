@@ -185,7 +185,7 @@ paths:
                   description: Trading name of the business or organization.
                 address:
                   type: object
-                  description: Address of the funding recipient.
+                  description: Polymorphic object that contains address information for a funding recipient.
                   oneOf:
                     - required: &ref_0
                         - city
@@ -697,7 +697,7 @@ paths:
                     description: Legal name of the business or organization.
                   address:
                     type: object
-                    description: Address of the funding recipient.
+                    description: Polymorphic object that contains address information for a funding recipient.
                     oneOf:
                       - required: *ref_0
                         type: object
@@ -2552,10 +2552,10 @@ paths:
                         items:
                           type: object
                           title: pricing intent
-                          description: Object that contains information about a pricing intent.
+                          description: Polymorphic object that contains pricing intent information.
                           oneOf: &ref_56
                             - type: object
-                              title: pricing intent version 5.0
+                              title: '5.0'
                               description: Object that contains information about a pricing intent for Merchant Processing Agreement (MPA) 5.0.
                               allOf: &ref_598
                                 - type: object
@@ -2673,7 +2673,7 @@ paths:
                                           minimum: 0
                                           example: 10
                                         platinumSecurity:
-                                          description: Object that contains information about the Platinum Security fee.
+                                          description: "Polymorphic object that contains billing details for Platinum Security.  \n\nThe value of the billingFrequency field determines which variant you should use:  \n-\t`monthly` - We collect the fee for Platinum Security each month.\n-\t`annual` - We collect the fee for Platinum Security each year. \n"
                                           type: object
                                           discriminator:
                                             propertyName: billingFrequency
@@ -2682,7 +2682,7 @@ paths:
                                               annual: '#/components/schemas/baseUsAnnual'
                                           oneOf:
                                             - type: object
-                                              title: Monthly platinum security
+                                              title: monthly
                                               required: &ref_562
                                                 - billingFrequency
                                               properties: &ref_563
@@ -2698,7 +2698,7 @@ paths:
                                                   example: 1295
                                                   default: 1295
                                             - type: object
-                                              title: Annual platinum security
+                                              title: annual
                                               required: &ref_564
                                                 - billingFrequency
                                               properties: &ref_565
@@ -2771,7 +2771,7 @@ paths:
                                       properties:
                                         card:
                                           type: object
-                                          description: Object that contains information about card fees.
+                                          description: "Polymorphic object that contains fees for card transactions.  \n\nThe value of the planType field determines which variant you should use:  \n-\t`interchangePlus` - Interchange + pricing\n-\t`interchangePlusPlus` - Interchange pricing with three tiers\n-\t`tiered3` - Three-tiered pricing \n-\t`tiered4` - Four-tiered pricing\n-\t`tiered6` - Six-tiered pricing\n-\t`flatRate` - Flat rate pricing\n-\t`consumerChoice` - ConsumerChoice \n-\t`rewardPayChoice` - RewardPayChoice\n"
                                           discriminator:
                                             propertyName: planType
                                             mapping:
@@ -2818,7 +2818,7 @@ paths:
                                                             - type: integer
                                                               minimum: 0
                                                     amex:
-                                                      description: Object that contains the fees for American Express transactions.
+                                                      description: "Polymorphic object that contains fees for American Express transactions.  \n\nThe value of the type field determines which variant you should use:  \n-\t`optBlue` - Amex OptBlue pricing program.\n-\t`direct` - Amex Direct pricing program.\n"
                                                       discriminator:
                                                         propertyName: type
                                                         mapping:
@@ -2826,7 +2826,7 @@ paths:
                                                           direct: '#/components/schemas/interchangePlusAmexDirect'
                                                       oneOf:
                                                         - type: object
-                                                          title: American Express OptBlue
+                                                          title: optBlue
                                                           required: &ref_566
                                                             - type
                                                             - volume
@@ -2853,7 +2853,7 @@ paths:
                                                                 - type: integer
                                                                   minimum: 0
                                                         - type: object
-                                                          title: American Express Direct
+                                                          title: direct
                                                           required: &ref_568
                                                             - type
                                                             - transaction
@@ -2982,7 +2982,7 @@ paths:
                                                           title: Processor Fee
                                                           properties: *ref_43
                                                     amex:
-                                                      description: Object that contains the fees for American Express transactions.
+                                                      description: "Polymorphic object that contains fees for American Express transactions.  \n\nThe value of the type field determines which variant you should use:  \n-\t`optBlue` - Amex OptBlue pricing program.\n-\t`direct` - Amex Direct pricing program.\n"
                                                       discriminator:
                                                         propertyName: type
                                                         mapping:
@@ -2990,7 +2990,7 @@ paths:
                                                           direct: '#/components/schemas/interchangePlusPlusAmexDirect'
                                                       oneOf:
                                                         - type: object
-                                                          title: American Express OptBlue
+                                                          title: optBlue
                                                           required: &ref_570
                                                             - type
                                                             - qualifiedRate
@@ -3018,7 +3018,7 @@ paths:
                                                               title: Processor Fee
                                                               properties: *ref_43
                                                         - type: object
-                                                          title: American Express Direct
+                                                          title: direct
                                                           required: &ref_572
                                                             - type
                                                             - transaction
@@ -3077,7 +3077,7 @@ paths:
                                                       required: *ref_52
                                                       properties: *ref_53
                                                     amex:
-                                                      description: Object that contains the fees for American Express transactions.
+                                                      description: "Polymorphic object that contains fees for American Express transactions.  \n\nThe value of the type field determines which variant you should use:  \n-\t`optBlue` - Amex OptBlue pricing program.\n-\t`direct` - Amex Direct pricing program.\n"
                                                       discriminator:
                                                         propertyName: type
                                                         mapping:
@@ -3085,7 +3085,7 @@ paths:
                                                           direct: '#/components/schemas/tiered3AmexDirect'
                                                       oneOf:
                                                         - type: object
-                                                          title: American Express OptBlue
+                                                          title: optBlue
                                                           required: &ref_576
                                                             - type
                                                             - qualifiedRate
@@ -3113,7 +3113,7 @@ paths:
                                                               title: Processor Fee
                                                               properties: *ref_43
                                                         - type: object
-                                                          title: American Express Direct
+                                                          title: direct
                                                           required: &ref_578
                                                             - type
                                                             - transaction
@@ -3178,7 +3178,7 @@ paths:
                                                               title: Processor Fee
                                                               properties: *ref_43
                                                     amex:
-                                                      description: Object that contains the fees for American Express transactions.
+                                                      description: "Polymorphic object that contains fees for American Express transactions.  \n\nThe value of the type field determines which variant you should use:  \n-\t`optBlue` - Amex OptBlue pricing program.\n-\t`direct` - Amex Direct pricing program.\n"
                                                       discriminator:
                                                         propertyName: type
                                                         mapping:
@@ -3186,7 +3186,7 @@ paths:
                                                           direct: '#/components/schemas/tiered4AmexDirect'
                                                       oneOf:
                                                         - type: object
-                                                          title: American Express OptBlue
+                                                          title: optBlue
                                                           required: &ref_580
                                                             - type
                                                             - qualifiedRate
@@ -3214,7 +3214,7 @@ paths:
                                                               title: Processor Fee
                                                               properties: *ref_43
                                                         - type: object
-                                                          title: American Express Direct
+                                                          title: direct
                                                           required: &ref_582
                                                             - type
                                                             - transaction
@@ -3284,7 +3284,7 @@ paths:
                                                               title: Processor Fee
                                                               properties: *ref_43
                                                     amex:
-                                                      description: Object that contains the fees for American Express transactions.
+                                                      description: "Polymorphic object that contains fees for American Express transactions.  \n\nThe value of the type field determines which variant you should use:  \n-\t`optBlue` - Amex OptBlue pricing program.\n-\t`direct` - Amex Direct pricing program.\n"
                                                       discriminator:
                                                         propertyName: type
                                                         mapping:
@@ -3292,7 +3292,7 @@ paths:
                                                           direct: '#/components/schemas/tiered6AmexDirect'
                                                       oneOf:
                                                         - type: object
-                                                          title: American Express OptBlue
+                                                          title: optBlue
                                                           required: &ref_585
                                                             - type
                                                             - qualifiedRate
@@ -3320,7 +3320,7 @@ paths:
                                                               title: Processor Fee
                                                               properties: *ref_43
                                                         - type: object
-                                                          title: American Express Direct
+                                                          title: direct
                                                           required: &ref_587
                                                             - type
                                                             - transaction
@@ -3374,14 +3374,14 @@ paths:
                                                       title: Processor Fee
                                                       properties: *ref_43
                                                     amex:
-                                                      description: Object that contains the fees for American Express transactions.
+                                                      description: Polymorphic object that contains fees for American Express transactions.
                                                       discriminator:
                                                         propertyName: type
                                                         mapping:
                                                           direct: '#/components/schemas/flatRateAmexDirect'
                                                       oneOf:
                                                         - type: object
-                                                          title: American Express Direct
+                                                          title: direct
                                                           required: &ref_589
                                                             - type
                                                             - transaction
@@ -3675,10 +3675,10 @@ paths:
                                         - fees
                                     services:
                                       title: US version 5.0 services array
-                                      description: Object that contains information about our additional services that the merchant can sign up for.
+                                      description: Array of polymorphic objects that contain information about additional services that we offer.
                                       type: array
                                       items: &ref_597
-                                        title: US version 5.0 service
+                                        title: hardwareAdvantagePlan
                                         type: object
                                         description: Object that contains information about the Hardware Advantage Plan.
                                         discriminator: &ref_595
@@ -3822,7 +3822,7 @@ paths:
             schema:
               type: object
               title: pricing intent
-              description: Object that contains information about a pricing intent.
+              description: Polymorphic object that contains pricing intent information.
               oneOf: *ref_56
             examples:
               interchangePlus:
@@ -4298,7 +4298,7 @@ paths:
               schema:
                 type: object
                 title: pricing intent
-                description: Object that contains information about a pricing intent.
+                description: Polymorphic object that contains pricing intent information.
                 oneOf: *ref_56
               examples:
                 createdPricingIntent:
@@ -4457,7 +4457,7 @@ paths:
               schema:
                 type: object
                 title: pricing intent
-                description: Object that contains information about a pricing intent.
+                description: Polymorphic object that contains pricing intent information.
                 oneOf: *ref_56
               examples:
                 pricingIntent:
@@ -4502,7 +4502,7 @@ paths:
             schema:
               type: object
               title: pricing intent
-              description: Object that contains information about a pricing intent.
+              description: Polymorphic object that contains pricing intent information.
               oneOf: *ref_56
             examples:
               pricingIntent:
@@ -4831,7 +4831,7 @@ paths:
               schema:
                 type: object
                 title: pricing intent
-                description: Object that contains information about a pricing intent.
+                description: Polymorphic object that contains pricing intent information.
                 oneOf: *ref_56
               examples:
                 pricingIntent:
@@ -7839,6 +7839,7 @@ paths:
             example:
               value: '1234001'
       requestBody:
+        description: "Polymorphic object that contains payment link information.  \n\nThe value of the type parameter determines which variant you should use:\n-\t`multiUse` - Create a link that the merchant can use to take multiple payments.\n-\t`singleUse` - Create a link that the merchant can use for only one payment.\n"
         content:
           application/json:
             schema:
@@ -7851,7 +7852,7 @@ paths:
                     - paymentMethods
                     - merchantReference
                   type: object
-                  title: Multi-use link
+                  title: multiUse
                   description: Object that contains information about a multi-use payment link.
                   properties: &ref_93
                     type:
@@ -7887,13 +7888,13 @@ paths:
                           example: Pie It Forward charitable trust donation
                         charge:
                           type: object
-                          description: Indicates whether the merchant or the customer enters the amount for the transaction.
+                          description: "Polymorphic object that indicates who enters the amount for the payment link.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`prompt` - Customer enters the amount.\n-\t`preset` - Merchant sets the amount. \n"
                           oneOf:
                             - required: &ref_84
                                 - type
                                 - currency
                               type: object
-                              title: Prompt amount
+                              title: prompt
                               description: Object that contains information about the charge when the customer enters the amount of the transaction.
                               properties: &ref_85
                                 type:
@@ -8082,7 +8083,7 @@ paths:
                                 - amount
                                 - currency
                               type: object
-                              title: Preset amount
+                              title: preset
                               description: Object that contains information about the charge when the merchant enters the amount of the transaction.
                               properties: &ref_87
                                 type:
@@ -8220,7 +8221,7 @@ paths:
                     - paymentMethods
                     - merchantReference
                   type: object
-                  title: Single-use link
+                  title: singleUse
                   description: Object that contains information about a single-use payment link.
                   properties: &ref_95
                     type:
@@ -8262,16 +8263,16 @@ paths:
                           example: Large Pepperoni Pizza
                         charge:
                           type: object
-                          description: Indicates whether the merchant or the customer enters the amount for the transaction.
+                          description: "Polymorphic object that indicates who enters the amount for the payment link.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`prompt` - Customer enters the amount.\n-\t`preset` - Merchant sets the amount. \n"
                           oneOf:
                             - required: *ref_84
                               type: object
-                              title: Prompt amount
+                              title: prompt
                               description: Object that contains information about the charge when the customer enters the amount of the transaction.
                               properties: *ref_85
                             - required: *ref_86
                               type: object
-                              title: Preset amount
+                              title: preset
                               description: Object that contains information about the charge when the merchant enters the amount of the transaction.
                               properties: *ref_87
                     authType:
@@ -8382,7 +8383,7 @@ paths:
         required: true
       responses:
         '201':
-          description: Successful request. We created the payment link.
+          description: "Successful request. We return a polymorphic object that contains payment link information.\nThe value of the type parameter determines which variant you should use:\n-\t`multiUse` - Create a link that the merchant can use to take multiple payments.\n-\t`singleUse` - Create a link that the merchant can use for only one payment.\n"
           content:
             application/json:
               schema:
@@ -8390,12 +8391,12 @@ paths:
                 oneOf:
                   - required: *ref_92
                     type: object
-                    title: Multi-use link
+                    title: multiUse
                     description: Object that contains information about a multi-use payment link.
                     properties: *ref_93
                   - required: *ref_94
                     type: object
-                    title: Single-use link
+                    title: singleUse
                     description: Object that contains information about a single-use payment link.
                     properties: *ref_95
               examples:
@@ -8672,18 +8673,18 @@ paths:
                     properties:
                       data:
                         type: array
-                        description: Array of payment links.
+                        description: "Array of polymorphic objects that contains payment link information.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t'multiUse' - Create a link that the merchant can use to take multiple payments.\n-\t'singleUse' - Create a link that the merchant can use for only one payment.\n"
                         items:
                           type: object
                           oneOf:
                             - required: *ref_92
                               type: object
-                              title: Multi-use link
+                              title: multiUse
                               description: Object that contains information about a multi-use payment link.
                               properties: *ref_93
                             - required: *ref_94
                               type: object
-                              title: Single-use link
+                              title: singleUse
                               description: Object that contains information about a single-use payment link.
                               properties: *ref_95
               examples:
@@ -8802,7 +8803,7 @@ paths:
               value: JZURRJBUPS
       responses:
         '200':
-          description: Successful request. Returns the payment link.
+          description: "Successful request. We return a polymorphic object that contains payment link information.\nThe value of the type parameter determines which variant you should use:\n-\t`multiUse` - Create a link that the merchant can use to take multiple payments.\n-\t`singleUse` - Create a link that the merchant can use for only one payment.\n"
           content:
             application/json:
               schema:
@@ -8810,12 +8811,12 @@ paths:
                 oneOf:
                   - required: *ref_92
                     type: object
-                    title: Multi-use link
+                    title: multiUse
                     description: Object that contains information about a multi-use payment link.
                     properties: *ref_93
                   - required: *ref_94
                     type: object
-                    title: Single-use link
+                    title: singleUse
                     description: Object that contains information about a single-use payment link.
                     properties: *ref_95
               examples:
@@ -8907,7 +8908,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Successful request. We updated the payment link.
+          description: "Successful request. We updated the payment link and return a polymorphic object that contains payment link information.\nThe value of the type parameter determines which variant you should use:\n-\t`multiUse` - Create a link that the merchant can use to take multiple payments.\n-\t`singleUse` - Create a link that the merchant can use for only one payment.\n"
           content:
             application/json:
               schema:
@@ -8915,12 +8916,12 @@ paths:
                 oneOf:
                   - required: *ref_92
                     type: object
-                    title: Multi-use link
+                    title: multiUse
                     description: Object that contains information about a multi-use payment link.
                     properties: *ref_93
                   - required: *ref_94
                     type: object
-                    title: Single-use link
+                    title: singleUse
                     description: Object that contains information about a single-use payment link.
                     properties: *ref_95
               examples:
@@ -8975,7 +8976,7 @@ paths:
           examples: *ref_100
       responses:
         '200':
-          description: Successful request. We deactivated the payment link.
+          description: "Successful request. We return a polymorphic object that contains payment link information.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`multiUse` - Create a link that the merchant can use to take multiple payments.\n-\t`singleUse` - Create a link that the merchant can use for only one payment.\n"
           content:
             application/json:
               schema:
@@ -8983,12 +8984,12 @@ paths:
                 oneOf:
                   - required: *ref_92
                     type: object
-                    title: Multi-use link
+                    title: multiUse
                     description: Object that contains information about a multi-use payment link.
                     properties: *ref_93
                   - required: *ref_94
                     type: object
-                    title: Single-use link
+                    title: singleUse
                     description: Object that contains information about a single-use payment link.
                     properties: *ref_95
               examples:
@@ -9074,12 +9075,13 @@ paths:
           application/json:
             schema:
               type: object
+              description: Polymorphic object that contains information about how to share a payment link.
               oneOf:
                 - required: &ref_106
                     - sharingMethod
                     - recipients
                   type: object
-                  title: Share via email
+                  title: email
                   description: Object that contains the information about a sharing event that the merchant sent by email.
                   properties: &ref_107
                     sharingMethod:
@@ -9155,7 +9157,7 @@ paths:
                       email: sarah.hopper@example.com
       responses:
         '201':
-          description: Successful request. We shared the payment link.
+          description: Successful request. We return a polymorphic object that contains information about how the merchant shared a payment link.
           content:
             application/json:
               schema:
@@ -9163,7 +9165,7 @@ paths:
                 oneOf:
                   - required: *ref_106
                     type: object
-                    title: Share via email
+                    title: email
                     description: Object that contains the information about a sharing event that the merchant sent by email.
                     properties: *ref_107
               examples:
@@ -9280,13 +9282,13 @@ paths:
                     properties:
                       data:
                         type: array
-                        description: Array of sharing events for the payment link.
+                        description: Array of polymorphic objects that contain information about how the merchant shared a payment link.
                         items:
                           type: object
                           oneOf:
                             - required: *ref_106
                               type: object
-                              title: Share via email
+                              title: email
                               description: Object that contains the information about a sharing event that the merchant sent by email.
                               properties: *ref_107
               examples:
@@ -12730,7 +12732,7 @@ paths:
                         - serviceProvider
                         - mpiReference
                       type: object
-                      title: Gateway
+                      title: gateway
                       description: Object that contains the 3-D Secure information from our gateway.
                       properties: &ref_184
                         serviceProvider:
@@ -12749,7 +12751,7 @@ paths:
                         - eci
                         - serviceProvider
                       type: object
-                      title: Third party
+                      title: thirdParty
                       description: Object that contains the 3-D Secure information from a third party.
                       properties: &ref_186
                         serviceProvider:
@@ -15148,7 +15150,7 @@ paths:
                   properties: *ref_178
                 paymentMethod:
                   type: object
-                  description: Object that contains information about the customer's payment details.
+                  description: "Polymorphic object that contains payment details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`card` - Payment card details\n-\t`secureToken` - Secure token details\n-\t`digitalWallet` - Digital wallet details\n-\t`singleUseToken` - Single-use token details\n"
                   discriminator:
                     propertyName: type
                     mapping:
@@ -15220,7 +15222,7 @@ paths:
                       properties: *ref_182
                 threeDSecure:
                   type: object
-                  description: Object that contains information for an authentication check on the customer's payment details using the 3-D Secure protocol.
+                  description: "Polymorphic object that contains authentication information from 3-D Secure.  \n\nThe value of the serviceProvider parameter determines which variant you should use:  \n-\t`gateway` - Use our gateway to run a 3-D Secure check.\n-\t`thirdParty` - Use a third party to run a 3-D Secure check.\n"
                   discriminator:
                     propertyName: serviceProvider
                     mapping:
@@ -15229,12 +15231,12 @@ paths:
                   oneOf:
                     - required: *ref_183
                       type: object
-                      title: Gateway
+                      title: gateway
                       description: Object that contains the 3-D Secure information from our gateway.
                       properties: *ref_184
                     - required: *ref_185
                       type: object
-                      title: Third party
+                      title: thirdParty
                       description: Object that contains the 3-D Secure information from a third party.
                       properties: *ref_186
                 credentialOnFile:
@@ -19914,7 +19916,7 @@ paths:
                   enum: *ref_83
                 paymentMethod:
                   type: object
-                  description: Object that contains information about the customer's payment details.
+                  description: "Polymorphic object that contains payment details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`card` - Payment card details\n-\t`secureToken` - Secure token details\n-\t`digitalWallet` - Digital wallet details\n"
                   discriminator:
                     propertyName: type
                     mapping:
@@ -22400,10 +22402,10 @@ paths:
                       type: array
                       minItems: 1
                       uniqueItems: true
-                      description: Object that contains the addresses for the business.
+                      description: Array of polymorphic objects that contain address information for the business.
                       items:
                         oneOf:
-                          - title: Legal address
+                          - title: legalAddress
                             required: &ref_799
                               - type
                               - city
@@ -25087,7 +25089,7 @@ paths:
                         properties:
                           card:
                             type: object
-                            description: Object that contains the fees for card transactions.
+                            description: "Polymorphic object that contains fees for card transactions.  \n\nThe value of the planType field determines which variant you should use:  \n-\t`interchangePlus` - Interchange + pricing\n-\t`interchangePlusTiered3` - Interchange pricing with three tiers\n-\t`tiered3` - Three-tiered pricing \n-\t`tiered4` - Four-tiered pricing\n-\t`tiered6` - Six-tiered pricing\n-\t`flatRate` - Flat rate pricing\n-\t`consumerChoice` - ConsumerChoice \n-\t`rewardPay` - RewardPay\n-\t`rewardPayChoice` - RewardPayChoice\n"
                             discriminator:
                               propertyName: planType
                               mapping:
@@ -25125,7 +25127,7 @@ paths:
                                         required: *ref_52
                                         properties: *ref_53
                                       amex:
-                                        description: Object that contains the fees for American Express transactions.
+                                        description: "Polymorphic object that contains fees for American Express transactions.  \n\nThe value of the type field determines which variant you should use:  \n-\t`optBlue` - Amex OptBlue pricing program.\n-\t`direct` - Amex Direct pricing program.\n"
                                         discriminator:
                                           propertyName: type
                                           mapping:
@@ -25133,7 +25135,7 @@ paths:
                                             direct: '#/components/schemas/interchangePlusTiered3AmexDirect'
                                         oneOf:
                                           - type: object
-                                            title: American Express OptBlue
+                                            title: optBlue
                                             required: &ref_818
                                               - type
                                               - qualifiedRate
@@ -25161,7 +25163,7 @@ paths:
                                                 title: Processor Fee
                                                 properties: *ref_43
                                           - type: object
-                                            title: American Express Direct
+                                            title: direct
                                             required: &ref_820
                                               - type
                                               - transaction
@@ -29868,12 +29870,12 @@ components:
       required: *ref_561
     baseUsMonthly:
       type: object
-      title: Monthly platinum security
+      title: monthly
       required: *ref_562
       properties: *ref_563
     baseUsAnnual:
       type: object
-      title: Annual platinum security
+      title: annual
       required: *ref_564
       properties: *ref_565
     baseUs:
@@ -29900,12 +29902,12 @@ components:
       properties: *ref_43
     interchangePlusAmexOptBlue:
       type: object
-      title: American Express OptBlue
+      title: optBlue
       required: *ref_566
       properties: *ref_567
     interchangePlusAmexDirect:
       type: object
-      title: American Express Direct
+      title: direct
       required: *ref_568
       properties: *ref_569
     pinDebit:
@@ -29940,12 +29942,12 @@ components:
       properties: *ref_53
     interchangePlusPlusAmexOptBlue:
       type: object
-      title: American Express OptBlue
+      title: optBlue
       required: *ref_570
       properties: *ref_571
     interchangePlusPlusAmexDirect:
       type: object
-      title: American Express Direct
+      title: direct
       required: *ref_572
       properties: *ref_573
     interchangePlusPlus:
@@ -29956,12 +29958,12 @@ components:
       required: *ref_575
     tiered3AmexOptBlue:
       type: object
-      title: American Express OptBlue
+      title: optBlue
       required: *ref_576
       properties: *ref_577
     tiered3AmexDirect:
       type: object
-      title: American Express Direct
+      title: direct
       required: *ref_578
       properties: *ref_579
     tiered3:
@@ -29975,12 +29977,12 @@ components:
       allOf: *ref_54
     tiered4AmexOptBlue:
       type: object
-      title: American Express OptBlue
+      title: optBlue
       required: *ref_580
       properties: *ref_581
     tiered4AmexDirect:
       type: object
-      title: American Express Direct
+      title: direct
       required: *ref_582
       properties: *ref_583
     tiered4:
@@ -29994,12 +29996,12 @@ components:
       allOf: *ref_584
     tiered6AmexOptBlue:
       type: object
-      title: American Express OptBlue
+      title: optBlue
       required: *ref_585
       properties: *ref_586
     tiered6AmexDirect:
       type: object
-      title: American Express Direct
+      title: direct
       required: *ref_587
       properties: *ref_588
     tiered6:
@@ -30010,7 +30012,7 @@ components:
       required: *ref_324
     flatRateAmexDirect:
       type: object
-      title: American Express Direct
+      title: direct
       required: *ref_589
       properties: *ref_590
     flatRate:
@@ -30047,14 +30049,14 @@ components:
       properties: *ref_593
       required: *ref_594
     serviceUs5.0:
-      title: US version 5.0 service
+      title: hardwareAdvantagePlan
       type: object
       description: Object that contains information about the Hardware Advantage Plan.
       discriminator: *ref_595
       oneOf: *ref_596
     servicesUs5.0:
       title: US version 5.0 services array
-      description: Object that contains information about our additional services that the merchant can sign up for.
+      description: Array of polymorphic objects that contain information about additional services that we offer.
       type: array
       items: *ref_597
       uniqueItems: true
@@ -30066,13 +30068,13 @@ components:
       properties: *ref_288
     pricingIntent5.0:
       type: object
-      title: pricing intent version 5.0
+      title: '5.0'
       description: Object that contains information about a pricing intent for Merchant Processing Agreement (MPA) 5.0.
       allOf: *ref_598
     pricingIntent:
       type: object
       title: pricing intent
-      description: Object that contains information about a pricing intent.
+      description: Polymorphic object that contains pricing intent information.
       oneOf: *ref_56
     paginatedPricingIntent:
       type: object
@@ -30204,13 +30206,13 @@ components:
     promptPaymentLinkCharge:
       required: *ref_84
       type: object
-      title: Prompt amount
+      title: prompt
       description: Object that contains information about the charge when the customer enters the amount of the transaction.
       properties: *ref_85
     presetPaymentLinkCharge:
       required: *ref_86
       type: object
-      title: Preset amount
+      title: preset
       description: Object that contains information about the charge when the merchant enters the amount of the transaction.
       properties: *ref_87
     multiUsePaymentLinkOrder:
@@ -30235,7 +30237,7 @@ components:
     multiUsePaymentLink:
       required: *ref_92
       type: object
-      title: Multi-use link
+      title: multiUse
       description: Object that contains information about a multi-use payment link.
       properties: *ref_93
     singleUsePaymentLinkOrder:
@@ -30246,7 +30248,7 @@ components:
     singleUsePaymentLink:
       required: *ref_94
       type: object
-      title: Single-use link
+      title: singleUse
       description: Object that contains information about a single-use payment link.
       properties: *ref_95
     paymentLinkPaginatedList:
@@ -30261,7 +30263,7 @@ components:
     paymentLinkEmailShareEvent:
       required: *ref_106
       type: object
-      title: Share via email
+      title: email
       description: Object that contains the information about a sharing event that the merchant sent by email.
       properties: *ref_107
     sharingEventPaginatedList:
@@ -30609,13 +30611,13 @@ components:
     gatewayThreeDSecure:
       required: *ref_183
       type: object
-      title: Gateway
+      title: gateway
       description: Object that contains the 3-D Secure information from our gateway.
       properties: *ref_184
     thirdPartyThreeDSecure:
       required: *ref_185
       type: object
-      title: Third party
+      title: thirdParty
       description: Object that contains the 3-D Secure information from a third party.
       properties: *ref_186
     tokenizationRequest:
@@ -31116,7 +31118,7 @@ components:
       required: *ref_797
       properties: *ref_798
     legalAddress:
-      title: Legal address
+      title: legalAddress
       required: *ref_799
       allOf: *ref_800
     business:
@@ -31220,12 +31222,12 @@ components:
       allOf: *ref_817
     interchangePlusTiered3AmexOptBlue:
       type: object
-      title: American Express OptBlue
+      title: optBlue
       required: *ref_818
       properties: *ref_819
     interchangePlusTiered3AmexDirect:
       type: object
-      title: American Express Direct
+      title: direct
       required: *ref_820
       properties: *ref_821
     interchangePlusTiered3:
