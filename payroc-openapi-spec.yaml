@@ -10080,7 +10080,7 @@ paths:
                   example: PlanRef8765
                 paymentMethod:
                   type: object
-                  description: Object that contains information about the customer's payment details.
+                  description: Polymorphic object that contains information about the secure token.
                   discriminator:
                     propertyName: type
                     mapping:
@@ -11884,7 +11884,7 @@ paths:
                       type: string
                       description: IP address of the device.
                 source:
-                  description: Object that contains information about the payment method to tokenize.
+                  description: "Polymorphic object that contains the payment method to tokenize.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n-\t`card` - Payment card details\n-\t`singleUseToken` - Single-use token details\n"
                   type: object
                   discriminator:
                     propertyName: type
@@ -12721,7 +12721,7 @@ paths:
                           example: web
                 threeDSecure:
                   type: object
-                  description: Object that contains information for an authentication check on the customer's payment details using the 3-D Secure protocol.
+                  description: "Polymorphic object that contains authentication information from 3-D Secure.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`gatewayThreeDSecure` - Use our gateway to run a 3-D Secure check.\n-\t`thirdPartyThreeDSecure` - Use a third party to run a 3-D Secure check.\n"
                   discriminator:
                     propertyName: type
                     mapping:
@@ -12989,7 +12989,7 @@ paths:
                         minLength: 2
                         example: en
                   source:
-                    description: Object that contains information about the payment method that we tokenized.
+                    description: "Polymorphic object that contains the payment method that we tokenized.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n-\t`card` - Payment card details\n"
                     type: object
                     discriminator:
                       propertyName: type
@@ -13397,7 +13397,7 @@ paths:
                             - type: object
                               properties:
                                 source:
-                                  description: Object that contains information about the payment method that we tokenized.
+                                  description: "Polymorphic object that contains the payment method that we tokenized.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n-\t`card` - Payment card details\n"
                                   type: object
                                   discriminator:
                                     propertyName: type
@@ -13814,10 +13814,11 @@ paths:
           schema: *ref_161
           examples: *ref_162
       requestBody:
+        description: Polymorphic object that contains information about the single-use token.
         content:
           application/json:
             schema:
-              description: Object that contains the single-use token.
+              description: Polymorphic object that contains information about the single-use token.
               discriminator: &ref_687
                 propertyName: type
                 mapping:
@@ -13981,7 +13982,7 @@ paths:
                   description: Operator who initiated the request.
                   example: Jane
                 source:
-                  description: Object that contains information about the payment method to tokenize.
+                  description: "Polymorphic object that contains the payment method to tokenize.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n-\t`card` - Payment card details\n"
                   type: object
                   discriminator:
                     propertyName: type
@@ -14055,7 +14056,7 @@ paths:
                     example: Jane
                   paymentMethod:
                     type: object
-                    description: Object that contains information about the customer's payment details.
+                    description: Polymorphic object that contains payment card details.
                     writeOnly: true
                     discriminator:
                       propertyName: type
@@ -14084,7 +14085,7 @@ paths:
                     description: Date and time that the token expires. We return this value in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
                     example: '2024-07-02T16:00:00Z'
                   source:
-                    description: Object that contains information about the payment method that we tokenized.
+                    description: "Polymorphic object that contains the payment method that we tokenized.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n-\t`card` - Payment card details\n"
                     type: object
                     discriminator:
                       propertyName: type
@@ -17845,7 +17846,7 @@ paths:
                   description: Object that contains the IP address of the device that sent the request.
                   properties: *ref_178
                 refundMethod:
-                  description: Object that contains information about how the merchant refunds the customer.
+                  description: "Polymorphic object that contains information about the payment method that the merchant uses to refund the customer.  \n\nThe value of the type parameter determines which variant you should use:\n-\t`card` - Payment card details\n-\t`secureToken` - Secure token details\n"
                   type: object
                   discriminator:
                     propertyName: type
@@ -18442,7 +18443,7 @@ paths:
                   example: Jane
                 adjustments:
                   type: array
-                  description: Array of objects that contain information about the adjustments to the refund.
+                  description: "Array of polymorphic objects that contain information about adjustments to the refund.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`status` - Status of the transaction.\n-\t`customer` - Customer's contact information and shipping address.\n"
                   uniqueItems: true
                   items:
                     discriminator:
@@ -22529,6 +22530,7 @@ paths:
                         example: America/Chicago
                         maxLength: 28
                       address:
+                        description: Polymorphic object that contains address information for the processing account.
                         type: object
                         oneOf:
                           - required: *ref_0
@@ -22859,7 +22861,7 @@ paths:
                                   properties: *ref_21
                       pricing:
                         type: object
-                        description: Object that contains HATEOAS links to the pricing information that we apply to the processing account.
+                        description: "Polymorphic object that contains pricing information for the processing account.  \n\nThe value of the type parameter determines which variant you should use:\n-\t`intent` - Use a pricing agreement template.\n-\t`agreement` - Create a new pricing agreement.\n"
                         discriminator: &ref_810
                           propertyName: type
                           mapping:
@@ -22867,7 +22869,7 @@ paths:
                             agreement: '#/components/schemas/pricingAgreement'
                         oneOf: &ref_811
                           - type: object
-                            title: Pricing intent
+                            title: intent
                             required: &ref_807
                               - type
                               - pricingIntentId
@@ -22885,10 +22887,10 @@ paths:
                                 description: Unique identifier of the pricing intent.
                                 example: '6123'
                           - type: object
-                            title: Pricing agreement
+                            title: agreement
                             allOf: &ref_809
                               - type: object
-                                description: Type of pricing for the processing account.
+                                description: Polymorphic object that contains pricing agreement information for the processing account.
                                 properties:
                                   type:
                                     type: string
@@ -22905,7 +22907,7 @@ paths:
                                     properties: *ref_288
                       signature:
                         type: object
-                        description: Object that includes information about how we captured the owner's signature.
+                        description: "Polymorphic object that contains information about how we captured the owner's signature.  \n\nThe value of the type parameter determines which variant you should use:\n-\t`requestedViaDirectLink` - Request signature using a link.\n-\t`requestedViaEmail` - Request signature by email.\n"
                         discriminator: &ref_293
                           propertyName: type
                           mapping:
@@ -22913,7 +22915,7 @@ paths:
                             requestedViaEmail: '#/components/schemas/signatureByEmail'
                         oneOf: &ref_294
                           - description: Object that contains signature information if we captured the merchant’s signature by direct link.
-                            title: Signature by direct link
+                            title: requestedViaDirectLink
                             type: object
                             required: &ref_801
                               - type
@@ -22938,7 +22940,7 @@ paths:
                                   href: https://us.agreementexpress.net/mv2/viewer2.jsp?docId=00000000-0000-0000-0000-000000000000
                                   method: get
                           - description: Object that contains signature information if we captured the merchant’s signature by email.
-                            title: Signature by email
+                            title: requestedViaEmail
                             type: object
                             required: &ref_803
                               - type
@@ -23273,7 +23275,7 @@ paths:
                               example: get
                         signature:
                           type: object
-                          description: Object that includes information about how we captured the owner's signature.
+                          description: "Polymorphic object that contains information about how we captured the owner's signature.  \n\nThe value of the type parameter determines which variant you should use:\n-\t`requestedViaDirectLink` - Request signature using a link.\n-\t`requestedViaEmail` - Request signature by email.\n"
                           discriminator: *ref_293
                           oneOf: *ref_294
                   metadata:
@@ -23924,6 +23926,7 @@ paths:
                               maxLength: 28
                             address:
                               type: object
+                              description: Polymorphic object that contains address information for the processing account.
                               oneOf:
                                 - required: *ref_0
                                   type: object
@@ -24040,7 +24043,7 @@ paths:
                                         description: HTTP method you can use to retrieve the resource.
                             signature:
                               type: object
-                              description: Object that includes information about how we captured the owner's signature.
+                              description: "Polymorphic object that contains information about how we captured the owner's signature.  \n\nThe value of the type parameter determines which variant you should use:\n-\t`requestedViaDirectLink` - Request signature using a link.\n-\t`requestedViaEmail` - Request signature by email.\n"
                               discriminator: *ref_293
                               oneOf: *ref_294
                             metadata:
@@ -25053,7 +25056,7 @@ paths:
           examples: *ref_312
       responses:
         '200':
-          description: Successful request. Returns the pricing agreement for the processing account.
+          description: "Successful request. We return a polymorphic object that contains the pricing agreement for the processing account.  \n\nThe value of the version field determines which variant you should use:  \n-\t`4.0` - Pricing agreement version 4.\n-\t`5.0` - Pricing agreement version 5.\n"
           content:
             application/json:
               schema:
@@ -25616,6 +25619,7 @@ paths:
           schema: *ref_311
           examples: *ref_312
       requestBody:
+        description: Polymorphic object that contains reminder details.
         content:
           application/json:
             schema:
@@ -25651,7 +25655,7 @@ paths:
                   type: pricingAgreement
       responses:
         '201':
-          description: Successful request. We sent the email to the merchant.
+          description: Successful request. We sent an email to the merchant and we return a polymorphic object that contains reminder details.
           content:
             application/json:
               schema:
@@ -30630,7 +30634,7 @@ components:
       description: Object that contains the token.
       properties: *ref_686
     accountUpdate:
-      description: Object that contains the single-use token.
+      description: Polymorphic object that contains information about the single-use token.
       discriminator: *ref_687
       oneOf: *ref_688
     singleUseTokenRequest:
@@ -31129,19 +31133,19 @@ components:
       properties: *ref_292
     signatureByDirectLink:
       description: Object that contains signature information if we captured the merchant’s signature by direct link.
-      title: Signature by direct link
+      title: requestedViaDirectLink
       type: object
       required: *ref_801
       properties: *ref_802
     signatureByEmail:
       description: Object that contains signature information if we captured the merchant’s signature by email.
-      title: Signature by email
+      title: requestedViaEmail
       type: object
       required: *ref_803
       properties: *ref_804
     signature:
       type: object
-      description: Object that includes information about how we captured the owner's signature.
+      description: "Polymorphic object that contains information about how we captured the owner's signature.  \n\nThe value of the type parameter determines which variant you should use:\n-\t`requestedViaDirectLink` - Request signature using a link.\n-\t`requestedViaEmail` - Request signature by email.\n"
       discriminator: *ref_293
       oneOf: *ref_294
     merchantPlatform:
@@ -31174,16 +31178,16 @@ components:
       allOf: *ref_806
     pricingTemplate:
       type: object
-      title: Pricing intent
+      title: intent
       required: *ref_807
       properties: *ref_808
     pricingAgreement:
       type: object
-      title: Pricing agreement
+      title: agreement
       allOf: *ref_809
     pricing:
       type: object
-      description: Object that contains HATEOAS links to the pricing information that we apply to the processing account.
+      description: "Polymorphic object that contains pricing information for the processing account.  \n\nThe value of the type parameter determines which variant you should use:\n-\t`intent` - Use a pricing agreement template.\n-\t`agreement` - Create a new pricing agreement.\n"
       discriminator: *ref_810
       oneOf: *ref_811
     contact:
