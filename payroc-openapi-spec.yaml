@@ -236,7 +236,7 @@ paths:
                 contactMethods:
                   type: array
                   minItems: 1
-                  description: Array of contactMethod objects that you can use to add contact methods for the funding recipient. You must provide at least an email address.
+                  description: "Array of polymorphic objects, which contain contact information.  \n\n**Note:** You must provide an email address.\n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address \n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number\n"
                   items:
                     discriminator: &ref_2
                       propertyName: type
@@ -250,7 +250,7 @@ paths:
                           - type
                           - value
                         type: object
-                        title: Email contact method
+                        title: email
                         properties: &ref_544
                           type:
                             type: string
@@ -266,7 +266,7 @@ paths:
                           - type
                           - value
                         type: object
-                        title: Phone number contact method
+                        title: phone
                         properties: &ref_546
                           type:
                             type: string
@@ -282,7 +282,7 @@ paths:
                           - type
                           - value
                         type: object
-                        title: Mobile number contact method
+                        title: mobile
                         properties: &ref_548
                           type:
                             type: string
@@ -298,7 +298,7 @@ paths:
                           - type
                           - value
                         type: object
-                        title: Fax number contact method
+                        title: fax
                         properties: &ref_550
                           type:
                             type: string
@@ -395,9 +395,7 @@ paths:
                         minItems: 1
                         maxItems: 4
                         uniqueItems: true
-                        description: |
-                          Array of contactMethod objects.  
-                          **Note:** If you are adding information about an owner, you must provide at least an email address. If you are adding information about a contact, you must provide at least a contact number.   
+                        description: "Array of polymorphic objects, which contain contact information.  \n\n**Note:** If you are adding information about an owner, you must provide at least an email address. If you are adding information about a contact, you must provide at least a contact number.   \n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address \n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number\n"
                         items:
                           discriminator: *ref_2
                           oneOf: *ref_3
@@ -709,7 +707,7 @@ paths:
                   contactMethods:
                     type: array
                     minItems: 1
-                    description: Array of contactMethod objects for the funding recipient.
+                    description: "Array of polymorphic objects, which contain contact information.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address \n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number\n"
                     items:
                       discriminator: *ref_2
                       oneOf: *ref_3
@@ -10091,7 +10089,7 @@ paths:
                         - token
                       type: object
                       writeOnly: true
-                      title: Secure token
+                      title: secureToken
                       description: Object that contains information about the secure token that represents the customer’s payment details.
                       properties: &ref_180
                         type:
@@ -11851,7 +11849,7 @@ paths:
                     contactMethods:
                       type: array
                       uniqueItems: true
-                      description: Customer's contact information.
+                      description: "Array of polymorphic objects, which contain contact information.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address \n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number\n"
                       items:
                         discriminator: *ref_2
                         oneOf: *ref_3
@@ -11901,7 +11899,7 @@ paths:
                         - routingNumber
                       type: object
                       writeOnly: true
-                      title: ACH
+                      title: ach
                       description: Object that contains information about the payment details for the customer’s automated clearing house (ACH) transactions.
                       properties: &ref_164
                         type:
@@ -11968,7 +11966,7 @@ paths:
                         - institutionNumber
                       type: object
                       writeOnly: true
-                      title: PAD
+                      title: pad
                       description: Object that contains information about the payment details for the customer’s preauthorized electronic debit (PAD) transactions.
                       properties: &ref_166
                         type:
@@ -12023,7 +12021,7 @@ paths:
                         - cardDetails
                       type: object
                       writeOnly: true
-                      title: Card
+                      title: card
                       description: Object that contains information about the customer’s payment card.
                       properties: &ref_168
                         type:
@@ -12044,7 +12042,14 @@ paths:
                           example: checking
                         cardDetails:
                           type: object
-                          description: Object that contains the details of the payment card.
+                          description: |
+                            Polymorphic object that contains payment card information.  
+
+                            The value of the entryMethod parameter determines which variant you should use:  
+                            - `raw` - Unencrypted payment data directly from the device.
+                            - `icc` - Payment data that the device captured from the chip.
+                            - `keyed` - Payment data that the merchant entered manually.
+                            - `swiped` - Payment data that the device captured from the magnetic strip.
                           discriminator:
                             propertyName: entryMethod
                             mapping:
@@ -12058,7 +12063,7 @@ paths:
                                 - device
                                 - rawData
                               type: object
-                              title: Raw
+                              title: raw
                               description: Object that contains information about the unencrypted card details.
                               properties: &ref_662
                                 entryMethod:
@@ -12172,7 +12177,7 @@ paths:
                                 - device
                                 - iccData
                               type: object
-                              title: Chip
+                              title: icc
                               description: Object that contains information about the Integrated Circuit Card (ICC).
                               properties: &ref_666
                                 entryMethod:
@@ -12282,7 +12287,7 @@ paths:
                                 - entryMethod
                                 - keyedData
                               type: object
-                              title: Keyed
+                              title: keyed
                               description: Object that contains information about the keyed card details.
                               properties: &ref_674
                                 entryMethod:
@@ -12293,6 +12298,7 @@ paths:
                                   example: keyed
                                 keyedData:
                                   type: object
+                                  description: "Polymorphic object that contains payment card details that the merchant manually entered into the device.  \n\nThe value of the dataFormat parameter determines which variant you should use:  \n-\t`fullyEncrypted` - Some payment card details are encrypted.\n-\t`partiallyEncrypted` - Payment card details are in plain text.\n-\t`plainText` - All payment card details are encrypted.\n"
                                   discriminator:
                                     propertyName: dataFormat
                                     mapping:
@@ -12305,7 +12311,7 @@ paths:
                                         - device
                                         - encryptedData
                                       type: object
-                                      title: Encrypted
+                                      title: fullyEncrypted
                                       description: Object that contains information about the encrypted card data for keyed transactions.
                                       properties: &ref_668
                                         dataFormat:
@@ -12339,7 +12345,7 @@ paths:
                                         - expiryDate
                                         - maskedPan
                                       type: object
-                                      title: Partially encrypted
+                                      title: partiallyEncrypted
                                       description: Object that contains information about the partially-encrypted card data for keyed transactions.
                                       properties: &ref_670
                                         dataFormat:
@@ -12391,7 +12397,7 @@ paths:
                                         - dataFormat
                                         - cardNumber
                                       type: object
-                                      title: Unencrypted
+                                      title: plainText
                                       description: Object that contains information about the plain-text card data for keyed transactions.
                                       properties: &ref_672
                                         dataFormat:
@@ -12440,6 +12446,7 @@ paths:
                                   example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                                 pinDetails:
                                   type: object
+                                  description: Polymorphic object that contains information about the customer's PIN.
                                   discriminator:
                                     propertyName: dataFormat
                                     mapping:
@@ -12450,7 +12457,7 @@ paths:
                                         - pin
                                         - pinKsn
                                       type: object
-                                      title: Encrypted
+                                      title: dukpt
                                       description: Object that contains information about encrypted PIN details.
                                       properties: &ref_149
                                         dataFormat:
@@ -12484,7 +12491,7 @@ paths:
                                 - entryMethod
                                 - swipedData
                               type: object
-                              title: Swiped
+                              title: swiped
                               description: Object that contains information about the customer’s card details for swiped transactions.
                               properties: &ref_680
                                 entryMethod:
@@ -12504,6 +12511,7 @@ paths:
                                   example: swiped
                                 swipedData:
                                   type: object
+                                  description: "Polymorphic object that contains payment card details that a device captured from the magnetic strip.  \n\nThe value of the dataFormat parameter determines which variant you should use:  \n-\t`encrypted` - Payment card details are encrypted.\n-\t`plainText` - Payment card details are in plain text.\n"
                                   discriminator:
                                     propertyName: dataFormat
                                     mapping:
@@ -12515,7 +12523,7 @@ paths:
                                         - device
                                         - encryptedData
                                       type: object
-                                      title: Encrypted
+                                      title: encrypted
                                       description: Object that contains information about the encrypted swiped card data.
                                       properties: &ref_676
                                         dataFormat:
@@ -12559,7 +12567,7 @@ paths:
                                         - device
                                         - trackData
                                       type: object
-                                      title: Unencrypted
+                                      title: plainText
                                       description: Object that contains information about plain-text swiped card data.
                                       properties: &ref_678
                                         dataFormat:
@@ -12605,6 +12613,7 @@ paths:
                                   example: a1b1c012345678a000b000c0012345d0e0f010g10061a031i001j071k0a1b0c1d0e1234567890120f1g0h1i0j1k0a1b0123451c012d0e1f0g1h0i1j123k1a1b1c1d1e1f1g123h1i1j1k1a1b1c1d1e1f1g123h123i1j123k12340a120a12345b012c0123012d0d1e0f1g0h1i123j123k10000
                                 pinDetails:
                                   type: object
+                                  description: Polymorphic object that contains information about the customer's PIN.
                                   discriminator:
                                     propertyName: dataFormat
                                     mapping:
@@ -12612,7 +12621,7 @@ paths:
                                   oneOf:
                                     - required: *ref_148
                                       type: object
-                                      title: Encrypted
+                                      title: dukpt
                                       description: Object that contains information about encrypted PIN details.
                                       properties: *ref_149
                                 ebtDetails:
@@ -12625,7 +12634,7 @@ paths:
                         - token
                       type: object
                       writeOnly: true
-                      title: Single-use token
+                      title: singleUseToken
                       description: Object that contains information about the single-use token, which represents the customer’s payment details.
                       properties: &ref_182
                         type:
@@ -12652,6 +12661,12 @@ paths:
                           example: abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
                         pinDetails:
                           type: object
+                          description: |
+                            Polymorphic object that contains information about a customer's PIN.  
+
+                            The value of the dataFormat parameter determines which variant you should use:  
+                            - `dukpt` - PIN information is encrypted.
+                            - `raw` - PIN information is unencrypted.
                           discriminator:
                             propertyName: dataFormat
                             mapping:
@@ -12660,14 +12675,14 @@ paths:
                           oneOf:
                             - required: *ref_148
                               type: object
-                              title: Encrypted
+                              title: dukpt
                               description: Object that contains information about encrypted PIN details.
                               properties: *ref_149
                             - required: &ref_681
                                 - dataFormat
                                 - pin
                               type: object
-                              title: Unencrypted
+                              title: raw
                               description: Object that contains information about the unencrypted PIN details.
                               properties: &ref_682
                                 dataFormat:
@@ -12956,7 +12971,7 @@ paths:
                       contactMethods:
                         type: array
                         uniqueItems: true
-                        description: Customer's contact information.
+                        description: "Array of polymorphic objects, which contain contact information.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address \n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number\n"
                         items:
                           discriminator: *ref_2
                           oneOf: *ref_3
@@ -12987,7 +13002,7 @@ paths:
                           - accountNumber
                           - routingNumber
                         type: object
-                        title: ACH account
+                        title: ach
                         description: Object that contains the customer's account details.
                         properties: &ref_154
                           type:
@@ -13022,7 +13037,7 @@ paths:
                           - transitNumber
                           - institutionNumber
                         type: object
-                        title: PAD account
+                        title: pad
                         description: Object that contains the customer's account details.
                         properties: &ref_156
                           type:
@@ -13392,7 +13407,7 @@ paths:
                                     - allOf: &ref_655
                                         - required: *ref_153
                                           type: object
-                                          title: ACH account
+                                          title: ach
                                           description: Object that contains the customer's account details.
                                           properties: *ref_154
                                         - type: object
@@ -13408,7 +13423,7 @@ paths:
                                     - allOf: &ref_656
                                         - required: *ref_155
                                           type: object
-                                          title: PAD account
+                                          title: pad
                                           description: Object that contains the customer's account details.
                                           properties: *ref_156
                                         - type: object
@@ -13976,19 +13991,19 @@ paths:
                     - required: *ref_163
                       type: object
                       writeOnly: true
-                      title: ACH
+                      title: ach
                       description: Object that contains information about the payment details for the customer’s automated clearing house (ACH) transactions.
                       properties: *ref_164
                     - required: *ref_165
                       type: object
                       writeOnly: true
-                      title: PAD
+                      title: pad
                       description: Object that contains information about the payment details for the customer’s preauthorized electronic debit (PAD) transactions.
                       properties: *ref_166
                     - required: *ref_167
                       type: object
                       writeOnly: true
-                      title: Card
+                      title: card
                       description: Object that contains information about the customer’s payment card.
                       properties: *ref_168
             examples:
@@ -14048,7 +14063,7 @@ paths:
                       - required: *ref_167
                         type: object
                         writeOnly: true
-                        title: Card
+                        title: card
                         description: Object that contains information about the customer’s payment card.
                         properties: *ref_168
                   token:
@@ -14078,12 +14093,12 @@ paths:
                     oneOf:
                       - required: *ref_153
                         type: object
-                        title: ACH account
+                        title: ach
                         description: Object that contains the customer's account details.
                         properties: *ref_154
                       - required: *ref_155
                         type: object
-                        title: PAD account
+                        title: pad
                         description: Object that contains the customer's account details.
                         properties: *ref_156
                       - required: *ref_157
@@ -14784,10 +14799,10 @@ paths:
                                   properties:
                                     taxes:
                                       type: array
-                                      description: List of taxes.
+                                      description: "Array of polymorphic tax objects, which contain information about a tax.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n"
                                       items:
                                         type: object
-                                        description: Object that contains information about the tax details.
+                                        description: "Polymorphic object that contains tax details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n"
                                         discriminator: &ref_174
                                           propertyName: type
                                           mapping:
@@ -15118,7 +15133,7 @@ paths:
                                             description: Array of objects that contain information about each tax that applies to the item.
                                             items:
                                               type: object
-                                              description: Object that contains information about the tax details.
+                                              description: "Polymorphic object that contains tax details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n"
                                               discriminator: *ref_174
                                               oneOf: *ref_175
                 customer:
@@ -15145,13 +15160,13 @@ paths:
                     - required: *ref_167
                       type: object
                       writeOnly: true
-                      title: Card
+                      title: card
                       description: Object that contains information about the customer’s payment card.
                       properties: *ref_168
                     - required: *ref_179
                       type: object
                       writeOnly: true
-                      title: Secure token
+                      title: secureToken
                       description: Object that contains information about the secure token that represents the customer’s payment details.
                       properties: *ref_180
                     - required: &ref_258
@@ -15160,7 +15175,7 @@ paths:
                         - serviceProvider
                       type: object
                       writeOnly: true
-                      title: Digital wallet
+                      title: digitalWallet
                       description: Object that contains information about the payment details in the customer’s digital wallet.
                       properties: &ref_259
                         type:
@@ -15200,7 +15215,7 @@ paths:
                     - required: *ref_181
                       type: object
                       writeOnly: true
-                      title: Single-use token
+                      title: singleUseToken
                       description: Object that contains information about the single-use token, which represents the customer’s payment details.
                       properties: *ref_182
                 threeDSecure:
@@ -16624,7 +16639,7 @@ paths:
                   example: Jane
                 adjustments:
                   type: array
-                  description: Array of objects that contain information about the adjustments to the payment.
+                  description: "Array of polymorphic objects which contain information about adjustments to a payment.  \n\nThe value of the type parameter determines which variant you should use:\n-\t`order` - Tip information.\n-\t`status` - Status of the transaction.\n-\t`customer` - Customer's contact information and shipping address.\n-\t`signature` - Customer's signature.\n"
                   uniqueItems: true
                   items:
                     discriminator:
@@ -16639,7 +16654,7 @@ paths:
                           - type
                           - amount
                         type: object
-                        title: Order
+                        title: order
                         description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the order details.
                         properties: &ref_726
                           type:
@@ -16667,7 +16682,7 @@ paths:
                           - type
                           - toStatus
                         type: object
-                        title: Status
+                        title: status
                         description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the status of the transaction.
                         properties: &ref_243
                           type:
@@ -16686,7 +16701,7 @@ paths:
                       - required: &ref_244
                           - type
                         type: object
-                        title: Customer
+                        title: customer
                         description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the customer’s contact details.
                         properties: &ref_245
                           type:
@@ -16701,7 +16716,7 @@ paths:
                             properties: *ref_213
                           contactMethods:
                             uniqueItems: true
-                            description: Customer's contact information.
+                            description: "Array of polymorphic objects, which contain contact information.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address \n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number\n"
                             type: array
                             items:
                               discriminator: *ref_2
@@ -16710,7 +16725,7 @@ paths:
                           - type
                           - cardholderSignature
                         type: object
-                        title: Signature
+                        title: signature
                         description: |
                           Object that contains the signature for the transaction.  
                           **Note:** If the merchant previously added a signature to the transaction, they can’t adjust or delete the signature.
@@ -17839,13 +17854,13 @@ paths:
                     - required: *ref_167
                       type: object
                       writeOnly: true
-                      title: Card
+                      title: card
                       description: Object that contains information about the customer’s payment card.
                       properties: *ref_168
                     - required: *ref_179
                       type: object
                       writeOnly: true
-                      title: Secure token
+                      title: secureToken
                       description: Object that contains information about the secure token that represents the customer’s payment details.
                       properties: *ref_180
                 customFields:
@@ -18436,12 +18451,12 @@ paths:
                     oneOf:
                       - required: *ref_242
                         type: object
-                        title: Status
+                        title: status
                         description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the status of the transaction.
                         properties: *ref_243
                       - required: *ref_244
                         type: object
-                        title: Customer
+                        title: customer
                         description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the customer’s contact details.
                         properties: *ref_245
             examples:
@@ -19339,7 +19354,7 @@ paths:
                   properties: *ref_176
                 card:
                   type: object
-                  description: Object that contains information about the card.
+                  description: Polymorphic object that contains payment details.
                   discriminator:
                     propertyName: type
                     mapping:
@@ -19348,7 +19363,7 @@ paths:
                     - required: *ref_167
                       type: object
                       writeOnly: true
-                      title: Card
+                      title: card
                       description: Object that contains information about the customer’s payment card.
                       properties: *ref_168
             examples:
@@ -19514,7 +19529,7 @@ paths:
                   properties: *ref_176
                 card:
                   type: object
-                  description: Object that contains information about the card.
+                  description: "Polymorphic object that contains payment details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`card` - Payment card details\n-\t`singleUseToken` - Single-use token details\n"
                   discriminator:
                     propertyName: type
                     mapping:
@@ -19524,13 +19539,13 @@ paths:
                     - required: *ref_167
                       type: object
                       writeOnly: true
-                      title: Card
+                      title: card
                       description: Object that contains information about the customer’s payment card.
                       properties: *ref_168
                     - required: *ref_181
                       type: object
                       writeOnly: true
-                      title: Single-use token
+                      title: singleUseToken
                       description: Object that contains information about the single-use token, which represents the customer’s payment details.
                       properties: *ref_182
             examples:
@@ -19698,7 +19713,7 @@ paths:
                   enum: *ref_83
                 card:
                   type: object
-                  description: Object that contains information about the card.
+                  description: "Polymorphic object that contains payment details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`card` - Payment card details\n-\t`cardBin` - Bank identification number (BIN) of the payment card\n-\t`secureToken` - Secure token details\n-\t`digitalWallet` - Digital wallet details\n"
                   discriminator:
                     propertyName: type
                     mapping:
@@ -19710,7 +19725,7 @@ paths:
                     - required: *ref_167
                       type: object
                       writeOnly: true
-                      title: Card
+                      title: card
                       description: Object that contains information about the customer’s payment card.
                       properties: *ref_168
                     - required: &ref_760
@@ -19718,7 +19733,7 @@ paths:
                         - bin
                       type: object
                       writeOnly: true
-                      title: Card BIN
+                      title: cardBin
                       description: Object that contains information about the card's bank identification number (BIN).
                       properties: &ref_761
                         type:
@@ -19735,13 +19750,13 @@ paths:
                     - required: *ref_179
                       type: object
                       writeOnly: true
-                      title: Secure token
+                      title: secureToken
                       description: Object that contains information about the secure token that represents the customer’s payment details.
                       properties: *ref_180
                     - required: *ref_258
                       type: object
                       writeOnly: true
-                      title: Digital wallet
+                      title: digitalWallet
                       description: Object that contains information about the payment details in the customer’s digital wallet.
                       properties: *ref_259
             examples:
@@ -19910,19 +19925,19 @@ paths:
                     - required: *ref_167
                       type: object
                       writeOnly: true
-                      title: Card
+                      title: card
                       description: Object that contains information about the customer’s payment card.
                       properties: *ref_168
                     - required: *ref_179
                       type: object
                       writeOnly: true
-                      title: Secure token
+                      title: secureToken
                       description: Object that contains information about the secure token that represents the customer’s payment details.
                       properties: *ref_180
                     - required: *ref_258
                       type: object
                       writeOnly: true
-                      title: Digital wallet
+                      title: digitalWallet
                       description: Object that contains information about the payment details in the customer’s digital wallet.
                       properties: *ref_259
             examples:
@@ -20186,7 +20201,7 @@ paths:
                       example: en
                     contactMethods:
                       uniqueItems: true
-                      description: Customer's contact information.
+                      description: "Array of polymorphic objects, which contain contact information.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address \n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number\n"
                       type: array
                       items:
                         discriminator: *ref_2
@@ -20197,7 +20212,7 @@ paths:
                   properties: *ref_220
                 paymentMethod:
                   type: object
-                  description: Object that contains information about the customer's payment details.
+                  description: "Polymorphic object that contains payment detail information.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n-\t`secureToken` - Secure token details\n-\t`singleUseToken` - Single-use token details\n"
                   discriminator:
                     propertyName: type
                     mapping:
@@ -20209,25 +20224,25 @@ paths:
                     - required: *ref_163
                       type: object
                       writeOnly: true
-                      title: ACH
+                      title: ach
                       description: Object that contains information about the payment details for the customer’s automated clearing house (ACH) transactions.
                       properties: *ref_164
                     - required: *ref_165
                       type: object
                       writeOnly: true
-                      title: PAD
+                      title: pad
                       description: Object that contains information about the payment details for the customer’s preauthorized electronic debit (PAD) transactions.
                       properties: *ref_166
                     - required: *ref_179
                       type: object
                       writeOnly: true
-                      title: Secure token
+                      title: secureToken
                       description: Object that contains information about the secure token that represents the customer’s payment details.
                       properties: *ref_180
                     - required: *ref_181
                       type: object
                       writeOnly: true
-                      title: Single-use token
+                      title: singleUseToken
                       description: Object that contains information about the single-use token, which represents the customer’s payment details.
                       properties: *ref_182
                 customFields:
@@ -20340,7 +20355,7 @@ paths:
                     description: Object that contains information about the customer.
                     properties: *ref_268
                   bankAccount:
-                    description: Object that contains information about the bank account.
+                    description: "Polymorphic object that contains bank account information.  \nThe value of the type field determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n"
                     type: object
                     discriminator:
                       propertyName: type
@@ -20354,7 +20369,7 @@ paths:
                           - routingNumber
                           - type
                         type: object
-                        title: ACH account
+                        title: ach
                         description: Object that contains the customer's account details.
                         properties: &ref_277
                           type:
@@ -20412,7 +20427,7 @@ paths:
                           - transitNumber
                           - type
                         type: object
-                        title: PAD account
+                        title: pad
                         description: Object that contains the customer's account details.
                         properties: &ref_279
                           type:
@@ -21334,7 +21349,7 @@ paths:
               properties: &ref_788
                 paymentMethod:
                   type: object
-                  description: Object that contains information about the customer's payment details.
+                  description: "Polymorphic object that contains the customer's updated payment details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`secureToken` - Secure token details\n"
                   discriminator:
                     propertyName: type
                     mapping:
@@ -21344,13 +21359,13 @@ paths:
                     - required: *ref_163
                       type: object
                       writeOnly: true
-                      title: ACH
+                      title: ach
                       description: Object that contains information about the payment details for the customer’s automated clearing house (ACH) transactions.
                       properties: *ref_164
                     - required: *ref_179
                       type: object
                       writeOnly: true
-                      title: Secure token
+                      title: secureToken
                       description: Object that contains information about the secure token that represents the customer’s payment details.
                       properties: *ref_180
             examples:
@@ -21501,7 +21516,7 @@ paths:
                   description: Object that contains information about the customer.
                   properties: *ref_268
                 refundMethod:
-                  description: Object that contains information about how the merchant refunds the customer.
+                  description: "Polymorphic object that contains payment details for the refund.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`secureToken` - Secure token details\n"
                   type: object
                   discriminator:
                     propertyName: type
@@ -21512,13 +21527,13 @@ paths:
                     - required: *ref_163
                       type: object
                       writeOnly: true
-                      title: ACH
+                      title: ach
                       description: Object that contains information about the payment details for the customer’s automated clearing house (ACH) transactions.
                       properties: *ref_164
                     - required: *ref_179
                       type: object
                       writeOnly: true
-                      title: Secure token
+                      title: secureToken
                       description: Object that contains information about the secure token that represents the customer’s payment details.
                       properties: *ref_180
                 customFields:
@@ -21592,7 +21607,7 @@ paths:
                     description: Object that contains information about the customer.
                     properties: *ref_268
                   bankAccount:
-                    description: Object that contains information about the bank account.
+                    description: "Polymorphic object that contains bank account information.  \n\nThe value of the type field determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n"
                     type: object
                     discriminator:
                       propertyName: type
@@ -21602,12 +21617,12 @@ paths:
                     oneOf:
                       - required: *ref_276
                         type: object
-                        title: ACH account
+                        title: ach
                         description: Object that contains the customer's account details.
                         properties: *ref_277
                       - required: *ref_278
                         type: object
-                        title: PAD account
+                        title: pad
                         description: Object that contains the customer's account details.
                         properties: *ref_279
                   payment:
@@ -22182,7 +22197,7 @@ paths:
                   description: Unique identifier that we assigned to the terminal.
                   example: '1234001'
                 bankAccount:
-                  description: Object that contains information about the bank account.
+                  description: "Polymorphic object that contains bank account information.  \n\nThe value of the type field determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n"
                   type: object
                   discriminator:
                     propertyName: type
@@ -22193,13 +22208,13 @@ paths:
                     - required: *ref_163
                       type: object
                       writeOnly: true
-                      title: ACH
+                      title: ach
                       description: Object that contains information about the payment details for the customer’s automated clearing house (ACH) transactions.
                       properties: *ref_164
                     - required: *ref_165
                       type: object
                       writeOnly: true
-                      title: PAD
+                      title: pad
                       description: Object that contains information about the payment details for the customer’s preauthorized electronic debit (PAD) transactions.
                       properties: *ref_166
             examples:
@@ -22417,7 +22432,7 @@ paths:
                       type: array
                       minItems: 1
                       uniqueItems: true
-                      description: Array of contactMethod objects. One contact method must be an email address.
+                      description: "Array of polymorphic objects, which contain contact information.  \n\n**Note:** You must provide an email address.\n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address \n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number\n"
                       items:
                         discriminator: *ref_2
                         oneOf: *ref_3
@@ -22522,7 +22537,7 @@ paths:
                       contactMethods:
                         type: array
                         minItems: 1
-                        description: Array of contactMethod objects. One contact method must be an email address.
+                        description: "Array of polymorphic objects, which contain contact information.  \n\n**Note:** You must provide an email address.\n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address \n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number.\n"
                         items:
                           discriminator: *ref_2
                           oneOf: *ref_3
@@ -22990,9 +23005,7 @@ paths:
                               minItems: 1
                               maxItems: 4
                               uniqueItems: true
-                              description: |
-                                Array of contactMethod objects.  
-                                **Note:** If you are adding information about an owner, you must provide at least an email address. If you are adding information about a contact, you must provide at least a contact number.   
+                              description: "Array of polymorphic objects, which contain contact information.  \n\n**Note:** If you are adding information about an owner, you must provide at least an email address. If you are adding information about a contact, you must provide at least a contact number.   \n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address \n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number\n"
                               items:
                                 discriminator: *ref_2
                                 oneOf: *ref_3
@@ -23918,7 +23931,7 @@ paths:
                             contactMethods:
                               type: array
                               minItems: 1
-                              description: Array of contactMethods objects for the processing account. At least one contactMethod must be an email address.
+                              description: "Array of polymorphic objects, which contain contact information.  \n\n**Note:** You must provide an email address.\n\nThe value of the type parameter determines which variant you should use:  \n-\t`email` - Email address\n-\t`phone` - Phone number\n-\t`mobile` - Mobile number\n-\t`fax` - Fax number\n"
                               items:
                                 discriminator: *ref_2
                                 oneOf: *ref_3
@@ -25012,7 +25025,7 @@ paths:
           content: *ref_14
   /processing-accounts/{processingAccountId}/pricing:
     get:
-      summary: Get processing account pricing agreement
+      summary: Retrieve processing account pricing agreement
       description: |
         Use this method to retrieve the pricing agreement that we apply to a processing account.  
 
@@ -25985,7 +25998,7 @@ paths:
                                 manual: '#/components/schemas/manualBatchClose'
                             oneOf:
                               - type: object
-                                title: Automatic Batch Close
+                                title: automatic
                                 description: Indicates how the merchant batches their transactions.
                                 properties: &ref_832
                                   batchCloseType:
@@ -26004,7 +26017,7 @@ paths:
                                 required: &ref_833
                                   - batchCloseType
                               - type: object
-                                title: Manual Batch Close
+                                title: manual
                                 description: Indicates how the merchant batches their transactions.
                                 properties: &ref_834
                                   batchCloseType:
@@ -26172,6 +26185,7 @@ paths:
                           properties: &ref_838
                             links:
                               type: array
+                              description: Polymorphic object that contains information about the processing terminal that the order is linked to.
                               items:
                                 type: object
                                 anyOf:
@@ -26579,7 +26593,7 @@ paths:
                               description: Name of the product and its setup.
                               maxLength: 50
                             gateway:
-                              description: Object that contains the gateway settings for the solution.
+                              description: Polymorphic object that contains the gateway settings for the solution.
                               discriminator:
                                 propertyName: gateway
                                 mapping:
@@ -26601,7 +26615,7 @@ paths:
                                     - gateway
                                     - terminalTemplateId
                             batchClosure:
-                              description: Object that contains information about when and how the terminal closes the batch.
+                              description: "Polymorphic object that contains information about when and how the terminal closes the batch.  \n\nThe value of the batchCloseType field determines which variant you should use:  \n-\t`automatic` - Terminal automatically closes the batch at a specific time each day. \n- `manual` - Merchant uses the terminal to manually close the batch.\n"
                               discriminator:
                                 propertyName: batchCloseType
                                 mapping:
@@ -26609,7 +26623,7 @@ paths:
                                   manual: '#/components/schemas/schemas-manualBatchClose'
                               oneOf:
                                 - type: object
-                                  title: Automatic Batch Close
+                                  title: automatic
                                   description: Indicates how authorized transactions will be batched for settlement
                                   properties: &ref_845
                                     batchCloseType:
@@ -26626,7 +26640,7 @@ paths:
                                     - batchCloseType
                                     - batchCloseTime
                                 - type: object
-                                  title: Manual Batch Close
+                                  title: manual
                                   description: Indicates how authorized transactions will be batched for settlement
                                   properties: &ref_847
                                     batchCloseType:
@@ -26651,7 +26665,7 @@ paths:
                               description: Object that contains the feature settings for the terminal.
                               properties:
                                 tips:
-                                  description: Object that contains the tip settings for the processing terminal.
+                                  description: "Polymorphic object that indicates if the terminal accepts tips.  \n\nThe value of the enabled field determines which variant you should use:  \n-\t`true` - Terminal allows tips.\n-\t`false` - Terminal doesn't allow tips.\n"
                                   discriminator:
                                     propertyName: enabled
                                     mapping:
@@ -26720,7 +26734,7 @@ paths:
                                   required:
                                     - enabled
                                 ebt:
-                                  description: Object that contains details about EBT transactions.
+                                  description: "Polymorphic object that indicates if the terminal accepts EBT transactions.  \n\nThe value of the enabled field determines which variant you should use:  \n-\t`true` - Terminal allows EBT transactions.\n-\t`false` - Terminal doesn't allow EBT transactions.\n"
                                   discriminator:
                                     propertyName: enabled
                                     mapping:
@@ -27357,7 +27371,7 @@ paths:
                     description: Unique identifier that we assigned to the processing account.
                     example: '23451'
                   configuration:
-                    description: Object that contains the host processor configuration.
+                    description: Polymorphic object that contains the host processor configuration.
                     discriminator:
                       propertyName: processor
                       mapping:
@@ -27747,7 +27761,7 @@ paths:
                                 - processingAccount.status.changed
                             notifications:
                               type: array
-                              description: Array of notifications objects. Each object contains information about how we contact you when an event occurs.
+                              description: Array of polymorphic notification objects that contain information about how we contact you when an event occurs.
                               items:
                                 type: object
                                 title: Notification method
@@ -29777,22 +29791,22 @@ components:
     contactMethodEmail:
       required: *ref_543
       type: object
-      title: Email contact method
+      title: email
       properties: *ref_544
     contactMethodPhone:
       required: *ref_545
       type: object
-      title: Phone number contact method
+      title: phone
       properties: *ref_546
     contactMethodMobile:
       required: *ref_547
       type: object
-      title: Mobile number contact method
+      title: mobile
       properties: *ref_548
     contactMethodFax:
       required: *ref_549
       type: object
-      title: Fax number contact method
+      title: fax
       properties: *ref_550
     contactMethod:
       discriminator: *ref_2
@@ -30362,7 +30376,7 @@ components:
       required: *ref_179
       type: object
       writeOnly: true
-      title: Secure token
+      title: secureToken
       description: Object that contains information about the secure token that represents the customer’s payment details.
       properties: *ref_180
     taxRate:
@@ -30416,13 +30430,13 @@ components:
     achSource:
       required: *ref_153
       type: object
-      title: ACH account
+      title: ach
       description: Object that contains the customer's account details.
       properties: *ref_154
     padSource:
       required: *ref_155
       type: object
-      title: PAD account
+      title: pad
       description: Object that contains the customer's account details.
       properties: *ref_156
     surcharging:
@@ -30469,14 +30483,14 @@ components:
       required: *ref_163
       type: object
       writeOnly: true
-      title: ACH
+      title: ach
       description: Object that contains information about the payment details for the customer’s automated clearing house (ACH) transactions.
       properties: *ref_164
     padPayload:
       required: *ref_165
       type: object
       writeOnly: true
-      title: PAD
+      title: pad
       description: Object that contains information about the payment details for the customer’s preauthorized electronic debit (PAD) transactions.
       properties: *ref_166
     deviceConfig:
@@ -30492,7 +30506,7 @@ components:
     rawCardDetails:
       required: *ref_661
       type: object
-      title: Raw
+      title: raw
       description: Object that contains information about the unencrypted card details.
       properties: *ref_662
     encryptionCapableDevice:
@@ -30521,75 +30535,75 @@ components:
     iccCardDetails:
       required: *ref_665
       type: object
-      title: Chip
+      title: icc
       description: Object that contains information about the Integrated Circuit Card (ICC).
       properties: *ref_666
     fullyEncryptedKeyedDataFormat:
       required: *ref_667
       type: object
-      title: Encrypted
+      title: fullyEncrypted
       description: Object that contains information about the encrypted card data for keyed transactions.
       properties: *ref_668
     partiallyEncryptedKeyedDataFormat:
       required: *ref_669
       type: object
-      title: Partially encrypted
+      title: partiallyEncrypted
       description: Object that contains information about the partially-encrypted card data for keyed transactions.
       properties: *ref_670
     plainTextKeyedDataFormat:
       required: *ref_671
       type: object
-      title: Unencrypted
+      title: plainText
       description: Object that contains information about the plain-text card data for keyed transactions.
       properties: *ref_672
     dukptPinDetails:
       required: *ref_148
       type: object
-      title: Encrypted
+      title: dukpt
       description: Object that contains information about encrypted PIN details.
       properties: *ref_149
     keyedCardDetails:
       required: *ref_673
       type: object
-      title: Keyed
+      title: keyed
       description: Object that contains information about the keyed card details.
       properties: *ref_674
     encryptedSwipedDataFormat:
       required: *ref_675
       type: object
-      title: Encrypted
+      title: encrypted
       description: Object that contains information about the encrypted swiped card data.
       properties: *ref_676
     plainTextSwipedDataFormat:
       required: *ref_677
       type: object
-      title: Unencrypted
+      title: plainText
       description: Object that contains information about plain-text swiped card data.
       properties: *ref_678
     swipedCardDetails:
       required: *ref_679
       type: object
-      title: Swiped
+      title: swiped
       description: Object that contains information about the customer’s card details for swiped transactions.
       properties: *ref_680
     cardPayload:
       required: *ref_167
       type: object
       writeOnly: true
-      title: Card
+      title: card
       description: Object that contains information about the customer’s payment card.
       properties: *ref_168
     rawPinDetails:
       required: *ref_681
       type: object
-      title: Unencrypted
+      title: raw
       description: Object that contains information about the unencrypted PIN details.
       properties: *ref_682
     singleUseTokenPayload:
       required: *ref_181
       type: object
       writeOnly: true
-      title: Single-use token
+      title: singleUseToken
       description: Object that contains information about the single-use token, which represents the customer’s payment details.
       properties: *ref_182
     gatewayThreeDSecure:
@@ -30775,7 +30789,7 @@ components:
       properties: *ref_716
     tax:
       type: object
-      description: Object that contains information about the tax details.
+      description: "Polymorphic object that contains tax details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n"
       discriminator: *ref_174
       oneOf: *ref_175
     breakdownRequest:
@@ -30797,7 +30811,7 @@ components:
       required: *ref_258
       type: object
       writeOnly: true
-      title: Digital wallet
+      title: digitalWallet
       description: Object that contains information about the payment details in the customer’s digital wallet.
       properties: *ref_259
     schemas-credentialOnFile:
@@ -30829,25 +30843,25 @@ components:
     orderAdjustment:
       required: *ref_725
       type: object
-      title: Order
+      title: order
       description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the order details.
       properties: *ref_726
     statusAdjustment:
       required: *ref_242
       type: object
-      title: Status
+      title: status
       description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the status of the transaction.
       properties: *ref_243
     customerAdjustment:
       required: *ref_244
       type: object
-      title: Customer
+      title: customer
       description: Object that contains information about the adjustment to the transaction. Send this object if the merchant is adjusting the customer’s contact details.
       properties: *ref_245
     signatureAdjustment:
       required: *ref_727
       type: object
-      title: Signature
+      title: signature
       description: |
         Object that contains the signature for the transaction.  
         **Note:** If the merchant previously added a signature to the transaction, they can’t adjust or delete the signature.
@@ -30962,7 +30976,7 @@ components:
       required: *ref_760
       type: object
       writeOnly: true
-      title: Card BIN
+      title: cardBin
       description: Object that contains information about the card's bank identification number (BIN).
       properties: *ref_761
     binLookup:
@@ -31017,13 +31031,13 @@ components:
     achBankAccount:
       required: *ref_276
       type: object
-      title: ACH account
+      title: ach
       description: Object that contains the customer's account details.
       properties: *ref_277
     padBankAccount:
       required: *ref_278
       type: object
-      title: PAD account
+      title: pad
       description: Object that contains the customer's account details.
       properties: *ref_279
     bankTransferReturnSummary:
@@ -31257,13 +31271,13 @@ components:
       maxLength: 28
     automaticBatchClose:
       type: object
-      title: Automatic Batch Close
+      title: automatic
       description: Indicates how the merchant batches their transactions.
       properties: *ref_832
       required: *ref_833
     manualBatchClose:
       type: object
-      title: Manual Batch Close
+      title: manual
       description: Indicates how the merchant batches their transactions.
       properties: *ref_834
       required: *ref_835
@@ -31297,13 +31311,13 @@ components:
       required: *ref_844
     schemas-automaticBatchClose:
       type: object
-      title: Automatic Batch Close
+      title: automatic
       description: Indicates how authorized transactions will be batched for settlement
       properties: *ref_845
       required: *ref_846
     schemas-manualBatchClose:
       type: object
-      title: Manual Batch Close
+      title: manual
       description: Indicates how authorized transactions will be batched for settlement
       properties: *ref_847
       required: *ref_848
