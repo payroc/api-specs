@@ -6918,61 +6918,62 @@ paths:
                 title: transaction
                 description: Object that contains information about the transaction.
                 properties: *ref_72
-              example:
-                summary: Retrieve transaction
-                value:
-                  transactionId: 442233
-                  type: capture
-                  date: '2024-07-02'
-                  amount: 4999
-                  entryMethod: ecommerce
-                  createdDate: '2024-07-02'
-                  lastModifiedDate: '2024-07-02'
-                  status: paid
-                  cashbackAmount: 0
-                  interchange:
-                    basisPoint: 0
-                    transactionFee: 0
-                  currency: USD
-                  merchant:
-                    merchantId: '4525644354'
-                    doingBusinessAs: Pizza Doe
-                    processingAccountId: 38765
-                    link:
-                      rel: processingAccount
-                      method: get
-                      href: https://api.payroc.com/v1/processing-accounts/38765
-                  settled:
-                    settledBy: 3rd party
-                    achDate: '2024-07-02'
-                    achDepositId: 99
-                    link:
-                      rel: achDeposit
-                      method: get
-                      href: https://api.payroc.com/v1/ach-deposits/99
-                  batch:
-                    batchId: 12
+              examples:
+                retrievedTransaction:
+                  summary: Retrieve transaction
+                  value: &ref_916
+                    transactionId: 442233
+                    type: capture
                     date: '2024-07-02'
-                    cycle: am
-                    link:
-                      rel: batch
-                      method: get
-                      href: https://api.payroc.com/v1/batches/12
-                  card:
-                    cardNumber: 453985******7062
-                    type: visa
-                    cvvPresenceIndicator: true
-                    avsRequest: true
-                    avsResponse: ''
-                  authorization:
-                    authorizationId: 303101
-                    code: A1B2C3
                     amount: 4999
-                    avsResponseCode: ''
-                    link:
-                      rel: authorization
-                      method: get
-                      href: https://api.payroc.com/v1/authorizations/303101
+                    entryMethod: ecommerce
+                    createdDate: '2024-07-02'
+                    lastModifiedDate: '2024-07-02'
+                    status: paid
+                    cashbackAmount: 0
+                    interchange:
+                      basisPoint: 0
+                      transactionFee: 0
+                    currency: USD
+                    merchant:
+                      merchantId: '4525644354'
+                      doingBusinessAs: Pizza Doe
+                      processingAccountId: 38765
+                      link:
+                        rel: processingAccount
+                        method: get
+                        href: https://api.payroc.com/v1/processing-accounts/38765
+                    settled:
+                      settledBy: 3rd party
+                      achDate: '2024-07-02'
+                      achDepositId: 99
+                      link:
+                        rel: achDeposit
+                        method: get
+                        href: https://api.payroc.com/v1/ach-deposits/99
+                    batch:
+                      batchId: 12
+                      date: '2024-07-02'
+                      cycle: am
+                      link:
+                        rel: batch
+                        method: get
+                        href: https://api.payroc.com/v1/batches/12
+                    card:
+                      cardNumber: 453985******7062
+                      type: visa
+                      cvvPresenceIndicator: true
+                      avsRequest: true
+                      avsResponse: ''
+                    authorization:
+                      authorizationId: 303101
+                      code: A1B2C3
+                      amount: 4999
+                      avsResponseCode: ''
+                      link:
+                        rel: authorization
+                        method: get
+                        href: https://api.payroc.com/v1/authorizations/303101
         '400':
           description: Validation error
           content:
@@ -6985,7 +6986,7 @@ paths:
                 transactionIdError:
                   summary: Bad Request
                   description: One or more validation errors occurred
-                  value: &ref_916
+                  value: &ref_917
                     type: https://docs.payroc.com/api/errors#bad-request
                     title: Bad request
                     status: 400
@@ -7280,7 +7281,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated authorizations
-                  value: &ref_917
+                  value: &ref_918
                     limit: 2
                     count: 1
                     hasMore: false
@@ -7396,47 +7397,48 @@ paths:
                 title: authorization
                 description: Object that contains information about the authorization.
                 properties: *ref_80
-              example:
-                summary: Retrieve authorization
-                value:
-                  authorizationId: 65
-                  createdDate: '2024-07-02'
-                  lastModifiedDate: '2024-07-02'
-                  authorizationResponse: successful
-                  preauthorizationRequestAmount: 10000
-                  currency: USD
-                  merchant:
-                    merchantId: '4525644354'
-                    doingBusinessAs: Pizza Doe
-                    processingAccountId: 38765
-                    link:
-                      rel: processingAccount
-                      method: get
-                      href: https://api.payroc.com/v1/processing-accounts/38765
-                  batch:
-                    batchId: 12
-                    date: '2024-07-02'
-                    cycle: am
-                    link:
-                      rel: batch
-                      method: get
-                      href: https://api.payroc.com/v1/batches/12
-                  card:
-                    cardNumber: 453985******7062
-                    type: visa
-                    cvvPresenceIndicator: true
-                    avsRequest: true
-                    avsResponse: 'Y'
-                  transaction:
-                    transactionId: 442233
-                    type: capture
-                    date: '2024-07-02'
-                    entryMethod: swiped
-                    amount: 100
-                    link:
-                      rel: transaction
-                      method: get
-                      href: https://api.payroc.com/v1/transactions/12345
+              examples:
+                retrievedAuthorization:
+                  summary: Retrieve authorization
+                  value: &ref_919
+                    authorizationId: 65
+                    createdDate: '2024-07-02'
+                    lastModifiedDate: '2024-07-02'
+                    authorizationResponse: successful
+                    preauthorizationRequestAmount: 10000
+                    currency: USD
+                    merchant:
+                      merchantId: '4525644354'
+                      doingBusinessAs: Pizza Doe
+                      processingAccountId: 38765
+                      link:
+                        rel: processingAccount
+                        method: get
+                        href: https://api.payroc.com/v1/processing-accounts/38765
+                    batch:
+                      batchId: 12
+                      date: '2024-07-02'
+                      cycle: am
+                      link:
+                        rel: batch
+                        method: get
+                        href: https://api.payroc.com/v1/batches/12
+                    card:
+                      cardNumber: 453985******7062
+                      type: visa
+                      cvvPresenceIndicator: true
+                      avsRequest: true
+                      avsResponse: 'Y'
+                    transaction:
+                      transactionId: 442233
+                      type: capture
+                      date: '2024-07-02'
+                      entryMethod: swiped
+                      amount: 100
+                      link:
+                        rel: transaction
+                        method: get
+                        href: https://api.payroc.com/v1/transactions/12345
         '400':
           description: Invalid request
           content: *ref_15
@@ -7653,7 +7655,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated disputes
-                  value: &ref_918
+                  value: &ref_920
                     limit: 2
                     count: 1
                     hasMore: false
@@ -8345,7 +8347,7 @@ paths:
               multiUsePaymentLinkRequest:
                 summary: Multi-use payment link.
                 description: Create a multi-use payment link.
-                value: &ref_920
+                value: &ref_922
                   type: multiUse
                   merchantReference: LinkRef6543
                   order:
@@ -8363,7 +8365,7 @@ paths:
               singleUsePaymentLinkRequest:
                 summary: Single-use payment link.
                 description: Create a single-use payment link.
-                value: &ref_921
+                value: &ref_923
                   type: singleUse
                   merchantReference: LinkRef7654
                   order:
@@ -8473,7 +8475,7 @@ paths:
                 resourceExists:
                   summary: Resource already exists
                   description: Resource already exists
-                  value: &ref_922
+                  value: &ref_924
                     type: https://docs.payroc.com/api/errors#resource-already-exists
                     title: Resource already exists
                     status: 409
@@ -8511,7 +8513,7 @@ paths:
                 unsupportedMediaType:
                   summary: Unsupported media type
                   description: The payload is in an unsupported format.
-                  value: &ref_923
+                  value: &ref_925
                     type: https://docs.payroc.com/api/errors#unsupported-media-type
                     title: Unsupported media type
                     status: 415
@@ -8691,7 +8693,7 @@ paths:
                 paginatedResults:
                   summary: Payment links
                   description: Paginated list of payment links
-                  value: &ref_919
+                  value: &ref_921
                     limit: 2
                     count: 2
                     hasMore: true
@@ -8896,7 +8898,7 @@ paths:
                 description: |
                   Partially update an existing payment link.  
                   Structure your request to follow the RFC 6902 standard.
-                value: &ref_924
+                value: &ref_926
                   - op: replace
                     path: /expiresOn
                     value: '2024-10-25'
@@ -8996,7 +8998,7 @@ paths:
                 deactivatedPaymentLink:
                   summary: Payment link
                   description: Deactivated multi-use payment link.
-                  value: &ref_925
+                  value: &ref_927
                     type: multiUse
                     paymentLinkId: JZURRJBUPS
                     merchantReference: LinkRef6543
@@ -9144,7 +9146,7 @@ paths:
               sharePaymentLinkRequest:
                 summary: Share a payment link.
                 description: Share a payment link.
-                value: &ref_927
+                value: &ref_929
                   sharingMethod: email
                   merchantCopy: true
                   message: |
@@ -9172,7 +9174,7 @@ paths:
                 paymentLinkShareEvent:
                   summary: Payment link sharing event.
                   description: Payment link sharing event
-                  value: &ref_928
+                  value: &ref_930
                     sharingMethod: email
                     sharingEventId: GTZH5WVXK9
                     dateTime: '2024-07-02T15:30:00Z'
@@ -9295,7 +9297,7 @@ paths:
                 paginatedResults:
                   summary: Sharing events
                   description: Paginated list of payment link sharing events
-                  value: &ref_926
+                  value: &ref_928
                     limit: 2
                     count: 2
                     hasMore: true
@@ -9585,7 +9587,7 @@ paths:
               paymentPlanRequest:
                 summary: Payment Plan
                 description: Payment Plan
-                value: &ref_930
+                value: &ref_932
                   paymentPlanId: PlanRef8765
                   name: Premium Club
                   description: Monthly Premium Club subscription
@@ -9765,7 +9767,7 @@ paths:
                 paginatedResults:
                   summary: Payment Plan
                   description: Payment Plan
-                  value: &ref_929
+                  value: &ref_931
                     limit: 2
                     count: 2
                     hasMore: true
@@ -9926,7 +9928,7 @@ paths:
                   Make changes to an existing payment plan.
 
                   Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
-                value: &ref_931
+                value: &ref_933
                   - op: replace
                     path: /currency
                     value: USD
@@ -10326,7 +10328,7 @@ paths:
               createSubscription:
                 summary: Subscription
                 description: Subscription
-                value: &ref_933
+                value: &ref_935
                   subscriptionId: SubRef7654
                   paymentPlanId: PlanRef8765
                   paymentMethod:
@@ -10958,7 +10960,7 @@ paths:
                 paginatedResults:
                   summary: Paginated Subscription
                   description: Example of Paginated Subscription
-                  value: &ref_932
+                  value: &ref_934
                     limit: 2
                     count: 2
                     hasMore: true
@@ -11187,7 +11189,7 @@ paths:
                   Make changes to a subscription.
 
                   Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
-                value: &ref_934
+                value: &ref_936
                   - op: replace
                     path: /setupOrder/amount
                     value: 2999
@@ -11304,7 +11306,7 @@ paths:
                 deactivateSubscription:
                   summary: Deactivate subscription
                   description: Deactivate a subscription
-                  value: &ref_935
+                  value: &ref_937
                     subscriptionId: SubRef7654
                     processingTerminalId: '1234001'
                     paymentPlan:
@@ -11521,7 +11523,7 @@ paths:
               subscriptionPaymentRequest:
                 summary: Subscription manual payment
                 description: Subscription manual payment
-                value: &ref_936
+                value: &ref_938
                   operator: Jane
                   order:
                     amount: 4999
@@ -11651,7 +11653,7 @@ paths:
                 subscriptionPaymentResponse:
                   summary: Subscription manual payment
                   description: Subscription manual payment
-                  value: &ref_937
+                  value: &ref_939
                     subscriptionId: SubRef7654
                     processingTerminalId: '1234001'
                     payment:
@@ -12797,7 +12799,7 @@ paths:
               createSecureToken:
                 summary: Secure Token
                 description: Secure Token
-                value: &ref_939
+                value: &ref_941
                   operator: Jane
                   mitAgreement: unscheduled
                   customer:
@@ -13447,7 +13449,7 @@ paths:
                 paginatedResults:
                   summary: Paginated Secure Token
                   description: Paginated Secure Token
-                  value: &ref_938
+                  value: &ref_940
                     limit: 2
                     count: 2
                     hasMore: true
@@ -13668,7 +13670,7 @@ paths:
                   Update the customer's payment details that are represented by the secure token.
 
                   Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
-                value: &ref_940
+                value: &ref_942
                   - op: replace
                     path: /customer/lastName
                     value: Reed
@@ -13846,7 +13848,7 @@ paths:
               accountUpdate:
                 summary: Update account details
                 description: Account update request by single use token
-                value: &ref_941
+                value: &ref_943
                   type: singleUseToken
                   token: abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
         required: true
@@ -13915,7 +13917,7 @@ paths:
                 payloadTooLarge:
                   summary: Payload too large
                   description: The payload submitted is too large
-                  value: &ref_942
+                  value: &ref_944
                     type: https://docs.payroc.com/api/errors#payload-too-large
                     title: Payload too large
                     status: 413
@@ -14013,7 +14015,7 @@ paths:
               createSingleUseToken:
                 summary: Create single-use token
                 description: Create a single-use token. The token expires after 30 minutes.
-                value: &ref_943
+                value: &ref_945
                   channel: web
                   operator: Jane
                   source:
@@ -14113,7 +14115,7 @@ paths:
                 createSingleUseToken:
                   summary: Create single-use token
                   description: Create a single-use token. The token expires after 30 minutes.
-                  value: &ref_944
+                  value: &ref_946
                     processingTerminalId: '1234001'
                     token: fa2e9e51bc5265a33a5ca41449524d53d1def596ffd8c0904f222183a71a65cdb58835120a65196a48a6375abc4deafe2b7e948689ab9d6aba919e860f32e247
                     expiresAt: '2024-08-05T19:50:05.723+02:00'
@@ -14240,7 +14242,7 @@ paths:
               createSessionRequest:
                 summary: Create session request
                 description: Create session request.
-                value: &ref_945
+                value: &ref_947
                   libVersion: 1.1.0.123456
                   scenario: payment
         required: true
@@ -14278,7 +14280,7 @@ paths:
                 createSessionResponse:
                   summary: Create session response
                   description: Create session response.
-                  value: &ref_946
+                  value: &ref_948
                     processingTerminalId: '1234001'
                     token: abcdef1234567890abcdef1234567890
                     expiresAt: '2025-07-02T15:30:00.000+02:00'
@@ -14366,7 +14368,7 @@ paths:
               applePaySessions:
                 summary: Apple Pay session
                 description: Start a session with Apple to accept a payment with Apple Pay.
-                value: &ref_947
+                value: &ref_949
                   appleDomainId: DUHDZJHGYY
                   appleValidationUrl: https://apple-pay-gateway.apple.com/paymentservices/startSession
         required: true
@@ -14404,7 +14406,7 @@ paths:
                 applePayResponseSession:
                   summary: Apple Pay session response
                   description: Wrapper for the content that Apple returns after starting the Apple Pay session.
-                  value: &ref_948
+                  value: &ref_950
                     startSessionResponse: |
                       {
                         "epochTimestamp": 1736264582447,
@@ -15331,7 +15333,7 @@ paths:
               paymentRequest:
                 summary: Card Payment
                 description: Payment
-                value: &ref_950
+                value: &ref_952
                   channel: web
                   processingTerminalId: '1234001'
                   operator: Jane
@@ -15377,7 +15379,7 @@ paths:
                       value: abc123
               applePaySaleRequest:
                 summary: Apple Pay Payment
-                value: &ref_951
+                value: &ref_953
                   channel: web
                   processingTerminalId: '1234001'
                   operator: Jane
@@ -15943,7 +15945,7 @@ paths:
                         value: abc123
                 applePaySaleResponse:
                   summary: Apple Pay Payment
-                  value: &ref_952
+                  value: &ref_954
                     paymentId: J9VULKIKFP
                     processingTerminalId: '1234001'
                     operator: Jane
@@ -16417,7 +16419,7 @@ paths:
                 paginatedResults:
                   summary: Payment
                   description: Payment
-                  value: &ref_949
+                  value: &ref_951
                     limit: 2
                     count: 2
                     hasMore: true
@@ -16747,7 +16749,7 @@ paths:
               adjustPaymentRequest:
                 summary: Adjust Payment
                 description: Adjust Payment
-                value: &ref_953
+                value: &ref_955
                   adjustments:
                     - type: customer
                       shippingAddress:
@@ -16776,7 +16778,7 @@ paths:
                 adjustPaymentResponse:
                   summary: Adjust Payment
                   description: Adjust Payment
-                  value: &ref_954
+                  value: &ref_956
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1234001'
                     order:
@@ -16928,7 +16930,7 @@ paths:
               paymentCapture:
                 summary: Payment capture
                 description: Capture a payment with itemized breakdown
-                value: &ref_955
+                value: &ref_957
                   processingTerminalId: '1234001'
                   operator: Jane
                   amount: 4999
@@ -17043,7 +17045,7 @@ paths:
               reversalPayment:
                 summary: Reversal Payment
                 description: Reversal Payment
-                value: &ref_956
+                value: &ref_958
                   amount: 4999
       responses:
         '200':
@@ -17058,7 +17060,7 @@ paths:
                 reversalPayment:
                   summary: Reversal Payment
                   description: Reversal Payment
-                  value: &ref_957
+                  value: &ref_959
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1234001'
                     order:
@@ -17219,7 +17221,7 @@ paths:
               refundPaymentRequest:
                 summary: Refund Payment
                 description: Refund Payment
-                value: &ref_958
+                value: &ref_960
                   amount: 4999
                   description: Refund for order OrderRef6543
         required: true
@@ -17236,7 +17238,7 @@ paths:
                 refundPayment:
                   summary: Refund Payment
                   description: Refund Payment
-                  value: &ref_959
+                  value: &ref_961
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1234001'
                     operator: Jane
@@ -17485,7 +17487,7 @@ paths:
               paymentInstructionRequest:
                 summary: Payment Instruction
                 description: Submit an instruction for initiating a payment on a physical device.
-                value: &ref_960
+                value: &ref_962
                   operator: Jane
                   processingTerminalId: '1234001'
                   order:
@@ -17548,7 +17550,7 @@ paths:
                 paymentInstruction:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
-                  value: &ref_961
+                  value: &ref_963
                     paymentInstructionId: a37439165d134678a9100ebba3b29597
                     status: inProgress
                     link:
@@ -17630,7 +17632,7 @@ paths:
                 paymentInstruction:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
-                  value: &ref_962
+                  value: &ref_964
                     paymentInstructionId: a37439165d134678a9100ebba3b29597
                     status: completed
                     link:
@@ -17703,7 +17705,7 @@ paths:
                 paymentInstructionCompleted:
                   summary: Payment instruction already completed
                   description: Payment instruction already completed
-                  value: &ref_963
+                  value: &ref_965
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -17718,7 +17720,7 @@ paths:
                 paymentInstructionFailed:
                   summary: Payment instruction failed
                   description: Payment instruction failed
-                  value: &ref_964
+                  value: &ref_966
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -17878,7 +17880,7 @@ paths:
               refund:
                 summary: Refund
                 description: Refund
-                value: &ref_966
+                value: &ref_968
                   processingTerminalId: '1234001'
                   order:
                     orderId: OrderRef6543
@@ -18250,7 +18252,7 @@ paths:
                 paginatedResults:
                   summary: Paginated Refund
                   description: Paginated Refund
-                  value: &ref_965
+                  value: &ref_967
                     limit: 2
                     count: 2
                     hasMore: true
@@ -18466,7 +18468,7 @@ paths:
               refundRequest:
                 summary: Adjust Refund
                 description: Adjust Refund
-                value: &ref_967
+                value: &ref_969
                   operator: Jane
                   adjustments:
                     - type: customer
@@ -18488,7 +18490,7 @@ paths:
                 refundResponse:
                   summary: Adjust Refund
                   description: Adjust Refund
-                  value: &ref_968
+                  value: &ref_970
                     refundId: CD3HN88U9F
                     processingTerminalId: '1234001'
                     operator: Jane
@@ -18601,7 +18603,7 @@ paths:
                 refundResponse:
                   summary: Reverse Refund
                   description: Reverse Refund
-                  value: &ref_969
+                  value: &ref_971
                     refundId: CD3HN88U9F
                     processingTerminalId: '1234001'
                     order:
@@ -18754,7 +18756,7 @@ paths:
               refundInstructionRequest:
                 summary: Refund instruction
                 description: Submit an instruction for initiating a refund on a physical device.
-                value: &ref_970
+                value: &ref_972
                   operator: Jane
                   processingTerminalId: '1234001'
                   order:
@@ -18791,7 +18793,7 @@ paths:
                 refundInstruction:
                   summary: Refund instruction
                   description: Object that contains information about the progress of the refund instruction.
-                  value: &ref_971
+                  value: &ref_973
                     refundInstructionId: a37439165d134678a9100ebba3b29597
                     status: inProgress
                     link:
@@ -18873,7 +18875,7 @@ paths:
                 refundInstruction:
                   summary: Refund instruction
                   description: Object that contains information about the progress of the refund instruction.
-                  value: &ref_972
+                  value: &ref_974
                     refundInstructionId: a37439165d134678a9100ebba3b29597
                     status: completed
                     link:
@@ -18946,7 +18948,7 @@ paths:
                 refundInstructionCompleted:
                   summary: Refund instruction already completed
                   description: Refund instruction already completed
-                  value: &ref_973
+                  value: &ref_975
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -18961,7 +18963,7 @@ paths:
                 refundInstructionFailed:
                   summary: Refund instruction failed
                   description: Refund instruction failed
-                  value: &ref_974
+                  value: &ref_976
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -19022,7 +19024,7 @@ paths:
               signatureInstructionRequest:
                 summary: Signature Instruction
                 description: Submit an instruction for capturing a signature on a physical device.
-                value: &ref_975
+                value: &ref_977
                   processingTerminalId: '1234001'
       responses:
         '202':
@@ -19050,7 +19052,7 @@ paths:
                 signatureInstruction:
                   summary: Signature instruction
                   description: Object that contains information about the progress of the signature instruction.
-                  value: &ref_976
+                  value: &ref_978
                     signatureInstructionId: a37439165d134678a9100ebba3b29597
                     status: inProgress
                     link:
@@ -19132,7 +19134,7 @@ paths:
                 signatureInstruction:
                   summary: Signature instruction
                   description: Object that contains information about the progress of the signature instruction.
-                  value: &ref_977
+                  value: &ref_979
                     signatureInstructionId: a37439165d134678a9100ebba3b29597
                     status: completed
                     link:
@@ -19203,7 +19205,7 @@ paths:
                 signatureInstructionCompleted:
                   summary: Signature instruction already completed
                   description: Signature instruction already completed
-                  value: &ref_978
+                  value: &ref_980
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -19218,7 +19220,7 @@ paths:
                 signatureInstructionFailed:
                   summary: Signature instruction failed
                   description: Signature instruction failed
-                  value: &ref_979
+                  value: &ref_981
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -19287,7 +19289,7 @@ paths:
                 signature:
                   summary: Signature
                   description: A signature response example.
-                  value: &ref_980
+                  value: &ref_982
                     signatureId: JDN4ILZB0T
                     processingTerminalId: '1024'
                     createdOn: '2024-07-02'
@@ -19373,7 +19375,7 @@ paths:
               cardVerificationRequest:
                 summary: Card Verification
                 description: Card Verification
-                value: &ref_981
+                value: &ref_983
                   operator: Jane
                   processingTerminalId: '1234001'
                   card:
@@ -19432,7 +19434,7 @@ paths:
                 cardVerificationResponse:
                   summary: Card Verification
                   description: Card Verification
-                  value: &ref_982
+                  value: &ref_984
                     operator: Jane
                     processingTerminalId: '1234001'
                     card:
@@ -19555,7 +19557,7 @@ paths:
               cardBalanceRequest:
                 summary: Card Balance
                 description: Card Balance
-                value: &ref_983
+                value: &ref_985
                   operator: Jane
                   processingTerminalId: '1234001'
                   currency: USD
@@ -19637,7 +19639,7 @@ paths:
                 cardBalanceResponse:
                   summary: Card Balance
                   description: Card Balance
-                  value: &ref_984
+                  value: &ref_986
                     operator: Jane
                     processingTerminalId: '1234001'
                     card:
@@ -19766,7 +19768,7 @@ paths:
               binLookupRequest:
                 summary: BIN lookup
                 description: BIN lookup
-                value: &ref_985
+                value: &ref_987
                   operator: Jane
                   processingTerminalId: '1234001'
                   card:
@@ -19821,7 +19823,7 @@ paths:
                 binLookupResponse:
                   summary: BIN lookup
                   description: BIN lookup
-                  value: &ref_986
+                  value: &ref_988
                     type: MASTERCARD
                     cardNumber: 453985******7062
                     country: US
@@ -19947,7 +19949,7 @@ paths:
               fxRateRequest:
                 summary: Fx-Rate
                 description: Fx-Rate
-                value: &ref_987
+                value: &ref_989
                   channel: web
                   operator: Jane
                   processingTerminalId: '1234001'
@@ -20033,7 +20035,7 @@ paths:
                 fxRateResponse:
                   summary: Fx-Rate
                   description: Fx-Rate
-                  value: &ref_988
+                  value: &ref_990
                     processingTerminalId: '1234001'
                     operator: Jane
                     baseAmount: 10000
@@ -20260,7 +20262,7 @@ paths:
               createdBankTransferPaymentStoreToken:
                 summary: Store Token Bank Transfer Payment
                 description: Bank Transfer Payment with ACH payload and token storage
-                value: &ref_990
+                value: &ref_992
                   processingTerminalId: '1234001'
                   order:
                     orderId: OrderRef6543
@@ -20882,7 +20884,7 @@ paths:
                 paginatedResults:
                   summary: Bank Transfer Payment
                   description: Bank Transfer Payment
-                  value: &ref_989
+                  value: &ref_991
                     limit: 2
                     count: 2
                     hasMore: true
@@ -21023,7 +21025,7 @@ paths:
                 bankTransferPaymentDeclined:
                   summary: Declined Payment
                   description: Bank Transfer Payment that was declined with return information
-                  value: &ref_991
+                  value: &ref_993
                     paymentId: E29U8OU8Q4
                     processingTerminalId: '1234001'
                     order:
@@ -21131,7 +21133,7 @@ paths:
                 reverseBankTransferPayment:
                   summary: Reverse Bank Transfer Payment
                   description: Reverse Bank Transfer Payment
-                  value: &ref_992
+                  value: &ref_994
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1234001'
                     order:
@@ -21267,7 +21269,7 @@ paths:
               refundBankTransferPayment:
                 summary: Refund Bank Transfer Payment
                 description: Refund Bank Transfer Payment
-                value: &ref_993
+                value: &ref_995
                   amount: 4999
                   description: amount to refund
         required: true
@@ -21285,7 +21287,7 @@ paths:
                 bankTransferPayment:
                   summary: Reverse Bank Transfer Payment
                   description: Reverse Bank Transfer Payment
-                  value: &ref_994
+                  value: &ref_996
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1234001'
                     order:
@@ -21427,7 +21429,7 @@ paths:
               representBankTransferPayment:
                 summary: Representment Bank Transfer Payment
                 description: Representment Bank Transfer Payment
-                value: &ref_995
+                value: &ref_997
                   paymentMethod:
                     type: ach
                     accountType: checking
@@ -21603,7 +21605,7 @@ paths:
               bankTransferUnreferencedRefundRequest:
                 summary: Bank Transfer Unreferenced Refund
                 description: Bank Transfer Unreferenced Refund
-                value: &ref_997
+                value: &ref_999
                   processingTerminalId: '1234001'
                   order:
                     orderId: OrderRef6543
@@ -21947,7 +21949,7 @@ paths:
                 paginatedResults:
                   summary: Paginated Bank Transfer Unreferenced Refund
                   description: Paginated Bank Transfer Unreferenced Refund
-                  value: &ref_996
+                  value: &ref_998
                     limit: 2
                     count: 2
                     hasMore: true
@@ -22140,7 +22142,7 @@ paths:
                 bankTransferUnreferencedRefund:
                   summary: Bank Transfer Unreferenced Refund
                   description: Bank Transfer Unreferenced Refund
-                  value: &ref_998
+                  value: &ref_1000
                     refundId: CD3HN88U9F
                     processingTerminalId: '1234001'
                     order:
@@ -22276,7 +22278,7 @@ paths:
               bankAccountVerificationRequestPad:
                 summary: PAD Bank Account Verification Request
                 description: Bank Account Verification Request for PAD
-                value: &ref_999
+                value: &ref_1001
                   processingTerminalId: '1234001'
                   bankAccount:
                     type: pad
@@ -22289,7 +22291,7 @@ paths:
               bankAccountVerificationRequestAch:
                 summary: ACH Bank Account Verification Request
                 description: Bank Account Verification Request for ACH
-                value: &ref_1000
+                value: &ref_1002
                   processingTerminalId: '1234001'
                   bankAccount:
                     type: ach
@@ -22327,7 +22329,7 @@ paths:
                 bankAccountVerificationResponse:
                   summary: Bank Account Verification Response
                   description: Bank Account Verification Response
-                  value: &ref_1001
+                  value: &ref_1003
                     processingTerminalId: '1234001'
                     verified: true
         '400':
@@ -23083,7 +23085,7 @@ paths:
               createMerchantPlatform:
                 summary: Create merchant platform
                 description: Create a merchant platform.
-                value: &ref_1003
+                value: &ref_1005
                   business:
                     name: Example Corp
                     taxId: 12-3456789
@@ -23352,7 +23354,7 @@ paths:
                 created:
                   summary: Created merchant platform
                   description: New merchant platform created
-                  value: &ref_1004
+                  value: &ref_1006
                     merchantPlatformId: '12345'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -23390,7 +23392,7 @@ paths:
                 partialSuccess:
                   summary: Failed processing account
                   description: We successfully created the merchant platform, but failed to add one or more processing accounts.
-                  value: &ref_1005
+                  value: &ref_1007
                     merchantPlatformId: '12346'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -23495,7 +23497,7 @@ paths:
                 taxIdInUse:
                   summary: Tax ID in use
                   description: The tax ID supplied is already in use.
-                  value: &ref_1006
+                  value: &ref_1008
                     type: https://docs.payroc.com/api/errors#tax-id-in-use
                     title: Tax ID already in use
                     status: 409
@@ -23503,7 +23505,7 @@ paths:
                 nationalIdInUse:
                   summary: National ID in use
                   description: One or more supplied national IDs are not unique. All national IDs must be unique.
-                  value: &ref_1007
+                  value: &ref_1009
                     type: https://docs.payroc.com/api/errors#national-id-in-use
                     title: National ID in use
                     status: 409
@@ -23575,7 +23577,7 @@ paths:
                 listMerchantPlatforms:
                   summary: Paginated list of merchant platforms
                   description: Retrieve a list of merchant platforms associated with your account.
-                  value: &ref_1002
+                  value: &ref_1004
                     limit: 2
                     count: 2
                     hasMore: true
@@ -23706,7 +23708,7 @@ paths:
                 retrievedMerchantPlatforms:
                   summary: Retrieve merchant platform
                   description: Retrieve a merchant platform.
-                  value: &ref_1008
+                  value: &ref_1010
                     merchantPlatformId: '12345'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -24120,7 +24122,7 @@ paths:
                 listProcessingAccounts:
                   summary: Paginated list of processing account
                   description: Retrieve processing accounts associated with a merchant platform.
-                  value: &ref_1009
+                  value: &ref_1011
                     limit: 2
                     count: 2
                     hasMore: true
@@ -24374,7 +24376,7 @@ paths:
               retrievedMerchantPlatforms:
                 summary: Create merchant platform
                 description: Create a merchant platform.
-                value: &ref_1010
+                value: &ref_1012
                   doingBusinessAs: Pizza Doe
                   owners:
                     - firstName: Jane
@@ -24510,7 +24512,7 @@ paths:
                 retrievedMerchantPlatforms:
                   summary: Retrieve merchant platform
                   description: Retrieve a merchant platform.
-                  value: &ref_1011
+                  value: &ref_1013
                     processingAccountId: '38765'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -24714,7 +24716,7 @@ paths:
                 processingAccount:
                   summary: Retrieve processing account
                   description: Retrieve a specific processing account.
-                  value: &ref_1012
+                  value: &ref_1014
                     processingAccountId: '38765'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -24891,7 +24893,7 @@ paths:
                 fundingAccounts:
                   summary: List of funding accounts
                   description: List of funding accounts associated with a processing account.
-                  value: &ref_1013
+                  value: &ref_1015
                     - fundingAccountId: 123
                       createdDate: '2024-07-02T12:00:00.000Z'
                       lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -25019,7 +25021,7 @@ paths:
                 paginatedContacts:
                   summary: Paginated list of processing account contacts
                   description: List of contacts associated with a processing account.
-                  value: &ref_1014
+                  value: &ref_1016
                     limit: 2
                     count: 2
                     hasMore: true
@@ -25410,7 +25412,7 @@ paths:
                 paginatedContacts:
                   summary: Get processing account pricing agreement
                   description: Retrieve a pricing agreement for a processing account.
-                  value: &ref_1015
+                  value: &ref_1017
                     country: US
                     version: '5.0'
                     base:
@@ -25560,7 +25562,7 @@ paths:
                 listProcessingAccountOwners:
                   summary: Paginated list of processing account owners
                   description: Retrieve owners associated with a processing account.
-                  value: &ref_1016
+                  value: &ref_1018
                     limit: 2
                     count: 2
                     hasMore: true
@@ -25703,7 +25705,7 @@ paths:
                   When you create a processing account, we send a copy of the pricing agreement to the merchant to sign. You can choose to send them a copy of the pricing agreement by email, or you can generate a link to the pricing agreement.<br/>  
                   If you requested the merchant's signature by email and they don't respond, use our Reminders endpoint to create a reminder and to send another email.<br/>  
                   **Note:** You can use the Reminders endpoint only if you request the merchant's signature by email. If you generate a link to the pricing agreement, you can't use the Reminders endpoint.  
-                value: &ref_1017
+                value: &ref_1019
                   type: pricingAgreement
       responses:
         '201':
@@ -25724,7 +25726,7 @@ paths:
                 reminderCreated:
                   summary: Reminder created
                   description: Reminder created.
-                  value: &ref_1018
+                  value: &ref_1020
                     reminderId: '1234567'
                     type: pricingAgreement
         '400':
@@ -25743,7 +25745,7 @@ paths:
                 notRequestedByEmail:
                   summary: Not requested by email
                   description: We couldn't resend the email to the merchant because you didn't originally choose to send the information by email.
-                  value: &ref_1019
+                  value: &ref_1021
                     type: https://docs.payroc.com/api/errors#not-requested-by-email
                     title: Not requested by email
                     status: 400
@@ -25751,7 +25753,7 @@ paths:
                 contractAlreadySigned:
                   summary: Contract already signed
                   description: We couldn’t resend the email because the merchant already signed the contract.
-                  value: &ref_1020
+                  value: &ref_1022
                     type: https://docs.payroc.com/api/errors#contract-already-signed
                     title: Contract already signed
                     status: 400
@@ -25759,7 +25761,7 @@ paths:
                 noPricingAgreementExistsForTheProcessingAccount:
                   summary: No pricing agreement exists for the processing account
                   description: We couldn’t resend the email because there is no pricing agreement for the processing account.
-                  value: &ref_1021
+                  value: &ref_1023
                     type: https://docs.payroc.com/api/errors#no-pricing-agreement-exists-for-the-processing-account
                     title: No pricing agreement exists
                     status: 400
@@ -26144,7 +26146,7 @@ paths:
                 description: |
                   Use this method to order and configure terminals for a processing account. When you create an order, you specify the gateway settings, device settings, and application settings for the terminals. 
                   **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](#getMerchantAccounts)
-                value: &ref_1023
+                value: &ref_1025
                   trainingProvider: payroc
                   shipping:
                     preferences:
@@ -26297,7 +26299,7 @@ paths:
                 terminalOrder:
                   summary: Terminal order
                   description: Terminal order
-                  value: &ref_1024
+                  value: &ref_1026
                     terminalOrderId: '12345'
                     status: open
                     trainingProvider: payroc
@@ -26473,7 +26475,7 @@ paths:
                 terminalOrders:
                   summary: Paginated list of Terminal Orders
                   description: Retrieve terminal orders associated with a processing account.
-                  value: &ref_1022
+                  value: &ref_1024
                     - terminalOrderId: '12345'
                       status: open
                       trainingProvider: payroc
@@ -26962,7 +26964,7 @@ paths:
                 processingTerminals:
                   summary: Paginated list of processing terminals
                   description: List of processing terminals associated with a processing account.
-                  value: &ref_1025
+                  value: &ref_1027
                     limit: 2
                     count: 2
                     hasMore: true
@@ -27320,7 +27322,7 @@ paths:
                 processingTerminals:
                   summary: Retrieve processing terminal
                   description: Retrieve a specific processing terminal.
-                  value: &ref_1026
+                  value: &ref_1028
                     processingAccountId: '38765'
                     status: active
                     timezone: Pacific/Midway
@@ -27585,7 +27587,7 @@ paths:
                 contact:
                   summary: Contact object
                   description: Contact object
-                  value: &ref_1027
+                  value: &ref_1029
                     contactId: 1543
                     type: manager
                     firstName: Jane
@@ -27643,7 +27645,7 @@ paths:
               updateContact:
                 summary: Update contact
                 description: Update a specific contact.
-                value: &ref_1028
+                value: &ref_1030
                   type: manager
                   firstName: Jane
                   middleName: Helen
@@ -27871,7 +27873,7 @@ paths:
                 paginatedList:
                   summary: Paginated list of Event subscriptions
                   description: Example of a paginated list of event subscriptions
-                  value: &ref_1029
+                  value: &ref_1031
                     limit: 10
                     count: 2
                     hasMore: false
@@ -27946,7 +27948,7 @@ paths:
               createEventSubscription:
                 summary: Create event subscription
                 description: Create an event subscription
-                value: &ref_1030
+                value: &ref_1032
                   enabled: true
                   eventTypes:
                     - processingAccount.status.changed
@@ -27960,7 +27962,7 @@ paths:
               createEventSubscriptionMetadata:
                 summary: Create event subscription with metadata
                 description: Create an event subscription
-                value: &ref_1031
+                value: &ref_1033
                   enabled: true
                   eventTypes:
                     - processingAccount.status.changed
@@ -27977,7 +27979,7 @@ paths:
           headers:
             Location:
               description: URI reference to created resource
-              schema: &ref_1043
+              schema: &ref_1045
                 type: string
           content:
             application/json:
@@ -27990,7 +27992,7 @@ paths:
                 createdEventSubscription:
                   summary: Event subscription created
                   description: Example of a created event subscription.
-                  value: &ref_1032
+                  value: &ref_1034
                     id: 2565435189324
                     enabled: true
                     status: registered
@@ -28006,7 +28008,7 @@ paths:
                 eventSubscriptionCreatedMetadata:
                   summary: Event subscription created metadata
                   description: Example of a created event subscription.
-                  value: &ref_1033
+                  value: &ref_1035
                     id: 2565435189324
                     enabled: true
                     status: registered
@@ -28100,7 +28102,7 @@ paths:
                 eventSubscription:
                   summary: Event subscription
                   description: Example of an event subscription.
-                  value: &ref_1034
+                  value: &ref_1036
                     id: 2565435189324
                     enabled: true
                     status: registered
@@ -28154,7 +28156,7 @@ paths:
               updateEventSubscription:
                 summary: Update event subscription
                 description: Update an event subscription
-                value: &ref_1035
+                value: &ref_1037
                   enabled: true
                   eventTypes:
                     - processingAccount.status.changed
@@ -28221,7 +28223,7 @@ paths:
                   Partially update an existing event subscription.
 
                   Structure your request to follow the RFC 6902 standard.
-                value: &ref_1036
+                value: &ref_1038
                   - op: replace
                     path: /enabled
                     value: false
@@ -28239,7 +28241,7 @@ paths:
                 patchedEventSubscription:
                   summary: Patched event subscription
                   description: Example of a patched event subscription.
-                  value: &ref_1037
+                  value: &ref_1039
                     id: 2565435189324
                     enabled: false
                     status: registered
@@ -28365,7 +28367,7 @@ paths:
                 terminalOrder:
                   summary: Terminal order
                   description: Terminal order
-                  value: &ref_1038
+                  value: &ref_1040
                     terminalOrderId: '12345'
                     status: open
                     trainingProvider: payroc
@@ -28595,7 +28597,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated ACH deposits
-                  value: &ref_1039
+                  value: &ref_1041
                     limit: 2
                     count: 1
                     hasMore: false
@@ -28738,7 +28740,7 @@ paths:
                 idError:
                   summary: Bad Request
                   description: One or more validation errors occurred
-                  value: &ref_1040
+                  value: &ref_1042
                     type: https://docs.payroc.com/api/errors#bad-request
                     title: Bad request
                     status: 400
@@ -28886,7 +28888,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated ACH deposit fees
-                  value: &ref_1041
+                  value: &ref_1043
                     limit: 2
                     count: 1
                     hasMore: false
@@ -28979,7 +28981,7 @@ paths:
                 attachment:
                   summary: Upload Attachment
                   description: Upload a file attachment
-                  value: &ref_1042
+                  value: &ref_1044
                     attachmentId: '15387'
                     type: personalIdentification
                     uploadStatus: accepted
@@ -31697,28 +31699,34 @@ components:
     paginatedTransactions:
       summary: Paginated transactions
       value: *ref_915
+    retrievedTransaction:
+      summary: Retrieve transaction
+      value: *ref_916
     transactionIdError:
       summary: Bad Request
       description: One or more validation errors occurred
-      value: *ref_916
+      value: *ref_917
     paginatedAuthorizations:
       summary: Paginated authorizations
-      value: *ref_917
+      value: *ref_918
+    retrievedAuthorization:
+      summary: Retrieve authorization
+      value: *ref_919
     paginatedDisputes:
       summary: Paginated disputes
-      value: *ref_918
+      value: *ref_920
     paginatedPaymentLinks:
       summary: Payment links
       description: Paginated list of payment links
-      value: *ref_919
+      value: *ref_921
     multiUsePaymentLinkRequest:
       summary: Multi-use payment link.
       description: Create a multi-use payment link.
-      value: *ref_920
+      value: *ref_922
     singleUsePaymentLinkRequest:
       summary: Single-use payment link.
       description: Create a single-use payment link.
-      value: *ref_921
+      value: *ref_923
     paymentLinkResponse:
       summary: Payment Link
       description: Active multi-use payment link.
@@ -31726,41 +31734,41 @@ components:
     resourceExists:
       summary: Resource already exists
       description: Resource already exists
-      value: *ref_922
+      value: *ref_924
     unsupportedMediaType:
       summary: Unsupported media type
       description: The payload is in an unsupported format.
-      value: *ref_923
+      value: *ref_925
     patchPaymentLinkRealistic:
       summary: Partially update payment link
       description: |
         Partially update an existing payment link.  
         Structure your request to follow the RFC 6902 standard.
-      value: *ref_924
+      value: *ref_926
     deactivatedPaymentLink:
       summary: Payment link
       description: Deactivated multi-use payment link.
-      value: *ref_925
+      value: *ref_927
     paginatedSharingEvents:
       summary: Sharing events
       description: Paginated list of payment link sharing events
-      value: *ref_926
+      value: *ref_928
     sharePaymentLinkRequest:
       summary: Share a payment link.
       description: Share a payment link.
-      value: *ref_927
+      value: *ref_929
     paymentLinkShareEvent:
       summary: Payment link sharing event.
       description: Payment link sharing event
-      value: *ref_928
+      value: *ref_930
     paginatedPaymentPlan:
       summary: Payment Plan
       description: Payment Plan
-      value: *ref_929
+      value: *ref_931
     paymentPlanRequest:
       summary: Payment Plan
       description: Payment Plan
-      value: *ref_930
+      value: *ref_932
     paymentPlanResponse:
       summary: Payment Plan
       description: Payment Plan
@@ -31771,15 +31779,15 @@ components:
         Make changes to an existing payment plan.
 
         Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
-      value: *ref_931
+      value: *ref_933
     paginatedSubscription:
       summary: Paginated Subscription
       description: Example of Paginated Subscription
-      value: *ref_932
+      value: *ref_934
     subscriptionRequest:
       summary: Subscription
       description: Subscription
-      value: *ref_933
+      value: *ref_935
     subscriptionWithSurchargeResponse:
       summary: Subscription with surcharge
       description: Subscription with surcharge
@@ -31794,27 +31802,27 @@ components:
         Make changes to a subscription.
 
         Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
-      value: *ref_934
+      value: *ref_936
     deactivateSubscription:
       summary: Deactivate subscription
       description: Deactivate a subscription
-      value: *ref_935
+      value: *ref_937
     subscriptionPaymentRequest:
       summary: Subscription manual payment
       description: Subscription manual payment
-      value: *ref_936
+      value: *ref_938
     subscriptionPaymentResponse:
       summary: Subscription manual payment
       description: Subscription manual payment
-      value: *ref_937
+      value: *ref_939
     paginatedSecureToken:
       summary: Paginated Secure Token
       description: Paginated Secure Token
-      value: *ref_938
+      value: *ref_940
     secureTokenRequest:
       summary: Secure Token
       description: Secure Token
-      value: *ref_939
+      value: *ref_941
     secureTokenResponse:
       summary: Secure Token
       description: Secure Token
@@ -31825,113 +31833,113 @@ components:
         Update the customer's payment details that are represented by the secure token.
 
         Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
-      value: *ref_940
+      value: *ref_942
     accountUpdateRequest:
       summary: Update account details
       description: Account update request by single use token
-      value: *ref_941
+      value: *ref_943
     payloadTooLarge:
       summary: Payload too large
       description: The payload submitted is too large
-      value: *ref_942
+      value: *ref_944
     singleUseTokenRequest:
       summary: Create single-use token
       description: Create a single-use token. The token expires after 30 minutes.
-      value: *ref_943
+      value: *ref_945
     singleUseTokenResponse:
       summary: Create single-use token
       description: Create a single-use token. The token expires after 30 minutes.
-      value: *ref_944
+      value: *ref_946
     createSessionRequest:
       summary: Create session request
       description: Create session request.
-      value: *ref_945
+      value: *ref_947
     createSessionResponse:
       summary: Create session response
       description: Create session response.
-      value: *ref_946
+      value: *ref_948
     applePaySessions:
       summary: Apple Pay session
       description: Start a session with Apple to accept a payment with Apple Pay.
-      value: *ref_947
+      value: *ref_949
     applePayResponseSession:
       summary: Apple Pay session response
       description: Wrapper for the content that Apple returns after starting the Apple Pay session.
-      value: *ref_948
+      value: *ref_950
     paginatedPayment:
       summary: Payment
       description: Payment
-      value: *ref_949
+      value: *ref_951
     paymentRequest:
       summary: Card Payment
       description: Payment
-      value: *ref_950
+      value: *ref_952
     applePaySaleRequest:
       summary: Apple Pay Payment
-      value: *ref_951
+      value: *ref_953
     paymentResponse:
       summary: Payment
       description: Payment
       value: *ref_208
     applePaySaleResponse:
       summary: Apple Pay Payment
-      value: *ref_952
+      value: *ref_954
     adjustPaymentRequest:
       summary: Adjust Payment
       description: Adjust Payment
-      value: *ref_953
+      value: *ref_955
     adjustPaymentResponse:
       summary: Adjust Payment
       description: Adjust Payment
-      value: *ref_954
+      value: *ref_956
     paymentCaptureRequest:
       summary: Payment capture
       description: Capture a payment with itemized breakdown
-      value: *ref_955
+      value: *ref_957
     reversalPaymentRequest:
       summary: Reversal Payment
       description: Reversal Payment
-      value: *ref_956
+      value: *ref_958
     reversalPaymentResponse:
       summary: Reversal Payment
       description: Reversal Payment
-      value: *ref_957
+      value: *ref_959
     refundPaymentRequest:
       summary: Refund Payment
       description: Refund Payment
-      value: *ref_958
+      value: *ref_960
     refundPaymentResponse:
       summary: Refund Payment
       description: Refund Payment
-      value: *ref_959
+      value: *ref_961
     paymentInstructionRequest:
       summary: Payment Instruction
       description: Submit an instruction for initiating a payment on a physical device.
-      value: *ref_960
+      value: *ref_962
     paymentInstructionInProgress:
       summary: Payment instruction
       description: Object that contains information about the progress of the payment instruction.
-      value: *ref_961
+      value: *ref_963
     paymentInstruction:
       summary: Payment instruction
       description: Object that contains information about the progress of the payment instruction.
-      value: *ref_962
+      value: *ref_964
     paymentInstructionCompleted:
       summary: Payment instruction already completed
       description: Payment instruction already completed
-      value: *ref_963
+      value: *ref_965
     paymentInstructionFailed:
       summary: Payment instruction failed
       description: Payment instruction failed
-      value: *ref_964
+      value: *ref_966
     paginatedRefund:
       summary: Paginated Refund
       description: Paginated Refund
-      value: *ref_965
+      value: *ref_967
     refundRequest:
       summary: Refund
       description: Refund
-      value: *ref_966
+      value: *ref_968
     refundResponse:
       summary: Refund
       description: Refund
@@ -31939,99 +31947,99 @@ components:
     adjustRefundRequest:
       summary: Adjust Refund
       description: Adjust Refund
-      value: *ref_967
+      value: *ref_969
     adjustRefundResponse:
       summary: Adjust Refund
       description: Adjust Refund
-      value: *ref_968
+      value: *ref_970
     reverseRefund:
       summary: Reverse Refund
       description: Reverse Refund
-      value: *ref_969
+      value: *ref_971
     refundInstructionRequest:
       summary: Refund instruction
       description: Submit an instruction for initiating a refund on a physical device.
-      value: *ref_970
+      value: *ref_972
     refundInstructionInProgress:
       summary: Refund instruction
       description: Object that contains information about the progress of the refund instruction.
-      value: *ref_971
+      value: *ref_973
     refundInstruction:
       summary: Refund instruction
       description: Object that contains information about the progress of the refund instruction.
-      value: *ref_972
+      value: *ref_974
     refundInstructionCompleted:
       summary: Refund instruction already completed
       description: Refund instruction already completed
-      value: *ref_973
+      value: *ref_975
     refundInstructionFailed:
       summary: Refund instruction failed
       description: Refund instruction failed
-      value: *ref_974
+      value: *ref_976
     signatureInstructionRequest:
       summary: Signature Instruction
       description: Submit an instruction for capturing a signature on a physical device.
-      value: *ref_975
+      value: *ref_977
     signatureInstructionInProgress:
       summary: Signature instruction
       description: Object that contains information about the progress of the signature instruction.
-      value: *ref_976
+      value: *ref_978
     signatureInstruction:
       summary: Signature instruction
       description: Object that contains information about the progress of the signature instruction.
-      value: *ref_977
+      value: *ref_979
     signatureInstructionCompleted:
       summary: Signature instruction already completed
       description: Signature instruction already completed
-      value: *ref_978
+      value: *ref_980
     signatureInstructionFailed:
       summary: Signature instruction failed
       description: Signature instruction failed
-      value: *ref_979
+      value: *ref_981
     signatureResponse:
       summary: Signature
       description: A signature response example.
-      value: *ref_980
+      value: *ref_982
     cardVerificationRequest:
       summary: Card Verification
       description: Card Verification
-      value: *ref_981
+      value: *ref_983
     cardVerificationResponse:
       summary: Card Verification
       description: Card Verification
-      value: *ref_982
+      value: *ref_984
     cardBalanceRequest:
       summary: Card Balance
       description: Card Balance
-      value: *ref_983
+      value: *ref_985
     cardBalanceResponse:
       summary: Card Balance
       description: Card Balance
-      value: *ref_984
+      value: *ref_986
     binLookupRequest:
       summary: BIN lookup
       description: BIN lookup
-      value: *ref_985
+      value: *ref_987
     binLookupResponse:
       summary: BIN lookup
       description: BIN lookup
-      value: *ref_986
+      value: *ref_988
     fxRateRequest:
       summary: Fx-Rate
       description: Fx-Rate
-      value: *ref_987
+      value: *ref_989
     fxRateResponse:
       summary: Fx-Rate
       description: Fx-Rate
-      value: *ref_988
+      value: *ref_990
     paginatedBankTransferPayment:
       summary: Bank Transfer Payment
       description: Bank Transfer Payment
-      value: *ref_989
+      value: *ref_991
     bankTransferPaymentRequestStoreTokenRequest:
       summary: Store Token Bank Transfer Payment
       description: Bank Transfer Payment with ACH payload and token storage
-      value: *ref_990
+      value: *ref_992
     bankTransferPaymentResponseStoreToken:
       summary: Store Token Bank Transfer Payment
       description: Bank Transfer Payment with ACH payload and token storage
@@ -32039,31 +32047,31 @@ components:
     bankTransferPaymentDeclined:
       summary: Declined Payment
       description: Bank Transfer Payment that was declined with return information
-      value: *ref_991
+      value: *ref_993
     reverseBankTransferPayment:
       summary: Reverse Bank Transfer Payment
       description: Reverse Bank Transfer Payment
-      value: *ref_992
+      value: *ref_994
     refundBankTransferPaymentRequest:
       summary: Refund Bank Transfer Payment
       description: Refund Bank Transfer Payment
-      value: *ref_993
+      value: *ref_995
     refundBankTransferPaymentResponse:
       summary: Reverse Bank Transfer Payment
       description: Reverse Bank Transfer Payment
-      value: *ref_994
+      value: *ref_996
     representmentBankTransferPaymentRequest:
       summary: Representment Bank Transfer Payment
       description: Representment Bank Transfer Payment
-      value: *ref_995
+      value: *ref_997
     paginatedBankTransferUnreferencedRefundResponse:
       summary: Paginated Bank Transfer Unreferenced Refund
       description: Paginated Bank Transfer Unreferenced Refund
-      value: *ref_996
+      value: *ref_998
     bankTransferUnreferencedRefundRequest:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
-      value: *ref_997
+      value: *ref_999
     bankTransferUnreferencedRefundResponse:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
@@ -32071,35 +32079,35 @@ components:
     reverseBankTransferUnreferencedRefundResponse:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
-      value: *ref_998
+      value: *ref_1000
     bankAccountVerificationRequestPad:
       summary: PAD Bank Account Verification Request
       description: Bank Account Verification Request for PAD
-      value: *ref_999
+      value: *ref_1001
     bankAccountVerificationRequestAch:
       summary: ACH Bank Account Verification Request
       description: Bank Account Verification Request for ACH
-      value: *ref_1000
+      value: *ref_1002
     bankAccountVerificationResponse:
       summary: Bank Account Verification Response
       description: Bank Account Verification Response
-      value: *ref_1001
+      value: *ref_1003
     listMerchantPlatforms:
       summary: Paginated list of merchant platforms
       description: Retrieve a list of merchant platforms associated with your account.
-      value: *ref_1002
+      value: *ref_1004
     createMerchantPlatform:
       summary: Create merchant platform
       description: Create a merchant platform.
-      value: *ref_1003
+      value: *ref_1005
     merchantPlatformCreated:
       summary: Created merchant platform
       description: New merchant platform created
-      value: *ref_1004
+      value: *ref_1006
     processingAccountFailed:
       summary: Failed processing account
       description: We successfully created the merchant platform, but failed to add one or more processing accounts.
-      value: *ref_1005
+      value: *ref_1007
     fundingAccountsLimitReached:
       summary: Funding accounts limit reached
       description: Funding accounts restricted. You can not have any more than two funding accounts attached to this entity
@@ -32119,157 +32127,157 @@ components:
     taxIdInUse:
       summary: Tax ID in use
       description: The tax ID supplied is already in use.
-      value: *ref_1006
+      value: *ref_1008
     nationalIdInUse:
       summary: National ID in use
       description: One or more supplied national IDs are not unique. All national IDs must be unique.
-      value: *ref_1007
+      value: *ref_1009
     retrievedMerchantPlatforms:
       summary: Retrieve merchant platform
       description: Retrieve a merchant platform.
-      value: *ref_1008
+      value: *ref_1010
     listProcessingAccounts:
       summary: Paginated list of processing account
       description: Retrieve processing accounts associated with a merchant platform.
-      value: *ref_1009
+      value: *ref_1011
     createProcessingAccount:
       summary: Create merchant platform
       description: Create a merchant platform.
-      value: *ref_1010
+      value: *ref_1012
     processingAccountCreated:
       summary: Retrieve merchant platform
       description: Retrieve a merchant platform.
-      value: *ref_1011
+      value: *ref_1013
     retrieveProcessingAccount:
       summary: Retrieve processing account
       description: Retrieve a specific processing account.
-      value: *ref_1012
+      value: *ref_1014
     listProcessingAccountFundingAccounts:
       summary: List of funding accounts
       description: List of funding accounts associated with a processing account.
-      value: *ref_1013
+      value: *ref_1015
     listContactsPaginated:
       summary: Paginated list of processing account contacts
       description: List of contacts associated with a processing account.
-      value: *ref_1014
+      value: *ref_1016
     retrieveProcessingAccountPricingAgreement:
       summary: Get processing account pricing agreement
       description: Retrieve a pricing agreement for a processing account.
-      value: *ref_1015
+      value: *ref_1017
     listProcessingAccountOwners:
       summary: Paginated list of processing account owners
       description: Retrieve owners associated with a processing account.
-      value: *ref_1016
+      value: *ref_1018
     createReminderForProcessingAccount:
       summary: Create reminder for processing account
       description: |
         When you create a processing account, we send a copy of the pricing agreement to the merchant to sign. You can choose to send them a copy of the pricing agreement by email, or you can generate a link to the pricing agreement.<br/>  
         If you requested the merchant's signature by email and they don't respond, use our Reminders endpoint to create a reminder and to send another email.<br/>  
         **Note:** You can use the Reminders endpoint only if you request the merchant's signature by email. If you generate a link to the pricing agreement, you can't use the Reminders endpoint.  
-      value: *ref_1017
+      value: *ref_1019
     reminderCreated:
       summary: Reminder created
       description: Reminder created.
-      value: *ref_1018
+      value: *ref_1020
     notRequestedByEmail:
       summary: Not requested by email
       description: We couldn't resend the email to the merchant because you didn't originally choose to send the information by email.
-      value: *ref_1019
+      value: *ref_1021
     contractAlreadySigned:
       summary: Contract already signed
       description: We couldn’t resend the email because the merchant already signed the contract.
-      value: *ref_1020
+      value: *ref_1022
     noPricingAgreementExistsForTheProcessingAccount:
       summary: No pricing agreement exists for the processing account
       description: We couldn’t resend the email because there is no pricing agreement for the processing account.
-      value: *ref_1021
+      value: *ref_1023
     listTerminalOrders:
       summary: Paginated list of Terminal Orders
       description: Retrieve terminal orders associated with a processing account.
-      value: *ref_1022
+      value: *ref_1024
     createTerminalOrder:
       summary: Terminal order
       description: |
         Use this method to order and configure terminals for a processing account. When you create an order, you specify the gateway settings, device settings, and application settings for the terminals. 
         **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](#getMerchantAccounts)
-      value: *ref_1023
+      value: *ref_1025
     terminalOrderCreated:
       summary: Terminal order
       description: Terminal order
-      value: *ref_1024
+      value: *ref_1026
     listProcessingTemrinalsPaginated:
       summary: Paginated list of processing terminals
       description: List of processing terminals associated with a processing account.
-      value: *ref_1025
+      value: *ref_1027
     retrieveProcessingTerminal:
       summary: Retrieve processing terminal
       description: Retrieve a specific processing terminal.
-      value: *ref_1026
+      value: *ref_1028
     contact:
       summary: Contact object
       description: Contact object
-      value: *ref_1027
+      value: *ref_1029
     updateContact:
       summary: Update contact
       description: Update a specific contact.
-      value: *ref_1028
+      value: *ref_1030
     paginatedEventSubscriptions:
       summary: Paginated list of Event subscriptions
       description: Example of a paginated list of event subscriptions
-      value: *ref_1029
+      value: *ref_1031
     createEventSubscription:
       summary: Create event subscription
       description: Create an event subscription
-      value: *ref_1030
+      value: *ref_1032
     createEventSubscriptionMetadata:
       summary: Create event subscription with metadata
       description: Create an event subscription
-      value: *ref_1031
+      value: *ref_1033
     eventSubscriptionCreated:
       summary: Event subscription created
       description: Example of a created event subscription.
-      value: *ref_1032
+      value: *ref_1034
     eventSubscriptionCreatedMetadata:
       summary: Event subscription created metadata
       description: Example of a created event subscription.
-      value: *ref_1033
+      value: *ref_1035
     eventSubscription:
       summary: Event subscription
       description: Example of an event subscription.
-      value: *ref_1034
+      value: *ref_1036
     updateEventSubscription:
       summary: Update event subscription
       description: Update an event subscription
-      value: *ref_1035
+      value: *ref_1037
     patchEventSubscriptionRealistic:
       summary: Partially update event subscription
       description: |
         Partially update an existing event subscription.
 
         Structure your request to follow the RFC 6902 standard.
-      value: *ref_1036
+      value: *ref_1038
     patchEventSubscription:
       summary: Patched event subscription
       description: Example of a patched event subscription.
-      value: *ref_1037
+      value: *ref_1039
     terminalOrder:
       summary: Terminal order
       description: Terminal order
-      value: *ref_1038
+      value: *ref_1040
     paginatedAchDeposits:
       summary: Paginated ACH deposits
-      value: *ref_1039
+      value: *ref_1041
     achDepositIdError:
       summary: Bad Request
       description: One or more validation errors occurred
-      value: *ref_1040
+      value: *ref_1042
     paginatedAchDepositFees:
       summary: Paginated ACH deposit fees
-      value: *ref_1041
+      value: *ref_1043
     getAttachment:
       summary: Upload Attachment
       description: Upload a file attachment
-      value: *ref_1042
+      value: *ref_1044
   responses:
     '400':
       description: Invalid request
@@ -32305,7 +32313,7 @@ components:
       examples: *ref_25
     headers-location:
       description: URI reference to created resource
-      schema: *ref_1043
+      schema: *ref_1045
 x-tagGroups:
   - name: Attachments
     tags:
