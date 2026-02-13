@@ -41,12 +41,12 @@ tags:
         - **Support email address** - Email address that we contact if we can't deliver notifications.  
       <br/>  
       Use our event subscriptions endpoint to do the following:  
-      - [**Create event subscription**](#createEventSubscription) - Subscribe to receive notifications when events occur.  
-      - [**Update event subscription**](#updateEventSubscription) - Change the details of an event subscription, for example, to receive notifications for an additional event.  
-      - [**Partially update an event subscription**](#patchEventSubscription) - Change values of an existing event subscription.  
-      - [**Retrieve an event subscription**](#getEventSubscription) - Retrieve all the information that we stored in an event subscription. 
-      - [**List event subscriptions**](#listEventSubscriptions) - Retrieve a list of all event subscriptions associated with the ISV's account.  
-      - [**Delete event subscription**](#deleteEventSubscription)
+      - [**Create event subscription**](https://docs.payroc.com/api/schema/notifications/event-subscriptions/create) - Subscribe to receive notifications when events occur.  
+      - [**Update event subscription**](https://docs.payroc.com/api/schema/notifications/event-subscriptions/update) - Change the details of an event subscription, for example, to receive notifications for an additional event.  
+      - [**Partially update an event subscription**](https://docs.payroc.com/api/schema/notifications/event-subscriptions/partially-update) - Change values of an existing event subscription.  
+      - [**Retrieve an event subscription**](https://docs.payroc.com/api/schema/notifications/event-subscriptions/retrieve) - Retrieve all the information that we stored in an event subscription. 
+      - [**List event subscriptions**](https://docs.payroc.com/api/schema/notifications/event-subscriptions/list) - Retrieve a list of all event subscriptions associated with the ISV's account.  
+      - [**Delete event subscription**](https://docs.payroc.com/api/schema/notifications/event-subscriptions/delete)
   - name: Funding accounts
     description: Financial accounts associated with entities.
   - name: Funding activity
@@ -61,10 +61,10 @@ tags:
     description: |
       A merchant platform is an entity that represents a business and includes its legal information and all processing accounts.<br/><br/>
       After you create a merchant platform for a business, you can do the following:  
-        - [Create and add an additional processing account to a merchant platform.](#createProcessingAccount)  
-        - [Retrieve a merchant platform.](#getMerchantAccounts)  
-        - [Retrieve a list of merchant platforms.](#listMerchantPlatforms)  
-        - [Retrieve a list of open processing accounts that are linked to a merchant platform.](#listMerchantLocations)  
+        - [Create and add an additional processing account to a merchant platform.](https://docs.payroc.com/api/schema/boarding/merchant-platforms/create-processing-account)  
+        - [Retrieve a merchant platform.](https://docs.payroc.com/api/schema/boarding/merchant-platforms/retrieve)  
+        - [Retrieve a list of merchant platforms.](https://docs.payroc.com/api/schema/boarding/merchant-platforms/list)  
+        - [Retrieve a list of open processing accounts that are linked to a merchant platform.](https://docs.payroc.com/api/schema/boarding/merchant-platforms/list-processing-accounts)  
           
           
       For more information about boarding a merchant, go to our [Board a merchant](https://docs.payroc.com/guides/board-merchants/boarding) guide. 
@@ -26145,7 +26145,7 @@ paths:
                 summary: Terminal order
                 description: |
                   Use this method to order and configure terminals for a processing account. When you create an order, you specify the gateway settings, device settings, and application settings for the terminals. 
-                  **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](#getMerchantAccounts)
+                  **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](https://docs.payroc.com/api/schema/boarding/merchant-platforms/retrieve)
                 value: &ref_1025
                   trainingProvider: payroc
                   shipping:
@@ -28086,7 +28086,7 @@ paths:
 
         In your request, include the subscriptionId that we sent to you when we created the event subscription.  
           
-        **Note:** If you don't know the subscriptionId of the event subscription, go to [List event subscriptions](#listEventSubscriptions).
+        **Note:** If you don't know the subscriptionId of the event subscription, go to [List event subscriptions](https://docs.payroc.com/api/schema/notifications/event-subscriptions/list).
       operationId: getEventSubscription
       responses:
         '200':
@@ -32199,7 +32199,7 @@ components:
       summary: Terminal order
       description: |
         Use this method to order and configure terminals for a processing account. When you create an order, you specify the gateway settings, device settings, and application settings for the terminals. 
-        **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](#getMerchantAccounts)
+        **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](https://docs.payroc.com/api/schema/boarding/merchant-platforms/retrieve)
       value: *ref_1025
     terminalOrderCreated:
       summary: Terminal order
