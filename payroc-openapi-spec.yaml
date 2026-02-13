@@ -2568,13 +2568,13 @@ paths:
                                       readOnly: true
                                     createdDate:
                                       type: string
-                                      example: '2024-07-02T09:00:00'
+                                      example: '2024-07-02T09:00:00Z'
                                       format: date-time
                                       description: Date and time that we received your request to create the pricing intent. We return this value in the [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
                                       readOnly: true
                                     lastUpdatedDate:
                                       type: string
-                                      example: '2024-07-02T09:00:00'
+                                      example: '2024-07-02T09:00:00Z'
                                       format: date-time
                                       description: Date and time that the pricing intent was last modified. We return this value in the [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
                                       readOnly: true
@@ -2661,7 +2661,7 @@ paths:
                                         pciNonCompliance:
                                           type: integer
                                           description: Fee that we apply each month if you aren't compliant with PCI standards. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 3995
+                                          minimum: 0
                                           maximum: 10000
                                           default: 7495
                                           example: 7495
@@ -2716,7 +2716,7 @@ paths:
                                         maintenance:
                                           type: integer
                                           description: Monthly fee for maintenance. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 500
+                                          minimum: 0
                                           example: 1995
                                         minimum:
                                           type: integer
@@ -2726,21 +2726,21 @@ paths:
                                         voiceAuthorization:
                                           type: integer
                                           description: Fee for each voice authorization. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 95
+                                          minimum: 0
                                           maximum: 200
                                           default: 95
                                           example: 95
                                         chargeback:
                                           type: integer
                                           description: Fee for each chargeback. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 750
+                                          minimum: 0
                                           maximum: 5000
                                           default: 2500
                                           example: 2500
                                         retrieval:
                                           type: integer
                                           description: Fee for each retrieval. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 275
+                                          minimum: 0
                                           maximum: 5000
                                           default: 1500
                                           example: 1500
@@ -2752,7 +2752,7 @@ paths:
                                         earlyTermination:
                                           type: integer
                                           description: Fee for early termination. The value is in the currency's lowest denomination, for example, cents.
-                                          minimum: 19500
+                                          minimum: 0
                                           maximum: 59500
                                           default: 57500
                                           example: 57500
@@ -3721,8 +3721,8 @@ paths:
                         href: https://api.payroc.com/v1/pricing-intents?after=5&limit=1
                     data:
                       - id: '5'
-                        createdDate: '2024-07-02T09:00:00'
-                        lastUpdatedDate: '2024-07-02T09:00:00'
+                        createdDate: '2024-07-02T09:00:00Z'
+                        lastUpdatedDate: '2024-07-02T09:00:00Z'
                         status: pendingReview
                         key: base
                         country: US
@@ -4306,8 +4306,8 @@ paths:
                   description: Pricing intent
                   value: &ref_57
                     id: '5'
-                    createdDate: '2024-07-02T09:00:00'
-                    lastUpdatedDate: '2024-07-02T09:00:00'
+                    createdDate: '2024-07-02T09:00:00Z'
+                    lastUpdatedDate: '2024-07-02T09:00:00Z'
                     status: pendingReview
                     key: string
                     metadata:
@@ -11560,7 +11560,6 @@ paths:
                       - paymentId
                       - status
                       - responseCode
-                      - responseMessage
                     type: object
                     description: Object that contains information about a payment.
                     properties: &ref_234
@@ -20531,9 +20530,10 @@ paths:
                     type: object
                     description: Object that contains information about the transaction.
                     required: &ref_280
-                      - responseMessage
                       - status
                       - type
+                      - responseCode
+                      - currency
                     readOnly: true
                     properties: &ref_281
                       type:
