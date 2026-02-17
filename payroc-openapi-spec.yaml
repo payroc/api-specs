@@ -27197,7 +27197,7 @@ paths:
                         method: get
                         href: https://api.payroc.com/v1/processing-accounts/38765/processing-terminals?after=87926&limit=2
                     data:
-                      - processingAccountId: '38765'
+                      - processingTerminalId: '011234001'
                         status: active
                         timezone: Pacific/Midway
                         program: Payroc Cloud
@@ -27213,13 +27213,6 @@ paths:
                         features:
                           tips:
                             enabled: false
-                            tipPrompt: false
-                            tipAdjust: true
-                            suggestedTips:
-                              enabled: true
-                              tipPercentages:
-                                - 15
-                                - 20
                           enhancedProcessing:
                             enabled: true
                             transactionDataLevel: level2
@@ -27227,7 +27220,7 @@ paths:
                           ebt:
                             enabled: true
                             ebtType: foodStamp
-                            fnsNumber: '1234567890'
+                            fnsNumber: '3456789'
                           pinDebitCashback: false
                           recurringPayments: true
                           paymentLinks:
@@ -27236,22 +27229,22 @@ paths:
                             footerNotes: FooterNotesPayLink
                           preAuthorizations: true
                           offlinePayments: true
-                          security:
-                            tokenization: false
-                            avsPrompt: true
-                            avsLevel: fullAddress
-                            cvvPrompt: true
-                          receiptNotifications:
-                            emailReceipt: true
-                            smsReceipt: false
-                          taxes:
-                            - taxRate: 6
-                              taxLabel: Sales Tax
-                          devices:
-                            - manufacturer: Ingenico
-                              model: Axium Dx4000 Tsys
-                              serialNumber: DX400-1234
-                              communicationType: bluetooth
+                        security:
+                          tokenization: false
+                          avsPrompt: true
+                          avsLevel: fullAddress
+                          cvvPrompt: true
+                        receiptNotifications:
+                          emailReceipt: true
+                          smsReceipt: false
+                        taxes:
+                          - taxRate: 6
+                            taxLabel: Sales Tax
+                        devices:
+                          - manufacturer: Ingenico
+                            model: Axium Dx4000 Tsys
+                            serialNumber: DX400-1234
+                            communicationType: bluetooth
         '400':
           description: Invalid request
           content: *ref_15
@@ -27544,7 +27537,7 @@ paths:
                   summary: Retrieve processing terminal
                   description: Retrieve a specific processing terminal.
                   value: &ref_1058
-                    processingAccountId: '38765'
+                    processingTerminalId: '011234001'
                     status: active
                     timezone: Pacific/Midway
                     program: Payroc Cloud
@@ -27560,13 +27553,6 @@ paths:
                     features:
                       tips:
                         enabled: false
-                        tipPrompt: false
-                        tipAdjust: true
-                        suggestedTips:
-                          enabled: true
-                          tipPercentages:
-                            - 15
-                            - 20
                       enhancedProcessing:
                         enabled: true
                         transactionDataLevel: level2
@@ -27574,7 +27560,7 @@ paths:
                       ebt:
                         enabled: true
                         ebtType: foodStamp
-                        fnsNumber: '1234567890'
+                        fnsNumber: '3456789'
                       pinDebitCashback: false
                       recurringPayments: true
                       paymentLinks:
@@ -27583,22 +27569,22 @@ paths:
                         footerNotes: FooterNotesPayLink
                       preAuthorizations: true
                       offlinePayments: true
-                      security:
-                        tokenization: false
-                        avsPrompt: true
-                        avsLevel: fullAddress
-                        cvvPrompt: true
-                      receiptNotifications:
-                        emailReceipt: true
-                        smsReceipt: false
-                      taxes:
-                        - taxRate: 6
-                          taxLabel: Sales Tax
-                      devices:
-                        - manufacturer: Ingenico
-                          model: Axium Dx4000 Tsys
-                          serialNumber: DX400-1234
-                          communicationType: bluetooth
+                    security:
+                      tokenization: false
+                      avsPrompt: true
+                      avsLevel: fullAddress
+                      cvvPrompt: true
+                    receiptNotifications:
+                      emailReceipt: true
+                      smsReceipt: false
+                    taxes:
+                      - taxRate: 6
+                        taxLabel: Sales Tax
+                    devices:
+                      - manufacturer: Ingenico
+                        model: Axium Dx4000 Tsys
+                        serialNumber: DX400-1234
+                        communicationType: bluetooth
         '400':
           description: Invalid request
           content: *ref_15
