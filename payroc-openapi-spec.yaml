@@ -1177,11 +1177,11 @@ paths:
                     description: Contains the pagination properties that you use to navigate through a list of results.
                     properties: &ref_38
                       limit:
-                        type: number
+                        type: integer
                         description: Maximum number of results that we return for each page.
                         example: 25
                       count:
-                        type: number
+                        type: integer
                         description: |
                           Number of results we returned on this page. 
 
@@ -5048,7 +5048,7 @@ paths:
                                 - value
                               properties:
                                 value:
-                                  type: number
+                                  type: integer
                                   description: Amount of funds in the currency's lowest denomination, for example, cents.
                                   example: 120000
                                 currency:
@@ -5807,11 +5807,11 @@ paths:
                               description: Total funding balance for the merchant, including pending amounts. The value is in the currency's lowest denomination, for example, cents.
                               example: 120000
                             pending:
-                              type: number
+                              type: integer
                               description: Amount of the funding balance that we have not yet sent to funding accounts. The value is in the currency's lowest denomination, for example, cents.
                               example: 50050
                             available:
-                              type: number
+                              type: integer
                               description: Amount of the funding balance that you can use in funding instructions. The value is in the currency's lowest denomination, for example, cents.
                               example: 69950
                             currency:
@@ -5983,7 +5983,8 @@ paths:
                               example: payment
                               description: Description of the activity.
                             amount:
-                              type: number
+                              type: integer
+                              format: int64
                               example: 4999
                               description: Total amount that we removed or added to the merchant's funding balance. The value is in the currency’s lowest denomination, for example, cents.
                             type:
@@ -6243,15 +6244,19 @@ paths:
                               example: '2024-07-02'
                             saleAmount:
                               type: integer
+                              format: int64
                               description: Total value of sales in the batch. We return the value in the currency's lowest denomination, for example, cents.
                             heldAmount:
                               type: integer
+                              format: int64
                               description: Total value of authorizations in the batch. We return the value in the currency's lowest denomination, for example, cents.
                             returnAmount:
                               type: integer
+                              format: int64
                               description: Total value of returns in the batch. We return the value in the currency's lowest denomination, for example, cents.
                             transactionCount:
                               type: integer
+                              format: int64
                               description: Total number of transactions in the batch.
                             currency:
                               type: string
@@ -7310,6 +7315,7 @@ paths:
                                     - unknown
                                 amount:
                                   type: integer
+                                  format: int64
                                   description: Total amount of the transaction. The value is in the currency's lowest denomination, for example, cents.
                                   example: 25000
                                 link:
@@ -7663,9 +7669,11 @@ paths:
                               description: Reference number from the acquiring bank.
                             disputeAmount:
                               type: integer
+                              format: int64
                               description: Dispute amount. We return the value in the currency's lowest denomination, for example, cents.
                             feeAmount:
                               type: integer
+                              format: int64
                               description: Value of the fees for the dispute. We return the value in the currency's lowest denomination, for example, cents.
                             firstDispute:
                               type: boolean
@@ -15327,7 +15335,8 @@ paths:
                                               - YDK
                                               - YDQ
                                           unitPrice:
-                                            type: number
+                                            type: integer
+                                            format: int64
                                             description: Price of each unit.
                                             exclusiveMinimum: 0
                                             example: 2709
@@ -20771,7 +20780,8 @@ paths:
                           - returned
                         example: complete
                       authorizedAmount:
-                        type: number
+                        type: integer
+                        format: int64
                         description: |
                           Amount of the transaction.  
                           **Note:** The amount is negative for a refund.
@@ -26162,9 +26172,8 @@ paths:
                           - `Axium Bundle`
                         maxLength: 100
                       solutionQuantity:
-                        type: number
+                        type: integer
                         description: Quantity of the solution.
-                        format: integer
                         default: 1
                         maximum: 50
                       deviceCondition:
@@ -26250,8 +26259,7 @@ paths:
                             description: Object that contains the device settings if the solution includes a terminal or a peripheral device such as a printer.
                             properties:
                               numberOfMobileUsers:
-                                type: number
-                                format: integer
+                                type: integer
                                 description: Number of users that we need to set up for mobile solutions.
                               communicationType:
                                 type: string
@@ -28802,34 +28810,42 @@ paths:
                               example: 20
                             sales:
                               type: integer
+                              format: int64
                               description: Amount of sales in the ACH deposit. We return the value in the currency's lowest denomination, for example, cents.
                               example: 5000
                             returns:
                               type: integer
+                              format: int64
                               description: Amount of returns in the ACH deposit. We return the value in the currency's lowest denomination, for example, cents.
                               example: 100
                             dailyFees:
                               type: integer
+                              format: int64
                               description: Amount of fees that were applied to the transactions in the ACH deposit. We return the value in the currency's lowest denomination, for example cents.
                               example: 100
                             heldSales:
                               type: integer
+                              format: int64
                               description: Amount of funds that we held if the merchant was in full suspense. We return the value in the currency's lowest denomination, for example, cents.
                               example: 100
                             achAdjustment:
                               type: integer
+                              format: int64
                               description: Amount of adjustments that we made to the ACH deposit. We return the value in the currency's lowest denomination, for example, cents.
                               example: 100
                             holdback:
                               type: integer
+                              format: int64
                               description: Amount of funds that we held as reserve from the ACH deposit. We return the value in the currency's lowest denomination, for example, cents.
                               example: 100
                             reserveRelease:
                               type: integer
+                              format: int64
                               description: Amount of funds that we released from holdback. We return the value in the currency's lowest denomination, for example, cents.
                               example: 100
                             netAmount:
                               type: integer
+                              format: int64
                               description: Total amount that we paid the merchant after fees and adjustments. We return the value in the currency's lowest denomination, for example, cents.
                               example: 5000
                             merchant:
