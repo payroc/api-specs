@@ -27280,7 +27280,7 @@ paths:
         - **type** - Type of attachment that you want to upload.
         - **description** - Short description of the attachment.  
 
-        In the response, our gateway returns information about the attachment including its upload status and an attachmentId that you can use to [Retrieve the details of the Attachment](https://docs.payroc.com/api/schema/attachments/get-attachment).
+        In the response, our gateway returns information about the attachment including its upload status and an attachmentId that you can use to [Retrieve the details of the Attachment](https://docs.payroc.com/api/schema/attachments/retrieve).
       operationId: createProcessingAccountAttachment
       parameters:
         - name: Idempotency-Key
