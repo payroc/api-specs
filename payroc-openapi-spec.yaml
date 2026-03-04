@@ -20751,7 +20751,6 @@ paths:
                       - status
                       - type
                       - responseCode
-                      - currency
                     readOnly: true
                     properties: &ref_281
                       type:
