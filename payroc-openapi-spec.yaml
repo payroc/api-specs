@@ -28896,7 +28896,7 @@ paths:
                             enabled: false
                           tokenization: true
                         links:
-                          - processingTerminalId: 38765
+                          - processingTerminalId: '38765'
                             link:
                               rel: processingTerminal
                               method: get
