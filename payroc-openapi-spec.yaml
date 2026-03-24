@@ -2809,7 +2809,7 @@ paths:
                                                             - description: Percentage value up to 2 decimal places.
                                                               title: percentage
                                                               type: number
-                                                              format: double
+                                                              format: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -2844,7 +2844,7 @@ paths:
                                                                 - description: Percentage value up to 2 decimal places.
                                                                   title: percentage
                                                                   type: number
-                                                                  format: double
+                                                                  format: decimal
                                                                   minimum: 0
                                                                   maximum: 100
                                                                   example: 1.25
@@ -2883,7 +2883,7 @@ paths:
                                                             - description: Percentage value up to 2 decimal places.
                                                               title: percentage
                                                               type: number
-                                                              format: double
+                                                              format: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -3415,7 +3415,7 @@ paths:
                                                         - description: Percentage value up to 2 decimal places.
                                                           title: percentage
                                                           type: number
-                                                          format: double
+                                                          format: decimal
                                                           minimum: 0
                                                           maximum: 100
                                                           example: 1.25
@@ -3437,12 +3437,12 @@ paths:
                                                     merchantChargePercentage:
                                                       description: Percentage of the total transaction amount that the processor charges the merchant.
                                                       type: number
-                                                      format: double
+                                                      format: decimal
                                                       allOf:
                                                         - description: Percentage value up to 2 decimal places.
                                                           title: percentage
                                                           type: number
-                                                          format: double
+                                                          format: decimal
                                                           minimum: 0
                                                           maximum: 100
                                                           example: 1.25
@@ -3485,7 +3485,7 @@ paths:
                                                             - description: Percentage value up to 2 decimal places.
                                                               title: percentage
                                                               type: number
-                                                              format: double
+                                                              format: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -3517,7 +3517,7 @@ paths:
                                                             - description: Percentage value up to 2 decimal places.
                                                               title: percentage
                                                               type: number
-                                                              format: double
+                                                              format: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -3530,7 +3530,7 @@ paths:
                                                             - description: Percentage value up to 2 decimal places.
                                                               title: percentage
                                                               type: number
-                                                              format: double
+                                                              format: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -3600,7 +3600,7 @@ paths:
                                                     - description: Percentage value up to 2 decimal places.
                                                       title: percentage
                                                       type: number
-                                                      format: double
+                                                      format: decimal
                                                       minimum: 0
                                                       maximum: 100
                                                       example: 1.25
@@ -3610,7 +3610,7 @@ paths:
                                                     - description: Percentage value up to 2 decimal places.
                                                       title: percentage
                                                       type: number
-                                                      format: double
+                                                      format: decimal
                                                       minimum: 0
                                                       maximum: 100
                                                       example: 1.25
@@ -9626,7 +9626,7 @@ paths:
                                             example: Sales Tax
                                           rate:
                                             type: number
-                                            format: double
+                                            format: decimal
                                             description: Tax percentage for the transaction.
                                             maximum: 99.99999
                                             minimum: 0
@@ -10348,7 +10348,7 @@ paths:
                                         description: Indicates that the tax is a rate.
                                       rate:
                                         type: number
-                                        format: double
+                                        format: decimal
                                         description: Tax percentage for the transaction.
                                         maximum: 99.99999
                                         minimum: 0
@@ -10643,7 +10643,7 @@ paths:
                                             maximum: 100
                                             exclusiveMinimum: 0
                                             type: number
-                                            format: double
+                                            format: decimal
                                             readOnly: true
                                             description: If the merchant added a surcharge fee, this value indicates the surcharge percentage.
                                             example: 2
@@ -13300,7 +13300,7 @@ paths:
                                 exclusiveMinimum: 0
                                 maximum: 100
                                 type: number
-                                format: double
+                                format: decimal
                                 description: Surcharge rate that the merchant configures on their account.
                                 example: 3
                               disclosure:
@@ -14811,12 +14811,12 @@ paths:
                                 fxRate:
                                   type: number
                                   description: Foreign exchange rate for the card's currency.
-                                  format: double
+                                  format: decimal
                                   example: 1.37
                                 markup:
                                   type: number
                                   description: Markup percentage rate that the DCC provider applies to the foreign exchange rate.
-                                  format: double
+                                  format: decimal
                                   example: 3.5
                                 markupText:
                                   type: string
@@ -14940,7 +14940,7 @@ paths:
                                           maximum: 100
                                           exclusiveMinimum: 0
                                           type: number
-                                          format: double
+                                          format: decimal
                                           description: If the value for type is `percentage`, this value is the tip as a percentage.
                                           example: 10
                                     surcharge:
@@ -14978,7 +14978,7 @@ paths:
                                               example: true
                                             rate:
                                               type: number
-                                              format: double
+                                              format: decimal
                                               description: |
                                                 If the customer used a card to pay for the transaction, this value indicates the percentage that our gateway added to the transaction amount.  
                                                 **Note:** Our gateway returns a value for **rate** only if the value for **applied** in the request is `true`.
@@ -15325,13 +15325,13 @@ paths:
                                             example: 2709
                                           quantity:
                                             type: number
-                                            format: double
+                                            format: decimal
                                             exclusiveMinimum: 0
                                             description: Number of units.
                                             example: 1
                                           discountRate:
                                             type: number
-                                            format: double
+                                            format: decimal
                                             description: Discount rate that the merchant applies to the item.
                                             exclusiveMinimum: 0
                                             example: 5
@@ -25418,7 +25418,7 @@ paths:
                                               - description: Percentage value up to 2 decimal places.
                                                 title: percentage
                                                 type: number
-                                                format: double
+                                                format: decimal
                                                 minimum: 0
                                                 maximum: 100
                                                 example: 1.25
@@ -25579,7 +25579,7 @@ paths:
                                           - description: Percentage value up to 2 decimal places.
                                             title: percentage
                                             type: number
-                                            format: double
+                                            format: decimal
                                             minimum: 0
                                             maximum: 100
                                             example: 1.25
@@ -25592,7 +25592,7 @@ paths:
                                           - description: Percentage value up to 2 decimal places.
                                             title: percentage
                                             type: number
-                                            format: double
+                                            format: decimal
                                             minimum: 0
                                             maximum: 100
                                             example: 1.25
@@ -30431,7 +30431,7 @@ components:
       description: Percentage value up to 2 decimal places.
       title: percentage
       type: number
-      format: double
+      format: decimal
       minimum: 0
       maximum: 100
       example: 1.25
