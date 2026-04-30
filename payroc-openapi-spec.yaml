@@ -5653,14 +5653,6 @@ paths:
                   summary: Insufficient funds
                   description: You do not have enough funds to complete the request.
                   value: *ref_57
-                canNotBeModified:
-                  summary: Cannot be modified
-                  description: Resource cannot be modified.
-                  value: &ref_61
-                    type: https://docs.payroc.com/api/errors#cannot-be-modified
-                    title: Cannot be modified
-                    status: 409
-                    detail: You cannot modify this resource in its current state
                 instructionIdError:
                   summary: Bad request
                   description: One or more validation errors occurred.
@@ -5682,6 +5674,23 @@ paths:
         '404':
           description: Resource not found
           content: *ref_18
+        '409':
+          description: Conflict.
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                properties: *ref_27
+                required: *ref_28
+              examples:
+                canNotBeModified:
+                  summary: Cannot be modified
+                  description: Resource cannot be modified.
+                  value: &ref_61
+                    type: https://docs.payroc.com/api/errors#cannot-be-modified
+                    title: Cannot be modified
+                    status: 409
+                    detail: You cannot modify this resource in its current state
         '500':
           description: An error has occured
           content: *ref_14
@@ -5710,10 +5719,6 @@ paths:
                 properties: *ref_9
                 required: *ref_10
               examples:
-                canNotBeModified:
-                  summary: Cannot be modified
-                  description: Resource cannot be modified.
-                  value: *ref_61
                 instructionIdError:
                   summary: Bad request
                   description: One or more validation errors occurred.
@@ -5727,6 +5732,19 @@ paths:
         '404':
           description: Resource not found
           content: *ref_18
+        '409':
+          description: Conflict.
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                properties: *ref_27
+                required: *ref_28
+              examples:
+                canNotBeModified:
+                  summary: Cannot be modified
+                  description: Resource cannot be modified.
+                  value: *ref_61
         '500':
           description: An error has occured
           content: *ref_14
@@ -25416,8 +25434,11 @@ paths:
           description: Identity could not be verified
           content: *ref_12
         '403':
-          description: Identity could not be verified
-          content: *ref_12
+          description: Do not have permissions to perform this action
+          content: *ref_13
+        '404':
+          description: Resource not found
+          content: *ref_18
         '406':
           description: Not acceptable
           content: *ref_19
