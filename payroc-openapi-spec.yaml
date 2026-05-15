@@ -12497,7 +12497,7 @@ paths:
                                   example: keyed
                                 keyedData:
                                   type: object
-                                  description: "Polymorphic object that contains payment card details that the merchant manually entered into the device.  \n\nThe value of the dataFormat parameter determines which variant you should use:  \n-\t`fullyEncrypted` - Some payment card details are encrypted.\n-\t`partiallyEncrypted` - Payment card details are in plain text.\n-\t`plainText` - All payment card details are encrypted.\n"
+                                  description: "Polymorphic object that contains payment card details that the merchant manually entered into the device.  \n\nThe value of the dataFormat parameter determines which variant you should use:  \n-\t`fullyEncrypted` - All payment card details are encrypted.\n-\t`partiallyEncrypted` - Some payment card details are encrypted.\n-\t`plainText` - Payment card details are in plain text.\n"
                                   discriminator:
                                     propertyName: dataFormat
                                     mapping:
