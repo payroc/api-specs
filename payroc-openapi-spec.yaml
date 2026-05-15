@@ -10272,12 +10272,14 @@ paths:
                         secCode:
                           type: string
                           description: |
-                            Indicates how the customer authorized the ACH transaction. Send one of the following values:  
+                            Indicates how the customer authorized the ACH transaction. Send one of the following values:
 
-                            - `web` – Online transaction.  
-                            - `tel` – Telephone transaction.  
-                            - `ccd` – Corporate credit card or debit card transaction.  
-                            - `ppd` – Pre-arranged transaction. 
+                            - `web` – Online transaction.
+                            - `tel` – Telephone transaction.
+                            - `ccd` – Corporate credit card or debit card transaction.
+                            - `ppd` – Pre-arranged transaction.
+
+                            **Note:** This field is mandatory when the secure token represents ACH bank account details.
                           enum:
                             - web
                             - tel
@@ -12123,12 +12125,14 @@ paths:
                         secCode:
                           type: string
                           description: |
-                            Indicates how the customer authorized the ACH transaction. Send one of the following values:  
+                            Indicates how the customer authorized the ACH transaction. Send one of the following values:
 
-                            - `web` – Online transaction.  
-                            - `tel` – Telephone transaction.  
-                            - `ccd` – Corporate credit card or debit card transaction.  
-                            - `ppd` – Pre-arranged transaction. 
+                            - `web` – Online transaction.
+                            - `tel` – Telephone transaction.
+                            - `ccd` – Corporate credit card or debit card transaction.
+                            - `ppd` – Pre-arranged transaction.
+
+                            **Note:** This field is mandatory for ACH payments and unreferenced refunds.
                           enum:
                             - web
                             - tel
@@ -12904,12 +12908,14 @@ paths:
                         secCode:
                           type: string
                           description: |
-                            Indicates how the customer authorized the ACH transaction. Send one of the following values:  
+                            Indicates how the customer authorized the ACH transaction. Send one of the following values:
 
-                            - `web` – Online transaction.  
-                            - `tel` – Telephone transaction.  
-                            - `ccd` – Corporate credit card or debit card transaction.  
-                            - `ppd` – Pre-arranged transaction. 
+                            - `web` – Online transaction.
+                            - `tel` – Telephone transaction.
+                            - `ccd` – Corporate credit card or debit card transaction.
+                            - `ppd` – Pre-arranged transaction.
+
+                            **Note:** This field is mandatory when the single-use token represents ACH bank account details.
                           enum:
                             - web
                             - tel
