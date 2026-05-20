@@ -27780,7 +27780,7 @@ paths:
 
         **Note:** You need the ID of the processing account before you can upload an attachment. If you don't know the processingAccountId, go to the [Retrieve a Merchant Platform](https://docs.payroc.com/api/schema/boarding/merchant-platforms/retrieve) method.  
 
-        The attachment must be an uncompressed file under 30MB in one of the following formats:
+        The attachment must be an uncompressed file under 50MB in one of the following formats:
         - .bmp, csv, .doc, .docx, .gif, .htm, .html, .jpg, .jpeg, .msg, .pdf, .png, .ppt, .pptx, .tif, .tiff, .txt, .xls, .xlsx  
 
         In the request, include the attachment that you want to upload and the following information about the attachment:
