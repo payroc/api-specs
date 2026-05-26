@@ -20837,7 +20837,7 @@ paths:
                     description: Object that contains information about the customer.
                     properties: *ref_266
                   bankAccount:
-                    description: "Polymorphic object that contains bank account information.  \nThe value of the type field determines which variant you should use:  \n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n"
+                    description: "Polymorphic object that contains bank account information.\n\nThe value of the type field determines which variant you should use:\n-\t`ach` - Automated Clearing House (ACH) details\n-\t`pad` - Pre-authorized debit (PAD) details\n"
                     type: object
                     discriminator:
                       propertyName: type
