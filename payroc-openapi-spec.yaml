@@ -26976,7 +26976,7 @@ paths:
                           properties: &ref_856
                             links:
                               type: array
-                              description: Polymorphic object that contains information about the processing terminal that the order is linked to.
+                              description: Array of objects that contain information about each processing terminal that the terminal order is linked to.
                               items:
                                 type: object
                                 anyOf:
