@@ -23390,12 +23390,12 @@ paths:
                             properties:
                               average:
                                 type: integer
-                                format: int32
+                                format: int64
                                 description: Estimated average transaction amount. The value is in the currency's lowest denomination, for example, cents. You must provide an amount that is greater than zero.
                                 example: 5000
                               highest:
                                 type: integer
-                                format: int32
+                                format: int64
                                 description: Estimated maximum transaction amount. The value is in the currency's lowest denomination, for example, cents. You must provide an amount that is greater than zero.
                                 example: 10000
                           monthlyAmounts:
@@ -23407,12 +23407,12 @@ paths:
                             properties:
                               average:
                                 type: integer
-                                format: int32
+                                format: int64
                                 description: Estimated average transaction amount each month. The value is in the currency's lowest denomination, for example, cents. You must provide an amount that is greater than zero.
                                 example: 50000
                               highest:
                                 type: integer
-                                format: int32
+                                format: int64
                                 description: Estimated maximum transaction amount each month. The value is in the currency's lowest denomination, for example, cents. You must provide an amount that is greater than zero.
                                 example: 100000
                           volumeBreakdown:
