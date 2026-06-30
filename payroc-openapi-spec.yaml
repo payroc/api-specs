@@ -25880,7 +25880,7 @@ paths:
           examples: *ref_312
       responses:
         '200':
-          description: "Successful request. We return a polymorphic object that contains the pricing agreement for the processing account.  \n\nThe value of the version field determines which variant you should use:  \n-\t`4.0` - Pricing agreement version 4.\n-\t`5.0` - Pricing agreement version 5.\n"
+          description: "Successful request. We return a polymorphic object that contains the pricing agreement for the processing account.  \n\nThe value of the version field determines which variant you should use:\n-\t`4.0` - Pricing agreement version 4.\n-\t`5.0` - Pricing agreement version 5.\n-\t`5.2` - Pricing agreement version 5.2.\n"
           content:
             application/json:
               schema:
@@ -26431,13 +26431,18 @@ paths:
                         type: array
                         items: *ref_342
                         uniqueItems: true
+                  - type: object
+                    title: US pricing agreement version 5.2
+                    description: Object that contains information about U.S. pricing intents for Merchant Processing Agreement (MPA) 5.2.
+                    required: *ref_287
+                    properties: *ref_288
               examples:
                 paginatedContacts:
                   summary: Get processing account pricing agreement
                   description: Retrieve a pricing agreement for a processing account.
                   value: &ref_1101
                     country: US
-                    version: '5.0'
+                    version: '5.2'
                     base:
                       addressVerification: 5
                       annualFee:
@@ -26473,9 +26478,6 @@ paths:
                             monthlyAccess: 0
                           electronicBenefitsTransfer:
                             transaction: 0
-                          enhancedInterchange:
-                            enrollment: 0
-                            creditToMerchant: 1.25
                           specialityCards:
                             transaction: 0
                       ach:
@@ -26495,6 +26497,8 @@ paths:
                         setup: 0
                         perTransaction: 0
                         perDeviceMonthly: 0
+                        3dSecurePerTransaction: 0
+                        tapToPayPerTransaction: 0
         '400':
           description: Invalid request
           content: *ref_15
