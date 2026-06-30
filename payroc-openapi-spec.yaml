@@ -10519,7 +10519,7 @@ paths:
                   maxLength: 48
                   minLength: 1
                   type: string
-                  description: Unique identifier that the merchant assigned to the subscription.
+                  description: Unique identifier that the merchant assigns to the subscription.
                   example: SubRef7654
                 paymentPlanId:
                   maxLength: 48
@@ -10608,7 +10608,7 @@ paths:
                           maxLength: 24
                           minLength: 1
                           type: string
-                          description: A unique identifier assigned by the merchant.
+                          description: Unique identifier that the merchant assigns to the transaction.
                           example: OrderRef6543
                         amount:
                           type: integer
@@ -15078,7 +15078,7 @@ paths:
                               maxLength: 24
                               minLength: 1
                               type: string
-                              description: A unique identifier assigned by the merchant.
+                              description: Unique identifier that the merchant assigns to the transaction.
                               example: OrderRef6543
                             dateTime:
                               type: string
@@ -18480,7 +18480,7 @@ paths:
                           maxLength: 24
                           minLength: 1
                           type: string
-                          description: A unique identifier assigned by the merchant.
+                          description: Unique identifier that the merchant assigns to the transaction.
                           example: OrderRef6543
                         dateTime:
                           type: string
@@ -20905,7 +20905,7 @@ paths:
                               maxLength: 24
                               minLength: 1
                               type: string
-                              description: A unique identifier assigned by the merchant.
+                              description: Unique identifier that the merchant assigns to the transaction.
                               example: OrderRef6543
                             dateTime:
                               type: string
