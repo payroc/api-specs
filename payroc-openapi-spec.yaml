@@ -6635,7 +6635,7 @@ paths:
                         href: https://api.payroc.com/v1/batches?before=65&limit=2&date=2024-07-02
                       - rel: next
                         method: get
-                        href: https://api.payroc.com/v1/batches?after=66&limit=2&&date=2024-07-02
+                        href: https://api.payroc.com/v1/batches?after=66&limit=2&date=2024-07-02
                     data:
                       - batchId: 65
                         date: '2024-07-02'
@@ -7164,7 +7164,7 @@ paths:
                     links:
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1/transctions?before=442233&limit=2&date=2024-07-02
+                        href: https://api.payroc.com/v1/transactions?before=442233&limit=2&date=2024-07-02
                     data:
                       - transactionId: 442233
                         type: capture
