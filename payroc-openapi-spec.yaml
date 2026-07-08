@@ -1491,19 +1491,6 @@ paths:
                       value: fred.nerk@example.com
                     - type: phone
                       value: '2025550110'
-                  owners:
-                    - ownerId: 12346
-                      link:
-                        rel: owner
-                        href: https://api.payroc.com/v1/owners/12346
-                        method: get
-                  fundingAccounts:
-                    - fundingAccountId: 124
-                      status: approved
-                      link:
-                        rel: fundingAccount
-                        href: https://api.payroc.com/v1/funding-accounts/124
-                        method: get
                   metadata:
                     responsiblePerson: Jane Doe
       responses:
@@ -4581,8 +4568,6 @@ paths:
                           transaction: 10
                         credit:
                           tips: noTips
-                          cardChargePercentage: 3
-                          merchantChargePercentage: 0
                           merchantChargePerTransaction: 10
                         specialityCards:
                           transaction: 10
@@ -15419,7 +15404,6 @@ paths:
                                                 format: int64
                                                 description: Tax amount for the transaction. The value is in the currency's lowest denomination, for example, cents.
                                                 minimum: 0
-                                                exclusiveMinimum: 0
                                                 example: 190
                                               name:
                                                 type: string
@@ -20814,7 +20798,6 @@ paths:
                     inquiryResult:
                       dccOffered: true
                     dccOffer:
-                      accepted: true
                       offerReference: 3396977e-40b9-4b26-8a3f-c25bc1280ee2
                       fxAmount: 16125
                       fxCurrency: JPY
@@ -27897,8 +27880,8 @@ paths:
                               discriminator:
                                 propertyName: batchCloseType
                                 mapping:
-                                  automatic: '#/components/schemas/schemas-automaticBatchClose'
-                                  manual: '#/components/schemas/schemas-manualBatchClose'
+                                  automatic: '#/components/schemas/automaticBatchClose-2'
+                                  manual: '#/components/schemas/manualBatchClose-2'
                               oneOf:
                                 - type: object
                                   title: automatic
@@ -30948,14 +30931,14 @@ components:
       description: Filter results by the unique identifier that the processor assigned to the merchant.
       schema: *ref_64
       examples: *ref_65
-    parameters-dateFrom:
+    dateFrom-2:
       name: dateFrom
       in: query
       description: Filter by activity after a specific date. Send a value in **YYYY-MM-DD** format.
       required: true
       schema: *ref_378
       examples: *ref_379
-    parameters-dateTo:
+    dateTo-2:
       name: dateTo
       in: query
       required: true
@@ -31015,7 +30998,7 @@ components:
       required: true
       schema: *ref_390
       examples: *ref_391
-    parameters-date:
+    date-2:
       name: date
       in: query
       required: true
@@ -31222,13 +31205,13 @@ components:
       description: Filter payments by the cardholder’s name.
       schema: *ref_438
       examples: *ref_439
-    parameters-first6:
+    first6-2:
       name: first6
       in: query
       description: Filter payments by the first six digits of the card number that the customer used in the transaction.
       schema: *ref_440
       examples: *ref_441
-    parameters-last4:
+    last4-2:
       name: last4
       in: query
       description: Filter payments by the last four digits of the card number that the customer used in the transaction.
@@ -31252,19 +31235,19 @@ components:
       description: Filter payments by transaction type.
       schema: *ref_448
       examples: *ref_449
-    parameters-status:
+    status-2:
       name: status
       in: query
       description: Filter payments by the status of the transaction.
       schema: *ref_450
       examples: *ref_451
-    components-parameters-dateFrom:
+    dateFrom-3:
       name: dateFrom
       in: query
       description: Filter by payments that the processor processed after a specific date. The date format follows the ISO 8601 standard.
       schema: *ref_452
       examples: *ref_453
-    components-parameters-dateTo:
+    dateTo-3:
       name: dateTo
       in: query
       description: Filter by payments that the processer processed before a specific date. The date format follows the ISO 8601 standard.
@@ -31282,7 +31265,7 @@ components:
       description: Filter by payments that the processor settled on a specific date in the format **YYYY-MM-DD**.
       schema: *ref_458
       examples: *ref_459
-    parameters-paymentLinkId:
+    paymentLinkId-2:
       name: paymentLinkId
       in: query
       description: Unique identifier that our gateway assigned to the payment link.
@@ -31309,61 +31292,61 @@ components:
       required: true
       schema: *ref_225
       examples: *ref_226
-    parameters-orderId:
+    orderId-2:
       name: orderId
       in: query
       description: Filter refunds by the unique identifier that the merchant assigned to the order.
       schema: *ref_464
       examples: *ref_465
-    parameters-operator:
+    operator-2:
       name: operator
       in: query
       description: Filter refunds by the operator who initiated the request.
       schema: *ref_466
       examples: *ref_467
-    parameters-cardholderName:
+    cardholderName-2:
       name: cardholderName
       in: query
       description: Filter refunds by cardholder name.
       schema: *ref_468
       examples: *ref_469
-    components-parameters-first6:
+    first6-3:
       name: first6
       in: query
       description: Filter refunds by the first six digits of the card number.
       schema: *ref_470
       examples: *ref_471
-    components-parameters-last4:
+    last4-3:
       name: last4
       in: query
       description: Filter refunds by the last four digits of the card number.
       schema: *ref_472
       examples: *ref_473
-    components-parameters-status:
+    status-3:
       name: status
       in: query
       description: Filter refunds by the current status of the refund.
       schema: *ref_474
       examples: *ref_475
-    parameters-v1_components-parameters-dateFrom:
+    dateFrom-4:
       name: dateFrom
       in: query
       description: Filter by refunds processed after a specific date. The date format follows the ISO 8601 standard.
       schema: *ref_476
       examples: *ref_477
-    parameters-v1_components-parameters-dateTo:
+    dateTo-4:
       name: dateTo
       in: query
       description: Filter by refunds processed before a specific date. The date format follows the ISO 8601 standard.
       schema: *ref_478
       examples: *ref_479
-    parameters-settlementState:
+    settlementState-2:
       name: settlementState
       in: query
       description: Status of the settlement.
       schema: *ref_480
       examples: *ref_481
-    parameters-settlementDate:
+    settlementDate-2:
       name: settlementDate
       in: query
       description: Date the transaction was settled.
@@ -31376,7 +31359,7 @@ components:
       required: true
       schema: *ref_240
       examples: *ref_241
-    parameters-serialNumber:
+    serialNumber-2:
       name: serialNumber
       description: Serial number that identifies the merchant’s payment device.
       in: path
@@ -31472,7 +31455,7 @@ components:
       description: Filter results by the settlement date. Send a value in **YYYY-MM-DD** format.
       schema: *ref_508
       examples: *ref_509
-    components-parameters-paymentLinkId:
+    paymentLinkId-3:
       name: paymentLinkId
       in: query
       description: Filter results by the paymentLinkId.
@@ -31575,7 +31558,7 @@ components:
       required: true
       schema: *ref_311
       examples: *ref_312
-    processing-accounts-v1_components-parameters-status:
+    status-4:
       name: status
       in: query
       schema: *ref_534
@@ -31601,7 +31584,7 @@ components:
       required: true
       schema: *ref_362
       examples: *ref_363
-    parameters-v1_components-parameters-status:
+    status-5:
       name: status
       in: query
       description: Filter event subscriptions by subscription status.
@@ -31613,7 +31596,7 @@ components:
       description: Filter event subscriptions by an event type. For a list of event types, go to [Events List](https://docs.payroc.com/knowledge/events/events-list).
       schema: *ref_540
       examples: *ref_541
-    parameters-subscriptionId:
+    subscriptionId-2:
       name: subscriptionId
       in: path
       description: |
@@ -32761,7 +32744,7 @@ components:
       title: digitalWallet
       description: Object that contains information about the payment details in the customer’s digital wallet.
       properties: *ref_259
-    schemas-credentialOnFile:
+    credentialOnFile-2:
       type: object
       description: Object that contains information about saving the customer’s payment details.
       properties: *ref_220
@@ -33245,7 +33228,7 @@ components:
       type: object
       required: *ref_343
       properties: *ref_344
-    schemas-timezone:
+    timezone-2:
       type: string
       description: |
         Time zone of the terminal. 
@@ -33288,7 +33271,7 @@ components:
       properties: *ref_356
       required: *ref_357
     trainingProvider: *ref_874
-    properties-shipping: *ref_875
+    shipping-2: *ref_875
     purchase:
       type: object
       properties: *ref_876
@@ -33302,7 +33285,7 @@ components:
       type: object
       properties: *ref_880
       required: *ref_881
-    components-schemas-timezone:
+    timezone-3:
       type: string
       description: Indicates the timezone within which transactions will be processed for this terminal
       maxLength: 28
@@ -33313,13 +33296,13 @@ components:
       description: Object that contains the gateway settings for the solution.
       properties: *ref_883
       required: *ref_884
-    schemas-automaticBatchClose:
+    automaticBatchClose-2:
       type: object
       title: automatic
       description: Indicates how authorized transactions will be batched for settlement
       properties: *ref_885
       required: *ref_886
-    schemas-manualBatchClose:
+    manualBatchClose-2:
       type: object
       title: manual
       description: Indicates how authorized transactions will be batched for settlement
@@ -33672,18 +33655,18 @@ components:
       summary: Paginated activity records
       description: Valid payfac account with activity for date range.
       value: *ref_968
-    examples-parameterError:
+    parameterError-2:
       summary: Bad request
       description: One or more validation errors occurred.
       value: *ref_969
     paginatedBatches:
       summary: Paginated batches
       value: *ref_970
-    components-examples-parameterError:
+    parameterError-3:
       summary: Bad Request
       description: One or more validation errors occurred
       value: *ref_70
-    examples-paginationError:
+    paginationError-2:
       summary: Bad Request
       description: One or more validation errors occurred
       value: *ref_71
@@ -34456,7 +34439,7 @@ components:
       description: URI reference to created resource.
       schema: *ref_24
       examples: *ref_25
-    headers-location:
+    location-2:
       description: URI reference to created resource
       schema: *ref_1139
 x-tagGroups:
