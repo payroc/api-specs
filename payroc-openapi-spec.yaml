@@ -21242,6 +21242,7 @@ paths:
                         - date
                         - paymentId
                         - represented
+                        - closed
                         - returnCode
                         - returnReason
                       type: object
@@ -21270,6 +21271,10 @@ paths:
                           type: boolean
                           description: Indicates whether the return has been re-presented.
                           example: false
+                        closed:
+                          type: boolean
+                          description: Indicates whether the merchant accepted an alternative payment method to complete the payment.
+                          example: false
                         link:
                           type: object
                           readOnly: true
@@ -21278,7 +21283,7 @@ paths:
                           required: *ref_5
                           example: *ref_6
                   representment:
-                    description: List of re-presented payments linked to the return.
+                    description: Object that contains details about the re-presented payment linked to the return.
                     required: *ref_233
                     type: object
                     properties: *ref_234
@@ -21817,6 +21822,7 @@ paths:
                         returnCode: R11
                         returnReason: Customer advises not authorized
                         represented: false
+                        closed: false
                         link:
                           rel: self
                           method: GET
@@ -22195,6 +22201,83 @@ paths:
       responses:
         '200':
           description: Successful request. We processed the payment.
+          content:
+            application/json:
+              schema:
+                required: *ref_269
+                type: object
+                description: Object that contains information about the sale and the customer's bank details.
+                properties: *ref_270
+              examples:
+                bankTransferPayment:
+                  summary: Store Token Bank Transfer Payment
+                  description: Bank Transfer Payment with ACH payload and token storage
+                  value: *ref_271
+        '400':
+          description: Validation error
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                properties: *ref_9
+                required: *ref_10
+              examples:
+                validationError:
+                  summary: Bad Request
+                  description: One or more validation errors occurred
+                  value: *ref_11
+                idempotentKeyMissing:
+                  summary: Idempotency key missing
+                  description: Idempotency key must be supplied
+                  value: *ref_26
+                idempotentKeyInUse:
+                  summary: Idempotency key in use
+                  description: Idempotency key in use
+                  value: *ref_29
+        '401':
+          description: Identity could not be verified
+          content: *ref_12
+        '403':
+          description: Do not have permissions to perform this action
+          content: *ref_13
+        '404':
+          description: Resource not found
+          content: *ref_18
+        '406':
+          description: Not acceptable
+          content: *ref_19
+        '409':
+          description: Conflict
+          content: *ref_104
+        '415':
+          description: Unsupported media type
+          content: *ref_105
+        '500':
+          description: An error has occured
+          content: *ref_14
+  /bank-transfer-payments/{paymentId}/close:
+    post:
+      tags:
+        - Bank transfer payments
+      summary: Close return
+      description: "Use this method to close a return if the customer used an alternative payment method to resolve a returned payment. \n\nTo close a return, you need the paymentId of the return. To get the paymentId of the return, complete the following steps:\n\n1.\tUse our [Retrieve Payment](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/retrieve) method to view the details of the original payment.\n2.\tFrom the [returns object](https://docs.payroc.com/api/schema/bank-transfer-payments/payments/retrieve#response.body.returns) in the response, get the paymentId of the return.\n\nIf your request is successful, our gateway closes the return.\n"
+      operationId: closeBankTransferPayment
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          description: Unique identifier that you generate for each request. You must use the [UUID v4 format](https://www.rfc-editor.org/rfc/rfc4122) for the identifier. For more information about the idempotency key, go to [Idempotency](https://docs.payroc.com/api/idempotency).
+          schema: *ref_22
+          examples: *ref_23
+        - name: paymentId
+          description: Unique identifier that our gateway assigned to the payment.
+          in: path
+          required: true
+          schema: *ref_272
+          examples: *ref_273
+      responses:
+        '200':
+          description: Successful request. We closed the return.
           content:
             application/json:
               schema:
