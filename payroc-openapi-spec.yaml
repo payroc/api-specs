@@ -1491,6 +1491,19 @@ paths:
                       value: fred.nerk@example.com
                     - type: phone
                       value: '2025550110'
+                  owners:
+                    - ownerId: 12346
+                      link:
+                        rel: owner
+                        href: https://api.payroc.com/v1/owners/12346
+                        method: get
+                  fundingAccounts:
+                    - fundingAccountId: 124
+                      status: approved
+                      link:
+                        rel: fundingAccount
+                        href: https://api.payroc.com/v1/funding-accounts/124
+                        method: get
                   metadata:
                     responsiblePerson: Jane Doe
       responses:
