@@ -26504,7 +26504,7 @@ paths:
                     properties: *ref_288
               examples:
                 paginatedContacts:
-                  summary: Get processing account pricing agreement
+                  summary: Retrieve processing account pricing agreement
                   description: Retrieve a pricing agreement for a processing account.
                   value: &ref_1101
                     country: US
@@ -34333,7 +34333,7 @@ components:
       description: List of contacts associated with a processing account.
       value: *ref_1100
     retrieveProcessingAccountPricingAgreement:
-      summary: Get processing account pricing agreement
+      summary: Retrieve processing account pricing agreement
       description: Retrieve a pricing agreement for a processing account.
       value: *ref_1101
     listProcessingAccountOwners:
