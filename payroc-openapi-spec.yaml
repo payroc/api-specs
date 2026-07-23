@@ -15686,11 +15686,14 @@ paths:
                                 - processingModel
                                 - sequence
                               type: object
-                              description: If you don't use our Subscriptions mechanism, include this section to configure your standing/recurring orders.
+                              description: |
+                                Object that contains information about repeat payments.  
+
+                                Include this object if the payment is part of a recurring billing schedule and you don't use our [subscriptions](https://docs.payroc.com/guides/take-payments/repeat-payments/use-our-gateway) feature. 
                               properties: &ref_750
                                 sequence:
                                   type: string
-                                  description: Position of the transaction in the payment plan sequence.
+                                  description: Indicates if this payment is the first payment or if it is a subsequent payment.
                                   enum:
                                     - first
                                     - subsequent
@@ -15698,7 +15701,7 @@ paths:
                                 processingModel:
                                   type: string
                                   description: |
-                                    Indicates the type of payment instruction.
+                                    Indicates the type of payment schedule.
 
                                     - 'unscheduled' – The payment is not part of a regular billing cycle.
                                     - 'recurring' – The payment is part of a regular billing cycle with no end date.
@@ -15709,7 +15712,7 @@ paths:
                                     - installment
                                   example: recurring
                                 referenceDataOfFirstTxn:
-                                  description: Object that contains information about the initial payment for the payment instruction.
+                                  description: Object that contains information about the first payment.
                                   type: object
                                   properties: &ref_748
                                     paymentId:
@@ -15718,13 +15721,13 @@ paths:
                                       type: string
                                       description: |
                                         Unique identifier of the first payment.  
-                                        **Note:** We recommend that you always send a value for **paymentId**.
+                                        **Note:** We recommend that you always send a value for the **paymentId** parameter.
                                       example: M2MJOG6O2Y
                                     cardSchemeReferenceId:
                                       maxLength: 64
                                       minLength: 1
                                       type: string
-                                      description: Identifier that the card brand assigns to the payment instruction.
+                                      description: Identifier that the card brand assigned to the first payment.
                                       example: ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
                     - type: object
                       properties:
@@ -16353,16 +16356,18 @@ paths:
                       type: string
                       description: |
                         Unique identifier that the merchant creates for the secure token that represents the customer’s payment details.  
-                        **Note:** If you do not send a value for the **secureTokenId**, our gateway generates a unique identifier for the token.
+                        **Note:** If you do not send a value for the **secureTokenId** parameter, our gateway generates a unique identifier for the token.
                       example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                     mitAgreement:
                       type: string
                       description: |
-                        Indicates how the merchant can use the customer’s card details, as agreed by the customer:  
+                        Indicates how the merchant can use the customer's card details to run future card transactions, as agreed with the customer.  
 
-                        - `unscheduled` - Transactions for a fixed or variable amount that are run at a certain pre-defined event.  
-                        - `recurring` - Transactions for a fixed amount that are run at regular intervals, for example, monthly. Recurring transactions don’t have a fixed duration and run until the customer cancels the agreement.  
-                        - `installment` - Transactions for a fixed amount that are run at regular intervals, for example, monthly. Installment transactions have a fixed duration.  
+                        If you send a value for the **mitAgreement** parameter, you must also include the **[standingInstructions](https://docs.payroc.com/api/schema/card-payments/payments/create#request.body.order.standingInstructions)** object in your request.
+
+                        - `unscheduled` - Transactions for a fixed or variable amount that the merchant runs at a certain predefined event. 
+                        - `recurring` - Transactions for a fixed amount that the merchant runs at regular intervals, for example, monthly. Recurring transactions don’t have a fixed duration and run until the customer cancels the agreement.  
+                        - `installment` - Transactions for a fixed amount that the merchant runs at regular intervals, for example, monthly. Installment transactions have a fixed duration.  
                           
                         **Note:** If you send a value for **mitAgreement**, you must send the **standingInstructions** object in the **paymentOrder** object.
                       enum:
@@ -34102,12 +34107,15 @@ components:
       properties: *ref_261
     firstTxnReferenceData:
       type: object
-      description: Object that contains information about the initial payment for the payment instruction.
+      description: Object that contains information about the first payment.
       properties: *ref_748
     standingInstructions:
       required: *ref_749
       type: object
-      description: If you don't use our Subscriptions mechanism, include this section to configure your standing/recurring orders.
+      description: |
+        Object that contains information about repeat payments.  
+
+        Include this object if the payment is part of a recurring billing schedule and you don't use our [subscriptions](https://docs.payroc.com/guides/take-payments/repeat-payments/use-our-gateway) feature. 
       properties: *ref_750
     paymentOrderBase:
       required: *ref_220
