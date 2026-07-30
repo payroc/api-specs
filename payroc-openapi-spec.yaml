@@ -11182,7 +11182,10 @@ paths:
                                         type: number
                                         format: double
                                         x-fern-type-hint: decimal
-                                        description: Tax percentage for the transaction.
+                                        description: |
+                                          Tax percentage for the transaction.
+
+                                          Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                         maximum: 99.99999
                                         minimum: 0
                                         example: 7
@@ -12773,8 +12776,8 @@ paths:
                   minLength: 1
                   type: string
                   description: |
-                    Unique identifier that the merchant created for the secure token that represents the customer's payment details. 
-                    If the merchant doesn't create a secureTokenId, the gateway generates one and returns it in the response.
+                    Unique identifier that you create for the secure token that represents the customer’s payment details.  
+                    **Note:** If you don't send a value for the secureTokenId, our gateway generates a unique identifier for the token.
                   example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                 operator:
                   maxLength: 50
@@ -12797,7 +12800,10 @@ paths:
                   example: recurring
                 customer:
                   type: object
-                  description: Object that contains the customer's contact details and address information.
+                  description: |
+                    Object that contains the customer's contact details and address information.
+
+                    Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                   properties: &ref_209
                     firstName:
                       type: string
@@ -12819,9 +12825,11 @@ paths:
                     referenceNumber:
                       type: string
                       description: |
-                        Identifier of the transaction, also known as a customer code. 
+                        Identifier of the transaction, also known as a customer code.
 
-                        For requests, you must send a value for **referenceNumber** if the customer provides one. 
+                        For requests, you must send a value for **referenceNumber** if the customer provides one.
+
+                        Required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                       maxLength: 48
                       minLength: 0
                       example: CustomerCode234567
@@ -12832,20 +12840,29 @@ paths:
                       title: address
                       properties: *ref_1
                     shippingAddress:
-                      description: Object that contains information about the customer and their shipping address.
+                      description: |
+                        Object that contains information about the customer and their shipping address.
+
+                        Contains parameters required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                       type: object
                       properties: &ref_246
                         recipientName:
                           maxLength: 50
                           minLength: 0
                           type: string
-                          description: Recipient's name.
+                          description: |
+                            Recipient's name.
+
+                            Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                           example: Sarah Hopper
                         address:
+                          description: |
+                            Object that contains information about the shipping address.
+
+                            Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                           required: *ref_0
                           type: object
                           title: address
-                          description: Object that contains information about the address.
                           properties: *ref_1
                     contactMethods:
                       type: array
@@ -13847,6 +13864,37 @@ paths:
                   customFields:
                     - name: yourCustomField
                       value: abc123
+              createSecureTokenSingleUseToken:
+                summary: Secure token created from a single-use token
+                description: Create a secure token using a single-use token that represents card details.
+                value: &ref_1056
+                  operator: Jane
+                  mitAgreement: unscheduled
+                  customer:
+                    firstName: Sarah
+                    lastName: Hopper
+                    dateOfBirth: '1990-07-15'
+                    referenceNumber: Customer-12
+                    billingAddress:
+                      address1: 1 Example Ave.
+                      address2: Example Address Line 2
+                      city: Chicago
+                      state: Illinois
+                      country: US
+                      postalCode: '60056'
+                    contactMethods:
+                      - type: email
+                        value: sarah.hopper@example.com
+                    notificationLanguage: en
+                  ipAddress:
+                    type: ipv4
+                    value: 104.18.24.203
+                  source:
+                    type: singleUseToken
+                    token: abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
+                  customFields:
+                    - name: yourCustomField
+                      value: abc123
         required: true
       responses:
         '201':
@@ -14213,6 +14261,39 @@ paths:
                           state: Illinois
                           country: US
                           postalCode: '60056'
+                      contactMethods:
+                        - type: email
+                          value: sarah.hopper@example.com
+                      notificationLanguage: en
+                    source:
+                      type: card
+                      cardholderName: Sarah Hazel Hopper
+                      cardNumber: 453985******7062
+                      expiryDate: '1230'
+                    token: '296753123456'
+                    status: notValidated
+                    customFields:
+                      - name: yourCustomField
+                        value: abc123
+                createdSecureTokenSingleUseToken:
+                  summary: Secure token created from a single-use token
+                  description: Create a secure token using a single-use token that represents card details.
+                  value: &ref_1057
+                    secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                    processingTerminalId: '1234001'
+                    mitAgreement: unscheduled
+                    customer:
+                      firstName: Sarah
+                      lastName: Hopper
+                      dateOfBirth: '1990-07-15'
+                      referenceNumber: Customer-12
+                      billingAddress:
+                        address1: 1 Example Ave.
+                        address2: Example Address Line 2
+                        city: Chicago
+                        state: Illinois
+                        country: US
+                        postalCode: '60056'
                       contactMethods:
                         - type: email
                           value: sarah.hopper@example.com
@@ -14674,7 +14755,7 @@ paths:
                   Update the customer's payment details that are represented by the secure token.
 
                   Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
-                value: &ref_1056
+                value: &ref_1058
                   - op: replace
                     path: /customer/lastName
                     value: Reed
@@ -14687,7 +14768,7 @@ paths:
               patchSecureTokenAdd:
                 summary: 'Update secure token: add'
                 description: Add operation adds a new value to an object or array.
-                value: &ref_1057
+                value: &ref_1059
                   - op: add
                     path: /customFields
                     value:
@@ -14696,34 +14777,34 @@ paths:
               patchSecureTokenRemove:
                 summary: 'Update secure token: remove'
                 description: Remove operation deletes a value from the secure token.
-                value: &ref_1058
+                value: &ref_1060
                   - op: remove
                     path: /customer/dateOfBirth
               patchSecureTokenReplace:
                 summary: 'Update secure token: replace'
                 description: Replace operation updates an existing value.
-                value: &ref_1059
+                value: &ref_1061
                   - op: replace
                     path: /customer/lastName
                     value: Reed
               patchSecureTokenMove:
                 summary: 'Update secure token: move'
                 description: Move operation relocates a value from one location to another.
-                value: &ref_1060
+                value: &ref_1062
                   - op: move
                     from: /customFields/0
                     path: /customFields/1
               patchSecureTokenCopy:
                 summary: 'Update secure token: copy'
                 description: Copy operation duplicates a value from one location to another.
-                value: &ref_1061
+                value: &ref_1063
                   - op: copy
                     from: /customer/firstName
                     path: /customer/lastName
               patchSecureTokenTest:
                 summary: 'Update secure token: test'
                 description: Test operation validates that a value at the target location equals the specified value.
-                value: &ref_1062
+                value: &ref_1064
                   - op: test
                     path: /mitAgreement
                     value: unscheduled
@@ -14895,7 +14976,7 @@ paths:
               accountUpdate:
                 summary: Update account details
                 description: Account update request by single use token
-                value: &ref_1063
+                value: &ref_1065
                   type: singleUseToken
                   token: abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
         required: true
@@ -14964,7 +15045,7 @@ paths:
                 payloadTooLarge:
                   summary: Payload too large
                   description: The payload submitted is too large
-                  value: &ref_1064
+                  value: &ref_1066
                     type: https://docs.payroc.com/api/errors#payload-too-large
                     title: Payload too large
                     status: 413
@@ -15062,7 +15143,7 @@ paths:
               createSingleUseToken:
                 summary: Create single-use token
                 description: Create a single-use token. The token expires after 30 minutes.
-                value: &ref_1065
+                value: &ref_1067
                   channel: web
                   operator: Jane
                   source:
@@ -15162,7 +15243,7 @@ paths:
                 createSingleUseToken:
                   summary: Create single-use token
                   description: Create a single-use token. The token expires after 30 minutes.
-                  value: &ref_1066
+                  value: &ref_1068
                     processingTerminalId: '1234001'
                     token: fa2e9e51bc5265a33a5ca41449524d53d1def596ffd8c0904f222183a71a65cdb58835120a65196a48a6375abc4deafe2b7e948689ab9d6aba919e860f32e247
                     expiresAt: '2024-08-05T19:50:05.723+02:00'
@@ -15288,7 +15369,7 @@ paths:
               createSessionRequest:
                 summary: Create session request
                 description: Create session request.
-                value: &ref_1067
+                value: &ref_1069
                   libVersion: 1.1.0.123456
                   scenario: payment
         required: true
@@ -15326,7 +15407,7 @@ paths:
                 createSessionResponse:
                   summary: Create session response
                   description: Create session response.
-                  value: &ref_1068
+                  value: &ref_1070
                     processingTerminalId: '1234001'
                     token: abcdef1234567890abcdef1234567890
                     expiresAt: '2025-07-02T15:30:00.000+02:00'
@@ -15414,7 +15495,7 @@ paths:
               applePaySessions:
                 summary: Apple Pay session
                 description: Start a session with Apple to accept a payment with Apple Pay.
-                value: &ref_1069
+                value: &ref_1071
                   appleDomainId: DUHDZJHGYY
                   appleValidationUrl: https://apple-pay-gateway.apple.com/paymentservices/startSession
         required: true
@@ -15452,7 +15533,7 @@ paths:
                 applePayResponseSession:
                   summary: Apple Pay session response
                   description: Wrapper for the content that Apple returns after starting the Apple Pay session.
-                  value: &ref_1070
+                  value: &ref_1072
                     startSessionResponse: |
                       {
                         "epochTimestamp": 1736264582447,
@@ -15744,7 +15825,10 @@ paths:
                           required: &ref_249
                             - subtotal
                           type: object
-                          description: Object that contains information about the breakdown of the transaction.
+                          description: |
+                            Object that contains information about the breakdown of the transaction.
+
+                            Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                           allOf: &ref_250
                             - type: object
                               allOf: &ref_766
@@ -15756,7 +15840,10 @@ paths:
                                     subtotal:
                                       type: integer
                                       format: int64
-                                      description: Amount of the transaction before tax and fees. The value is in the currency’s lowest denomination, for example, cents.
+                                      description: |
+                                        Amount of the transaction before tax and fees. The value is in the currency’s lowest denomination, for example, cents.
+
+                                        Required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                       example: 2899
                                     cashbackAmount:
                                       type: integer
@@ -15897,10 +15984,10 @@ paths:
                                   properties:
                                     taxes:
                                       type: array
-                                      description: "Array of polymorphic tax objects, which contain information about a tax.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n"
+                                      description: "Array of polymorphic tax objects, which contain information about a tax.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n\nRequired for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).\n"
                                       items:
                                         type: object
-                                        description: "Polymorphic object that contains tax details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n"
+                                        description: "Polymorphic object that contains tax details.\n\nThe value of the type parameter determines which variant you should use:\n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n\nRequired for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).\n"
                                         discriminator: &ref_207
                                           propertyName: type
                                           mapping:
@@ -15922,7 +16009,10 @@ paths:
                                               amount:
                                                 type: integer
                                                 format: int64
-                                                description: Tax amount for the transaction. The value is in the currency's lowest denomination, for example, cents.
+                                                description: |
+                                                  Tax amount for the transaction. The value is in the currency's lowest denomination, for example, cents.
+
+                                                  Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                                 minimum: 0
                                                 example: 190
                                               name:
@@ -15940,13 +16030,17 @@ paths:
                                   type: integer
                                   format: int64
                                   description: |
-                                    Amount of duties or fees that apply to the order. The value is in the currency's lowest denomination, for example, cents. 
+                                    Amount of duties or fees that apply to the order. The value is in the currency's lowest denomination, for example, cents.
+
+                                    Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                   example: 0
                                 freightAmount:
                                   type: integer
                                   format: int64
                                   description: |
                                     Amount for shipping in the currency's lowest denomination, for example, cents.
+
+                                    Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                   example: 0
                                 convenienceFee:
                                   required: *ref_205
@@ -15956,7 +16050,10 @@ paths:
                                   properties: *ref_206
                                 items:
                                   type: array
-                                  description: Array of objects that contain information about each item that the customer purchased.
+                                  description: |
+                                    Array of objects that contain information about each item that the customer purchased.
+
+                                    Contains parameters required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                   items:
                                     description: Array of 'lineItem' objects. Each object contains information about the items in the transaction.
                                     type: object
@@ -15965,29 +16062,44 @@ paths:
                                           - quantity
                                           - unitPrice
                                         type: object
-                                        description: List of line items.
+                                        description: |
+                                          List of line items.
+
+                                          Contains parameters required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                         properties: &ref_225
                                           commodityCode:
                                             maxLength: 45
                                             minLength: 0
                                             type: string
-                                            description: Commodity code of the item.
+                                            description: |
+                                              Commodity code of the item.
+
+                                              Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                             example: 5812-0111
                                           productCode:
                                             maxLength: 45
                                             minLength: 0
                                             type: string
-                                            description: Product code of the item.
+                                            description: |
+                                              Product code of the item.
+
+                                              Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                             example: PZA-001-LG
                                           description:
                                             maxLength: 250
                                             minLength: 0
                                             type: string
-                                            description: Description of the item.
+                                            description: |
+                                              Description of the item.
+
+                                              Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                             example: Large Pepperoni Pizza
                                           unitOfMeasure:
+                                            description: |
+                                              Unit of measurement for the item.
+
+                                              Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data). Also required for Level 2 (American Express only).
                                             type: string
-                                            description: Unit of measurement for the item. For more information about units of measurement, go to [Units of measurement](https://docs.payroc.com/knowledge/basic-concepts/units-of-measurement).
                                             example: QAN
                                             enum: &ref_758
                                               - ACR
@@ -16209,7 +16321,10 @@ paths:
                                           unitPrice:
                                             type: integer
                                             format: int64
-                                            description: Price of each unit.
+                                            description: |
+                                              Price of each unit.
+
+                                              Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                             exclusiveMinimum: 0
                                             example: 2709
                                           quantity:
@@ -16217,28 +16332,40 @@ paths:
                                             format: double
                                             x-fern-type-hint: decimal
                                             exclusiveMinimum: 0
-                                            description: Number of units.
+                                            description: |
+                                              Number of units.
+
+                                              Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                             example: 1
                                           discountRate:
                                             type: number
                                             format: double
                                             x-fern-type-hint: decimal
-                                            description: Discount rate that the merchant applies to the item.
+                                            description: |
+                                              Discount rate that the merchant applies to the item.
+
+                                              Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                             exclusiveMinimum: 0
                                             example: 5
                                       - type: object
                                         properties:
                                           taxes:
                                             type: array
-                                            description: Array of objects that contain information about each tax that applies to the item.
+                                            description: |
+                                              Array of objects that contain information about each tax that applies to the item.
+
+                                              Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                             items:
                                               type: object
-                                              description: "Polymorphic object that contains tax details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n"
+                                              description: "Polymorphic object that contains tax details.\n\nThe value of the type parameter determines which variant you should use:\n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n\nRequired for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).\n"
                                               discriminator: *ref_207
                                               oneOf: *ref_208
                 customer:
                   type: object
-                  description: Object that contains the customer's contact details and address information.
+                  description: |
+                    Object that contains the customer's contact details and address information.
+
+                    Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                   properties: *ref_209
                 ipAddress:
                   required: *ref_210
@@ -16355,7 +16482,7 @@ paths:
                       minLength: 0
                       type: string
                       description: |
-                        Unique identifier that the merchant creates for the secure token that represents the customer’s payment details.  
+                        Unique identifier that the merchant creates for the secure token that represents the customer’s payment details.
                         **Note:** If you do not send a value for the **secureTokenId** parameter, our gateway generates a unique identifier for the token.
                       example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
                     mitAgreement:
@@ -16431,7 +16558,7 @@ paths:
               paymentRequest:
                 summary: Card Payment
                 description: Payment
-                value: &ref_1072
+                value: &ref_1074
                   channel: web
                   processingTerminalId: '1234001'
                   operator: Jane
@@ -16477,7 +16604,7 @@ paths:
                       value: abc123
               applePaySaleRequest:
                 summary: Apple Pay Payment
-                value: &ref_1073
+                value: &ref_1075
                   channel: web
                   processingTerminalId: '1234001'
                   operator: Jane
@@ -16490,6 +16617,92 @@ paths:
                     type: digitalWallet
                     serviceProvider: apple
                     encryptedData: 7b2262696c6c696e67436f6e74616374223a7b2266616d696c794e616d65223a22222c22676976656e4e616d65223a22222c2270686f6e6574696346616d696c794e616d65223a22222c2270686f6e65746963476976656e4e616d65223a22227d2c227368697070696e67436f6e74616374223a7b22656d61696c41646472657373223a227465737440646f6d61696e2e636f6d222c2266616d696c794e616d65223a22222c22676976656e4e616d65223a22222c2270686f6e6574696346616d696c794e616d65223a22222c2270686f6e65746963476976656e4e616d65223a22227d2c22746f6b656e223a7b227061796d656e7444617461223a7b2264617461223a2259314b37626731573479755568587473335941627a6150756c384d31795057304c724637734e2f70415950456d3871647969716c6257777356792b7732334c666c74344e6932525a684c2f6a52727563356f69496235537437763248543739682b74702f78517838496b6a5631485354594d747156644c6a413977686379774f654f70326575556d306e56386b50726569564273726a596c355931437a30576371495648595134424e737a4b5876675063686a497a6f4d4b456336425650744c7335777654667a434b51574a496a646b62516161306265685958524b422b7941773872537a6a4a476f3758523061467a414b4e70346c6f436e69484e564838373244504e4a77364b30336e544d69724b37725a615566485356754d477544473348366e4d78336c48436e6b517478764551474771754132676c416434424f427943414976483541566671655173534137776a4459702f494c6c66614e64307469467478344d6235566f6952513249387379384548547670307736667861316973613874636f484855614b32353857486474673d3d222c227369676e6174757265223a224d494147435371475349623344514548417143414d494143415145784454414c42676c67686b67425a514d45416745776741594a4b6f5a496876634e415163424141436767444343412b517767674f4c6f414d434151494343466e596f627971394f504e4d416f4743437147534d343942414d434d486f784c6a417342674e5642414d4d4a5546776347786c4945467763477870593246306157397549456c756447566e636d46306157397549454e4249433067527a4d784a6a416b42674e564241734d485546776347786c49454e6c636e52705a6d6c6a59585270623234675158563061473979615852354d524d77455159445651514b44417042634842735a53424a626d4d754d517377435159445651514745774a56557a4165467730794d5441304d6a41784f544d334d444261467730794e6a41304d546b784f544d324e546c614d4749784b44416d42674e5642414d4d4832566a5979317a62584174596e4a76613256794c584e705a32356656554d304c564e42546b5243543167784644415342674e564241734d43326c505579425465584e305a57317a4d524d77455159445651514b44417042634842735a53424a626d4d754d517377435159445651514745774a56557a425a4d424d4742797147534d34394167454743437147534d34394177454841304941424949772f6176446e50646549437851325a74464575593334716b423357797a344c484e53314a6e6d506a505472336f4769576f7768354d4d39334f6a697157777661766f5a4d445263546f656b516d7a7055624570576a676749524d4949434454414d42674e5648524d4241663845416a41414d42384741315564497751594d42614146435079536352506b2b54764a2b62453969687350364b372f53354c4d45554743437347415155464277454242446b774e7a4131426767724267454642516377415959706148523063446f764c32396a633341755958427762475575593239744c32396a633341774e433168634842735a5746705932457a4d4449776767456442674e5648534145676745554d4949424544434341517747435371475349623359325146415443422f6a4342777759494b77594242515548416749776762594d67624e535a5778705957356a5a5342766269423061476c7a49474e6c636e52705a6d6c6a5958526c49474a35494746756553427759584a306553426863334e316257567a4947466a593256776447467559325567623259676447686c4948526f5a5734675958427762476c6a59574a735a53427a644746755a4746795a4342305a584a7463794268626d5167593239755a476c3061573975637942765a6942316332557349474e6c636e52705a6d6c6a5958526c4948427662476c6a65534268626d51675932567964476c6d61574e6864476c7662694277636d466a64476c6a5a53427a644746305a57316c626e527a4c6a4132426767724267454642516343415259716148523063446f764c33643364793568634842735a53356a623230765932567964476c6d61574e68644756686458526f62334a7064486b764d44514741315564487751744d4373774b61416e6f43574749326830644841364c79396a636d77755958427762475575593239744c3246776347786c59576c6a59544d7559334a734d4230474131556444675157424251434a44414c6d753774526a4758704b5a614b5a3543635949635254414f42674e56485138424166384542414d43423441774477594a4b6f5a496876646a5a415964424149464144414b42676771686b6a4f5051514441674e4841444245416942306f624d6b32304a4a517733544a307851644d53416a5a6f6653413436686358424e69566d4d6c2b386f7749676154615155367631433170532b6659415463574b725778517039594961446551344b63363042354b3259457767674c754d49494364614144416745434167684a62532b2f4f706a616c7a414b42676771686b6a4f50515144416a426e4d527377475159445651514444424a42634842735a5342536232393049454e4249433067527a4d784a6a416b42674e564241734d485546776347786c49454e6c636e52705a6d6c6a59585270623234675158563061473979615852354d524d77455159445651514b44417042634842735a53424a626d4d754d517377435159445651514745774a56557a4165467730784e4441314d4459794d7a51324d7a4261467730794f5441314d4459794d7a51324d7a42614d486f784c6a417342674e5642414d4d4a5546776347786c4945467763477870593246306157397549456c756447566e636d46306157397549454e4249433067527a4d784a6a416b42674e564241734d485546776347786c49454e6c636e52705a6d6c6a59585270623234675158563061473979615852354d524d77455159445651514b44417042634842735a53424a626d4d754d517377435159445651514745774a56557a425a4d424d4742797147534d34394167454743437147534d34394177454841304941425041584559515a31325346315270654a594548647569416f752f656536354e34493338533550684d3162565a6c733172694c516c33594e496b353775676a396468664f694d743275325a7776736a6f4b59542f5645576a6766637767665177526759494b77594242515548415145454f6a41344d4459474343734741515546427a41426869706f644852774f69387662324e7a63433568634842735a53356a6232307662324e7a634441304c5746776347786c636d397664474e685a7a4d77485159445652304f4242594546435079536352506b2b54764a2b62453969687350364b372f53354c4d41384741315564457745422f7751464d414d4241663877487759445652306a42426777466f4155753744656f56677a694a716b69706e65767233727239724c4a4b73774e77594456523066424441774c6a41736f4371674b49596d6148523063446f764c324e7962433568634842735a53356a623230765958427762475679623239305932466e4d79356a636d777744675944565230504151482f42415144416745474d42414743697147534962335932514741673445416755414d416f4743437147534d343942414d43413263414d4751434d447250636f4e5246706d78687673317731624b59722f30462b335a4433564e6f6f362b385a7942586b4b33696669593935745a6e356a56515132506e656e432f6749774d693356524347776f7756336246337a4f4475515a2f305866437768625a5a50786e4a7067684a76565068366652755a7935734a6953466842706b50435a4964414141786767474a4d4949426851494241544342686a42364d5334774c4159445651514444435642634842735a5342426348427361574e6864476c766269424a626e526c5a334a6864476c7662694244515341744945637a4d5359774a4159445651514c44423142634842735a5342445a584a3061575a7059324630615739754945463164476876636d6c30655445544d424547413155454367774b51584277624755675357356a4c6a454c4d416b474131554542684d4356564d4343466e596f627971394f504e4d417347435743475341466c41775143416143426b7a415942676b71686b69473977304243514d784377594a4b6f5a496876634e415163424d42774743537147534962334451454a42544550467730794e4445794d5449784e6a51774d5452614d43674743537147534962334451454a4e4445624d426b774377594a59495a4941575544424149426f516f4743437147534d343942414d434d43384743537147534962334451454a4244456942434335615768366c647944637435626844536b62345835494a612b576f746d6d74344a624c74386949754a6b6a414b42676771686b6a4f50515144416752494d45594349514437637561364c6430697a6148716d5371713747303433476770363467484d6b514e523577757a32736137674968414e44643730585a6639432f412b58774e716a75672b76684c39534c4c4966465159746f6745377842534c774141414141414141222c22686561646572223a7b227075626c69634b657948617368223a225542347255754d6b7044627054564b7448636a6452525a496f643465766562754d4f696b7a4156556441593d222c22657068656d6572616c5075626c69634b6579223a224d466b77457759484b6f5a497a6a3043415159494b6f5a497a6a3044415163445167414557556a70324f663878427449432f354335535349544e443554736f75564c423831464547383847504b7243394e394d753365534e72586c32636564757533552f504f53652f616f75384477556a674e6670584d7831673d3d222c227472616e73616374696f6e4964223a2231363431326566383238303362633133356338333165396235663732376432366165623661616130363364633138353861313562323734386666346636333739227d2c2276657273696f6e223a2245435f7631227d2c227061796d656e744d6574686f64223a7b22646973706c61794e616d65223a224d6173746572436172642031343731222c226e6574776f726b223a224d617374657243617264222c2274797065223a226465626974227d2c227472616e73616374696f6e4964656e746966696572223a2231363431326566383238303362633133356338333165396235663732376432366165623661616130363364633138353861313562323734386666346636333739227d7d
+              singleUseTokenSaleRequest:
+                summary: Card sale with single-use token that we convert to a secure token
+                description: Convert a single-use token to a secure token when running a card sale.
+                value: &ref_1076
+                  channel: web
+                  processingTerminalId: '1234001'
+                  operator: Jane
+                  order:
+                    orderId: OrderRef6543
+                    description: Large Pepperoni Pizza
+                    currency: USD
+                    amount: 4999
+                  paymentMethod:
+                    type: singleUseToken
+                    token: abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
+                  credentialOnFile:
+                    tokenize: true
+                    secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                  customer:
+                    firstName: Sarah
+                    lastName: Hopper
+                    billingAddress:
+                      address1: 1 Example Ave.
+                      address2: Example Address Line 2
+                      address3: Example Address Line 3
+                      city: Chicago
+                      state: Illinois
+                      country: US
+                      postalCode: '60056'
+                    shippingAddress:
+                      recipientName: Sarah Hopper
+                      address:
+                        address1: 1 Example Ave.
+                        address2: Example Address Line 2
+                        address3: Example Address Line 3
+                        city: Chicago
+                        state: Illinois
+                        country: US
+                        postalCode: '60056'
+                  customFields:
+                    - name: yourCustomField
+                      value: abc123
+              secureTokenRepeatPaymentRequest:
+                summary: Card sale with secure token and is the first payment in a series
+                description: Create the first payment in a recurring series using a secure token.
+                value: &ref_1077
+                  channel: web
+                  processingTerminalId: '1234001'
+                  operator: Jane
+                  order:
+                    orderId: OrderRef6543
+                    description: 'Pizza Doe #1234 - Dinner'
+                    currency: USD
+                    amount: 4999
+                    standingInstructions:
+                      sequence: first
+                      processingModel: recurring
+                  customer:
+                    firstName: Sarah
+                    lastName: Hopper
+                    billingAddress:
+                      address1: 1 Example Ave.
+                      address2: Example Address Line 2
+                      address3: Example Address Line 3
+                      city: Chicago
+                      state: Illinois
+                      country: US
+                      postalCode: '60056'
+                    shippingAddress:
+                      recipientName: Sarah Hopper
+                      address:
+                        address1: 1 Example Ave.
+                        address2: Example Address Line 2
+                        address3: Example Address Line 3
+                        city: Chicago
+                        state: Illinois
+                        country: US
+                        postalCode: '60056'
+                  paymentMethod:
+                    type: secureToken
+                    token: '296753123456'
+                  credentialOnFile:
+                    mitAgreement: recurring
+                  customFields:
+                    - name: yourCustomField
+                      value: abc123
         required: true
       responses:
         '201':
@@ -16537,7 +16750,10 @@ paths:
                             required: &ref_760
                               - subtotal
                             type: object
-                            description: Object that contains information about the breakdown of the transaction.
+                            description: |
+                              Object that contains information about the breakdown of the transaction.
+
+                              Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                             allOf: &ref_761
                               - type: object
                                 allOf: &ref_757
@@ -16560,13 +16776,17 @@ paths:
                                     type: integer
                                     format: int64
                                     description: |
-                                      Amount of duties or fees that apply to the order. The value is in the currency's lowest denomination, for example, cents. 
+                                      Amount of duties or fees that apply to the order. The value is in the currency's lowest denomination, for example, cents.
+
+                                      Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                     example: 0
                                   freightAmount:
                                     type: integer
                                     format: int64
                                     description: |
                                       Amount for shipping in the currency's lowest denomination, for example, cents.
+
+                                      Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                     example: 0
                                   convenienceFee:
                                     required: *ref_205
@@ -16576,20 +16796,29 @@ paths:
                                     properties: *ref_206
                                   items:
                                     type: array
-                                    description: Array of objects that contain information about each item that the customer purchased.
+                                    description: |
+                                      Array of objects that contain information about each item that the customer purchased.
+
+                                      Contains parameters required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                     items:
                                       description: Array of 'lineItem' objects. Each object contains information about the items in the transaction.
                                       type: object
                                       allOf: &ref_759
                                         - required: *ref_224
                                           type: object
-                                          description: List of line items.
+                                          description: |
+                                            List of line items.
+
+                                            Contains parameters required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                           properties: *ref_225
                                         - type: object
                                           properties:
                                             taxes:
                                               type: array
-                                              description: Array of objects that contain information about each tax that applies to the item.
+                                              description: |
+                                                Array of objects that contain information about each tax that applies to the item.
+
+                                                Required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                                               items:
                                                 required: *ref_157
                                                 type: object
@@ -17069,7 +17298,7 @@ paths:
                         value: abc123
                 applePaySaleResponse:
                   summary: Apple Pay Payment
-                  value: &ref_1074
+                  value: &ref_1078
                     paymentId: J9VULKIKFP
                     processingTerminalId: '1234001'
                     operator: Jane
@@ -17102,6 +17331,146 @@ paths:
                       responseCode: A
                       responseMessage: APPROVAL
                       processorResponseCode: '00'
+                singleUseTokenSaleResponse:
+                  summary: Card sale with single-use token that we convert to a secure token
+                  description: Convert a single-use token to a secure token when running a card sale.
+                  value: &ref_1079
+                    paymentId: M2MJOG6O2Y
+                    processingTerminalId: '1234001'
+                    operator: Jane
+                    order:
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Large Pepperoni Pizza
+                      amount: 4999
+                      currency: USD
+                    customer:
+                      firstName: Sarah
+                      lastName: Hopper
+                      billingAddress:
+                        address1: 1 Example Ave.
+                        address2: Example Address Line 2
+                        address3: Example Address Line 3
+                        city: Chicago
+                        state: Illinois
+                        country: US
+                        postalCode: '60056'
+                      shippingAddress:
+                        recipientName: Sarah Hopper
+                        address:
+                          address1: 1 Example Ave.
+                          address2: Example Address Line 2
+                          address3: Example Address Line 3
+                          city: Chicago
+                          state: Illinois
+                          country: US
+                          postalCode: '60056'
+                    card:
+                      type: Visa Credit
+                      cardholderName: Sarah Hopper
+                      cardNumber: 453985******7062
+                      expiryDate: '1230'
+                      entryMethod: keyed
+                      secureToken:
+                        secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                        customerName: Sarah Hopper
+                        token: '296753123456'
+                        status: notValidated
+                        link:
+                          rel: self
+                          method: GET
+                          href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                      securityChecks:
+                        cvvResult: M
+                        avsResult: 'Y'
+                    supportedOperations:
+                      - capture
+                      - fullyReverse
+                      - partiallyReverse
+                      - incrementAuthorization
+                      - adjustTip
+                      - setAsPending
+                    transactionResult:
+                      type: sale
+                      status: ready
+                      approvalCode: OK3
+                      authorizedAmount: 4999
+                      currency: USD
+                      responseCode: A
+                      responseMessage: OK3
+                      cardSchemeReferenceId: ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
+                    customFields:
+                      - name: yourCustomField
+                        value: abc123
+                secureTokenRepeatPaymentResponse:
+                  summary: Card sale with secure token and is the first payment in a series
+                  description: Create the first payment in a recurring series using a secure token.
+                  value: &ref_1080
+                    paymentId: M2MJOG6O2Y
+                    processingTerminalId: '1234001'
+                    operator: Jane
+                    order:
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: 'Pizza Doe #1234 - Dinner'
+                      amount: 4999
+                      currency: USD
+                      standingInstructions:
+                        sequence: first
+                        processingModel: recurring
+                    customer:
+                      firstName: Sarah
+                      lastName: Hopper
+                      billingAddress:
+                        address1: 1 Example Ave.
+                        address2: Example Address Line 2
+                        address3: Example Address Line 3
+                        city: Chicago
+                        state: Illinois
+                        country: US
+                        postalCode: '60056'
+                      shippingAddress:
+                        recipientName: Sarah Hopper
+                        address:
+                          address1: 1 Example Ave.
+                          address2: Example Address Line 2
+                          address3: Example Address Line 3
+                          city: Chicago
+                          state: Illinois
+                          country: US
+                          postalCode: '60056'
+                    card:
+                      type: Visa Credit
+                      cardholderName: Sarah Hopper
+                      cardNumber: 453985******7062
+                      expiryDate: '1230'
+                      entryMethod: keyed
+                      secureToken:
+                        secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                        customerName: Sarah Hopper
+                        token: '296753123456'
+                        status: notValidated
+                        link:
+                          rel: self
+                          method: GET
+                          href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                      securityChecks:
+                        avsResult: 'Y'
+                    supportedOperations:
+                      - fullyReverse
+                      - setAsPending
+                    transactionResult:
+                      type: sale
+                      status: ready
+                      approvalCode: OK3
+                      authorizedAmount: 4999
+                      currency: USD
+                      responseCode: A
+                      responseMessage: OK3
+                      cardSchemeReferenceId: ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
+                    customFields:
+                      - name: yourCustomField
+                        value: abc123
           headers:
             location:
               description: URI reference to created resource.
@@ -17543,7 +17912,7 @@ paths:
                 paginatedResults:
                   summary: Payment
                   description: Payment
-                  value: &ref_1071
+                  value: &ref_1073
                     limit: 2
                     count: 2
                     hasMore: true
@@ -17840,7 +18209,10 @@ paths:
                               - customer
                             example: customer
                           shippingAddress:
-                            description: Object that contains information about the customer and their shipping address.
+                            description: |
+                              Object that contains information about the customer and their shipping address.
+
+                              Contains parameters required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                             type: object
                             properties: *ref_246
                           contactMethods:
@@ -17873,7 +18245,7 @@ paths:
               adjustPaymentRequest:
                 summary: Adjust Payment
                 description: Adjust Payment
-                value: &ref_1075
+                value: &ref_1081
                   adjustments:
                     - type: customer
                       shippingAddress:
@@ -17902,7 +18274,7 @@ paths:
                 adjustPaymentResponse:
                   summary: Adjust Payment
                   description: Adjust Payment
-                  value: &ref_1076
+                  value: &ref_1082
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1234001'
                     order:
@@ -18048,13 +18420,16 @@ paths:
                 breakdown:
                   required: *ref_249
                   type: object
-                  description: Object that contains information about the breakdown of the transaction.
+                  description: |
+                    Object that contains information about the breakdown of the transaction.
+
+                    Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                   allOf: *ref_250
             examples:
               paymentCapture:
                 summary: Payment capture
                 description: Capture a payment with itemized breakdown
-                value: &ref_1077
+                value: &ref_1083
                   processingTerminalId: '1234001'
                   operator: Jane
                   amount: 4999
@@ -18169,7 +18544,7 @@ paths:
               reversalPayment:
                 summary: Reversal Payment
                 description: Reversal Payment
-                value: &ref_1078
+                value: &ref_1084
                   amount: 4999
       responses:
         '200':
@@ -18184,7 +18559,7 @@ paths:
                 reversalPayment:
                   summary: Reversal Payment
                   description: Reversal Payment
-                  value: &ref_1079
+                  value: &ref_1085
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1234001'
                     order:
@@ -18345,7 +18720,7 @@ paths:
               refundPaymentRequest:
                 summary: Refund Payment
                 description: Refund Payment
-                value: &ref_1080
+                value: &ref_1086
                   amount: 4999
                   description: Refund for order OrderRef6543
         required: true
@@ -18362,7 +18737,7 @@ paths:
                 refundPayment:
                   summary: Refund Payment
                   description: Refund Payment
-                  value: &ref_1081
+                  value: &ref_1087
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1234001'
                     operator: Jane
@@ -18569,7 +18944,10 @@ paths:
                                     properties: *ref_204
                 customer:
                   type: object
-                  description: Object that contains the customer's contact details and address information.
+                  description: |
+                    Object that contains the customer's contact details and address information.
+
+                    Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                   properties: *ref_209
                 ipAddress:
                   required: *ref_210
@@ -18644,7 +19022,7 @@ paths:
               paymentInstructionRequest:
                 summary: Payment Instruction
                 description: Submit an instruction for initiating a payment on a physical device.
-                value: &ref_1082
+                value: &ref_1088
                   operator: Jane
                   processingTerminalId: '1234001'
                   order:
@@ -18657,7 +19035,7 @@ paths:
               paymentInstructionRequestMiFare:
                 summary: Payment Instruction with MiFare closed-loop options
                 description: Submit an instruction for initiating a payment on a physical device with MiFare closed-loop options.
-                value: &ref_1083
+                value: &ref_1089
                   operator: Jane
                   processingTerminalId: '1234001'
                   order:
@@ -18720,7 +19098,7 @@ paths:
                 paymentInstruction:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
-                  value: &ref_1084
+                  value: &ref_1090
                     paymentInstructionId: a37439165d134678a9100ebba3b29597
                     status: inProgress
                     link:
@@ -18802,7 +19180,7 @@ paths:
                 paymentInstruction:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
-                  value: &ref_1085
+                  value: &ref_1091
                     paymentInstructionId: a37439165d134678a9100ebba3b29597
                     status: completed
                     link:
@@ -18812,7 +19190,7 @@ paths:
                 paymentInstructionMiFare:
                   summary: Payment instruction for MiFare card
                   description: Object that contains information about the progress of the payment instruction for a MiFare card.
-                  value: &ref_1086
+                  value: &ref_1092
                     paymentInstructionId: a37439165d134678a9100ebba3b29597
                     status: completed
                     link:
@@ -18885,7 +19263,7 @@ paths:
                 paymentInstructionCompleted:
                   summary: Payment instruction already completed
                   description: Payment instruction already completed
-                  value: &ref_1087
+                  value: &ref_1093
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -18900,7 +19278,7 @@ paths:
                 paymentInstructionFailed:
                   summary: Payment instruction failed
                   description: Payment instruction failed
-                  value: &ref_1088
+                  value: &ref_1094
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -19020,7 +19398,10 @@ paths:
                           properties: *ref_261
                 customer:
                   type: object
-                  description: Object that contains the customer's contact details and address information.
+                  description: |
+                    Object that contains the customer's contact details and address information.
+
+                    Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                   properties: *ref_209
                 ipAddress:
                   required: *ref_210
@@ -19061,7 +19442,7 @@ paths:
               refund:
                 summary: Refund
                 description: Refund
-                value: &ref_1090
+                value: &ref_1096
                   processingTerminalId: '1234001'
                   order:
                     orderId: OrderRef6543
@@ -19433,7 +19814,7 @@ paths:
                 paginatedResults:
                   summary: Paginated Refund
                   description: Paginated Refund
-                  value: &ref_1089
+                  value: &ref_1095
                     limit: 2
                     count: 2
                     hasMore: true
@@ -19649,7 +20030,7 @@ paths:
               refundRequest:
                 summary: Adjust Refund
                 description: Adjust Refund
-                value: &ref_1091
+                value: &ref_1097
                   operator: Jane
                   adjustments:
                     - type: customer
@@ -19671,7 +20052,7 @@ paths:
                 refundResponse:
                   summary: Adjust Refund
                   description: Adjust Refund
-                  value: &ref_1092
+                  value: &ref_1098
                     refundId: CD3HN88U9F
                     processingTerminalId: '1234001'
                     operator: Jane
@@ -19784,7 +20165,7 @@ paths:
                 refundResponse:
                   summary: Reverse Refund
                   description: Reverse Refund
-                  value: &ref_1093
+                  value: &ref_1099
                     refundId: CD3HN88U9F
                     processingTerminalId: '1234001'
                     order:
@@ -19921,7 +20302,10 @@ paths:
                     - type: object
                 customer:
                   type: object
-                  description: Object that contains the customer's contact details and address information.
+                  description: |
+                    Object that contains the customer's contact details and address information.
+
+                    Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                   properties: *ref_209
                 ipAddress:
                   required: *ref_210
@@ -19937,7 +20321,7 @@ paths:
               refundInstructionRequest:
                 summary: Refund instruction
                 description: Submit an instruction for initiating a refund on a physical device.
-                value: &ref_1094
+                value: &ref_1100
                   operator: Jane
                   processingTerminalId: '1234001'
                   order:
@@ -19974,7 +20358,7 @@ paths:
                 refundInstruction:
                   summary: Refund instruction
                   description: Object that contains information about the progress of the refund instruction.
-                  value: &ref_1095
+                  value: &ref_1101
                     refundInstructionId: a37439165d134678a9100ebba3b29597
                     status: inProgress
                     link:
@@ -20056,7 +20440,7 @@ paths:
                 refundInstruction:
                   summary: Refund instruction
                   description: Object that contains information about the progress of the refund instruction.
-                  value: &ref_1096
+                  value: &ref_1102
                     refundInstructionId: a37439165d134678a9100ebba3b29597
                     status: completed
                     link:
@@ -20129,7 +20513,7 @@ paths:
                 refundInstructionCompleted:
                   summary: Refund instruction already completed
                   description: Refund instruction already completed
-                  value: &ref_1097
+                  value: &ref_1103
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -20144,7 +20528,7 @@ paths:
                 refundInstructionFailed:
                   summary: Refund instruction failed
                   description: Refund instruction failed
-                  value: &ref_1098
+                  value: &ref_1104
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -20205,7 +20589,7 @@ paths:
               signatureInstructionRequest:
                 summary: Signature Instruction
                 description: Submit an instruction for capturing a signature on a physical device.
-                value: &ref_1099
+                value: &ref_1105
                   processingTerminalId: '1234001'
       responses:
         '202':
@@ -20233,7 +20617,7 @@ paths:
                 signatureInstruction:
                   summary: Signature instruction
                   description: Object that contains information about the progress of the signature instruction.
-                  value: &ref_1100
+                  value: &ref_1106
                     signatureInstructionId: a37439165d134678a9100ebba3b29597
                     status: inProgress
                     link:
@@ -20315,7 +20699,7 @@ paths:
                 signatureInstruction:
                   summary: Signature instruction
                   description: Object that contains information about the progress of the signature instruction.
-                  value: &ref_1101
+                  value: &ref_1107
                     signatureInstructionId: a37439165d134678a9100ebba3b29597
                     status: completed
                     link:
@@ -20386,7 +20770,7 @@ paths:
                 signatureInstructionCompleted:
                   summary: Signature instruction already completed
                   description: Signature instruction already completed
-                  value: &ref_1102
+                  value: &ref_1108
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -20401,7 +20785,7 @@ paths:
                 signatureInstructionFailed:
                   summary: Signature instruction failed
                   description: Signature instruction failed
-                  value: &ref_1103
+                  value: &ref_1109
                     type: https://docs.payroc.com/api/errors#cannot-be-canceled
                     title: Cannot be canceled
                     status: 409
@@ -20470,7 +20854,7 @@ paths:
                 signature:
                   summary: Signature
                   description: A signature response example.
-                  value: &ref_1104
+                  value: &ref_1110
                     signatureId: JDN4ILZB0T
                     processingTerminalId: '1024'
                     createdOn: '2024-07-02'
@@ -20550,7 +20934,7 @@ paths:
                 closedLoopResponse:
                   summary: Closed Loop Read
                   description: A closed loop read response example.
-                  value: &ref_1105
+                  value: &ref_1111
                     closedLoopReadId: KEO45MAC1U
                     processingTerminalId: '1234001'
                     readDate: '2024-07-02'
@@ -20617,7 +21001,10 @@ paths:
                   example: Jane
                 customer:
                   type: object
-                  description: Object that contains the customer's contact details and address information.
+                  description: |
+                    Object that contains the customer's contact details and address information.
+
+                    Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                   properties: *ref_209
                 card:
                   type: object
@@ -20637,7 +21024,7 @@ paths:
               cardVerificationRequest:
                 summary: Card Verification
                 description: Card Verification
-                value: &ref_1106
+                value: &ref_1112
                   operator: Jane
                   processingTerminalId: '1234001'
                   card:
@@ -20696,7 +21083,7 @@ paths:
                 cardVerificationResponse:
                   summary: Card Verification
                   description: Card Verification
-                  value: &ref_1107
+                  value: &ref_1113
                     operator: Jane
                     processingTerminalId: '1234001'
                     card:
@@ -20793,7 +21180,10 @@ paths:
                   enum: *ref_116
                 customer:
                   type: object
-                  description: Object that contains the customer's contact details and address information.
+                  description: |
+                    Object that contains the customer's contact details and address information.
+
+                    Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
                   properties: *ref_209
                 card:
                   type: object
@@ -20820,7 +21210,7 @@ paths:
               cardBalanceRequest:
                 summary: Card Balance
                 description: Card Balance
-                value: &ref_1108
+                value: &ref_1114
                   operator: Jane
                   processingTerminalId: '1234001'
                   currency: USD
@@ -20901,7 +21291,7 @@ paths:
                 cardBalanceResponse:
                   summary: Card Balance
                   description: Card Balance
-                  value: &ref_1109
+                  value: &ref_1115
                     operator: Jane
                     processingTerminalId: '1234001'
                     card:
@@ -21031,7 +21421,7 @@ paths:
               binLookupRequest:
                 summary: BIN lookup
                 description: BIN lookup
-                value: &ref_1110
+                value: &ref_1116
                   processingTerminalId: '1234001'
                   card:
                     type: card
@@ -21097,7 +21487,7 @@ paths:
                 binLookupResponse:
                   summary: BIN lookup
                   description: BIN lookup
-                  value: &ref_1111
+                  value: &ref_1117
                     type: MASTERCARD
                     cardNumber: 453985******7062
                     country: US
@@ -21225,7 +21615,7 @@ paths:
               fxRateRequest:
                 summary: Fx-Rate
                 description: Fx-Rate
-                value: &ref_1112
+                value: &ref_1118
                   channel: web
                   operator: Jane
                   processingTerminalId: '1234001'
@@ -21312,7 +21702,7 @@ paths:
                 fxRateResponse:
                   summary: Fx-Rate
                   description: Fx-Rate
-                  value: &ref_1113
+                  value: &ref_1119
                     processingTerminalId: '1234001'
                     operator: Jane
                     baseAmount: 10000
@@ -21539,7 +21929,7 @@ paths:
               createdBankTransferPaymentStoreToken:
                 summary: Store Token Bank Transfer Payment
                 description: Bank Transfer Payment with ACH payload and token storage
-                value: &ref_1115
+                value: &ref_1121
                   processingTerminalId: '1234001'
                   order:
                     orderId: OrderRef6543
@@ -21568,6 +21958,54 @@ paths:
                     nameOnAccount: Sarah Hazel Hopper
                     accountNumber: '11101010'
                     routingNumber: '053200983'
+                    secCode: web
+                  customFields:
+                    - name: yourCustomField
+                      value: abc123
+              singleUseTokenSaleRequest:
+                summary: Bank transfer sale with single-use token that we convert to a secure token
+                description: Convert a single-use token to a secure token when running a bank transfer sale.
+                value: &ref_1122
+                  processingTerminalId: '1234001'
+                  order:
+                    orderId: OrderRef6543
+                    description: Large Pepperoni Pizza
+                    amount: 4999
+                    currency: USD
+                  paymentMethod:
+                    type: singleUseToken
+                    token: abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
+                    accountType: checking
+                    secCode: web
+                  credentialOnFile:
+                    tokenize: true
+                    secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                  customer:
+                    notificationLanguage: en
+                    contactMethods:
+                      - type: email
+                        value: sarah.hopper@example.com
+                  customFields:
+                    - name: yourCustomField
+                      value: abc123
+              secureTokenRepeatPaymentRequest:
+                summary: Bank transfer payment with a secure token
+                description: Create an ACH payment using a secure token.
+                value: &ref_1123
+                  processingTerminalId: '1234001'
+                  order:
+                    orderId: OrderRef6543
+                    description: Pizza Doe
+                    currency: USD
+                    amount: 4999
+                  customer:
+                    contactMethods:
+                      - type: email
+                        value: sarah.hopper@example.com
+                  paymentMethod:
+                    type: secureToken
+                    token: '296753123456'
+                    accountType: checking
                     secCode: web
                   customFields:
                     - name: yourCustomField
@@ -21930,6 +22368,90 @@ paths:
                     customFields:
                       - name: yourCustomField
                         value: abc123
+                singleUseTokenSaleResponse:
+                  summary: Bank transfer sale with single-use token that we convert to a secure token
+                  description: Convert a single-use token to a secure token when running a bank transfer sale.
+                  value: &ref_1124
+                    paymentId: E29U8OU8Q4
+                    processingTerminalId: '1234001'
+                    order:
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: Large Pepperoni Pizza
+                      amount: 4999
+                      currency: USD
+                    customer:
+                      contactMethods:
+                        - type: email
+                          value: sarah.hopper@example.com
+                      notificationLanguage: en
+                    bankAccount:
+                      type: ach
+                      secCode: web
+                      nameOnAccount: Sarah Hazel Hopper
+                      accountNumber: '****3591'
+                      routingNumber: '063100277'
+                      secureToken:
+                        secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                        customerName: Sarah Hazel Hopper
+                        token: '296753123456'
+                        status: notValidated
+                        link:
+                          rel: self
+                          method: GET
+                          href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                    transactionResult:
+                      type: payment
+                      status: ready
+                      authorizedAmount: 4999
+                      currency: USD
+                      responseCode: A
+                      responseMessage: NoError
+                      processorResponseCode: '0'
+                    customFields:
+                      - name: yourCustomField
+                        value: abc123
+                secureTokenRepeatPaymentResponse:
+                  summary: Bank transfer payment with a secure token
+                  description: Create an ACH payment using a secure token.
+                  value: &ref_1125
+                    paymentId: E29U8OU8Q4
+                    processingTerminalId: '1234001'
+                    order:
+                      orderId: OrderRef6543
+                      dateTime: '2024-07-02T15:30:00Z'
+                      description: 'Pizza Doe #1234 - Dinner'
+                      amount: 4999
+                      currency: USD
+                    customer:
+                      contactMethods:
+                        - type: email
+                          value: sarah.hopper@example.com
+                    bankAccount:
+                      type: ach
+                      nameOnAccount: Sarah Hazel Hopper
+                      accountNumber: '******3491'
+                      routingNumber: '063100277'
+                      secCode: web
+                      secureToken:
+                        secureTokenId: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                        customerName: Sarah Hazel Hopper
+                        token: '296753123456'
+                        status: bankAccountValidated
+                        link:
+                          rel: self
+                          method: GET
+                          href: https://api.payroc.com/v1/processing-terminals/1234001/secure-tokens/MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+                    transactionResult:
+                      type: payment
+                      status: pending
+                      authorizedAmount: 4999
+                      currency: USD
+                      responseCode: P
+                      responseMessage: Pending
+                    customFields:
+                      - name: yourCustomField
+                        value: abc123
           headers:
             location:
               description: URI reference to created resource.
@@ -22167,7 +22689,7 @@ paths:
                 paginatedResults:
                   summary: Bank Transfer Payment
                   description: Bank Transfer Payment
-                  value: &ref_1114
+                  value: &ref_1120
                     limit: 2
                     count: 2
                     hasMore: true
@@ -22308,7 +22830,7 @@ paths:
                 bankTransferPaymentDeclined:
                   summary: Declined Payment
                   description: Bank Transfer Payment that was declined with return information
-                  value: &ref_1116
+                  value: &ref_1126
                     paymentId: E29U8OU8Q4
                     processingTerminalId: '1234001'
                     order:
@@ -22416,7 +22938,7 @@ paths:
                 reverseBankTransferPayment:
                   summary: Reverse Bank Transfer Payment
                   description: Reverse Bank Transfer Payment
-                  value: &ref_1117
+                  value: &ref_1127
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1234001'
                     order:
@@ -22552,7 +23074,7 @@ paths:
               refundBankTransferPayment:
                 summary: Refund Bank Transfer Payment
                 description: Refund Bank Transfer Payment
-                value: &ref_1118
+                value: &ref_1128
                   amount: 4999
                   description: amount to refund
         required: true
@@ -22570,7 +23092,7 @@ paths:
                 bankTransferPayment:
                   summary: Reverse Bank Transfer Payment
                   description: Reverse Bank Transfer Payment
-                  value: &ref_1119
+                  value: &ref_1129
                     paymentId: M2MJOG6O2Y
                     processingTerminalId: '1234001'
                     order:
@@ -22712,7 +23234,7 @@ paths:
               representBankTransferPayment:
                 summary: Representment Bank Transfer Payment
                 description: Representment Bank Transfer Payment
-                value: &ref_1120
+                value: &ref_1130
                   paymentMethod:
                     type: ach
                     accountType: checking
@@ -22965,7 +23487,7 @@ paths:
               bankTransferUnreferencedRefundRequest:
                 summary: Bank Transfer Unreferenced Refund
                 description: Bank Transfer Unreferenced Refund
-                value: &ref_1122
+                value: &ref_1132
                   processingTerminalId: '1234001'
                   order:
                     orderId: OrderRef6543
@@ -23308,7 +23830,7 @@ paths:
                 paginatedResults:
                   summary: Paginated Bank Transfer Unreferenced Refund
                   description: Paginated Bank Transfer Unreferenced Refund
-                  value: &ref_1121
+                  value: &ref_1131
                     limit: 2
                     count: 2
                     hasMore: true
@@ -23499,7 +24021,7 @@ paths:
                 bankTransferUnreferencedRefund:
                   summary: Bank Transfer Unreferenced Refund
                   description: Bank Transfer Unreferenced Refund
-                  value: &ref_1123
+                  value: &ref_1133
                     refundId: CD3HN88U9F
                     processingTerminalId: '1234001'
                     order:
@@ -23634,7 +24156,7 @@ paths:
               bankAccountVerificationRequestPad:
                 summary: PAD Bank Account Verification Request
                 description: Bank Account Verification Request for PAD
-                value: &ref_1124
+                value: &ref_1134
                   processingTerminalId: '1234001'
                   bankAccount:
                     type: pad
@@ -23646,7 +24168,7 @@ paths:
               bankAccountVerificationRequestAch:
                 summary: ACH Bank Account Verification Request
                 description: Bank Account Verification Request for ACH
-                value: &ref_1125
+                value: &ref_1135
                   processingTerminalId: '1234001'
                   bankAccount:
                     type: ach
@@ -23684,7 +24206,7 @@ paths:
                 bankAccountVerificationResponse:
                   summary: Bank Account Verification Response
                   description: Bank Account Verification Response
-                  value: &ref_1126
+                  value: &ref_1136
                     processingTerminalId: '1234001'
                     verified: true
         '400':
@@ -24682,7 +25204,7 @@ paths:
               createMerchantPlatform:
                 summary: Create merchant platform
                 description: Create a merchant platform.
-                value: &ref_1128
+                value: &ref_1138
                   business:
                     name: Example Corp
                     taxId: 12-3456789
@@ -24829,7 +25351,7 @@ paths:
               createMerchantPlatformWithAddendums:
                 summary: Create merchant platform with addendums
                 description: Create a merchant platform with addendums appended to the Merchant Processing Agreement.
-                value: &ref_1129
+                value: &ref_1139
                   business:
                     name: Example Corp
                     taxId: 12-3456789
@@ -24932,7 +25454,7 @@ paths:
               createMerchantPlatformFiservWithCloverAmendment:
                 summary: Create Fiserv merchant platform with Clover Merchant Processing Amendment
                 description: Create a merchant platform for a Fiserv-bound merchant with the Clover Merchant Processing Amendment addendum including equipment line-item pre-fill data.
-                value: &ref_1130
+                value: &ref_1140
                   business:
                     name: Example Corp
                     taxId: 12-3456789
@@ -25186,7 +25708,7 @@ paths:
                 created:
                   summary: Created merchant platform
                   description: New merchant platform created
-                  value: &ref_1131
+                  value: &ref_1141
                     merchantPlatformId: '12345'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -25226,7 +25748,7 @@ paths:
                 createdWithAddendums:
                   summary: Created merchant platform with addendums
                   description: New merchant platform created with addendums appended to the Merchant Processing Agreement.
-                  value: &ref_1132
+                  value: &ref_1142
                     merchantPlatformId: '12345'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -25268,7 +25790,7 @@ paths:
                 createdFiservWithCloverAmendment:
                   summary: Created Fiserv merchant platform with Clover Merchant Processing Amendment
                   description: New merchant platform created for a Fiserv-bound merchant. The Clover Merchant Processing Amendment addendum is appended to the Merchant Processing Agreement with equipment line-item pre-fill data.
-                  value: &ref_1133
+                  value: &ref_1143
                     merchantPlatformId: '12347'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -25316,7 +25838,7 @@ paths:
                 partialSuccess:
                   summary: Failed processing account
                   description: We successfully created the merchant platform, but failed to add one or more processing accounts.
-                  value: &ref_1134
+                  value: &ref_1144
                     merchantPlatformId: '12346'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -25471,7 +25993,7 @@ paths:
                 taxIdInUse:
                   summary: Tax ID in use
                   description: The tax ID supplied is already in use.
-                  value: &ref_1135
+                  value: &ref_1145
                     type: https://docs.payroc.com/api/errors#tax-id-in-use
                     title: Tax ID already in use
                     status: 409
@@ -25479,7 +26001,7 @@ paths:
                 nationalIdInUse:
                   summary: National ID in use
                   description: One or more supplied national IDs are not unique. All national IDs must be unique.
-                  value: &ref_1136
+                  value: &ref_1146
                     type: https://docs.payroc.com/api/errors#national-id-in-use
                     title: National ID in use
                     status: 409
@@ -25551,7 +26073,7 @@ paths:
                 listMerchantPlatforms:
                   summary: Paginated list of merchant platforms
                   description: Retrieve a list of merchant platforms associated with your account.
-                  value: &ref_1127
+                  value: &ref_1137
                     limit: 2
                     count: 2
                     hasMore: true
@@ -25686,7 +26208,7 @@ paths:
                 retrievedMerchantPlatforms:
                   summary: Retrieve merchant platform
                   description: Retrieve a merchant platform.
-                  value: &ref_1137
+                  value: &ref_1147
                     merchantPlatformId: '12345'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -26125,7 +26647,7 @@ paths:
                 listProcessingAccounts:
                   summary: Paginated list of processing account
                   description: Retrieve processing accounts associated with a merchant platform.
-                  value: &ref_1138
+                  value: &ref_1148
                     limit: 2
                     count: 2
                     hasMore: true
@@ -26384,7 +26906,7 @@ paths:
               createProcessingAccount:
                 summary: Create merchant platform
                 description: Create a merchant platform.
-                value: &ref_1139
+                value: &ref_1149
                   doingBusinessAs: Pizza Doe
                   owners:
                     - firstName: Jane
@@ -26511,7 +27033,7 @@ paths:
               createProcessingAccountWithAddendums:
                 summary: Create processing account with addendums
                 description: Create a processing account with addendums appended to the Merchant Processing Agreement.
-                value: &ref_1140
+                value: &ref_1150
                   doingBusinessAs: Pizza Doe
                   owners:
                     - firstName: Jane
@@ -26594,7 +27116,7 @@ paths:
               createProcessingAccountFiserv:
                 summary: Create Fiserv processing account
                 description: Create a processing account for a Fiserv-bound merchant with no Clover devices.
-                value: &ref_1141
+                value: &ref_1151
                   doingBusinessAs: Pizza Doe
                   owners:
                     - firstName: Jane
@@ -26684,7 +27206,7 @@ paths:
                 processingAccountCreated:
                   summary: Retrieve merchant platform
                   description: Retrieve a merchant platform.
-                  value: &ref_1142
+                  value: &ref_1152
                     processingAccountId: '38765'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -26800,7 +27322,7 @@ paths:
                 processingAccountCreatedWithAddendums:
                   summary: Created processing account with addendums
                   description: Processing account created with addendums appended to the Merchant Processing Agreement.
-                  value: &ref_1143
+                  value: &ref_1153
                     processingAccountId: '38765'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -26882,7 +27404,7 @@ paths:
                 processingAccountCreatedFiservWithCloverAmendment:
                   summary: Created Fiserv processing account with Clover Merchant Processing Amendment
                   description: Processing account created for a Fiserv-bound merchant. The Clover Merchant Processing Amendment addendum is appended to the Merchant Processing Agreement with equipment line-item pre-fill data.
-                  value: &ref_1144
+                  value: &ref_1154
                     processingAccountId: '38766'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -26973,7 +27495,7 @@ paths:
                 processingAccountCreatedFiservNoClover:
                   summary: Created Fiserv processing account without Clover devices
                   description: Processing account created for a Fiserv-bound merchant with no Clover devices ordered. No addendums are appended.
-                  value: &ref_1145
+                  value: &ref_1155
                     processingAccountId: '38767'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -27159,7 +27681,7 @@ paths:
                 processingAccount:
                   summary: Retrieve processing account
                   description: Retrieve a specific processing account.
-                  value: &ref_1146
+                  value: &ref_1156
                     processingAccountId: '38765'
                     createdDate: '2024-07-02T12:00:00.000Z'
                     lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -27338,7 +27860,7 @@ paths:
                 fundingAccounts:
                   summary: List of funding accounts
                   description: List of funding accounts associated with a processing account.
-                  value: &ref_1147
+                  value: &ref_1157
                     - fundingAccountId: 123
                       createdDate: '2024-07-02T12:00:00.000Z'
                       lastModifiedDate: '2024-07-02T12:00:00.000Z'
@@ -27466,7 +27988,7 @@ paths:
                 paginatedContacts:
                   summary: Paginated list of processing account contacts
                   description: List of contacts associated with a processing account.
-                  value: &ref_1148
+                  value: &ref_1158
                     limit: 2
                     count: 2
                     hasMore: true
@@ -27867,7 +28389,7 @@ paths:
                 paginatedContacts:
                   summary: Retrieve processing account pricing agreement
                   description: Retrieve a pricing agreement for a processing account.
-                  value: &ref_1149
+                  value: &ref_1159
                     country: US
                     version: '5.2'
                     base:
@@ -28015,7 +28537,7 @@ paths:
                 listProcessingAccountOwners:
                   summary: Paginated list of processing account owners
                   description: Retrieve owners associated with a processing account.
-                  value: &ref_1150
+                  value: &ref_1160
                     limit: 2
                     count: 2
                     hasMore: true
@@ -28158,7 +28680,7 @@ paths:
                   When you create a processing account, we send a copy of the pricing agreement to the merchant to sign. You can choose to send them a copy of the pricing agreement by email, or you can generate a link to the pricing agreement.<br/>  
                   If you requested the merchant's signature by email and they don't respond, use our Reminders endpoint to create a reminder and to send another email.<br/>  
                   **Note:** You can use the Reminders endpoint only if you request the merchant's signature by email. If you generate a link to the pricing agreement, you can't use the Reminders endpoint.  
-                value: &ref_1151
+                value: &ref_1161
                   type: pricingAgreement
       responses:
         '201':
@@ -28179,7 +28701,7 @@ paths:
                 reminderCreated:
                   summary: Reminder created
                   description: Reminder created.
-                  value: &ref_1152
+                  value: &ref_1162
                     reminderId: '1234567'
                     type: pricingAgreement
         '400':
@@ -28198,7 +28720,7 @@ paths:
                 notRequestedByEmail:
                   summary: Not requested by email
                   description: We couldn't resend the email to the merchant because you didn't originally choose to send the information by email.
-                  value: &ref_1153
+                  value: &ref_1163
                     type: https://docs.payroc.com/api/errors#not-requested-by-email
                     title: Not requested by email
                     status: 400
@@ -28206,7 +28728,7 @@ paths:
                 contractAlreadySigned:
                   summary: Contract already signed
                   description: We couldn’t resend the email because the merchant already signed the contract.
-                  value: &ref_1154
+                  value: &ref_1164
                     type: https://docs.payroc.com/api/errors#contract-already-signed
                     title: Contract already signed
                     status: 400
@@ -28214,7 +28736,7 @@ paths:
                 noPricingAgreementExistsForTheProcessingAccount:
                   summary: No pricing agreement exists for the processing account
                   description: We couldn’t resend the email because there is no pricing agreement for the processing account.
-                  value: &ref_1155
+                  value: &ref_1165
                     type: https://docs.payroc.com/api/errors#no-pricing-agreement-exists-for-the-processing-account
                     title: No pricing agreement exists
                     status: 400
@@ -28728,7 +29250,7 @@ paths:
                 description: |
                   Use this method to order and configure terminals for a processing account. When you create an order, you specify the gateway settings, device settings, and application settings for the terminals. 
                   **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](https://docs.payroc.com/api/schema/boarding/merchant-platforms/retrieve)
-                value: &ref_1157
+                value: &ref_1167
                   trainingProvider: payroc
                   shipping:
                     preferences:
@@ -28936,7 +29458,7 @@ paths:
                 terminalOrder:
                   summary: Terminal order
                   description: Terminal order
-                  value: &ref_1158
+                  value: &ref_1168
                     terminalOrderId: '2346'
                     status: open
                     trainingProvider: payroc
@@ -29112,7 +29634,7 @@ paths:
                 terminalOrders:
                   summary: Paginated list of Terminal Orders
                   description: Retrieve terminal orders associated with a processing account.
-                  value: &ref_1156
+                  value: &ref_1166
                     - terminalOrderId: '12345'
                       status: open
                       trainingProvider: payroc
@@ -29609,7 +30131,7 @@ paths:
                 processingTerminals:
                   summary: Paginated list of processing terminals
                   description: List of processing terminals associated with a processing account.
-                  value: &ref_1159
+                  value: &ref_1169
                     limit: 2
                     count: 2
                     hasMore: true
@@ -29960,7 +30482,7 @@ paths:
                 processingTerminals:
                   summary: Retrieve processing terminal
                   description: Retrieve a specific processing terminal.
-                  value: &ref_1160
+                  value: &ref_1170
                     processingTerminalId: '011234001'
                     status: active
                     timezone: Pacific/Midway
@@ -30364,7 +30886,7 @@ paths:
                 deviceConfiguration:
                   summary: Device Configuration
                   description: An example Device Configuration response
-                  value: &ref_1161
+                  value: &ref_1171
                     model: idtechKioskV
                     manufacturer: idtech
                     supportsMagStripe: true
@@ -30472,7 +30994,7 @@ paths:
                 closeBatchResponse:
                   summary: Close-batch response
                   description: Example response returned from a close-batch request
-                  value: &ref_1162
+                  value: &ref_1172
                     cutOffTime: '13:55'
                     timezone: Pacific/Midway
         '400':
@@ -30541,7 +31063,7 @@ paths:
                 contact:
                   summary: Contact object
                   description: Contact object
-                  value: &ref_1163
+                  value: &ref_1173
                     contactId: 1543
                     type: manager
                     firstName: Jane
@@ -30599,7 +31121,7 @@ paths:
               updateContact:
                 summary: Update contact
                 description: Update a specific contact.
-                value: &ref_1164
+                value: &ref_1174
                   type: manager
                   firstName: Jane
                   middleName: Helen
@@ -30827,7 +31349,7 @@ paths:
                 paginatedList:
                   summary: Paginated list of Event subscriptions
                   description: Example of a paginated list of event subscriptions
-                  value: &ref_1165
+                  value: &ref_1175
                     limit: 10
                     count: 2
                     hasMore: false
@@ -30902,7 +31424,7 @@ paths:
               createEventSubscription:
                 summary: Create event subscription
                 description: Create an event subscription
-                value: &ref_1166
+                value: &ref_1176
                   enabled: true
                   eventTypes:
                     - processingAccount.status.changed
@@ -30916,7 +31438,7 @@ paths:
               createEventSubscriptionMetadata:
                 summary: Create event subscription with metadata
                 description: Create an event subscription
-                value: &ref_1167
+                value: &ref_1177
                   enabled: true
                   eventTypes:
                     - processingAccount.status.changed
@@ -30933,7 +31455,7 @@ paths:
           headers:
             Location:
               description: URI reference to created resource
-              schema: &ref_1187
+              schema: &ref_1197
                 type: string
           content:
             application/json:
@@ -30946,7 +31468,7 @@ paths:
                 createdEventSubscription:
                   summary: Event subscription created
                   description: Example of a created event subscription.
-                  value: &ref_1168
+                  value: &ref_1178
                     id: 2565435189324
                     enabled: true
                     status: registered
@@ -30962,7 +31484,7 @@ paths:
                 eventSubscriptionCreatedMetadata:
                   summary: Event subscription created metadata
                   description: Example of a created event subscription.
-                  value: &ref_1169
+                  value: &ref_1179
                     id: 2565435189324
                     enabled: true
                     status: registered
@@ -31056,7 +31578,7 @@ paths:
                 eventSubscription:
                   summary: Event subscription
                   description: Example of an event subscription.
-                  value: &ref_1170
+                  value: &ref_1180
                     id: 2565435189324
                     enabled: true
                     status: registered
@@ -31110,7 +31632,7 @@ paths:
               updateEventSubscription:
                 summary: Update event subscription
                 description: Update an event subscription
-                value: &ref_1171
+                value: &ref_1181
                   enabled: true
                   eventTypes:
                     - processingAccount.status.changed
@@ -31177,48 +31699,48 @@ paths:
                   Partially update an existing event subscription.
 
                   Structure your request to follow the RFC 6902 standard.
-                value: &ref_1172
+                value: &ref_1182
                   - op: replace
                     path: /enabled
                     value: false
               patchEventSubscriptionAdd:
                 summary: 'Update event subscription: add'
                 description: Add operation adds a new value to an object or array.
-                value: &ref_1173
+                value: &ref_1183
                   - op: add
                     path: /eventTypes
                     value: terminalOrder.status.changed
               patchEventSubscriptionRemove:
                 summary: 'Update event subscription: remove'
                 description: Remove operation deletes a value from the event subscription.
-                value: &ref_1174
+                value: &ref_1184
                   - op: remove
                     path: /metadata/yourCustomField
               patchEventSubscriptionReplace:
                 summary: 'Update event subscription: replace'
                 description: Replace operation updates an existing value.
-                value: &ref_1175
+                value: &ref_1185
                   - op: replace
                     path: /enabled
                     value: true
               patchEventSubscriptionMove:
                 summary: 'Update event subscription: move'
                 description: Move operation relocates a value from one location to another.
-                value: &ref_1176
+                value: &ref_1186
                   - op: move
                     from: /eventTypes/0
                     path: /eventTypes/1
               patchEventSubscriptionCopy:
                 summary: 'Update event subscription: copy'
                 description: Copy operation duplicates a value from one location to another.
-                value: &ref_1177
+                value: &ref_1187
                   - op: copy
                     from: /notifications/0/uri
                     path: /metadata/webhookBackup
               patchEventSubscriptionTest:
                 summary: 'Update event subscription: test'
                 description: Test operation validates that a value at the target location equals the specified value.
-                value: &ref_1178
+                value: &ref_1188
                   - op: test
                     path: /enabled
                     value: true
@@ -31241,7 +31763,7 @@ paths:
                 patchedEventSubscription:
                   summary: Patched event subscription
                   description: Example of a patched event subscription.
-                  value: &ref_1179
+                  value: &ref_1189
                     id: 2565435189324
                     enabled: false
                     status: registered
@@ -31367,7 +31889,7 @@ paths:
                 terminalOrder:
                   summary: Terminal order
                   description: Terminal order
-                  value: &ref_1180
+                  value: &ref_1190
                     terminalOrderId: '2346'
                     status: open
                     trainingProvider: payroc
@@ -31614,7 +32136,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated ACH deposits
-                  value: &ref_1181
+                  value: &ref_1191
                     limit: 2
                     count: 1
                     hasMore: false
@@ -31720,7 +32242,7 @@ paths:
               examples:
                 achDepositRetrieve:
                   summary: Retrieve ACH deposit
-                  value: &ref_1182
+                  value: &ref_1192
                     achDepositId: 99
                     associationDate: '2024-07-02'
                     achDate: '2024-07-02'
@@ -31758,7 +32280,7 @@ paths:
                 idError:
                   summary: Bad Request
                   description: One or more validation errors occurred
-                  value: &ref_1183
+                  value: &ref_1193
                     type: https://docs.payroc.com/api/errors#bad-request
                     title: Bad request
                     status: 400
@@ -31906,7 +32428,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated ACH deposit fees
-                  value: &ref_1184
+                  value: &ref_1194
                     limit: 2
                     count: 1
                     hasMore: false
@@ -31999,7 +32521,7 @@ paths:
                 attachment:
                   summary: Upload Attachment
                   description: Upload a file attachment
-                  value: &ref_1185
+                  value: &ref_1195
                     attachmentId: '15387'
                     type: personalIdentification
                     uploadStatus: accepted
@@ -32209,7 +32731,7 @@ paths:
                 paginatedResults:
                   summary: Device
                   description: Device Paginated List
-                  value: &ref_1186
+                  value: &ref_1196
                     limit: 2
                     count: 2
                     hasMore: true
@@ -33901,12 +34423,18 @@ components:
       type: object
       allOf: *ref_705
     shipping:
-      description: Object that contains information about the customer and their shipping address.
+      description: |
+        Object that contains information about the customer and their shipping address.
+
+        Contains parameters required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
       type: object
       properties: *ref_246
     customer:
       type: object
-      description: Object that contains the customer's contact details and address information.
+      description: |
+        Object that contains the customer's contact details and address information.
+
+        Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
       properties: *ref_209
     ipAddress:
       required: *ref_210
@@ -34160,7 +34688,10 @@ components:
     lineItemBase:
       required: *ref_224
       type: object
-      description: List of line items.
+      description: |
+        List of line items.
+
+        Contains parameters required for [Level 3 and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
       properties: *ref_225
     lineItem:
       type: object
@@ -34168,7 +34699,10 @@ components:
     itemizedBreakdown:
       required: *ref_760
       type: object
-      description: Object that contains information about the breakdown of the transaction.
+      description: |
+        Object that contains information about the breakdown of the transaction.
+
+        Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
       allOf: *ref_761
     paymentOrder:
       type: object
@@ -34232,7 +34766,7 @@ components:
       properties: *ref_765
     tax:
       type: object
-      description: "Polymorphic object that contains tax details.  \n\nThe value of the type parameter determines which variant you should use:  \n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n"
+      description: "Polymorphic object that contains tax details.\n\nThe value of the type parameter determines which variant you should use:\n-\t`amount` - Tax is a fixed amount.\n-\t`rate` - Tax is a percentage.\n\nRequired for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).\n"
       discriminator: *ref_207
       oneOf: *ref_208
     breakdownRequest:
@@ -34244,7 +34778,10 @@ components:
     itemizedBreakdownRequest:
       required: *ref_249
       type: object
-      description: Object that contains information about the breakdown of the transaction.
+      description: |
+        Object that contains information about the breakdown of the transaction.
+
+        Contains parameters required for [Level 2, Level 3, and CEDP transactions](https://docs.payroc.com/knowledge/card-payments/enhanced-data).
       allOf: *ref_250
     paymentOrderRequest:
       type: object
@@ -35447,155 +35984,179 @@ components:
       summary: Secure Token
       description: Secure Token
       value: *ref_1055
+    createSecureTokenSingleUseTokenRequest:
+      summary: Secure token created from a single-use token
+      description: Create a secure token using a single-use token that represents card details.
+      value: *ref_1056
     secureTokenResponse:
       summary: Secure Token
       description: Secure Token
       value: *ref_193
+    createSecureTokenSingleUseTokenResponse:
+      summary: Secure token created from a single-use token
+      description: Create a secure token using a single-use token that represents card details.
+      value: *ref_1057
     patchSecureTokenRealistic:
       summary: Update secure token
       description: |
         Update the customer's payment details that are represented by the secure token.
 
         Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
-      value: *ref_1056
+      value: *ref_1058
     patchSecureTokenAdd:
       summary: 'Update secure token: add'
       description: Add operation adds a new value to an object or array.
-      value: *ref_1057
+      value: *ref_1059
     patchSecureTokenRemove:
       summary: 'Update secure token: remove'
       description: Remove operation deletes a value from the secure token.
-      value: *ref_1058
+      value: *ref_1060
     patchSecureTokenReplace:
       summary: 'Update secure token: replace'
       description: Replace operation updates an existing value.
-      value: *ref_1059
+      value: *ref_1061
     patchSecureTokenMove:
       summary: 'Update secure token: move'
       description: Move operation relocates a value from one location to another.
-      value: *ref_1060
+      value: *ref_1062
     patchSecureTokenCopy:
       summary: 'Update secure token: copy'
       description: Copy operation duplicates a value from one location to another.
-      value: *ref_1061
+      value: *ref_1063
     patchSecureTokenTest:
       summary: 'Update secure token: test'
       description: Test operation validates that a value at the target location equals the specified value.
-      value: *ref_1062
+      value: *ref_1064
     accountUpdateRequest:
       summary: Update account details
       description: Account update request by single use token
-      value: *ref_1063
+      value: *ref_1065
     payloadTooLarge:
       summary: Payload too large
       description: The payload submitted is too large
-      value: *ref_1064
+      value: *ref_1066
     singleUseTokenRequest:
       summary: Create single-use token
       description: Create a single-use token. The token expires after 30 minutes.
-      value: *ref_1065
+      value: *ref_1067
     singleUseTokenResponse:
       summary: Create single-use token
       description: Create a single-use token. The token expires after 30 minutes.
-      value: *ref_1066
+      value: *ref_1068
     createSessionRequest:
       summary: Create session request
       description: Create session request.
-      value: *ref_1067
+      value: *ref_1069
     createSessionResponse:
       summary: Create session response
       description: Create session response.
-      value: *ref_1068
+      value: *ref_1070
     applePaySessions:
       summary: Apple Pay session
       description: Start a session with Apple to accept a payment with Apple Pay.
-      value: *ref_1069
+      value: *ref_1071
     applePayResponseSession:
       summary: Apple Pay session response
       description: Wrapper for the content that Apple returns after starting the Apple Pay session.
-      value: *ref_1070
+      value: *ref_1072
     paginatedPayment:
       summary: Payment
       description: Payment
-      value: *ref_1071
+      value: *ref_1073
     paymentRequest:
       summary: Card Payment
       description: Payment
-      value: *ref_1072
+      value: *ref_1074
     applePaySaleRequest:
       summary: Apple Pay Payment
-      value: *ref_1073
+      value: *ref_1075
+    paymentRequestSingleUseTokenSale:
+      summary: Card sale with single-use token that we convert to a secure token
+      description: Convert a single-use token to a secure token when running a card sale.
+      value: *ref_1076
+    cardPaymentRequestSecureTokenRepeatPayment:
+      summary: Card sale with secure token and is the first payment in a series
+      description: Create the first payment in a recurring series using a secure token.
+      value: *ref_1077
     paymentResponse:
       summary: Payment
       description: Payment
       value: *ref_241
     applePaySaleResponse:
       summary: Apple Pay Payment
-      value: *ref_1074
+      value: *ref_1078
+    paymentResponseSingleUseTokenSale:
+      summary: Card sale with single-use token that we convert to a secure token
+      description: Convert a single-use token to a secure token when running a card sale.
+      value: *ref_1079
+    cardPaymentResponseSecureTokenRepeatPayment:
+      summary: Card sale with secure token and is the first payment in a series
+      description: Create the first payment in a recurring series using a secure token.
+      value: *ref_1080
     adjustPaymentRequest:
       summary: Adjust Payment
       description: Adjust Payment
-      value: *ref_1075
+      value: *ref_1081
     adjustPaymentResponse:
       summary: Adjust Payment
       description: Adjust Payment
-      value: *ref_1076
+      value: *ref_1082
     paymentCaptureRequest:
       summary: Payment capture
       description: Capture a payment with itemized breakdown
-      value: *ref_1077
+      value: *ref_1083
     reversalPaymentRequest:
       summary: Reversal Payment
       description: Reversal Payment
-      value: *ref_1078
+      value: *ref_1084
     reversalPaymentResponse:
       summary: Reversal Payment
       description: Reversal Payment
-      value: *ref_1079
+      value: *ref_1085
     refundPaymentRequest:
       summary: Refund Payment
       description: Refund Payment
-      value: *ref_1080
+      value: *ref_1086
     refundPaymentResponse:
       summary: Refund Payment
       description: Refund Payment
-      value: *ref_1081
+      value: *ref_1087
     paymentInstructionRequest:
       summary: Payment Instruction
       description: Submit an instruction for initiating a payment on a physical device.
-      value: *ref_1082
+      value: *ref_1088
     paymentInstructionRequestMiFare:
       summary: Payment Instruction with MiFare closed-loop options
       description: Submit an instruction for initiating a payment on a physical device with MiFare closed-loop options.
-      value: *ref_1083
+      value: *ref_1089
     paymentInstructionInProgress:
       summary: Payment instruction
       description: Object that contains information about the progress of the payment instruction.
-      value: *ref_1084
+      value: *ref_1090
     paymentInstruction:
       summary: Payment instruction
       description: Object that contains information about the progress of the payment instruction.
-      value: *ref_1085
+      value: *ref_1091
     paymentInstructionMiFare:
       summary: Payment instruction for MiFare card
       description: Object that contains information about the progress of the payment instruction for a MiFare card.
-      value: *ref_1086
+      value: *ref_1092
     paymentInstructionCompleted:
       summary: Payment instruction already completed
       description: Payment instruction already completed
-      value: *ref_1087
+      value: *ref_1093
     paymentInstructionFailed:
       summary: Payment instruction failed
       description: Payment instruction failed
-      value: *ref_1088
+      value: *ref_1094
     paginatedRefund:
       summary: Paginated Refund
       description: Paginated Refund
-      value: *ref_1089
+      value: *ref_1095
     refundRequest:
       summary: Refund
       description: Refund
-      value: *ref_1090
+      value: *ref_1096
     refundResponse:
       summary: Refund
       description: Refund
@@ -35603,135 +36164,151 @@ components:
     adjustRefundRequest:
       summary: Adjust Refund
       description: Adjust Refund
-      value: *ref_1091
+      value: *ref_1097
     adjustRefundResponse:
       summary: Adjust Refund
       description: Adjust Refund
-      value: *ref_1092
+      value: *ref_1098
     reverseRefund:
       summary: Reverse Refund
       description: Reverse Refund
-      value: *ref_1093
+      value: *ref_1099
     refundInstructionRequest:
       summary: Refund instruction
       description: Submit an instruction for initiating a refund on a physical device.
-      value: *ref_1094
+      value: *ref_1100
     refundInstructionInProgress:
       summary: Refund instruction
       description: Object that contains information about the progress of the refund instruction.
-      value: *ref_1095
+      value: *ref_1101
     refundInstruction:
       summary: Refund instruction
       description: Object that contains information about the progress of the refund instruction.
-      value: *ref_1096
+      value: *ref_1102
     refundInstructionCompleted:
       summary: Refund instruction already completed
       description: Refund instruction already completed
-      value: *ref_1097
+      value: *ref_1103
     refundInstructionFailed:
       summary: Refund instruction failed
       description: Refund instruction failed
-      value: *ref_1098
+      value: *ref_1104
     signatureInstructionRequest:
       summary: Signature Instruction
       description: Submit an instruction for capturing a signature on a physical device.
-      value: *ref_1099
+      value: *ref_1105
     signatureInstructionInProgress:
       summary: Signature instruction
       description: Object that contains information about the progress of the signature instruction.
-      value: *ref_1100
+      value: *ref_1106
     signatureInstruction:
       summary: Signature instruction
       description: Object that contains information about the progress of the signature instruction.
-      value: *ref_1101
+      value: *ref_1107
     signatureInstructionCompleted:
       summary: Signature instruction already completed
       description: Signature instruction already completed
-      value: *ref_1102
+      value: *ref_1108
     signatureInstructionFailed:
       summary: Signature instruction failed
       description: Signature instruction failed
-      value: *ref_1103
+      value: *ref_1109
     signatureResponse:
       summary: Signature
       description: A signature response example.
-      value: *ref_1104
+      value: *ref_1110
     closedLoopResponse:
       summary: Closed Loop Read
       description: A closed loop read response example.
-      value: *ref_1105
+      value: *ref_1111
     cardVerificationRequest:
       summary: Card Verification
       description: Card Verification
-      value: *ref_1106
+      value: *ref_1112
     cardVerificationResponse:
       summary: Card Verification
       description: Card Verification
-      value: *ref_1107
+      value: *ref_1113
     cardBalanceRequest:
       summary: Card Balance
       description: Card Balance
-      value: *ref_1108
+      value: *ref_1114
     cardBalanceResponse:
       summary: Card Balance
       description: Card Balance
-      value: *ref_1109
+      value: *ref_1115
     binLookupRequest:
       summary: BIN lookup
       description: BIN lookup
-      value: *ref_1110
+      value: *ref_1116
     binLookupResponse:
       summary: BIN lookup
       description: BIN lookup
-      value: *ref_1111
+      value: *ref_1117
     fxRateRequest:
       summary: Fx-Rate
       description: Fx-Rate
-      value: *ref_1112
+      value: *ref_1118
     fxRateResponse:
       summary: Fx-Rate
       description: Fx-Rate
-      value: *ref_1113
+      value: *ref_1119
     paginatedBankTransferPayment:
       summary: Bank Transfer Payment
       description: Bank Transfer Payment
-      value: *ref_1114
+      value: *ref_1120
     bankTransferPaymentRequestStoreTokenRequest:
       summary: Store Token Bank Transfer Payment
       description: Bank Transfer Payment with ACH payload and token storage
-      value: *ref_1115
+      value: *ref_1121
+    bankTransferPaymentRequestSingleUseTokenSale:
+      summary: Bank transfer sale with single-use token that we convert to a secure token
+      description: Convert a single-use token to a secure token when running a bank transfer sale.
+      value: *ref_1122
+    bankPaymentRequestSecureTokenRepeatPayment:
+      summary: Bank transfer payment with a secure token
+      description: Create an ACH payment using a secure token.
+      value: *ref_1123
     bankTransferPaymentResponseStoreToken:
       summary: Store Token Bank Transfer Payment
       description: Bank Transfer Payment with ACH payload and token storage
       value: *ref_304
+    bankTransferPaymentResponseSingleUseTokenSale:
+      summary: Bank transfer sale with single-use token that we convert to a secure token
+      description: Convert a single-use token to a secure token when running a bank transfer sale.
+      value: *ref_1124
+    bankPaymentResponseSecureTokenRepeatPayment:
+      summary: Bank transfer payment with a secure token
+      description: Create an ACH payment using a secure token.
+      value: *ref_1125
     bankTransferPaymentDeclined:
       summary: Declined Payment
       description: Bank Transfer Payment that was declined with return information
-      value: *ref_1116
+      value: *ref_1126
     reverseBankTransferPayment:
       summary: Reverse Bank Transfer Payment
       description: Reverse Bank Transfer Payment
-      value: *ref_1117
+      value: *ref_1127
     refundBankTransferPaymentRequest:
       summary: Refund Bank Transfer Payment
       description: Refund Bank Transfer Payment
-      value: *ref_1118
+      value: *ref_1128
     refundBankTransferPaymentResponse:
       summary: Reverse Bank Transfer Payment
       description: Reverse Bank Transfer Payment
-      value: *ref_1119
+      value: *ref_1129
     representmentBankTransferPaymentRequest:
       summary: Representment Bank Transfer Payment
       description: Representment Bank Transfer Payment
-      value: *ref_1120
+      value: *ref_1130
     paginatedBankTransferUnreferencedRefundResponse:
       summary: Paginated Bank Transfer Unreferenced Refund
       description: Paginated Bank Transfer Unreferenced Refund
-      value: *ref_1121
+      value: *ref_1131
     bankTransferUnreferencedRefundRequest:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
-      value: *ref_1122
+      value: *ref_1132
     bankTransferUnreferencedRefundResponse:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
@@ -35739,51 +36316,51 @@ components:
     reverseBankTransferUnreferencedRefundResponse:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
-      value: *ref_1123
+      value: *ref_1133
     bankAccountVerificationRequestPad:
       summary: PAD Bank Account Verification Request
       description: Bank Account Verification Request for PAD
-      value: *ref_1124
+      value: *ref_1134
     bankAccountVerificationRequestAch:
       summary: ACH Bank Account Verification Request
       description: Bank Account Verification Request for ACH
-      value: *ref_1125
+      value: *ref_1135
     bankAccountVerificationResponse:
       summary: Bank Account Verification Response
       description: Bank Account Verification Response
-      value: *ref_1126
+      value: *ref_1136
     listMerchantPlatforms:
       summary: Paginated list of merchant platforms
       description: Retrieve a list of merchant platforms associated with your account.
-      value: *ref_1127
+      value: *ref_1137
     createMerchantPlatform:
       summary: Create merchant platform
       description: Create a merchant platform.
-      value: *ref_1128
+      value: *ref_1138
     createMerchantPlatformWithAddendums:
       summary: Create merchant platform with addendums
       description: Create a merchant platform with addendums appended to the Merchant Processing Agreement.
-      value: *ref_1129
+      value: *ref_1139
     createMerchantPlatformFiservWithCloverAmendment:
       summary: Create Fiserv merchant platform with Clover Merchant Processing Amendment
       description: Create a merchant platform for a Fiserv-bound merchant with the Clover Merchant Processing Amendment addendum including equipment line-item pre-fill data.
-      value: *ref_1130
+      value: *ref_1140
     merchantPlatformCreated:
       summary: Created merchant platform
       description: New merchant platform created
-      value: *ref_1131
+      value: *ref_1141
     merchantPlatformCreatedWithAddendums:
       summary: Created merchant platform with addendums
       description: New merchant platform created with addendums appended to the Merchant Processing Agreement.
-      value: *ref_1132
+      value: *ref_1142
     merchantPlatformCreatedFiservWithCloverAmendment:
       summary: Created Fiserv merchant platform with Clover Merchant Processing Amendment
       description: New merchant platform created for a Fiserv-bound merchant. The Clover Merchant Processing Amendment addendum is appended to the Merchant Processing Agreement with equipment line-item pre-fill data.
-      value: *ref_1133
+      value: *ref_1143
     processingAccountFailed:
       summary: Failed processing account
       description: We successfully created the merchant platform, but failed to add one or more processing accounts.
-      value: *ref_1134
+      value: *ref_1144
     fundingAccountsLimitReached:
       summary: Funding accounts limit reached
       description: Funding accounts restricted. You can not have any more than two funding accounts attached to this entity
@@ -35819,216 +36396,216 @@ components:
     taxIdInUse:
       summary: Tax ID in use
       description: The tax ID supplied is already in use.
-      value: *ref_1135
+      value: *ref_1145
     nationalIdInUse:
       summary: National ID in use
       description: One or more supplied national IDs are not unique. All national IDs must be unique.
-      value: *ref_1136
+      value: *ref_1146
     retrievedMerchantPlatforms:
       summary: Retrieve merchant platform
       description: Retrieve a merchant platform.
-      value: *ref_1137
+      value: *ref_1147
     listProcessingAccounts:
       summary: Paginated list of processing account
       description: Retrieve processing accounts associated with a merchant platform.
-      value: *ref_1138
+      value: *ref_1148
     createProcessingAccount:
       summary: Create merchant platform
       description: Create a merchant platform.
-      value: *ref_1139
+      value: *ref_1149
     createProcessingAccountWithAddendums:
       summary: Create processing account with addendums
       description: Create a processing account with addendums appended to the Merchant Processing Agreement.
-      value: *ref_1140
+      value: *ref_1150
     createProcessingAccountFiserv:
       summary: Create Fiserv processing account
       description: Create a processing account for a Fiserv-bound merchant with no Clover devices.
-      value: *ref_1141
+      value: *ref_1151
     processingAccountCreated:
       summary: Retrieve merchant platform
       description: Retrieve a merchant platform.
-      value: *ref_1142
+      value: *ref_1152
     processingAccountCreatedWithAddendums:
       summary: Created processing account with addendums
       description: Processing account created with addendums appended to the Merchant Processing Agreement.
-      value: *ref_1143
+      value: *ref_1153
     processingAccountCreatedFiservWithCloverAmendment:
       summary: Created Fiserv processing account with Clover Merchant Processing Amendment
       description: Processing account created for a Fiserv-bound merchant. The Clover Merchant Processing Amendment addendum is appended to the Merchant Processing Agreement with equipment line-item pre-fill data.
-      value: *ref_1144
+      value: *ref_1154
     processingAccountCreatedFiservNoClover:
       summary: Created Fiserv processing account without Clover devices
       description: Processing account created for a Fiserv-bound merchant with no Clover devices ordered. No addendums are appended.
-      value: *ref_1145
+      value: *ref_1155
     retrieveProcessingAccount:
       summary: Retrieve processing account
       description: Retrieve a specific processing account.
-      value: *ref_1146
+      value: *ref_1156
     listProcessingAccountFundingAccounts:
       summary: List of funding accounts
       description: List of funding accounts associated with a processing account.
-      value: *ref_1147
+      value: *ref_1157
     listContactsPaginated:
       summary: Paginated list of processing account contacts
       description: List of contacts associated with a processing account.
-      value: *ref_1148
+      value: *ref_1158
     retrieveProcessingAccountPricingAgreement:
       summary: Retrieve processing account pricing agreement
       description: Retrieve a pricing agreement for a processing account.
-      value: *ref_1149
+      value: *ref_1159
     listProcessingAccountOwners:
       summary: Paginated list of processing account owners
       description: Retrieve owners associated with a processing account.
-      value: *ref_1150
+      value: *ref_1160
     createReminderForProcessingAccount:
       summary: Create reminder for processing account
       description: |
         When you create a processing account, we send a copy of the pricing agreement to the merchant to sign. You can choose to send them a copy of the pricing agreement by email, or you can generate a link to the pricing agreement.<br/>  
         If you requested the merchant's signature by email and they don't respond, use our Reminders endpoint to create a reminder and to send another email.<br/>  
         **Note:** You can use the Reminders endpoint only if you request the merchant's signature by email. If you generate a link to the pricing agreement, you can't use the Reminders endpoint.  
-      value: *ref_1151
+      value: *ref_1161
     reminderCreated:
       summary: Reminder created
       description: Reminder created.
-      value: *ref_1152
+      value: *ref_1162
     notRequestedByEmail:
       summary: Not requested by email
       description: We couldn't resend the email to the merchant because you didn't originally choose to send the information by email.
-      value: *ref_1153
+      value: *ref_1163
     contractAlreadySigned:
       summary: Contract already signed
       description: We couldn’t resend the email because the merchant already signed the contract.
-      value: *ref_1154
+      value: *ref_1164
     noPricingAgreementExistsForTheProcessingAccount:
       summary: No pricing agreement exists for the processing account
       description: We couldn’t resend the email because there is no pricing agreement for the processing account.
-      value: *ref_1155
+      value: *ref_1165
     listTerminalOrders:
       summary: Paginated list of Terminal Orders
       description: Retrieve terminal orders associated with a processing account.
-      value: *ref_1156
+      value: *ref_1166
     createTerminalOrder:
       summary: Terminal order
       description: |
         Use this method to order and configure terminals for a processing account. When you create an order, you specify the gateway settings, device settings, and application settings for the terminals. 
         **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](https://docs.payroc.com/api/schema/boarding/merchant-platforms/retrieve)
-      value: *ref_1157
+      value: *ref_1167
     terminalOrderCreated:
       summary: Terminal order
       description: Terminal order
-      value: *ref_1158
+      value: *ref_1168
     listProcessingTemrinalsPaginated:
       summary: Paginated list of processing terminals
       description: List of processing terminals associated with a processing account.
-      value: *ref_1159
+      value: *ref_1169
     retrieveProcessingTerminal:
       summary: Retrieve processing terminal
       description: Retrieve a specific processing terminal.
-      value: *ref_1160
+      value: *ref_1170
     retrieveDeviceConfiguration:
       summary: Device Configuration
       description: An example Device Configuration response
-      value: *ref_1161
+      value: *ref_1171
     closeBatchResponse:
       summary: Close-batch response
       description: Example response returned from a close-batch request
-      value: *ref_1162
+      value: *ref_1172
     contact:
       summary: Contact object
       description: Contact object
-      value: *ref_1163
+      value: *ref_1173
     updateContact:
       summary: Update contact
       description: Update a specific contact.
-      value: *ref_1164
+      value: *ref_1174
     paginatedEventSubscriptions:
       summary: Paginated list of Event subscriptions
       description: Example of a paginated list of event subscriptions
-      value: *ref_1165
+      value: *ref_1175
     createEventSubscription:
       summary: Create event subscription
       description: Create an event subscription
-      value: *ref_1166
+      value: *ref_1176
     createEventSubscriptionMetadata:
       summary: Create event subscription with metadata
       description: Create an event subscription
-      value: *ref_1167
+      value: *ref_1177
     eventSubscriptionCreated:
       summary: Event subscription created
       description: Example of a created event subscription.
-      value: *ref_1168
+      value: *ref_1178
     eventSubscriptionCreatedMetadata:
       summary: Event subscription created metadata
       description: Example of a created event subscription.
-      value: *ref_1169
+      value: *ref_1179
     eventSubscription:
       summary: Event subscription
       description: Example of an event subscription.
-      value: *ref_1170
+      value: *ref_1180
     updateEventSubscription:
       summary: Update event subscription
       description: Update an event subscription
-      value: *ref_1171
+      value: *ref_1181
     patchEventSubscriptionRealistic:
       summary: Partially update event subscription
       description: |
         Partially update an existing event subscription.
 
         Structure your request to follow the RFC 6902 standard.
-      value: *ref_1172
+      value: *ref_1182
     patchEventSubscriptionAdd:
       summary: 'Update event subscription: add'
       description: Add operation adds a new value to an object or array.
-      value: *ref_1173
+      value: *ref_1183
     patchEventSubscriptionRemove:
       summary: 'Update event subscription: remove'
       description: Remove operation deletes a value from the event subscription.
-      value: *ref_1174
+      value: *ref_1184
     patchEventSubscriptionReplace:
       summary: 'Update event subscription: replace'
       description: Replace operation updates an existing value.
-      value: *ref_1175
+      value: *ref_1185
     patchEventSubscriptionMove:
       summary: 'Update event subscription: move'
       description: Move operation relocates a value from one location to another.
-      value: *ref_1176
+      value: *ref_1186
     patchEventSubscriptionCopy:
       summary: 'Update event subscription: copy'
       description: Copy operation duplicates a value from one location to another.
-      value: *ref_1177
+      value: *ref_1187
     patchEventSubscriptionTest:
       summary: 'Update event subscription: test'
       description: Test operation validates that a value at the target location equals the specified value.
-      value: *ref_1178
+      value: *ref_1188
     patchEventSubscription:
       summary: Patched event subscription
       description: Example of a patched event subscription.
-      value: *ref_1179
+      value: *ref_1189
     terminalOrder:
       summary: Terminal order
       description: Terminal order
-      value: *ref_1180
+      value: *ref_1190
     paginatedAchDeposits:
       summary: Paginated ACH deposits
-      value: *ref_1181
+      value: *ref_1191
     achDepositRetrieve:
       summary: Retrieve ACH deposit
-      value: *ref_1182
+      value: *ref_1192
     achDepositIdError:
       summary: Bad Request
       description: One or more validation errors occurred
-      value: *ref_1183
+      value: *ref_1193
     paginatedAchDepositFees:
       summary: Paginated ACH deposit fees
-      value: *ref_1184
+      value: *ref_1194
     getAttachment:
       summary: Upload Attachment
       description: Upload a file attachment
-      value: *ref_1185
+      value: *ref_1195
     paginatedDevice:
       summary: Device
       description: Device Paginated List
-      value: *ref_1186
+      value: *ref_1196
   responses:
     '400':
       description: Invalid request
@@ -36064,7 +36641,7 @@ components:
       examples: *ref_25
     location-2:
       description: URI reference to created resource
-      schema: *ref_1187
+      schema: *ref_1197
 x-tagGroups:
   - name: Attachments
     tags:
