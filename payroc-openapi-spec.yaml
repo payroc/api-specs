@@ -28882,7 +28882,7 @@ paths:
                         - email
                 orderItems:
                   type: array
-                  description: Array of order items. Provide a minimum of 1 order item and a maximum of 10 order items.
+                  description: Array of order items. Provide a minimum of 1 order item and a maximum of 20 order items.
                   items:
                     type: object
                     properties: &ref_371
