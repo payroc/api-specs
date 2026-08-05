@@ -1,0 +1,220 @@
+arazzo: 1.0.0
+info:
+  title: Review a merchant's boarding hierarchy and status
+  summary: Traverse a boarded merchant top-down to confirm its state and drive follow-on actions.
+  description: >
+    Read-only traversal of a boarded merchant. Starting from the ISV's merchant
+    platforms, the workflow drills down through a platform, its processing
+    accounts, and then the full detail of a single processing account: its
+    pricing agreement, contacts, owners, funding accounts, terminal orders, and
+    processing terminals. Use it to confirm boarding state (for example, that a
+    processing account has reached `approved`) and to collect the ids needed for
+    follow-on actions.
+
+    Every step is a GET and returns 200; nothing here mutates state. The
+    hierarchy is: merchant platform -> processing account(s) -> the account's
+    contacts / owners / funding accounts / terminal orders / processing
+    terminals. Two entry points collapse into this one family: you can discover
+    ids from the top (list platforms, then list the platform's processing
+    accounts, as modelled) or, if you already hold a `processingAccountId`, skip
+    straight to `retrieveProcessingAccount` and the account-level reads. The
+    listing steps are paginated (before/after/limit); this workflow reads the
+    first page and selects the first record.
+
+    Boarding drift to note: contacts and owners are created inline in the
+    create-merchant / create-processing-account payloads, so there are no
+    standalone create operations here — only the list reads below. This is a
+    single-actor lifecycle review (the integrator is the only actor), so no
+    actor annotations are modelled.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: review-merchant-hierarchy
+    summary: Confirm a boarded merchant's hierarchy and status via read-only reads.
+    description: >
+      Ordered read-only traversal. Steps 1-3 discover the merchant platform and
+      one of its processing accounts; steps 4-10 read the full detail of that
+      processing account. If a `processingAccountId` is already known, the
+      account-level steps (4 onward) can run directly against it, bypassing the
+      platform discovery steps.
+    inputs:
+      type: object
+      properties:
+        limit:
+          type: integer
+          description: Maximum number of results to return per page on the paginated list reads.
+          example: 20
+    steps:
+      - stepId: listMerchantPlatforms
+        description: >
+          List the merchant platforms linked to the ISV account and select one
+          to inspect. Paginated (before/after/limit); this reads the first page
+          and takes the first platform.
+        operationId: listMerchantPlatforms
+        parameters:
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          merchantPlatformId: $response.body#/data/0/merchantPlatformId
+
+      - stepId: retrieveMerchantPlatform
+        description: >
+          Retrieve the selected merchant platform's detail, including its legal
+          and contact information and the status of each linked processing
+          account.
+        operationId: getMerchantAccounts
+        parameters:
+          - name: merchantPlatformId
+            in: path
+            value: $steps.listMerchantPlatforms.outputs.merchantPlatformId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          merchantPlatformId: $response.body#/merchantPlatformId
+
+      - stepId: listPlatformProcessingAccounts
+        description: >
+          List the processing accounts under the platform and select one to
+          inspect. Paginated; reads the first page and takes the first account.
+          By default only open accounts are returned — set includeClosed=true to
+          include terminated, cancelled, or rejected accounts.
+        operationId: listMerchantLocations
+        parameters:
+          - name: merchantPlatformId
+            in: path
+            value: $steps.retrieveMerchantPlatform.outputs.merchantPlatformId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          processingAccountId: $response.body#/data/0/processingAccountId
+
+      - stepId: retrieveProcessingAccount
+        description: >
+          Retrieve the processing account's full detail: business information,
+          MCC, status, processing configuration, and funding summary. The
+          `status` output (for example, `approved`) is the primary confirmation
+          that boarding has completed.
+        operationId: getProcessingAccounts
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $steps.listPlatformProcessingAccounts.outputs.processingAccountId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          processingAccountId: $response.body#/processingAccountId
+          accountStatus: $response.body#/status
+
+      - stepId: retrieveProcessingAccountPricing
+        description: >
+          Retrieve the pricing agreement applied to the processing account. The
+          response is polymorphic — the `version` field (4.0, 5.0, or 5.2)
+          selects the agreement variant.
+        operationId: retrieveProcessingAccountPricing
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $steps.retrieveProcessingAccount.outputs.processingAccountId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          pricingVersion: $response.body#/version
+
+      - stepId: listProcessingAccountContacts
+        description: >
+          List the contacts on the processing account. Contacts are created
+          inline during boarding; this read confirms them post-boarding.
+          Paginated.
+        operationId: listProcessingAccountContacts
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $steps.retrieveProcessingAccount.outputs.processingAccountId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstContactId: $response.body#/data/0/contactId
+
+      - stepId: listMerchantOwners
+        description: >
+          List the owners of the processing account, including their equity
+          stake and whether they are a control prong or authorized signatory.
+          Owners are created inline during boarding; this read confirms them
+          post-boarding. Paginated.
+        operationId: listMerchantOwners
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $steps.retrieveProcessingAccount.outputs.processingAccountId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstOwnerId: $response.body#/data/0/ownerId
+
+      - stepId: listProcessingAccountFundingAccounts
+        description: >
+          List the funding accounts linked to the processing account and their
+          approval status. The response is a top-level array (not paginated).
+        operationId: listProcessingAccountsFundingAccounts
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $steps.retrieveProcessingAccount.outputs.processingAccountId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstFundingAccountId: $response.body#/0/fundingAccountId
+
+      - stepId: listProcessingAccountTerminalOrders
+        description: >
+          List the terminal orders for the processing account, including their
+          status and shipping information. The response is a top-level array;
+          optional status/date query filters are available.
+        operationId: listProcessingAccountsTerminalOrders
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $steps.retrieveProcessingAccount.outputs.processingAccountId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstTerminalOrderId: $response.body#/0/terminalOrderId
+
+      - stepId: listProcessingAccountProcessingTerminals
+        description: >
+          List the processing terminals configured for the processing account,
+          including their active/inactive status and configuration. Paginated.
+        operationId: listProcessingAccountsProcessingTerminals
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $steps.retrieveProcessingAccount.outputs.processingAccountId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstProcessingTerminalId: $response.body#/data/0/processingTerminalId
+    outputs:
+      merchantPlatformId: $steps.retrieveMerchantPlatform.outputs.merchantPlatformId
+      processingAccountId: $steps.retrieveProcessingAccount.outputs.processingAccountId
+      accountStatus: $steps.retrieveProcessingAccount.outputs.accountStatus
+      pricingVersion: $steps.retrieveProcessingAccountPricing.outputs.pricingVersion

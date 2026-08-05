@@ -1,0 +1,148 @@
+arazzo: 1.0.0
+info:
+  title: Run a bank-transfer sale
+  summary: Take funds from a customer using their bank account (ACH/PAD).
+  description: >
+    The "take a payment" capability of the Payroc API for bank transfers. A
+    merchant runs a bank-transfer sale to capture funds from a customer's bank
+    account via ACH (US) or PAD (Canada).
+
+    Runs POST /bank-transfer-payments (operationId `bankTransferPayment`).
+
+    Agent gotchas captured here:
+
+    - There is no autoCapture flag on this endpoint — a bank-transfer payment is
+      always a sale.
+
+    - Idempotency-Key: the POST REQUIRES a unique UUID v4 `Idempotency-Key`
+      header per request.
+
+    - The example uses an ACH payload; for PAD send `type: pad` with
+      transit/institution details.
+
+    To take a card sale instead, use the run-a-card-sale workflow.
+
+    The terminal outcome is a created payment (HTTP 201) with a `paymentId` and a
+    `transactionResult` that a later workflow can retrieve, adjust, reverse, or
+    refund.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: run-a-bank-transfer-sale
+    summary: Run a bank-transfer (ACH/PAD) sale.
+    description: >
+      Run a bank-transfer sale by POSTing to /bank-transfer-payments with the
+      customer's ACH (US) or PAD (Canada) bank details.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Account holder who presents the payment method.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API on the customer's behalf.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream ACH network that authorizes the funds; not directly callable.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - processingTerminalId
+        - orderId
+        - amount
+        - currency
+        - accountType
+        - nameOnAccount
+        - accountNumber
+        - routingNumber
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 sent in the Idempotency-Key header. Generate a fresh value per request.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal that runs the sale.
+          example: '1234001'
+        orderId:
+          type: string
+          description: Merchant-assigned unique identifier for the order.
+          example: OrderRef6543
+        description:
+          type: string
+          description: Description of the transaction.
+          example: Large Pepperoni Pizza
+        amount:
+          type: integer
+          description: Total transaction amount in the currency's lowest denomination (for example, cents).
+          example: 4999
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: USD
+        accountType:
+          type: string
+          description: Bank account type, checking or savings.
+          example: checking
+        nameOnAccount:
+          type: string
+          description: Name on the customer's bank account.
+          example: Sarah Hazel Hopper
+        accountNumber:
+          type: string
+          description: Customer's bank account number.
+          example: '11101010'
+        routingNumber:
+          type: string
+          description: ACH routing number.
+          example: '053200983'
+    steps:
+      - stepId: runBankTransferSale
+        x-actor: customer
+        description: >
+          Run a bank-transfer sale by POSTing to /bank-transfer-payments with the
+          customer's ACH (US) or PAD (Canada) bank details. The example uses an
+          ACH payload; for PAD send `type: pad` with transit/institution details.
+          There is no autoCapture flag on this endpoint — a bank-transfer payment
+          is always a sale.
+        operationId: bankTransferPayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            processingTerminalId: $inputs.processingTerminalId
+            order:
+              orderId: $inputs.orderId
+              description: $inputs.description
+              amount: $inputs.amount
+              currency: $inputs.currency
+            paymentMethod:
+              type: ach
+              accountType: $inputs.accountType
+              nameOnAccount: $inputs.nameOnAccount
+              accountNumber: $inputs.accountNumber
+              routingNumber: $inputs.routingNumber
+              secCode: web
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          paymentId: $response.body#/paymentId
+          status: $response.body#/transactionResult/status
+    outputs:
+      paymentId: $steps.runBankTransferSale.outputs.paymentId
+      status: $steps.runBankTransferSale.outputs.status

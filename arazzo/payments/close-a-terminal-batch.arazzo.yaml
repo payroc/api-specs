@@ -1,0 +1,67 @@
+arazzo: 1.0.0
+info:
+  title: Close a terminal batch
+  summary: Manually close (settle) the current batch for a processing terminal.
+  description: >
+    Manually closes the open batch on a processing terminal, settling the
+    transactions captured since the last close. This is a headline single-op
+    workflow: one POST to the terminal's close-batch endpoint. The gateway
+    responds asynchronously with HTTP 202 and returns the cut-off time and the
+    terminal's time zone that indicate when the gateway closes the batch, rather
+    than a synchronous settlement result. Agent gotchas: the request carries no
+    body; the Idempotency-Key header is REQUIRED (a missing key is a 400, not a
+    409); the batch is identified only by the terminal, so there is no batchId
+    input. After the gateway closes the batch, the merchant can view its details
+    in the Self-Care Portal.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: close-a-terminal-batch
+    summary: Close the current batch for a processing terminal.
+    description: >
+      Single step: call closeBatch for the given processingTerminalId. Supply a
+      UUID v4 Idempotency-Key header on the request. Success is HTTP 202 with a
+      cutOffTime and timezone in the response body.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - idempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier that we assigned to the terminal whose batch you want to close.
+          example: 1234001
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 identifier you generate for the request so it can be safely retried. Required.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+    steps:
+      - stepId: closeBatch
+        description: >
+          Manually close the open batch on the processing terminal. No request
+          body is sent; the terminal is identified by the path parameter and the
+          request is made idempotent by the Idempotency-Key header (a missing
+          header returns 400). The gateway returns 202 with the cut-off time and
+          time zone at which it closes the batch.
+        operationId: closeBatch
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        successCriteria:
+          - condition: $statusCode == 202
+        outputs:
+          cutOffTime: $response.body#/cutOffTime
+          timezone: $response.body#/timezone
+    outputs:
+      cutOffTime: $steps.closeBatch.outputs.cutOffTime
+      timezone: $steps.closeBatch.outputs.timezone

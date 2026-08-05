@@ -1,0 +1,148 @@
+arazzo: 1.0.0
+info:
+  title: Accept Google Pay
+  summary: Run a sale with an encrypted Google Pay token.
+  description: >
+    Accepts a payment funded by Google Pay. The client (web page or mobile app)
+    first obtains the customer's encrypted payment details from the Google Pay
+    API and converts them to hexadecimal; there is no dedicated Payroc session or
+    tokenization call for Google Pay. The server then runs a single standard sale
+    against POST /v1/payments using a digitalWallet paymentMethod.
+
+    Agent gotchas:
+    - paymentMethod.type must be `digitalWallet` and paymentMethod.serviceProvider
+      must be `google` (not `apple`). encryptedData is the hex-encoded token from
+      Google Pay, not a card number or secure token.
+    - This is a sale, so leave autoCapture at its default of `true` (a pre-auth
+      would send `false` and capture later). processAsSale immediately settles and
+      then blocks adjustment; leave it `false` unless immediate settlement is
+      intended.
+    - Variants (web vs in-app) differ only in how the client acquires the Google
+      Pay token client-side; both submit the identical payment request with
+      channel `web`. Do not split this into separate flows.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: accept-google-pay
+    summary: Run a sale using an encrypted Google Pay token.
+    description: >
+      Single-step payment: submit the encrypted Google Pay token to the Payments
+      endpoint as a digitalWallet payment method to run and capture a sale. The
+      caller must have already retrieved the encrypted payment details from the
+      Google Pay API (web or in-app) and converted them to hexadecimal before this
+      step. On success the gateway returns a paymentId and a transactionResult
+      whose status is `ready`.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder who authorizes the payment through Google Pay.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Website or mobile app that calls the Payroc API on the customer's behalf.
+      - id: google-pay
+        name: Google Pay API
+        type: external-system
+        description: Issues the encrypted payment token client-side; not called by these steps.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface this step calls.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream processor behind the gateway; not directly callable.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - processingTerminalId
+        - orderId
+        - amount
+        - currency
+        - encryptedData
+      properties:
+        idempotencyKey:
+          type: string
+          description: UUID v4 that makes the payment request idempotent.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        channel:
+          type: string
+          description: Channel the merchant used to receive the payment details. Google Pay (web and in-app) uses `web`.
+          enum:
+            - pos
+            - web
+            - moto
+          example: web
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the terminal that runs the transaction.
+          example: '1234001'
+        operator:
+          type: string
+          description: Operator who ran the transaction.
+          example: Jane
+        orderId:
+          type: string
+          description: Unique identifier that the merchant assigns to the transaction.
+          example: OrderRef6543
+        description:
+          type: string
+          description: Description of the transaction.
+          example: 'Pizza Doe #1234 - Dinner'
+        amount:
+          type: integer
+          description: Total amount in the currency's lowest denomination (for example, cents).
+          example: 4999
+        currency:
+          type: string
+          description: ISO 4217 currency code of the transaction.
+          example: USD
+        encryptedData:
+          type: string
+          description: Hex-encoded encrypted payment details retrieved from the Google Pay API.
+          example: A1B2C3D4E5F67890ABCD1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF
+    steps:
+      - stepId: runGooglePaySale
+        x-actor: customer
+        description: >
+          Run and capture a sale funded by Google Pay. Sends paymentMethod.type
+          `digitalWallet` with serviceProvider `google` and the hex-encoded
+          encryptedData token. autoCapture defaults to `true` (a sale); send
+          `false` only to run a pre-authorization and capture later. The same
+          request serves both the web and in-app variants.
+        operationId: payment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            channel: $inputs.channel
+            processingTerminalId: $inputs.processingTerminalId
+            operator: $inputs.operator
+            order:
+              orderId: $inputs.orderId
+              description: $inputs.description
+              amount: $inputs.amount
+              currency: $inputs.currency
+            paymentMethod:
+              type: digitalWallet
+              serviceProvider: google
+              encryptedData: $inputs.encryptedData
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.body#/transactionResult/status == ready
+        outputs:
+          paymentId: $response.body#/paymentId
+          transactionStatus: $response.body#/transactionResult/status
+    outputs:
+      paymentId: $steps.runGooglePaySale.outputs.paymentId
+      transactionStatus: $steps.runGooglePaySale.outputs.transactionStatus

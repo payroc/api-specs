@@ -1,0 +1,63 @@
+arazzo: 1.0.0
+info:
+  title: Deactivate a subscription
+  summary: Stop the gateway from taking further payments for a subscription.
+  description: >
+    Stops collection on an existing subscription (a customer's assignment to a
+    payment plan). POST with no request body; returns 200.
+
+    Agent gotchas:
+      - `subscriptionId` is the merchant-assigned string (for example
+        `SubRef7654`) used on create, not a gateway-generated id.
+      - `deactivateSubscription` requires no request body and no Idempotency-Key
+        header.
+
+    To restart collection later, use the reactivate-a-subscription workflow -
+    deactivate and reactivate are mutually exclusive collection-state actions.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: deactivate-a-subscription
+    summary: Deactivate a subscription to stop collection.
+    description: >
+      Stops the gateway from taking further payments for the subscription
+      identified by `subscriptionId` on the terminal (deactivateSubscription).
+      Returns 200.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - subscriptionId
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier for the terminal that owns the subscription.
+          example: '1234001'
+        subscriptionId:
+          type: string
+          description: Merchant-assigned identifier of the subscription to deactivate.
+          example: SubRef7654
+    steps:
+      - stepId: deactivateSubscription
+        description: >
+          Stops the gateway from taking further payments for the subscription.
+          POST with no request body; returns 200.
+        operationId: deactivateSubscription
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: subscriptionId
+            in: path
+            value: $inputs.subscriptionId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/currentState/status
+    outputs:
+      status: $steps.deactivateSubscription.outputs.status

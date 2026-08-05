@@ -1,0 +1,164 @@
+arazzo: 1.0.0
+info:
+  title: Refund a card payment
+  summary: Return funds to a customer against an existing settled card payment.
+  description: >
+    Runs a referenced refund - a refund tied to an originating paymentId - to
+    return funds to a customer's card. The merchant optionally looks up the
+    original payment first (by paymentId, or by searching when the id is
+    unknown), then posts the refund against that payment.
+
+    - Optionally GET /payments/{paymentId} (getPayment) or search GET /payments
+      (listPayments), then POST /payments/{paymentId}/refund (refundPayment).
+      Returns 200 with the refund nested under the payment.
+
+    Agent gotchas: a referenced refund is a POST that returns 200 (not 201). The
+    card refund id is nested, not top-level - it lives at `refunds/0/refundId`,
+    not at the body root. Every refund POST requires an `Idempotency-Key` header
+    in UUID v4 format. A refund only settles when the original payment is in a
+    closed batch; if the payment is still in an open batch the gateway reverses
+    (cancels) it instead of refunding - so this same endpoint doubles as a
+    reversal, and a dedicated reverse endpoint is not needed. Both full and
+    partial refunds use the same request; a partial refund simply sends an
+    `amount` lower than the original payment amount.
+
+    To refund a bank-transfer / ACH payment instead, use the
+    refund-a-bank-transfer-payment workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: refund-a-card-payment
+    summary: Referenced refund of an existing card payment.
+    description: >
+      Optionally retrieves the original card payment, then refunds it. The lookup
+      steps are optional: use getCardPayment when you already hold the paymentId,
+      or findCardPayment to search for it (e.g. by order id) when you do not.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: The person who requested the refund and receives the returned funds to their card.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to look up the payment and issue the refund on the customer's behalf.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream card processor that settles the returned funds; not directly callable.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - paymentId
+        - amount
+        - description
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per refund request, sent as the Idempotency-Key header.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        paymentId:
+          type: string
+          description: Unique identifier of the original payment to refund. Path parameter for the retrieve and refund steps.
+          example: M2MJOG6O2Y
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal, usable as an optional filter for the card search (findCardPayment).
+          example: "1234001"
+        orderId:
+          type: string
+          description: Optional order id used as a search filter when looking up the original payment without its paymentId.
+          example: OrderRef6543
+        amount:
+          type: integer
+          description: >
+            Amount to refund, in the currency's lowest denomination (e.g. cents).
+            Send the full original amount for a full refund, or a lower value for
+            a partial refund.
+          example: 4999
+        description:
+          type: string
+          description: Reason for the refund.
+          example: Refund for order OrderRef6543
+        operator:
+          type: string
+          description: Operator who issued the refund.
+          example: Jane
+    steps:
+      - stepId: findCardPayment
+        x-actor: merchant
+        description: >
+          Optional. Searches for the original card payment when you do not have
+          its paymentId (GET /payments), filtering by terminal and/or order id.
+          Skip this step when you already hold the paymentId - use getCardPayment
+          or go straight to refundCardPayment. Take the paymentId of the matching
+          result from `data/0/paymentId` and feed it into the refund step.
+        operationId: $sourceDescriptions.payroc-api.listPayments
+        parameters:
+          - name: processingTerminalId
+            in: query
+            value: $inputs.processingTerminalId
+          - name: orderId
+            in: query
+            value: $inputs.orderId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          foundPaymentId: $response.body#/data/0/paymentId
+      - stepId: getCardPayment
+        x-actor: merchant
+        description: >
+          Optional. Retrieves the original card payment by paymentId (GET
+          /payments/{paymentId}) to confirm its details and status before
+          refunding. A referenced refund only returns funds when the payment is in
+          a closed batch; an open-batch payment is reversed instead.
+        operationId: $sourceDescriptions.payroc-api.getPayment
+        parameters:
+          - name: paymentId
+            in: path
+            value: $inputs.paymentId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentId: $response.body#/paymentId
+          status: $response.body#/transactionResult/status
+      - stepId: refundCardPayment
+        x-actor: merchant
+        description: >
+          Refunds the referenced card payment (POST /payments/{paymentId}/refund).
+          Requires the Idempotency-Key header and a body with `amount` and
+          `description` (`operator` optional). The refund id is nested at
+          `refunds/0/refundId`, not at the body root. Returns 200.
+        operationId: $sourceDescriptions.payroc-api.refundPayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: paymentId
+            in: path
+            value: $inputs.paymentId
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: $inputs.amount
+            description: $inputs.description
+            operator: $inputs.operator
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.body#/refunds/0/status == ready
+        outputs:
+          refundId: $response.body#/refunds/0/refundId
+          refundStatus: $response.body#/refunds/0/status
+    outputs:
+      refundId: $steps.refundCardPayment.outputs.refundId
+      refundStatus: $steps.refundCardPayment.outputs.refundStatus

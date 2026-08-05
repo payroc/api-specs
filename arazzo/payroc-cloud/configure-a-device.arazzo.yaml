@@ -1,0 +1,119 @@
+arazzo: 1.0.0
+info:
+  title: Configure a device / retrieve terminal configuration
+  summary: Read the processing terminal, its host processor configuration, and a device's configuration before running device transactions.
+  description: >
+    Read-only retrieval of everything an integrator needs to configure a payment
+    device against a Payroc Cloud processing terminal and run device
+    transactions on it. Starting from a known processingTerminalId, the workflow
+    retrieves the processing terminal (status, gateway/application settings,
+    features, and the devices that use the terminal's configuration), then the
+    terminal's host processor configuration, then the configuration for a
+    specific device model (supported features, applications, EMV certificates,
+    and visual assets).
+
+    Every step is a GET and returns 200; nothing here mutates state. The three
+    device families in the inventory — ID TECH, Ingenico, and Android (PAX) —
+    collapse into this one workflow: they differ only in the `model` path
+    parameter of the final step (for example `idtechKioskV`, `paxA920Pro`, or
+    `ingenicoAxiumRx7000`). The devices array returned by the terminal read lists
+    the manufacturers and models bound to the terminal, so you can discover which
+    model value to request.
+
+    The host-configuration step is optional: integrate with it only if you use
+    your own gateway and want to validate the merchant/terminal processor
+    settings (posMid, terminalId, sharing groups, and so on). This is a
+    single-actor lookup (the integrator is the only actor), so no actor
+    annotations are modelled.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: configure-a-device
+    summary: Retrieve terminal, host, and device configuration for a Payroc Cloud device.
+    description: >
+      Ordered read-only retrieval. Step 1 reads the processing terminal and the
+      devices bound to it. Step 2 (optional — own-gateway integrations only)
+      reads the host processor configuration. Step 3 reads the configuration for
+      a specific device model; supply the `model` for the family you are
+      integrating (ID TECH, Ingenico, or Android/PAX).
+    inputs:
+      type: object
+      required: [processingTerminalId, model]
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier that we assigned to the processing terminal.
+          example: 1234001
+        model:
+          type: string
+          description: >
+            Type or model of the device whose configuration you want. Varies by
+            device family — for example idtechKioskV (ID TECH), paxA920Pro
+            (Android/PAX), or ingenicoAxiumRx7000 (Ingenico).
+          example: idtechKioskV
+    steps:
+      - stepId: getProcessingTerminal
+        description: >
+          Retrieve the processing terminal: its active/inactive status, gateway
+          and application settings, features, receipt and security settings, and
+          the devices that use the terminal's configuration. Only terminals whose
+          terminal order was created via the Payroc API can be retrieved.
+        operationId: getProcessingTerminal
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          processingTerminalId: $response.body#/processingTerminalId
+          status: $response.body#/status
+          deviceModel: $response.body#/devices/0/model
+
+      - stepId: getProcessingTerminalHostConfiguration
+        description: >
+          Optional. Retrieve the host processor configuration (merchant and
+          terminal settings such as posMid, chainNumber, terminalId, and sharing
+          groups). Integrate with this step only if you use your own gateway and
+          want to validate the processor configuration.
+        operationId: getProcessingTerminalHostConfiguration
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $steps.getProcessingTerminal.outputs.processingTerminalId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          processingAccountId: $response.body#/processingAccountId
+
+      - stepId: retrieveDeviceConfiguration
+        description: >
+          Retrieve the configuration for a specific device model on the terminal:
+          supported features, applications, EMV certificates and revoked
+          certificates, and visual assets. The `model` path parameter selects the
+          device family — pass the value for the ID TECH, Ingenico, or
+          Android/PAX device you are configuring (the terminal's devices array
+          from step 1 lists the models bound to this terminal).
+        operationId: retrieveDeviceConfiguration
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $steps.getProcessingTerminal.outputs.processingTerminalId
+          - name: model
+            in: path
+            value: $inputs.model
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          model: $response.body#/model
+          manufacturer: $response.body#/manufacturer
+    outputs:
+      processingTerminalId: $steps.getProcessingTerminal.outputs.processingTerminalId
+      status: $steps.getProcessingTerminal.outputs.status
+      processingAccountId: $steps.getProcessingTerminalHostConfiguration.outputs.processingAccountId
+      deviceModel: $steps.retrieveDeviceConfiguration.outputs.model

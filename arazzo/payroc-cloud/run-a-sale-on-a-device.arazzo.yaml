@@ -1,0 +1,244 @@
+arazzo: 1.0.0
+info:
+  title: Run a sale on a device
+  summary: Take a card-present sale on a Payroc Cloud payment device.
+  description: >
+    The headline Payroc Cloud (semi-integrated) capability: run a card-present
+    sale by pushing an instruction to a physical payment device rather than by
+    calling /payments directly. The integrator's POS submits a payment
+    instruction, the cardholder completes the payment on the device, and the POS
+    polls the instruction resource until it resolves, then retrieves the
+    resulting payment.
+
+
+    Agent gotchas captured here:
+
+    - Instruction, not payment: you POST to
+      /devices/{serialNumber}/payment-instructions, NOT to /payments. The
+      immediate response is HTTP 202 (accepted) with a `paymentInstructionId`
+      and `status: inProgress` — it is NOT the payment. The payment is created
+      asynchronously once the cardholder taps/inserts on the device.
+
+    - Polling model: GET /payment-instructions/{paymentInstructionId} long-polls,
+      blocking up to ~1 minute for the status to change. Keep re-issuing the GET
+      until `status` leaves `inProgress` (becomes `completed`, `canceled`, or
+      `failure`). This is one step here but is a loop at runtime.
+
+    - paymentId comes from a HATEOAS link, not a field: when the instruction
+      completes, the retrieve response carries `link.href` pointing at
+      /payments/{paymentId} (rel `payment`). Extract the `paymentId` from that
+      href — there is no top-level paymentId field on the instruction. (For a
+      MiFare closed-loop card the link instead has rel `closed-loop-read`.)
+
+    - autoCapture / processAsSale: for a SALE leave `autoCapture` at its default
+      `true`. `autoCapture: false` runs a pre-authorization on the device
+      instead. If `processAsSale: true` the gateway settles immediately and the
+      transaction can no longer be adjusted (and `autoCapture` is ignored).
+
+    - Idempotency-Key: the POST REQUIRES a unique UUID v4 `Idempotency-Key`
+      header per instruction.
+
+    - Cancel window: to cancel the instruction instead of letting it complete
+      (only while its status is `inProgress`), use the
+      cancel-a-device-payment-instruction workflow.
+
+
+    Device / config variants (documented, not separate files): the same flow
+    covers Android same-device-as-POS, Android POS-on-a-separate-device, and
+    non-Android (Ingenico, ID TECH) devices — only device configuration differs,
+    not these API calls. To also collect a signature, see
+    capture-signature-on-a-device.
+
+
+    The terminal outcome is a retrieved payment (HTTP 200) whose
+    `transactionResult` shows whether the processor approved or declined the sale.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: run-a-sale-on-a-device
+    summary: Find a device, push a sale instruction, poll for the result, and retrieve the payment.
+    description: >
+      Ordered flow:
+
+      1. `findDevice` (optional) — look up the target device by serial number to
+         confirm it exists and is active. Skip if you already hold the serial
+         number.
+
+      2. `submitPaymentInstruction` — push the sale to the device; returns a
+         `paymentInstructionId` and `status: inProgress` (HTTP 202).
+
+      3. `pollPaymentInstruction` — long-poll the instruction until its status
+         leaves `inProgress`. At runtime this repeats until the cardholder
+         completes (or the instruction fails/cancels). On completion the response
+         carries a HATEOAS `link.href` to the payment.
+
+      4. `retrievePayment` (optional) — GET the payment (paymentId taken from the
+         completed instruction's `link.href`) to see the approved/declined
+         result.
+
+      To cancel the instruction instead of letting it complete, use the
+      cancel-a-device-payment-instruction workflow.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder who taps, inserts, or swipes their card on the payment device.
+      - id: merchant
+        name: Merchant / integrator POS
+        type: client
+        description: The POS integration calling the Payroc API to drive the device.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call; relays instructions to the device.
+      - id: device
+        name: Payment device
+        type: external-system
+        description: Physical Payroc Cloud terminal that captures the card and completes the sale; reached via the gateway, not called directly.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - serialNumber
+        - processingTerminalId
+        - orderId
+        - amount
+        - currency
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 sent in the Idempotency-Key header of the instruction POST. Generate a fresh value per request.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        serialNumber:
+          type: string
+          description: Serial number of the merchant's payment device.
+          example: '1850010868'
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal that runs the sale.
+          example: '1234001'
+        operator:
+          type: string
+          description: Operator who initiated the instruction.
+          example: Jane
+        orderId:
+          type: string
+          description: Merchant-assigned unique identifier for the order.
+          example: OrderRef6543
+        amount:
+          type: integer
+          description: Total transaction amount in the currency's lowest denomination (for example, cents).
+          example: 4999
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: USD
+        paymentId:
+          type: string
+          description: >
+            Identifier of the payment produced by the instruction, used by the
+            optional retrievePayment step. Extract it from the completed
+            instruction's HATEOAS link.href (the tail of /payments/{paymentId});
+            it is not returned as a standalone field.
+          example: M2MJOG6O2Y
+    steps:
+      - stepId: findDevice
+        x-actor: merchant
+        description: >
+          OPTIONAL. Confirm the target device by filtering the device list on its
+          serial number. Skip this step if you already have a known-good serial
+          number. Returns a paginated list; the matching device is the first
+          entry in `data`.
+        operationId: searchDevices
+        parameters:
+          - name: serialNumber
+            in: query
+            value: $inputs.serialNumber
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          deviceId: $response.body#/data/0/deviceId
+          matchedSerialNumber: $response.body#/data/0/serialNumber
+      - stepId: submitPaymentInstruction
+        x-actor: merchant
+        description: >
+          Push the sale to the device. POST the instruction to
+          /devices/{serialNumber}/payment-instructions. The default
+          `autoCapture: true` (and `processAsSale: false`, its default) produce a
+          normal sale that stays adjustable in the open batch; `entryMethod:
+          deviceRead` prompts the cardholder to tap, insert, or swipe. The
+          immediate 202 response is the INSTRUCTION (status `inProgress`), not the
+          payment.
+        operationId: sendPaymentInstruction
+        parameters:
+          - name: serialNumber
+            in: path
+            value: $inputs.serialNumber
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            operator: $inputs.operator
+            processingTerminalId: $inputs.processingTerminalId
+            order:
+              orderId: $inputs.orderId
+              currency: $inputs.currency
+              amount: $inputs.amount
+            customizationOptions:
+              entryMethod: deviceRead
+            autoCapture: true
+        successCriteria:
+          - condition: $statusCode == 202
+        outputs:
+          paymentInstructionId: $response.body#/paymentInstructionId
+          status: $response.body#/status
+      - stepId: pollPaymentInstruction
+        x-actor: customer
+        description: >
+          The cardholder completes the payment on the device. Long-poll the
+          instruction until its status leaves `inProgress`. Each GET blocks up to
+          ~1 minute for a status change; at runtime repeat this step until the
+          status is `completed` (or `canceled` / `failure`). On completion the
+          response includes a HATEOAS `link` whose `href` points at the created
+          payment (rel `payment`); extract the paymentId from that href for the
+          next step. (MiFare closed-loop cards instead return a
+          `closed-loop-read` link.)
+        operationId: getPaymentInstruction
+        parameters:
+          - name: paymentInstructionId
+            in: path
+            value: $steps.submitPaymentInstruction.outputs.paymentInstructionId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/status
+          paymentLink: $response.body#/link/href
+      - stepId: retrievePayment
+        x-actor: merchant
+        description: >
+          OPTIONAL. Retrieve the resulting payment to see whether the processor
+          approved or declined the sale. Use the paymentId extracted from the
+          completed instruction's HATEOAS `link.href` (supplied via inputs, since
+          it is not a standalone response field).
+        operationId: getPayment
+        parameters:
+          - name: paymentId
+            in: path
+            value: $inputs.paymentId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentId: $response.body#/paymentId
+          transactionStatus: $response.body#/transactionResult/status
+    outputs:
+      paymentInstructionId: $steps.submitPaymentInstruction.outputs.paymentInstructionId
+      instructionStatus: $steps.pollPaymentInstruction.outputs.status
+      paymentId: $steps.retrievePayment.outputs.paymentId
+      transactionStatus: $steps.retrievePayment.outputs.transactionStatus

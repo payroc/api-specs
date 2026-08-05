@@ -1,0 +1,281 @@
+arazzo: 1.0.0
+info:
+  title: Run a pre-authorization and capture
+  summary: Hold funds on a customer's card, optionally adjust, then capture and optionally refund.
+  description: >
+    Holds an amount on a customer's payment card (a pre-authorization), then
+    captures it later - the classic hotel/rental deposit flow. The terminal
+    outcome is a captured card payment; an optional referenced refund can return
+    the funds afterward.
+
+
+    Agent gotchas:
+
+    - To run a pre-authorization (rather than a sale), send BOTH `autoCapture:
+      false` AND `processAsSale: false` in the Create Payment body. If either is
+      true the gateway runs a sale, and a sale cannot be captured. If
+      `processAsSale` is true the gateway ignores `autoCapture` entirely.
+
+    - This flow is state-dependent: only an open pre-authorization can be
+      captured. Pre-authorizations must be enabled on the merchant's account; if
+      they are not, the gateway runs the request as a sale with status
+      `pending`.
+
+    - Adjust (step 2) is optional and is how you capture MORE than you originally
+      authorized (card brands cap the additional amount): adjust up first, then
+      capture. Capturing less needs no adjust - just send a smaller `amount` on
+      capture, or omit `amount` to capture the full authorized amount.
+
+    - Refund (step 4) is optional and only applies AFTER capture, once the batch
+      is closed. If the payment is still in an open batch, `refundPayment`
+      reverses it instead of refunding. Reversal (void) is a distinct operation -
+      do not conflate refund with reversal.
+
+    - Every operation requires a unique `Idempotency-Key` header (UUID v4). Use a
+      fresh key per request; reusing a key replays the original response.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: run-a-pre-authorization
+    summary: Pre-authorize a card, optionally adjust the amount, capture, and optionally refund.
+    description: >
+      Step 1 creates the pre-authorization (autoCapture and processAsSale both
+      false). Step 2 (optional) adjusts the authorized amount before capture -
+      needed only when capturing more than was originally authorized. Step 3
+      captures the pre-authorization. Step 4 (optional) runs a referenced refund
+      against the captured payment.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder who presents the payment card to be pre-authorized and later charged.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API on the customer's behalf to authorize, adjust, capture, and refund.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream card processor and issuing bank that hold and release the funds; not directly callable.
+    inputs:
+      type: object
+      required:
+        - paymentIdempotencyKey
+        - captureIdempotencyKey
+        - processingTerminalId
+        - orderId
+        - amount
+        - currency
+        - description
+        - cardNumber
+        - expiryDate
+        - captureAmount
+      properties:
+        paymentIdempotencyKey:
+          type: string
+          format: uuid
+          description: Unique UUID v4 Idempotency-Key for the Create Payment request (step 1).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        adjustIdempotencyKey:
+          type: string
+          format: uuid
+          description: Unique UUID v4 Idempotency-Key for the optional Adjust Payment request (step 2). Must differ from the other keys.
+          example: a1b2c3d4-e5f6-4789-9abc-def012345678
+        captureIdempotencyKey:
+          type: string
+          format: uuid
+          description: Unique UUID v4 Idempotency-Key for the Capture Payment request (step 3). Must differ from the other keys.
+          example: b2c3d4e5-f6a7-4890-8bcd-ef0123456789
+        refundIdempotencyKey:
+          type: string
+          format: uuid
+          description: Unique UUID v4 Idempotency-Key for the optional Refund Payment request (step 4). Must differ from the other keys.
+          example: c3d4e5f6-a7b8-4901-9cde-f01234567890
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal running the transaction.
+          example: '1234001'
+        operator:
+          type: string
+          description: Operator who ran the transaction.
+          example: Jane
+        orderId:
+          type: string
+          description: Merchant-assigned identifier for the order.
+          example: OrderRef6543
+        amount:
+          type: integer
+          format: int64
+          description: Amount to pre-authorize, in the currency's lowest denomination (cents).
+          example: 4999
+        currency:
+          type: string
+          description: ISO 4217 currency code for the transaction.
+          example: USD
+        description:
+          type: string
+          description: Description of the transaction.
+          example: 'Pizza Doe #1234 - Dinner'
+        cardNumber:
+          type: string
+          description: Cardholder's primary account number (PAN).
+          example: '4539858876047062'
+        expiryDate:
+          type: string
+          description: Card expiry date in MMYY format.
+          example: '1230'
+        adjustedAmount:
+          type: integer
+          format: int64
+          description: New total amount for the pre-authorization when capturing more than originally authorized (optional adjust step), in cents.
+          example: 5499
+        captureAmount:
+          type: integer
+          format: int64
+          description: Amount to capture, in cents. Omit on the request to capture the full authorized amount.
+          example: 5499
+        refundAmount:
+          type: integer
+          format: int64
+          description: Amount to refund after capture (optional refund step), in cents.
+          example: 5499
+        refundDescription:
+          type: string
+          description: Reason for the refund (optional refund step).
+          example: Refund for order OrderRef6543
+    steps:
+      - stepId: createPreAuthorization
+        x-actor: customer
+        description: >
+          Create the pre-authorization to hold funds on the card. Sends both
+          autoCapture=false and processAsSale=false so the gateway authorizes
+          without settling - this is what makes it a pre-authorization rather
+          than a sale. Save the returned paymentId; every later step needs it.
+        operationId: payment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.paymentIdempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            channel: web
+            processingTerminalId: $inputs.processingTerminalId
+            operator: $inputs.operator
+            order:
+              orderId: $inputs.orderId
+              description: $inputs.description
+              currency: $inputs.currency
+              amount: $inputs.amount
+            paymentMethod:
+              type: card
+              cardDetails:
+                entryMethod: keyed
+                keyedData:
+                  dataFormat: plainText
+                  cardNumber: $inputs.cardNumber
+                  expiryDate: $inputs.expiryDate
+            autoCapture: false
+            processAsSale: false
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          paymentId: $response.body#/paymentId
+          authStatus: $response.body#/transactionResult/status
+
+      - stepId: adjustAuthorizedAmount
+        x-actor: merchant
+        description: >
+          OPTIONAL. Adjust the authorized amount before capture using an
+          order-type adjustment. Only needed when the merchant must capture MORE
+          than originally pre-authorized (for example, a hotel adds dinner to a
+          room hold). Skip this step to capture the original amount or less. The
+          adjustments array is polymorphic (order/status/customer/signature);
+          this uses the order variant to change the amount.
+        operationId: adjustPayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.adjustIdempotencyKey
+          - name: paymentId
+            in: path
+            value: $steps.createPreAuthorization.outputs.paymentId
+        requestBody:
+          contentType: application/json
+          payload:
+            operator: $inputs.operator
+            adjustments:
+              - type: order
+                amount: $inputs.adjustedAmount
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          adjustedPaymentId: $response.body#/paymentId
+
+      - stepId: capturePreAuthorization
+        x-actor: merchant
+        description: >
+          Capture the pre-authorization to take the funds from the card. Sending
+          an amount captures that value; omit amount to capture the full
+          authorized amount. To capture more than authorized, run the optional
+          adjust step first. Returns the payment with transactionResult.status
+          reflecting the capture.
+        operationId: capturePayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.captureIdempotencyKey
+          - name: paymentId
+            in: path
+            value: $steps.createPreAuthorization.outputs.paymentId
+        requestBody:
+          contentType: application/json
+          payload:
+            processingTerminalId: $inputs.processingTerminalId
+            operator: $inputs.operator
+            amount: $inputs.captureAmount
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          capturedPaymentId: $response.body#/paymentId
+          captureStatus: $response.body#/transactionResult/status
+
+      - stepId: refundCapturedPayment
+        x-actor: merchant
+        description: >
+          OPTIONAL. Run a referenced refund against the captured payment once its
+          batch is closed, returning funds to the cardholder. If the payment is
+          still in an open batch this operation reverses it instead of refunding.
+          Both amount and description are required. The new refund's id lives at
+          refunds[0].refundId in the response, not at the top level.
+        operationId: refundPayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.refundIdempotencyKey
+          - name: paymentId
+            in: path
+            value: $steps.createPreAuthorization.outputs.paymentId
+        requestBody:
+          contentType: application/json
+          payload:
+            operator: $inputs.operator
+            amount: $inputs.refundAmount
+            description: $inputs.refundDescription
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          refundId: $response.body#/refunds/0/refundId
+    outputs:
+      paymentId: $steps.createPreAuthorization.outputs.paymentId
+      capturedPaymentId: $steps.capturePreAuthorization.outputs.capturedPaymentId
+      refundId: $steps.refundCapturedPayment.outputs.refundId

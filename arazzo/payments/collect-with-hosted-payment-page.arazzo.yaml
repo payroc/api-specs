@@ -1,0 +1,152 @@
+arazzo: 1.0.0
+info:
+  title: Collect a payment with the Hosted Payment Page
+  summary: Redirect a customer to Payroc's hosted checkout to collect a payment, then optionally capture a pre-authorization.
+  description: >
+    Collects an online payment using Payroc's Hosted Payment Page (HPP), a
+    redirect-based hosted checkout. The merchant's website sends an authenticated
+    request that loads the HPP; the customer submits their payment details on the
+    Payroc-hosted page; the gateway processes the transaction with the processor
+    and returns the result to the merchant's receipt/return URL (and via webhook).
+    The terminal outcome is a completed online payment.
+
+
+    Most of this flow is browser redirect plus webhook rather than direct REST
+    calls, so it is NOT fully expressible as Arazzo API steps. The load-the-page
+    step is a signed form POST/redirect to the gateway's hosted checkout (not a
+    documented Payroc REST operationId), and the transaction result is delivered
+    to the merchant's return URL and by webhook. The single REST operation in this
+    family is the server-side capture used by the pre-authorization variant.
+
+
+    Variants (one workflow family, branch in descriptions):
+
+    - Sale: the default. The redirect + webhook completes the sale; no additional
+      REST call is required, so the capture step is not executed.
+
+    - Pre-authorization (capture after): configure the HPP request to
+      pre-authorize instead of sell, then capture server-side afterward with the
+      capturePayment step below.
+
+    - Save a customer's payment details: the HPP can tokenize the card during
+      checkout for later reuse.
+
+    - Repeat payments: reuse the saved payment details on a schedule - see the
+      set-up-repeat-payments workflow.
+
+
+    Agent gotchas:
+
+    - The capture step applies ONLY to the pre-authorization variant. For a plain
+      sale, do not call capturePayment - the redirect/webhook already settled it.
+
+    - You need the paymentId to capture. The gateway returns it to the merchant's
+      return URL and via webhook after the customer completes the HPP; it is not
+      obtained from a REST call in this workflow.
+
+    - Sending an amount captures that value; omit amount to capture the full
+      authorized amount. Capturing more than authorized requires adjusting the
+      pre-authorization first (see run-a-pre-authorization).
+
+    - Every REST request requires a unique Idempotency-Key header (UUID v4).
+      Reusing a key replays the original response.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: collect-with-hosted-payment-page
+    summary: Collect a payment via Payroc's redirect-based Hosted Payment Page, optionally capturing a pre-authorization afterward.
+    description: >
+      The customer is redirected to Payroc's Hosted Payment Page, submits their
+      payment details, and the gateway returns the transaction result to the
+      merchant's return URL and via webhook - none of which are REST operations in
+      this API. The only documented REST step is the optional server-side capture
+      used by the pre-authorization variant. For a plain sale the redirect and
+      webhook complete the payment and this step is not run.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder who is redirected to the Hosted Payment Page and submits their payment details.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Runs the website that loads the Hosted Payment Page and calls the Payroc API to capture a pre-authorization.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: Hosts the payment page, processes the transaction, and exposes the REST surface these steps call.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream card/bank processor and issuing bank that authorize and settle the funds; not directly callable.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - paymentId
+        - processingTerminalId
+      properties:
+        idempotencyKey:
+          type: string
+          format: uuid
+          description: Unique UUID v4 sent in the Idempotency-Key header. Use a fresh value for every request.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        paymentId:
+          type: string
+          description: >
+            Unique identifier of the payment created via the Hosted Payment Page.
+            The gateway returns it to the merchant's return URL and via webhook
+            after the customer completes checkout; it is not fetched by a REST
+            call in this workflow.
+          example: M2MJOG6O2Y
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal that ran the transaction.
+          example: '1234001'
+        operator:
+          type: string
+          description: Operator who captured the payment.
+          example: Jane
+        captureAmount:
+          type: integer
+          format: int64
+          description: Amount to capture, in the currency's lowest denomination (cents). Omit to capture the full authorized amount.
+          example: 4999
+    steps:
+      - stepId: captureHostedPreAuthorization
+        x-actor: merchant
+        description: >
+          OPTIONAL - pre-authorization variant only. After the customer completes
+          the Hosted Payment Page as a pre-authorization, capture the held funds
+          server-side using the paymentId returned to the merchant's return URL /
+          webhook. Sending an amount captures that value; omit amount to capture
+          the full authorized amount. For a plain sale, skip this step - the
+          redirect and webhook already settled the payment. Returns the payment
+          with transactionResult.status reflecting the capture.
+        operationId: capturePayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: paymentId
+            in: path
+            value: $inputs.paymentId
+        requestBody:
+          contentType: application/json
+          payload:
+            processingTerminalId: $inputs.processingTerminalId
+            operator: $inputs.operator
+            amount: $inputs.captureAmount
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          capturedPaymentId: $response.body#/paymentId
+          captureStatus: $response.body#/transactionResult/status
+    outputs:
+      capturedPaymentId: $steps.captureHostedPreAuthorization.outputs.capturedPaymentId
+      captureStatus: $steps.captureHostedPreAuthorization.outputs.captureStatus

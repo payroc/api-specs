@@ -1,0 +1,192 @@
+arazzo: 1.0.0
+info:
+  title: Manage payment plans
+  summary: Create, list, and retrieve a reusable recurring-billing schedule
+  description: >
+    Lifecycle of a payment plan — the reusable recurring-billing schedule
+    template that customers are later subscribed to (via
+    `set-up-repeat-payments` / the subscriptions family). This workflow creates a
+    plan and discovers/inspects it.
+
+    Agent gotchas captured by this workflow:
+      - `paymentPlanId` is merchant-assigned, NOT server-generated. Unlike most
+        Payroc resources, you supply a unique `paymentPlanId` in the create
+        request body; the same value is then used as the `{paymentPlanId}` path
+        parameter for retrieve.
+      - `type` drives the shape of the plan: `automatic` (the terminal collects
+        each payment) requires a `recurringOrder`; `manual` (the merchant
+        collects payments itself, via Pay Manual Subscription) does not. Send
+        `recurringOrder` only when `type` is `automatic`.
+      - `onUpdate` and `onDelete` govern what happens to subscriptions already
+        attached to the plan. `onUpdate`: `update` propagates changes to
+        existing subscriptions, `continue` leaves them untouched. `onDelete`:
+        `complete` stops existing subscriptions, `continue` keeps them running.
+        These are set at create time and interpreted at update / delete time.
+      - `createPaymentPlan` requires a unique `Idempotency-Key` (UUID v4) header.
+      - Verbs and statuses: `createPaymentPlan` is POST (201); `listPaymentPlans`
+        and `getPaymentPlan` are GET (200). `listPaymentPlans` is paginated: plans
+        live in the `data` array alongside `count`, `hasMore`, and `limit`.
+
+    To amend or remove a plan, use the update-a-payment-plan (PATCH) or
+    delete-a-payment-plan workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: manage-payment-plans
+    summary: Create, list, and retrieve a payment plan
+    description: >
+      Step 1 creates a payment plan on the terminal, supplying the
+      merchant-assigned `paymentPlanId` in the body. Step 2 (optional discovery)
+      lists the terminal's payment plans and extracts the first result's
+      `paymentPlanId` — skip it if you already hold the id. Step 3 retrieves the
+      plan to confirm its current state.
+
+      The primary path models an `automatic` plan (gateway collects each
+      payment, so a `recurringOrder` is sent). For a `manual` plan, omit
+      `recurringOrder` and collect payments yourself via the subscriptions
+      family. To amend or remove a plan, use update-a-payment-plan /
+      delete-a-payment-plan.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - paymentPlanId
+        - idempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier for the terminal that owns the payment plan.
+          example: '1234001'
+        paymentPlanId:
+          type: string
+          description: >
+            Merchant-assigned unique identifier for the payment plan. Supplied
+            in the create body and reused as the path parameter for retrieve.
+          example: PlanRef8765
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate for the create request, sent as the `Idempotency-Key` header.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        name:
+          type: string
+          description: Name of the payment plan.
+          example: Premium Club
+        currency:
+          type: string
+          description: Three-letter ISO currency code for the plan.
+          example: USD
+        frequency:
+          type: string
+          description: >
+            How often a payment is collected. One of `weekly`, `fortnightly`,
+            `monthly`, `quarterly`, `yearly`.
+          example: monthly
+        length:
+          type: integer
+          description: >
+            Number of payments in the plan. Send `0` to run indefinitely.
+          example: 12
+        limit:
+          type: integer
+          description: Maximum number of payment plans to return per page in the discovery step.
+          example: 10
+
+    steps:
+      - stepId: createPaymentPlan
+        description: >
+          Create the payment plan on the terminal. Supply the merchant-assigned
+          `paymentPlanId` in the body — the gateway does not generate it. This
+          example models an `automatic` plan, so it includes a `recurringOrder`;
+          for a `manual` plan, omit `recurringOrder`. `onUpdate`/`onDelete`
+          define how attached subscriptions behave on later update/delete.
+          Requires a unique `Idempotency-Key` header. Returns 201.
+        operationId: createPaymentPlan
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        requestBody:
+          contentType: application/json
+          payload:
+            paymentPlanId: $inputs.paymentPlanId
+            name: $inputs.name
+            description: Monthly Premium Club subscription
+            currency: $inputs.currency
+            setupOrder:
+              amount: 4999
+              description: Initial setup fee for Premium Club subscription
+              breakdown:
+                subtotal: 4347
+                taxes:
+                  - name: Sales Tax
+                    rate: 5.0
+            recurringOrder:
+              amount: 4999
+              description: Monthly Premium Club subscription
+              breakdown:
+                subtotal: 4347
+                taxes:
+                  - name: Sales Tax
+                    rate: 5.0
+            length: $inputs.length
+            type: automatic
+            frequency: $inputs.frequency
+            onUpdate: continue
+            onDelete: complete
+            customFieldNames:
+              - yourCustomField
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          paymentPlanId: $response.body#/paymentPlanId
+
+      - stepId: listPaymentPlans
+        description: >
+          Optional discovery step. Returns a paginated list of the terminal's
+          payment plans and extracts the first result's `paymentPlanId`. Plans
+          are in the `data` array. Skip this step if you already hold the
+          `paymentPlanId`.
+        operationId: listPaymentPlans
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstPaymentPlanId: $response.body#/data/0/paymentPlanId
+          hasMore: $response.body#/hasMore
+
+      - stepId: getPaymentPlan
+        description: >
+          Retrieve the payment plan to confirm its current state. Surfaces the
+          plan `name`, `frequency`, and `type`.
+        operationId: getPaymentPlan
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: paymentPlanId
+            in: path
+            value: $inputs.paymentPlanId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentPlanId: $response.body#/paymentPlanId
+          name: $response.body#/name
+          frequency: $response.body#/frequency
+
+    outputs:
+      paymentPlanId: $inputs.paymentPlanId
+      name: $steps.getPaymentPlan.outputs.name

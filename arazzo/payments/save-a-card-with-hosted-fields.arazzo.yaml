@@ -1,0 +1,202 @@
+arazzo: 1.0.0
+info:
+  title: Save a card with Hosted Fields
+  summary: Store a customer's card as a reusable secure token using gateway-hosted embedded fields.
+  description: >
+    Hosted Fields lets a merchant keep the look and feel of their own checkout
+    page while Payroc hosts the sensitive input fields, reducing the merchant's
+    PCI-DSS scope. The customer enters their card details into the embedded
+    fields; the gateway tokenizes them and returns a SINGLE-USE token. The server
+    then converts that single-use token into a REUSABLE secure token for later
+    payments/refunds.
+
+
+    Flow shape (two API calls with a client-side tokenization step between them):
+
+    1. Server creates a Hosted Fields session (createSession) with scenario
+       `tokenization` and passes the returned session token to the browser.
+
+    2. OFF-API, client-side: the Hosted Fields JavaScript library renders the
+       fields, the customer submits their details, and the client receives a
+       single-use token in a `submissionSuccess` event. This is a browser/library
+       step, NOT a Payroc REST call, so it is documented here rather than modelled
+       as an Arazzo step. The single-use token it produces is the
+       `singleUseToken` input to the next step.
+
+    3. Server mints a reusable secure token (createSecureToken) from the
+       single-use token.
+
+
+    To take a payment now (rather than save the card), use the
+    collect-with-hosted-fields workflow instead — a single-use token can be used
+    ONCE, either to run the sale or to be converted into a secure token, not both.
+
+
+    Agent gotchas captured here:
+
+    - Single-use vs secure token: the token from `submissionSuccess` is
+      single-use and expires ~30 minutes after issue — it can be used ONCE. This
+      workflow uses its own `tokenization`-scenario session and consumes the
+      token in `saveCardFromToken`.
+
+    - token vs secureTokenId: the createSecureToken response `token` value — not
+      secureTokenId — is what a later payment's paymentMethod.token expects.
+
+    - Idempotency-Key: createSession and createSecureToken each REQUIRE a unique
+      UUID v4 Idempotency-Key header. Generate a fresh value per request — hence a
+      separate key input per step.
+
+    - libVersion: createSession requires the version of the Hosted Fields JS
+      library in use (production is 1.7.0.261471).
+
+    - mitAgreement is required when saving card details.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: save-a-card-with-hosted-fields
+    summary: Create a tokenization session, tokenize card details client-side, then mint a reusable secure token.
+    description: >
+      Ordered flow: create a session with scenario `tokenization` (step
+      `createHostedFieldsSession`), then convert the resulting single-use token
+      into a reusable secure token server-side (step `saveCardFromToken`). The
+      client-side tokenization that produces the single-use token happens between
+      these steps in the browser and is not an API call, so it is described, not
+      modelled. To UPDATE an already-saved card, also send the existing
+      secureTokenId in the session request.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder who enters their payment details into the Hosted Fields form.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Hosts the checkout page and calls the Payroc API server-side to create the session and save the card.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call; also hosts the embedded fields and issues the single-use token.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - sessionIdempotencyKey
+        - libVersion
+        - singleUseToken
+        - secureTokenIdempotencyKey
+        - mitAgreement
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal (path parameter on the session and secure-token calls).
+          example: '1234001'
+        sessionIdempotencyKey:
+          type: string
+          description: Unique UUID v4 for the createSession request (Idempotency-Key header).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        libVersion:
+          type: string
+          description: Version of the Hosted Fields JavaScript library in use. Production is 1.7.0.261471.
+          example: 1.7.0.261471
+        singleUseToken:
+          type: string
+          description: >
+            Single-use token received client-side in the Hosted Fields
+            `submissionSuccess` event after the customer submits their details.
+            Used once — here, to mint a secure token.
+          example: 1234567890abcdef1234567890abcdef
+        operator:
+          type: string
+          description: Operator who saved the card.
+          example: Jane
+        secureTokenIdempotencyKey:
+          type: string
+          description: Unique UUID v4 for the createSecureToken request (Idempotency-Key header).
+          example: b8d4e6f0-1a2b-4c3d-9e5f-6a7b8c9d0e1f
+        secureTokenId:
+          type: string
+          description: >
+            Optional merchant-assigned identifier for the secure token. If
+            omitted, the gateway generates one. This is the token's reference, not
+            the reusable token value.
+          example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+        mitAgreement:
+          type: string
+          description: >
+            How the merchant may reuse the stored card details, as agreed by the
+            customer: unscheduled, recurring, or installment. Required when saving
+            card details.
+          example: recurring
+    steps:
+      - stepId: createHostedFieldsSession
+        x-actor: merchant
+        description: >
+          Create a Hosted Fields session for the terminal by POSTing to
+          /processing-terminals/{processingTerminalId}/hosted-fields-sessions with
+          scenario `tokenization`. The returned session token (expires after 10
+          minutes) is placed in the Hosted Fields JavaScript config in the
+          browser. To UPDATE an already-saved card, also send the existing
+          secureTokenId in this request. Requires an Idempotency-Key header and
+          the libVersion.
+        operationId: createSession
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.sessionIdempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        requestBody:
+          contentType: application/json
+          payload:
+            libVersion: $inputs.libVersion
+            scenario: tokenization
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          sessionToken: $response.body#/token
+          expiresAt: $response.body#/expiresAt
+      - stepId: saveCardFromToken
+        x-actor: merchant
+        description: >
+          Convert a single-use token (from a session created with scenario
+          `tokenization`) into a REUSABLE secure token by POSTing to
+          /processing-terminals/{processingTerminalId}/secure-tokens with a source
+          of type singleUseToken. Because a single-use token can be used only
+          once, this consumes the token. The response `token` value — not
+          secureTokenId — is what a later payment's paymentMethod.token expects.
+          mitAgreement is required when saving card details. Requires an
+          Idempotency-Key header.
+        operationId: createSecureToken
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.secureTokenIdempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        requestBody:
+          contentType: application/json
+          payload:
+            secureTokenId: $inputs.secureTokenId
+            operator: $inputs.operator
+            mitAgreement: $inputs.mitAgreement
+            source:
+              type: singleUseToken
+              token: $inputs.singleUseToken
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          secureTokenId: $response.body#/secureTokenId
+          secureToken: $response.body#/token
+          secureTokenStatus: $response.body#/status
+    outputs:
+      sessionToken: $steps.createHostedFieldsSession.outputs.sessionToken
+      secureTokenId: $steps.saveCardFromToken.outputs.secureTokenId
+      secureToken: $steps.saveCardFromToken.outputs.secureToken
+      secureTokenStatus: $steps.saveCardFromToken.outputs.secureTokenStatus

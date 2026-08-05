@@ -1,0 +1,105 @@
+arazzo: 1.0.0
+info:
+  title: Check an EBT card balance
+  summary: View the remaining balance on an Electronic Benefit Transfer (EBT) card.
+  description: >
+    Headline single-operation workflow for EBT programs. Submits an EBT balance
+    inquiry to the Payroc gateway and returns the card's current benefit balance.
+
+    The request must identify the processing terminal, the transaction currency,
+    and the card. The `card` object is polymorphic (discriminated by `type`): use
+    `card` for raw card details (as modelled here) or `singleUseToken` when the
+    card is represented by a single-use token. For EBT specifically, set
+    `card.cardDetails.ebtDetails.benefitCategory` (e.g. `cash` or `foodStamp`) to
+    select which benefit balance to query.
+
+    The gateway responds 200 even for a processor decline, so success is not the
+    same as an approval: assert `responseCode == A` to confirm the processor
+    approved the inquiry. The balance itself is returned in `card.balances`, an
+    array keyed by `benefitCategory` — read the amount/currency from the relevant
+    entry rather than assuming a single top-level balance.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: check-ebt-balance
+    summary: Submit an EBT balance inquiry and return the card's benefit balance.
+    description: >
+      Single-step workflow: POST the balance inquiry to /cards/balance. Inputs
+      supply the processing terminal, currency, and EBT card details. The step
+      asserts an approved processor response and surfaces the returned balances.
+    inputs:
+      type: object
+      required: [processingTerminalId, currency, cardNumber, expiryDate, benefitCategory]
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier that Payroc assigned to the terminal.
+          example: '1234001'
+        operator:
+          type: string
+          description: Operator who requested the balance inquiry.
+          example: Jane
+        currency:
+          type: string
+          description: >
+            Currency of the transaction, following the ISO 4217 standard.
+          example: USD
+        cardholderName:
+          type: string
+          description: Name of the cardholder.
+          example: Sarah Hazel Hopper
+        cardNumber:
+          type: string
+          description: Card number of the EBT card.
+          example: '4539858876047062'
+        expiryDate:
+          type: string
+          description: Expiry date of the card in MMYY format.
+          example: '1230'
+        benefitCategory:
+          type: string
+          description: >
+            EBT benefit category to query, for example `cash` or `foodStamp`.
+          example: cash
+    steps:
+      - stepId: balanceInquiry
+        description: >
+          Submit the EBT balance inquiry. The card is sent as raw keyed card
+          details (`card.type == card`); to query by token instead, send a
+          `singleUseToken` variant of the polymorphic `card` object. The gateway
+          returns 200 even on a decline, so successCriteria also asserts
+          `responseCode == A` to confirm the processor approved the inquiry.
+        operationId: balanceCard
+        requestBody:
+          contentType: application/json
+          payload:
+            processingTerminalId: $inputs.processingTerminalId
+            operator: $inputs.operator
+            currency: $inputs.currency
+            card:
+              type: card
+              cardDetails:
+                entryMethod: keyed
+                cardholderName: $inputs.cardholderName
+                keyedData:
+                  dataFormat: plainText
+                  cardNumber: $inputs.cardNumber
+                  expiryDate: $inputs.expiryDate
+                ebtDetails:
+                  benefitCategory: $inputs.benefitCategory
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.body#/responseCode == A
+        outputs:
+          balances: $response.body#/card/balances
+          responseCode: $response.body#/responseCode
+          responseMessage: $response.body#/responseMessage
+    outputs:
+      balances: $steps.balanceInquiry.outputs.balances
+      responseCode: $steps.balanceInquiry.outputs.responseCode
+      responseMessage: $steps.balanceInquiry.outputs.responseMessage

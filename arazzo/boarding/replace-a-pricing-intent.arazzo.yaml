@@ -1,0 +1,122 @@
+arazzo: 1.0.0
+info:
+  title: Replace a pricing intent
+  summary: Fully overwrite an existing pricing intent with a complete MPA 5.2 payload (PUT).
+  description: >
+    Full replace of a pricing intent - the reusable pricing template assigned to
+    a processing account during boarding. Overwrites the entire resource with a
+    complete MPA 5.2 payload via PUT.
+
+    Agent gotchas:
+    - The write payload is MPA version 5.2 (`writePricingIntent`); `country`,
+      `version`, `base`, and `key` are required. Fee amounts are integers in the
+      currency's lowest denomination (cents).
+    - PUT returns 204 No Content (no body).
+    - Updating a pricing intent never affects merchants you have already
+      onboarded; it only changes the template for future assignments.
+
+    To change only specific fields, use the patch-a-pricing-intent workflow
+    (partial RFC 6902 JSON Patch, PATCH) instead - a given amendment uses one or
+    the other, not both.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: replace-a-pricing-intent
+    summary: Fully replace a pricing intent via PUT.
+    description: >
+      Overwrite the entire pricing intent identified by `pricingIntentId` with a
+      complete MPA 5.2 payload (updatePricingIntent). Returns 204 No Content.
+    inputs:
+      type: object
+      required:
+        - pricingIntentId
+      properties:
+        pricingIntentId:
+          type: string
+          description: Identifier Payroc assigned to the pricing intent to replace.
+          example: '5'
+        key:
+          type: string
+          description: Your own reference for the pricing intent, stored for your records.
+          example: Your-Unique-Identifier
+    steps:
+      - stepId: replacePricingIntent
+        description: >
+          Overwrite the entire pricing intent with a complete MPA 5.2 payload via
+          PUT. Returns 204 No Content (no body). Does not affect already-onboarded
+          merchants.
+        operationId: updatePricingIntent
+        parameters:
+          - name: pricingIntentId
+            in: path
+            value: $inputs.pricingIntentId
+        requestBody:
+          contentType: application/json
+          payload:
+            key: $inputs.key
+            metadata:
+              yourCustomField: abc123
+            country: US
+            version: '5.2'
+            base:
+              addressVerification: 6
+              annualFee:
+                billInMonth: june
+                amount: 9900
+              regulatoryAssistanceProgram: 15
+              pciNonCompliance: 4995
+              platinumSecurity:
+                billingFrequency: monthly
+              maintenance: 500
+              minimum: 100
+              voiceAuthorization: 95
+              chargeback: 2500
+              retrieval: 1500
+              batch: 1500
+              earlyTermination: 57500
+            processor:
+              card:
+                planType: interchangePlus
+                fees:
+                  mastercardVisaDiscover:
+                    volume: 1.5
+                    transaction: 5
+                  amex:
+                    type: optBlue
+                    volume: 1.5
+                    transaction: 5
+                  pinDebit:
+                    additionalDiscount: 1.25
+                    transaction: 10
+                    monthlyAccess: 1200
+                  electronicBenefitsTransfer:
+                    transaction: 10
+                  specialityCards:
+                    transaction: 10
+              ach:
+                fees:
+                  transaction: 50
+                  batch: 5
+                  returns: 400
+                  unauthorizedReturn: 1999
+                  statement: 800
+                  monthlyMinimum: 20000
+                  accountVerification: 10
+                  discountRateUnder10000: 5.25
+                  discountRateAbove10000: 10
+            gateway:
+              fees:
+                monthly: 2000
+                setup: 5000
+                perTransaction: 2000
+                perDeviceMonthly: 10
+            services:
+              - name: hardwareAdvantagePlan
+                enabled: true
+        successCriteria:
+          - condition: $statusCode == 204

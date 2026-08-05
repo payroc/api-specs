@@ -1,0 +1,86 @@
+arazzo: 1.0.0
+info:
+  title: Update an event subscription (full replace)
+  summary: Fully replace an existing event subscription with a PUT.
+  description: >
+    Full replace of an event subscription (webhook notification registration).
+    Overwrites the entire subscription with the supplied body via PUT — omitted
+    fields are cleared.
+
+    Agent gotchas:
+    - PUT (updateEventSubscription) is a full replace and returns 204 No Content;
+      re-run getEventSubscription (see create-and-manage-an-event-subscription) to
+      confirm the new state.
+    - The subscriptionId is the int64 id returned by create at `#/id`.
+
+    To change only specific fields, use the patch-an-event-subscription workflow
+    (partial RFC 6902 JSON Patch) instead - a given amendment uses one or the
+    other, not both.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: update-an-event-subscription
+    summary: Fully replace an event subscription via PUT.
+    description: >
+      Replace the entire event subscription identified by `subscriptionId` with a
+      complete body (updateEventSubscription). Returns 204 No Content.
+    inputs:
+      type: object
+      required:
+        - subscriptionId
+        - eventType
+        - notificationUri
+        - secret
+        - supportEmailAddress
+      properties:
+        subscriptionId:
+          type: integer
+          description: Identifier (int64) of the event subscription to replace, as returned by create at #/id.
+          example: 1122334455
+        eventType:
+          type: string
+          description: Event to subscribe to.
+          example: processingAccount.status.changed
+        notificationUri:
+          type: string
+          description: Public endpoint that Payroc sends webhook POST requests to.
+          example: https://my-server/notification/endpoint
+        secret:
+          type: string
+          description: 16-64 character shared secret used to verify deliveries.
+          example: aBcD1234eFgH5678iJkL9012mNoP3456
+        supportEmailAddress:
+          type: string
+          description: Email address Payroc contacts if it cannot deliver notifications to your endpoint.
+          example: jane.doe@example.com
+    steps:
+      - stepId: updateSubscription
+        description: >
+          Replace the entire subscription with the supplied body via PUT — omitted
+          fields are cleared. Returns 204 No Content, so there is no response body
+          to capture.
+        operationId: updateEventSubscription
+        parameters:
+          - name: subscriptionId
+            in: path
+            value: $inputs.subscriptionId
+        requestBody:
+          contentType: application/json
+          payload:
+            enabled: true
+            eventTypes:
+              - $inputs.eventType
+            notifications:
+              - type: webhook
+                uri: $inputs.notificationUri
+                secret: $inputs.secret
+                supportEmailAddress: $inputs.supportEmailAddress
+            metadata:
+              yourCustomField: abc123
+        successCriteria:
+          - condition: $statusCode == 204

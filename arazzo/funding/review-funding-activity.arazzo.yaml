@@ -1,0 +1,105 @@
+arazzo: 1.0.0
+info:
+  title: Review funding activity and balances
+  summary: Read payfac funding balances and the funding activity ledger.
+  description: >
+    Lets a payfac integrator review the funding position of the merchants
+    linked to their account: first the current balances (total, pending, and
+    available funds per merchant), then the dated activity ledger that explains
+    how those balances moved.
+
+    Both operations are read-only, paginated GETs against payfac-scoped
+    endpoints; no resource is created or mutated. The `available` figure on a
+    balance is the amount usable in funding instructions — it excludes `pending`
+    funds not yet sent to funding accounts. Filter either call to a single
+    merchant with the optional `merchantId` query parameter. `getFundingActivity`
+    additionally requires a `dateFrom`/`dateTo` window (YYYY-MM-DD); a
+    `recipient` is only returned on activity rows whose `type` is `debit`.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: review-funding-activity
+    summary: Read funding balances then the funding activity ledger.
+    description: >
+      Step 1 lists the funding balance for each linked merchant. Step 2 lists
+      the funding activity (credits and debits) that produced those balances,
+      over a required date window. Both steps accept an optional `merchantId`
+      filter to scope results to one merchant; pagination is via the optional
+      `before`/`after`/`limit` query parameters.
+    inputs:
+      type: object
+      required: [dateFrom, dateTo]
+      properties:
+        merchantId:
+          type: string
+          description: >
+            Optional. Filter both steps to a single merchant by the identifier
+            the processor assigned. Omit to review all linked merchants.
+          example: '4525644354'
+        dateFrom:
+          type: string
+          format: date
+          description: Start of the activity window (inclusive), YYYY-MM-DD.
+          example: '2024-07-02'
+        dateTo:
+          type: string
+          format: date
+          description: End of the activity window (inclusive), YYYY-MM-DD.
+          example: '2024-07-03'
+        limit:
+          type: integer
+          description: Optional. Maximum number of results per page.
+          example: 20
+    steps:
+      - stepId: getFundingBalance
+        description: >
+          List the funding balance for each merchant linked to the account.
+          Each row reports `funds` (total, including pending), `pending` (not
+          yet sent to funding accounts), and `available` (usable in funding
+          instructions). Pass `merchantId` to scope to one merchant.
+        operationId: getFundingBalance
+        parameters:
+          - name: merchantId
+            in: query
+            value: $inputs.merchantId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          balances: $response.body#/data
+
+      - stepId: getFundingActivity
+        description: >
+          List the funding activity ledger over the required date window. Each
+          `activityRecord` shows the merchant, `amount`, and `type` (`credit`
+          moved funds into the balance, `debit` moved funds out). `recipient`
+          is populated only when `type` is `debit`. `dateFrom` and `dateTo` are
+          required query parameters; `merchantId` is an optional filter.
+        operationId: getFundingActivity
+        parameters:
+          - name: dateFrom
+            in: query
+            value: $inputs.dateFrom
+          - name: dateTo
+            in: query
+            value: $inputs.dateTo
+          - name: merchantId
+            in: query
+            value: $inputs.merchantId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          activity: $response.body#/data
+    outputs:
+      balances: $steps.getFundingBalance.outputs.balances
+      activity: $steps.getFundingActivity.outputs.activity

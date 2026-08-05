@@ -1,0 +1,130 @@
+arazzo: 1.0.0
+info:
+  title: Reverse (void) a card payment
+  summary: Cancel a card payment that is still in an open batch.
+  description: >
+    Reverses (voids) a card payment before it settles, removing it from the
+    merchant's open batch so no funds move. Reversal is distinct from a refund: a
+    reversal cancels an unsettled payment in an open batch, whereas a refund
+    returns funds for an already-settled payment in a closed batch. Agents
+    routinely conflate the two - if the batch has closed, use the
+    refund-a-card-payment workflow instead.
+
+    Optionally look up the payment first (listPayments), then reverse it
+    (reversePayment). Send an amount to reverse only part of the transaction; omit
+    it to reverse the full amount.
+
+    To reverse a bank-transfer / ACH payment instead, use the
+    reverse-a-bank-transfer-payment workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: reverse-a-card-payment
+    summary: Look up and reverse a card payment in an open batch.
+    description: >
+      Optionally list card payments to find the paymentId (listPayments), then
+      reverse it (reverseCardPayment). The list step is optional - use it only
+      when you do not already hold the paymentId.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder who requested that the payment be cancelled.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to look up and reverse the payment.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream processor that clears the open batch; not directly callable.
+    inputs:
+      type: object
+      required:
+        - paymentId
+        - idempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the terminal, used to filter the payment list.
+          example: 1234001
+        orderId:
+          type: string
+          description: Order ID to filter the payment list by when searching for the payment.
+          example: OrderRef6543
+        paymentId:
+          type: string
+          description: Unique identifier of the payment to reverse.
+          example: M2MJOG6O2Y
+        idempotencyKey:
+          type: string
+          description: UUID v4 that makes the reversal request idempotent (Idempotency-Key header).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        operator:
+          type: string
+          description: Operator who reversed the payment.
+          example: Jane
+        amount:
+          type: integer
+          description: >
+            Amount to reverse, in the currency's lowest denomination (for example, cents).
+            Omit to reverse the full transaction amount; send a smaller value for a partial reversal.
+          example: 4999
+    steps:
+      - stepId: listPayments
+        description: >
+          Optional. List card payments matching the search filters to find the
+          paymentId of the transaction to reverse. Skip this step if you already
+          hold the paymentId.
+        x-actor: merchant
+        operationId: $sourceDescriptions.payroc-api.listPayments
+        parameters:
+          - name: processingTerminalId
+            in: query
+            value: $inputs.processingTerminalId
+          - name: orderId
+            in: query
+            value: $inputs.orderId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstPaymentId: $response.body#/data/0/paymentId
+
+      - stepId: reverseCardPayment
+        description: >
+          Reverse (void) the card payment in the open batch. Takes the paymentId
+          in the path and a required Idempotency-Key header. Send amount for a
+          partial reversal, or omit it to reverse the full amount. Success returns
+          transactionResult.status == reversal.
+        x-actor: merchant
+        operationId: $sourceDescriptions.payroc-api.reversePayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: paymentId
+            in: path
+            value: $inputs.paymentId
+        requestBody:
+          contentType: application/json
+          payload:
+            operator: $inputs.operator
+            amount: $inputs.amount
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.body#/transactionResult/status == "reversal"
+        outputs:
+          paymentId: $response.body#/paymentId
+          status: $response.body#/transactionResult/status
+    outputs:
+      paymentId: $steps.reverseCardPayment.outputs.paymentId
+      status: $steps.reverseCardPayment.outputs.status

@@ -1,0 +1,207 @@
+arazzo: 1.0.0
+info:
+  title: Collect a payment with Hosted Fields
+  summary: Take a payment using gateway-hosted, PCI-reducing embedded card/bank fields.
+  description: >
+    Hosted Fields lets a merchant keep the look and feel of their own checkout
+    page while Payroc hosts the sensitive input fields, reducing the merchant's
+    PCI-DSS scope. The customer enters their card or bank details into the
+    embedded fields; the gateway tokenizes them and returns a SINGLE-USE token.
+    The server then runs the payment with that token. The terminal outcome is a
+    created payment (HTTP 201) with a paymentId and a transactionResult.
+
+
+    Flow shape (two API calls with a client-side tokenization step between them):
+
+    1. Server creates a Hosted Fields session (createSession) with scenario
+       `payment` and passes the returned session token to the browser.
+
+    2. OFF-API, client-side: the Hosted Fields JavaScript library renders the
+       fields, the customer submits their details, and the client receives a
+       single-use token in a `submissionSuccess` event. This is a browser/library
+       step, NOT a Payroc REST call, so it is documented here rather than modelled
+       as an Arazzo step. The single-use token it produces is the
+       `singleUseToken` input to the next step.
+
+    3. Server runs the sale (payment) with paymentMethod.type = singleUseToken.
+
+
+    To SAVE a card for later reuse (rather than take a payment now), use the
+    save-a-card-with-hosted-fields workflow instead — a single-use token can be
+    used ONCE, either to run the sale or to be converted into a secure token, not
+    both.
+
+
+    Agent gotchas captured here:
+
+    - Single-use vs secure token: the token from `submissionSuccess` is
+      single-use and expires ~30 minutes after issue — it can be used ONCE. To
+      both save the card and take a payment, run the sale with
+      `credentialOnFile.tokenize: true` on the payment.
+
+    - token vs secureTokenId: on the payment payload, paymentMethod.token takes
+      the token VALUE, not the secureTokenId reference.
+
+    - Idempotency-Key: createSession and payment each REQUIRE a unique UUID v4
+      Idempotency-Key header. Generate a fresh value per request — hence a
+      separate key input per step.
+
+    - libVersion: createSession requires the version of the Hosted Fields JS
+      library in use (production is 1.7.0.261471).
+
+    - Bank accounts: the same flow works for ACH (US) / PAD (Canada) — run the
+      sale against /bank-transfer-payments (a bank-transfer variant, out of scope
+      for the card steps modelled here) with the single-use token.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: collect-with-hosted-fields
+    summary: Create a Hosted Fields session, tokenize card details client-side, then run the sale.
+    description: >
+      Ordered flow: create a session with scenario `payment` (step
+      `createHostedFieldsSession`), then run the sale server-side with the
+      resulting single-use token (step `runSaleWithToken`). The client-side
+      tokenization that produces the single-use token happens between these steps
+      in the browser and is not an API call, so it is described, not modelled.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder / account holder who enters their payment details into the Hosted Fields form.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Hosts the checkout page and calls the Payroc API server-side to create the session and run the payment.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call; also hosts the embedded fields and issues the single-use token.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream processor / card scheme / ACH network that authorizes the funds; not directly callable.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - sessionIdempotencyKey
+        - libVersion
+        - singleUseToken
+        - paymentIdempotencyKey
+        - orderId
+        - amount
+        - currency
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal (path parameter on the session call).
+          example: '1234001'
+        sessionIdempotencyKey:
+          type: string
+          description: Unique UUID v4 for the createSession request (Idempotency-Key header).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        libVersion:
+          type: string
+          description: Version of the Hosted Fields JavaScript library in use. Production is 1.7.0.261471.
+          example: 1.7.0.261471
+        singleUseToken:
+          type: string
+          description: >
+            Single-use token received client-side in the Hosted Fields
+            `submissionSuccess` event after the customer submits their details.
+            Used once — here, to run the sale.
+          example: 1234567890abcdef1234567890abcdef
+        paymentIdempotencyKey:
+          type: string
+          description: Unique UUID v4 for the payment request (Idempotency-Key header).
+          example: 7c1f3a2b-4d5e-4f6a-8b9c-0d1e2f3a4b5c
+        orderId:
+          type: string
+          description: Merchant-assigned unique identifier for the order.
+          example: OrderRef6543
+        description:
+          type: string
+          description: Description of the transaction.
+          example: Large Pepperoni Pizza
+        amount:
+          type: integer
+          description: Total transaction amount in the currency's lowest denomination (for example, cents).
+          example: 4999
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: USD
+        operator:
+          type: string
+          description: Operator who ran the transaction.
+          example: Jane
+    steps:
+      - stepId: createHostedFieldsSession
+        x-actor: merchant
+        description: >
+          Create a Hosted Fields session for the terminal by POSTing to
+          /processing-terminals/{processingTerminalId}/hosted-fields-sessions with
+          scenario `payment`. The returned session token (expires after 10
+          minutes) is placed in the Hosted Fields JavaScript config in the
+          browser. Requires an Idempotency-Key header and the libVersion.
+        operationId: createSession
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.sessionIdempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        requestBody:
+          contentType: application/json
+          payload:
+            libVersion: $inputs.libVersion
+            scenario: payment
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          sessionToken: $response.body#/token
+          expiresAt: $response.body#/expiresAt
+      - stepId: runSaleWithToken
+        x-actor: customer
+        description: >
+          Run the sale server-side by POSTing to /payments with
+          paymentMethod.type = singleUseToken and the single-use token the client
+          received from the `submissionSuccess` event. The default
+          `autoCapture: true` / `processAsSale: false` produce a normal, adjustable
+          sale. To save the card at the same time, add a `credentialOnFile` object
+          with `tokenize: true`. Requires an Idempotency-Key header. Terminal
+          outcome: a created payment with a paymentId and transactionResult.
+        operationId: payment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.paymentIdempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            channel: web
+            processingTerminalId: $inputs.processingTerminalId
+            operator: $inputs.operator
+            order:
+              orderId: $inputs.orderId
+              description: $inputs.description
+              currency: $inputs.currency
+              amount: $inputs.amount
+            paymentMethod:
+              type: singleUseToken
+              token: $inputs.singleUseToken
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          paymentId: $response.body#/paymentId
+          status: $response.body#/transactionResult/status
+    outputs:
+      sessionToken: $steps.createHostedFieldsSession.outputs.sessionToken
+      paymentId: $steps.runSaleWithToken.outputs.paymentId
+      status: $steps.runSaleWithToken.outputs.status

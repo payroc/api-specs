@@ -1,0 +1,162 @@
+arazzo: 1.0.0
+info:
+  title: Refund a bank-transfer payment
+  summary: Return funds to a customer against an existing settled bank-transfer (ACH) payment.
+  description: >
+    Runs a referenced refund - a refund tied to an originating paymentId - to
+    return funds to a customer's bank account. The merchant optionally looks up
+    the original bank-transfer payment first (by paymentId, or by searching when
+    the id is unknown), then posts the refund against that payment.
+
+    - Optionally GET /bank-transfer-payments/{paymentId} (getBankTransferPayment)
+      or search GET /bank-transfer-payments (listBankTransferPayments), then POST
+      /bank-transfer-payments/{paymentId}/refund (refundBankTransferPayment).
+      Returns 200.
+
+    Agent gotchas: a referenced refund is a POST that returns 200 (not 201).
+    Every refund POST requires an `Idempotency-Key` header in UUID v4 format. A
+    refund only settles when the original payment is in a closed batch; if the
+    payment is still in an open batch the gateway reverses (cancels) it instead
+    of refunding - so this same endpoint doubles as a reversal, and a dedicated
+    reverse endpoint is not needed. Both full and partial refunds use the same
+    request; a partial refund simply sends an `amount` lower than the original
+    payment amount.
+
+    To refund a card payment instead, use the refund-a-card-payment workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: refund-a-bank-transfer-payment
+    summary: Referenced refund of an existing bank-transfer / ACH payment.
+    description: >
+      Optionally retrieves the original bank-transfer payment, then refunds it.
+      The lookup steps are optional: use getBankPayment when you already hold the
+      paymentId, or findBankPayment to search for it (e.g. by order id) when you
+      do not.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: The person who requested the refund and receives the returned funds to their bank account.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to look up the payment and issue the refund on the customer's behalf.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: ACH network
+        type: external-system
+        description: Downstream ACH network that settles the returned funds; not directly callable.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - paymentId
+        - amount
+        - description
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per refund request, sent as the Idempotency-Key header.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        paymentId:
+          type: string
+          description: Unique identifier of the original payment to refund. Path parameter for the retrieve and refund steps.
+          example: M2MJOG6O2Y
+        processingTerminalId:
+          type: string
+          description: >
+            Unique identifier of the processing terminal. Required as a query
+            filter for the bank-transfer search (findBankPayment).
+          example: "1234001"
+        orderId:
+          type: string
+          description: Optional order id used as a search filter when looking up the original payment without its paymentId.
+          example: OrderRef6543
+        amount:
+          type: integer
+          description: >
+            Amount to refund, in the currency's lowest denomination (e.g. cents).
+            Send the full original amount for a full refund, or a lower value for
+            a partial refund.
+          example: 4999
+        description:
+          type: string
+          description: Reason for the refund.
+          example: Refund for order OrderRef6543
+    steps:
+      - stepId: findBankPayment
+        x-actor: merchant
+        description: >
+          Optional. Searches for the original bank-transfer payment when you do
+          not have its paymentId (GET /bank-transfer-payments).
+          `processingTerminalId` is a required query parameter here. Skip this
+          step when you already hold the paymentId. Take the paymentId of the
+          matching result from `data/0/paymentId`.
+        operationId: $sourceDescriptions.payroc-api.listBankTransferPayments
+        parameters:
+          - name: processingTerminalId
+            in: query
+            value: $inputs.processingTerminalId
+          - name: orderId
+            in: query
+            value: $inputs.orderId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          foundPaymentId: $response.body#/data/0/paymentId
+      - stepId: getBankPayment
+        x-actor: merchant
+        description: >
+          Optional. Retrieves the original bank-transfer payment by paymentId (GET
+          /bank-transfer-payments/{paymentId}) to confirm its details and batch
+          status before refunding. An open-batch payment is reversed rather than
+          refunded.
+        operationId: $sourceDescriptions.payroc-api.getBankTransferPayment
+        parameters:
+          - name: paymentId
+            in: path
+            value: $inputs.paymentId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentId: $response.body#/paymentId
+          status: $response.body#/transactionResult/status
+      - stepId: refundBankPayment
+        x-actor: merchant
+        description: >
+          Refunds the referenced bank-transfer payment (POST
+          /bank-transfer-payments/{paymentId}/refund). Requires the
+          Idempotency-Key header and a body with `amount` and `description`.
+          Returns 200 with the refunded payment; the resulting transaction state
+          is in `transactionResult.status` (reversal when the payment was in an
+          open batch).
+        operationId: $sourceDescriptions.payroc-api.refundBankTransferPayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: paymentId
+            in: path
+            value: $inputs.paymentId
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: $inputs.amount
+            description: $inputs.description
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentId: $response.body#/paymentId
+          status: $response.body#/transactionResult/status
+    outputs:
+      paymentId: $steps.refundBankPayment.outputs.paymentId
+      status: $steps.refundBankPayment.outputs.status

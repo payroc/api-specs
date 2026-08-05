@@ -1,0 +1,306 @@
+arazzo: 1.0.0
+info:
+  title: Review settlement and reporting data
+  summary: Read settlement reports - batches, transactions, authorizations, disputes, and ACH deposits.
+  description: >
+    Lets an integrator review the settlement and reporting data that Payroc holds
+    for their merchants. This is one read-only reporting family with five
+    independent report-type branches; every operation is a paginated or single
+    GET and nothing is created or mutated.
+
+    The five branches, each a self-contained "review my X" task, are:
+
+    - batches: list batches for a date, then retrieve one batch by `batchId`.
+    - transactions: list transactions, then retrieve one by `transactionId`.
+    - authorizations: list authorizations, then retrieve one by `authorizationId`.
+    - disputes: list disputes for a date, then list the status history of one
+      dispute by `disputeId`.
+    - ACH deposits: list ACH deposits for a date, retrieve one by `achDepositId`,
+      then list the fee breakdown for that deposit.
+
+    Agent gotchas: identifiers here are integers (`batchId`, `transactionId`,
+    `authorizationId`, `disputeId`, `achDepositId`), unlike the string
+    `merchantId` the processor assigns. `getbatches`, `getdisputes`, and
+    `getAchDeposits` require the `date` query parameter. `getTransactions` and
+    `getAuthorizations` require EITHER `date` OR `batchId`. `getAchDepositFees`
+    requires EITHER `date` OR `achDepositId`. All list steps accept an optional
+    `merchantId` filter and `before`/`after`/`limit` pagination. The list -> retrieve
+    steps within a branch chain by feeding the first list row's id into the
+    retrieve step; supply the id directly if you already have it.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: review-settlement-reporting
+    summary: List then drill into settlement reports across five report types.
+    description: >
+      Walks each of the five report-type branches list-then-retrieve. Branches are
+      independent of one another - run whichever report type you need. Within a
+      branch the retrieve step depends on the preceding list step because it reads
+      the first row's identifier from that step's output; if you already hold the
+      identifier, pass it directly instead of chaining.
+
+      The five branches are independent read-only reports: run any one, several,
+      or all of them - they are additive, not mutually exclusive, and nothing is
+      mutated. Required filters differ by branch (see each step): `getbatches`,
+      `getdisputes`, and `getAchDeposits` require `date`. Modelled with `date` as
+      the primary filter; `getTransactions`/`getAuthorizations` also accept a
+      `batchId` in place of `date`, and `getAchDepositFees` accepts an
+      `achDepositId` in place of `date`. These EITHER/OR filters are a
+      parameter-level choice on a single GET, not separate steps.
+    inputs:
+      type: object
+      required: [date]
+      properties:
+        date:
+          type: string
+          format: date
+          description: >
+            Report date to filter list results by, YYYY-MM-DD. Required by the
+            batches, disputes, and ACH-deposit list steps; used as the primary
+            filter for transactions and authorizations too.
+          example: '2024-07-02'
+        merchantId:
+          type: string
+          description: >
+            Optional. Filter list results to a single merchant by the identifier
+            the processor assigned. Omit to review all linked merchants.
+          example: '4525644354'
+        limit:
+          type: integer
+          description: Optional. Maximum number of results per page.
+          example: 20
+    steps:
+      # --- Branch 1: batches ---
+      - stepId: listBatches
+        description: >
+          Batches branch, step 1. List the batches your merchants submitted to
+          the processor on `date` (a required query parameter). Each row reports
+          transaction counts, sale/held/return totals, and the owning merchant.
+          `merchantId` is an optional filter.
+        operationId: getbatches
+        parameters:
+          - name: date
+            in: query
+            value: $inputs.date
+          - name: merchantId
+            in: query
+            value: $inputs.merchantId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          batches: $response.body#/data
+          firstBatchId: $response.body#/data/0/batchId
+
+      - stepId: retrieveBatch
+        description: >
+          Batches branch, step 2. Retrieve a single batch by its integer
+          `batchId`. Chains from listBatches by reading the first row's
+          `batchId`; supply a known `batchId` directly if you have one.
+        operationId: getbatch
+        parameters:
+          - name: batchId
+            in: path
+            value: $steps.listBatches.outputs.firstBatchId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          batch: $response.body
+
+      # --- Branch 2: transactions ---
+      - stepId: listTransactions
+        description: >
+          Transactions branch, step 1. List merchant transactions. You must
+          provide EITHER `date` OR `batchId`; modelled here with `date`. Optional
+          `merchantId` and `transactionType` (Capture/Return) filters also apply.
+          Each row includes type, amount, batch, authorization, and settlement
+          details.
+        operationId: getTransactions
+        parameters:
+          - name: date
+            in: query
+            value: $inputs.date
+          - name: merchantId
+            in: query
+            value: $inputs.merchantId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          transactions: $response.body#/data
+          firstTransactionId: $response.body#/data/0/transactionId
+
+      - stepId: retrieveTransaction
+        description: >
+          Transactions branch, step 2. Retrieve a single transaction by its
+          integer `transactionId`. Chains from listTransactions; supply a known
+          `transactionId` directly if you have one.
+        operationId: gettransaction
+        parameters:
+          - name: transactionId
+            in: path
+            value: $steps.listTransactions.outputs.firstTransactionId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          transaction: $response.body
+
+      # --- Branch 3: authorizations ---
+      - stepId: listAuthorizations
+        description: >
+          Authorizations branch, step 1. List authorizations. You must provide
+          EITHER `date` OR `batchId`; modelled here with `date`. Optional
+          `merchantId` filter. Each row shows the issuing bank's authorization
+          response, the authorized amount, and card/transaction/batch details.
+        operationId: getAuthorizations
+        parameters:
+          - name: date
+            in: query
+            value: $inputs.date
+          - name: merchantId
+            in: query
+            value: $inputs.merchantId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          authorizations: $response.body#/data
+          firstAuthorizationId: $response.body#/data/0/authorizationId
+
+      - stepId: retrieveAuthorization
+        description: >
+          Authorizations branch, step 2. Retrieve a single authorization by its
+          integer `authorizationId`. Chains from listAuthorizations; supply a
+          known `authorizationId` directly if you have one.
+        operationId: getAuthorization
+        parameters:
+          - name: authorizationId
+            in: path
+            value: $steps.listAuthorizations.outputs.firstAuthorizationId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          authorization: $response.body
+
+      # --- Branch 4: disputes ---
+      - stepId: listDisputes
+        description: >
+          Disputes branch, step 1. List disputes submitted on `date` (a required
+          query parameter). Each row carries the dispute type, its `currentStatus`
+          (status + statusDate), and the linked transaction. Optional `merchantId`
+          filter.
+        operationId: getdisputes
+        parameters:
+          - name: date
+            in: query
+            value: $inputs.date
+          - name: merchantId
+            in: query
+            value: $inputs.merchantId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          disputes: $response.body#/data
+          firstDisputeId: $response.body#/data/0/disputeId
+
+      - stepId: listDisputeStatuses
+        description: >
+          Disputes branch, step 2. List the full status history of one dispute by
+          its integer `disputeId` (each entry has a statusId, status, and
+          statusDate). Chains from listDisputes; supply a known `disputeId`
+          directly if you have one.
+        operationId: getdisputesStatuses
+        parameters:
+          - name: disputeId
+            in: path
+            value: $steps.listDisputes.outputs.firstDisputeId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          statuses: $response.body
+
+      # --- Branch 5: ACH deposits ---
+      - stepId: listAchDeposits
+        description: >
+          ACH-deposits branch, step 1. List ACH deposits paid to your merchants on
+          `date` (a required query parameter). Each row breaks down sales,
+          returns, fees, and the net amount paid. Optional `merchantId` filter.
+        operationId: getAchDeposits
+        parameters:
+          - name: date
+            in: query
+            value: $inputs.date
+          - name: merchantId
+            in: query
+            value: $inputs.merchantId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          achDeposits: $response.body#/data
+          firstAchDepositId: $response.body#/data/0/achDepositId
+
+      - stepId: retrieveAchDeposit
+        description: >
+          ACH-deposits branch, step 2. Retrieve a single ACH deposit by its
+          integer `achDepositId`. Chains from listAchDeposits; supply a known
+          `achDepositId` directly if you have one.
+        operationId: getAchDeposit
+        parameters:
+          - name: achDepositId
+            in: path
+            value: $steps.listAchDeposits.outputs.firstAchDepositId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          achDeposit: $response.body
+
+      - stepId: listAchDepositFees
+        description: >
+          ACH-deposits branch, step 3 (optional). List the fee breakdown for an
+          ACH deposit. You must provide EITHER `date` OR `achDepositId`; modelled
+          here chaining `achDepositId` from retrieveAchDeposit so the fees line up
+          with the retrieved deposit. Optional `merchantId` filter.
+        operationId: getAchDepositFees
+        parameters:
+          - name: achDepositId
+            in: query
+            value: $steps.listAchDeposits.outputs.firstAchDepositId
+          - name: merchantId
+            in: query
+            value: $inputs.merchantId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          fees: $response.body#/data
+    outputs:
+      batches: $steps.listBatches.outputs.batches
+      batch: $steps.retrieveBatch.outputs.batch
+      transactions: $steps.listTransactions.outputs.transactions
+      transaction: $steps.retrieveTransaction.outputs.transaction
+      authorizations: $steps.listAuthorizations.outputs.authorizations
+      authorization: $steps.retrieveAuthorization.outputs.authorization
+      disputes: $steps.listDisputes.outputs.disputes
+      disputeStatuses: $steps.listDisputeStatuses.outputs.statuses
+      achDeposits: $steps.listAchDeposits.outputs.achDeposits
+      achDeposit: $steps.retrieveAchDeposit.outputs.achDeposit
+      achDepositFees: $steps.listAchDepositFees.outputs.fees

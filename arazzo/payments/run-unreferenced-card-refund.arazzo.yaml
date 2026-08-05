@@ -1,0 +1,144 @@
+arazzo: 1.0.0
+info:
+  title: Run an unreferenced card refund
+  summary: Return funds to a customer's card without referencing an originating payment.
+  description: >
+    Refunds money to a customer's card when there is no originating paymentId to
+    link the refund to (e.g. a goodwill gesture or an out-of-band sale). Because
+    the refund is unreferenced, you supply the customer's card details and the
+    refund amount directly rather than pointing at a prior payment. Unreferenced
+    refunds are available only on certain merchant accounts.
+
+    - POST /refunds via operationId `unreferencedRefund`. Requires `channel` (pos
+      or moto) and a `refundMethod` of type `card` (or `secureToken`). Returns
+      201 with a top-level `refundId`.
+
+    Agent gotchas: the refund id is returned at the top level as `refundId` (not
+    nested); every request requires an `Idempotency-Key` header in UUID v4
+    format; and `refundMethod` is polymorphic - its `type` (card / secureToken)
+    selects the variant, so do not mix ACH fields into a card refund.
+
+    To return funds to a bank account via ACH instead, use the
+    run-unreferenced-bank-transfer-refund workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: run-unreferenced-card-refund
+    summary: Refund a customer's card with no originating payment reference.
+    description: >
+      Runs a single unreferenced card refund via POST /refunds with a
+      `refundMethod` of type `card` (or `secureToken`).
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: The person receiving the returned funds to their card.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to issue the unreferenced refund on the customer's behalf.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream card processor that settles the returned funds; not directly callable.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - processingTerminalId
+        - orderId
+        - description
+        - amount
+        - currency
+        - channel
+        - cardNumber
+        - cardExpiryDate
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per request, sent as the Idempotency-Key header.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal that issues the refund.
+          example: "1234001"
+        operator:
+          type: string
+          description: Operator who initiated the refund.
+          example: Jane
+        orderId:
+          type: string
+          description: Unique identifier the merchant assigns to this refund transaction.
+          example: OrderRef6543
+        description:
+          type: string
+          description: Description of the refund.
+          example: Refund for order OrderRef6543
+        amount:
+          type: integer
+          description: Refund amount in the currency's lowest denomination (e.g. cents).
+          example: 4999
+        currency:
+          type: string
+          description: ISO 4217 currency code of the refund.
+          example: USD
+        channel:
+          type: string
+          description: Channel used to request the refund (pos or moto).
+          example: pos
+        cardNumber:
+          type: string
+          description: The customer's card number to refund to.
+          example: "4539858876047062"
+        cardExpiryDate:
+          type: string
+          description: The card expiry date in MMYY format.
+          example: "1230"
+    steps:
+      - stepId: runCardRefund
+        x-actor: merchant
+        description: >
+          Issues an unreferenced card refund (POST /refunds). Supply `channel`
+          (pos or moto) and a `refundMethod` of type `card`.
+        operationId: $sourceDescriptions.payroc-api.unreferencedRefund
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            processingTerminalId: $inputs.processingTerminalId
+            channel: $inputs.channel
+            operator: $inputs.operator
+            order:
+              orderId: $inputs.orderId
+              description: $inputs.description
+              amount: $inputs.amount
+              currency: $inputs.currency
+            refundMethod:
+              type: card
+              cardDetails:
+                entryMethod: keyed
+                keyedData:
+                  dataFormat: plainText
+                  cardNumber: $inputs.cardNumber
+                  expiryDate: $inputs.cardExpiryDate
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.body#/transactionResult/status == ready
+        outputs:
+          refundId: $response.body#/refundId
+          status: $response.body#/transactionResult/status
+    outputs:
+      refundId: $steps.runCardRefund.outputs.refundId
+      status: $steps.runCardRefund.outputs.status

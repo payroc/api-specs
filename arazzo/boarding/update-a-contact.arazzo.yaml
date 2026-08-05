@@ -1,0 +1,119 @@
+arazzo: 1.0.0
+info:
+  title: Update a processing account's contact
+  summary: Find a contact on a processing account, then replace it with a full PUT.
+  description: >
+    Updates one of the contacts attached to a processing account. Contacts are
+    NOT created here (they are supplied inline in the create-processing-account
+    payload during boarding); this workflow finds a contact and replaces it.
+
+    Agent gotchas: contactId is an integer (e.g. 1543), not a string; it is issued
+    by the gateway when the processing account is created and is also discoverable
+    via the list step. updateContact is a full PUT replace (not a PATCH) against
+    the contact schema — omitted fields are not preserved, so send the complete
+    object. It returns 204 No Content. A contact must always carry at least one
+    contact-number method (phone or mobile); email alone is insufficient.
+
+    To remove a contact instead, use the delete-a-contact workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: update-a-contact
+    summary: List, retrieve, then update (full PUT replace) a processing account's contact.
+    description: >
+      Optionally list the processing account's contacts (listContacts) and
+      retrieve one (getContact) to confirm it, then replace it with a full PUT
+      (updateContact). The list/retrieve steps are optional when you already hold
+      the contactId.
+    inputs:
+      type: object
+      required:
+        - processingAccountId
+        - contactId
+      properties:
+        processingAccountId:
+          type: string
+          description: Unique identifier that the gateway assigned to the processing account.
+          example: 38765
+        contactId:
+          type: integer
+          description: >
+            Unique identifier of the contact to update. An integer issued by the
+            gateway; also returned by the list step.
+          example: 1543
+        limit:
+          type: integer
+          description: Maximum number of contacts to return per page in the list step.
+          example: 2
+    steps:
+      - stepId: listContacts
+        description: >
+          Optional. List the contacts associated with the processing account to
+          discover the contactId. Supports before/after/limit cursor pagination.
+          Skip if you already hold the contactId.
+        operationId: listProcessingAccountContacts
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $inputs.processingAccountId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstContactId: $response.body#/data/0/contactId
+
+      - stepId: getContact
+        description: >
+          Optional. Retrieve the full details of the contact by its contactId
+          (name, type/role, identifiers, and contact methods) before replacing it.
+        operationId: getContact
+        parameters:
+          - name: contactId
+            in: path
+            value: $inputs.contactId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          contactId: $response.body#/contactId
+          type: $response.body#/type
+
+      - stepId: updateContact
+        description: >
+          Update the contact. This is a full PUT replacement against the contact
+          schema — send the complete object, as omitted fields are not preserved.
+          Required fields are type, firstName, lastName, and contactMethods; a
+          contact must include at least one contact number (phone or mobile).
+          Returns 204 No Content with no response body.
+        operationId: updateContact
+        parameters:
+          - name: contactId
+            in: path
+            value: $inputs.contactId
+        requestBody:
+          contentType: application/json
+          payload:
+            type: manager
+            firstName: Jane
+            middleName: Helen
+            lastName: Doe
+            identifiers:
+              - type: nationalId
+                value: 000-00-4320
+            contactMethods:
+              - type: email
+                value: jane.doe@example.com
+              - type: phone
+                value: '2025550164'
+              - type: mobile
+                value: '8445557624'
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      contactId: $inputs.contactId

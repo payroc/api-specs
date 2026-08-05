@@ -1,0 +1,235 @@
+arazzo: 1.0.0
+info:
+  title: Pay with a single-use token
+  summary: Tokenize a customer's card into a single-use token, then run a payment with it
+  description: >
+    Server-side flow that mints an ephemeral single-use token from a customer's
+    payment details and immediately spends it on one payment. An optional third
+    step reverses (voids) that payment before it settles.
+
+    Agent gotchas this workflow disambiguates:
+
+      - A single-use token is exactly 128 characters, can be spent only ONCE, and
+        expires 30 minutes after creation. It must be minted per-transaction.
+        Contrast the reusable secure token (secureTokenId, created via Create
+        Secure Token) — paymentMethod.type discriminates between them. Here the
+        payment uses paymentMethod.type: singleUseToken.
+      - In the payment request the 128-char value goes in paymentMethod.token —
+        there is no separate id. The value returned by Create Single-Use Token at
+        response body #/token is exactly what you pass.
+      - The token source is polymorphic (card | ach | pad). This family models the
+        card path; for bank payments the source/token still flow the same way, only
+        the source variant changes.
+      - Create Single-Use Token and Create Payment both return 201; Reverse Payment
+        returns 200.
+      - Reversal (/payments/{paymentId}/reverse) cancels a payment while it is in an
+        open batch (a void, before settlement). It is NOT a refund
+        (/payments/{paymentId}/refund), which returns funds after settlement. Agents
+        routinely conflate the two.
+      - Every POST requires a unique Idempotency-Key header; reusing a key across the
+        three calls is incorrect.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: pay-with-single-use-token
+    summary: Create a single-use token, run a payment, optionally reverse it
+    description: >
+      Step 1 tokenizes the customer's card into a single-use token. Step 2 runs the
+      payment, consuming that token. Step 3 (optional) reverses the payment before it
+      settles. The primary path shown is a keyed card; ACH/PAD sources follow the same
+      token-then-pay shape with a different source variant.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder who presents the payment card to be tokenized and charged.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API on the customer's behalf.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream processor that authorizes and settles the payment; not directly callable.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - channel
+        - cardholderName
+        - cardNumber
+        - expiryDate
+        - cvv
+        - orderId
+        - amount
+        - currency
+        - tokenIdempotencyKey
+        - paymentIdempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal that mints the token and runs the payment.
+          example: "1234001"
+        channel:
+          type: string
+          description: Channel the merchant used to receive the payment details.
+          enum: [pos, web, moto]
+          example: web
+        operator:
+          type: string
+          description: Operator who initiated the request.
+          example: Jane
+        cardholderName:
+          type: string
+          description: Name printed on the customer's card.
+          example: Sarah Hazel Hopper
+        cardNumber:
+          type: string
+          description: Customer's card number (PAN) to tokenize.
+          example: "4539858876047062"
+        expiryDate:
+          type: string
+          description: Card expiry date in MMYY format.
+          example: "1230"
+        cvv:
+          type: string
+          description: Card verification value.
+          example: "234"
+        orderId:
+          type: string
+          description: Unique identifier the merchant assigns to the transaction.
+          example: OrderRef6543
+        description:
+          type: string
+          description: Description of the transaction.
+          example: Large Pepperoni Pizza
+        amount:
+          type: integer
+          description: Total amount of the transaction in the currency's lowest denomination, for example cents.
+          example: 4999
+        currency:
+          type: string
+          description: ISO 4217 currency of the transaction.
+          example: USD
+        reversalAmount:
+          type: integer
+          description: >
+            Optional. Amount to reverse in the currency's lowest denomination. Omit to
+            reverse the full payment. Only used by the optional reversePayment step.
+          example: 4999
+        tokenIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the Create Single-Use Token request.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        paymentIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the Create Payment request (must differ from the token key).
+          example: a1b2c3d4-e5f6-4789-9abc-def012345678
+        reversalIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the optional Reverse Payment request.
+          example: b2c3d4e5-f6a7-4890-8bcd-ef0123456789
+    steps:
+      - stepId: createSingleUseToken
+        x-actor: customer
+        description: >
+          Tokenize the customer's card into a single-use token. The response token is
+          128 chars, single-use, and expires after 30 minutes — spend it immediately in
+          the next step. The source object is polymorphic; this models the keyed card
+          variant (type: card).
+        operationId: createSingleUseToken
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.tokenIdempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        requestBody:
+          contentType: application/json
+          payload:
+            channel: $inputs.channel
+            operator: $inputs.operator
+            source:
+              type: card
+              cardDetails:
+                entryMethod: keyed
+                cardholderName: $inputs.cardholderName
+                keyedData:
+                  dataFormat: plainText
+                  cardNumber: $inputs.cardNumber
+                  expiryDate: $inputs.expiryDate
+                  cvv: $inputs.cvv
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          singleUseToken: $response.body#/token
+          expiresAt: $response.body#/expiresAt
+
+      - stepId: runPayment
+        x-actor: customer
+        description: >
+          Run the payment using the single-use token from step 1. Pass the 128-char value
+          as paymentMethod.token with paymentMethod.type set to singleUseToken. This
+          consumes the token — it cannot be reused. Returns 201 with the paymentId and a
+          transactionResult whose status is asserted as ready.
+        operationId: payment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.paymentIdempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            processingTerminalId: $inputs.processingTerminalId
+            channel: $inputs.channel
+            operator: $inputs.operator
+            order:
+              orderId: $inputs.orderId
+              description: $inputs.description
+              amount: $inputs.amount
+              currency: $inputs.currency
+            paymentMethod:
+              type: singleUseToken
+              token: $steps.createSingleUseToken.outputs.singleUseToken
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.body#/transactionResult/status == "ready"
+        outputs:
+          paymentId: $response.body#/paymentId
+
+      - stepId: reversePayment
+        x-actor: merchant
+        description: >
+          Optional. Reverse (void) the payment before it settles, using the paymentId from
+          step 2. Omit amount to reverse the full payment. This is a void of an open-batch
+          payment — distinct from a refund, which returns funds after settlement. Returns 200.
+        operationId: reversePayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.reversalIdempotencyKey
+          - name: paymentId
+            in: path
+            value: $steps.runPayment.outputs.paymentId
+        requestBody:
+          contentType: application/json
+          payload:
+            operator: $inputs.operator
+            amount: $inputs.reversalAmount
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          reversedPaymentId: $response.body#/paymentId
+    outputs:
+      singleUseToken: $steps.createSingleUseToken.outputs.singleUseToken
+      paymentId: $steps.runPayment.outputs.paymentId

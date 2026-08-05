@@ -1,0 +1,107 @@
+arazzo: 1.0.0
+info:
+  title: Delete a payment plan
+  summary: Find a payment plan, then delete it.
+  description: >
+    Removes a reusable recurring-billing payment plan. Discover the plan, retrieve
+    it, then delete it.
+
+    Agent gotchas:
+      - `paymentPlanId` is merchant-assigned and is the `{paymentPlanId}` path
+        parameter.
+      - `deletePaymentPlan` is a DELETE that returns 204 (no body). It is
+        irreversible — the plan cannot be recovered and no further subscriptions
+        can be added to it. The plan's `onDelete` value (`complete` vs `continue`)
+        determines whether existing subscriptions stop or keep running.
+
+    To amend a plan instead, use the update-a-payment-plan workflow. Mutually
+    exclusive with update for the same plan.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: delete-a-payment-plan
+    summary: List, retrieve, then delete a payment plan.
+    description: >
+      Optionally list payment plans (listPaymentPlans) and retrieve one
+      (getPaymentPlan) to confirm its state, then delete it (deletePaymentPlan).
+      The list/retrieve steps are optional when you already hold the
+      paymentPlanId.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - paymentPlanId
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier for the terminal that owns the payment plan.
+          example: '1234001'
+        paymentPlanId:
+          type: string
+          description: Merchant-assigned identifier of the payment plan to delete (path parameter).
+          example: PlanRef8765
+        limit:
+          type: integer
+          description: Maximum number of payment plans to return per page in the discovery step.
+          example: 10
+    steps:
+      - stepId: listPaymentPlans
+        description: >
+          Optional discovery step. Returns a paginated list of the terminal's
+          payment plans and extracts the first result's `paymentPlanId`. Skip if
+          you already hold the `paymentPlanId`.
+        operationId: listPaymentPlans
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstPaymentPlanId: $response.body#/data/0/paymentPlanId
+          hasMore: $response.body#/hasMore
+
+      - stepId: getPaymentPlan
+        description: >
+          Optional. Retrieve the payment plan to confirm its current state before
+          deleting.
+        operationId: getPaymentPlan
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: paymentPlanId
+            in: path
+            value: $inputs.paymentPlanId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentPlanId: $response.body#/paymentPlanId
+          name: $response.body#/name
+
+      - stepId: deletePaymentPlan
+        description: >
+          Delete the payment plan. Irreversible — the plan cannot be recovered and
+          no further subscriptions can be added to it. The plan's `onDelete` value
+          (`complete` vs `continue`) determines whether existing subscriptions stop
+          or keep running. Returns 204 with no body.
+        operationId: deletePaymentPlan
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: paymentPlanId
+            in: path
+            value: $inputs.paymentPlanId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      paymentPlanId: $inputs.paymentPlanId

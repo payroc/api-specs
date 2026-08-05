@@ -1,0 +1,87 @@
+arazzo: 1.0.0
+info:
+  title: Delete a funding recipient
+  summary: Find a funding recipient, then delete it (cascading to its accounts and owners).
+  description: >
+    Removes a funding recipient. Discover the recipient, optionally retrieve it,
+    then delete it.
+
+    Agent gotchas:
+    - The path parameter is recipientId (an integer).
+    - deleteFundingRecipient is destructive and CASCADES: it removes the recipient
+      together with all of its funding accounts and owners. Returns 204 No Content.
+
+    To amend a recipient instead, use the update-a-funding-recipient workflow.
+    Mutually exclusive with update for the same recipient.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: delete-a-funding-recipient
+    summary: List, retrieve, then delete a funding recipient.
+    description: >
+      Optionally list recipients (listRecipients) and retrieve the target
+      recipient (getRecipient) to confirm it, then delete it (deleteRecipient).
+      The list/retrieve steps are optional when you already hold the recipientId.
+    inputs:
+      type: object
+      required:
+        - recipientId
+      properties:
+        recipientId:
+          type: integer
+          description: Unique identifier of the funding recipient to delete.
+          example: 234
+        limit:
+          type: integer
+          description: Maximum number of funding recipients to return per page when listing.
+          example: 25
+    steps:
+      - stepId: listRecipients
+        description: >
+          Optional discovery step. Return a paginated list of funding recipients so
+          the caller can find the target recipientId. Skip if the recipientId is
+          already known.
+        operationId: listFundingRecipients
+        parameters:
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstRecipientId: $response.body#/data/0/recipientId
+
+      - stepId: getRecipient
+        description: >
+          Optional. Retrieve the target funding recipient to confirm it before
+          deleting.
+        operationId: getFundingRecipient
+        parameters:
+          - name: recipientId
+            in: path
+            value: $inputs.recipientId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          recipientId: $response.body#/recipientId
+          status: $response.body#/status
+
+      - stepId: deleteRecipient
+        description: >
+          Delete the funding recipient. This is destructive and cascades - it also
+          removes the recipient's funding accounts and owners. Returns 204 No
+          Content.
+        operationId: deleteFundingRecipient
+        parameters:
+          - name: recipientId
+            in: path
+            value: $inputs.recipientId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      recipientId: $inputs.recipientId

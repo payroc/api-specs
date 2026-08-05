@@ -1,0 +1,98 @@
+arazzo: 1.0.0
+info:
+  title: Close an ACH return
+  summary: Permanently close a returned ACH (bank transfer) payment without re-presenting it.
+  description: >
+    Closes a returned ACH payment after NACHA has returned it and the merchant has
+    collected the funds by an alternative payment method. Closing the return is
+    permanent: it is the alternative to re-presenting the payment to NACHA (use the
+    Re-present Payment method for that instead).
+
+    Critical agent gotcha: the paymentId you close is NOT the paymentId of the
+    original payment. Retrieving the original bank transfer payment returns a
+    returns array, and each entry carries its OWN paymentId. You must close the
+    return using that nested returns[].paymentId, not the top-level paymentId of
+    the original payment. This workflow retrieves the payment first precisely so
+    that the return's paymentId can be read from returns/0/paymentId and fed into
+    the close step.
+
+    Endpoint note: the docs guide renders the path parameter in colon style
+    (:paymentId), which does not resolve as written. The real operations are
+    getBankTransferPayment (GET /bank-transfer-payments/{paymentId}) and
+    closeBankTransferPayment (POST /bank-transfer-payments/{paymentId}/close).
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: close-ach-return
+    summary: Retrieve a returned ACH payment, then close the return.
+    description: >
+      Two ordered steps. First retrieve the original bank transfer payment to read
+      the return's paymentId from its returns array; then close that return. The
+      retrieve step is a genuine dependency, not merely a lookup convenience,
+      because the close step needs the return's paymentId (returns/0/paymentId) -
+      which differs from the original payment's paymentId. If you already hold the
+      return's paymentId, you may supply it directly as the returnPaymentId input
+      and still run only the close step, but keeping the retrieve step makes the
+      workflow self-verifying.
+    inputs:
+      type: object
+      required:
+        - paymentId
+        - idempotencyKey
+      properties:
+        paymentId:
+          type: string
+          description: >
+            Unique identifier of the original bank transfer payment that was returned.
+            Used to retrieve the payment and read the return's paymentId from its
+            returns array. This is NOT the id used to close the return.
+          example: M2MJOG6O2Y
+        idempotencyKey:
+          type: string
+          description: UUID v4 that makes the close request idempotent (Idempotency-Key header).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+    steps:
+      - stepId: retrievePayment
+        description: >
+          Retrieve the original bank transfer payment by its paymentId so the
+          return's own paymentId can be read. The response returns array holds one
+          entry per return, each with its own paymentId, returnCode and returnReason.
+          Capture returns/0/paymentId - that is the id required to close the return,
+          NOT the top-level paymentId.
+        operationId: $sourceDescriptions.payroc-api.getBankTransferPayment
+        parameters:
+          - name: paymentId
+            in: path
+            value: $inputs.paymentId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          returnPaymentId: $response.body#/returns/0/paymentId
+          returnCode: $response.body#/returns/0/returnCode
+
+      - stepId: closeReturn
+        description: >
+          Close the return permanently. Takes the return's paymentId in the path
+          (from the previous step's returnPaymentId, i.e. returns/0/paymentId - not
+          the original payment's id) and a required Idempotency-Key header. This
+          endpoint has no request body. Success returns the bank transfer payment.
+        operationId: $sourceDescriptions.payroc-api.closeBankTransferPayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: paymentId
+            in: path
+            value: $steps.retrievePayment.outputs.returnPaymentId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentId: $response.body#/paymentId
+    outputs:
+      returnPaymentId: $steps.retrievePayment.outputs.returnPaymentId
+      closedPaymentId: $steps.closeReturn.outputs.paymentId

@@ -1,0 +1,232 @@
+arazzo: 1.0.0
+info:
+  title: Set up a funding recipient
+  summary: Create a funding recipient that can receive funds via funding instructions.
+  description: >
+    Creates a funding recipient - a business or organization (for example, a
+    charity) that can receive funds but cannot itself run transactions. A
+    funding recipient is distinct from a merchant that takes payments.
+
+
+    A single POST to /funding-recipients creates the recipient complete with its
+    legal details, at least one contact method (an email address is mandatory),
+    at least one owner, and at least one credit funding account - owners and
+    funding accounts are supplied INLINE in the create payload (there are no
+    standalone createContact / createOwner operations for the inline data). The
+    gateway returns the recipientId, which downstream steps and workflows
+    (send-funds-to-a-merchant composes this workflow) use to issue funding
+    instructions.
+
+
+    The two follow-on steps are OPTIONAL and only needed to attach ADDITIONAL
+    funding accounts or owners beyond the ones already provided at creation; they
+    reuse the recipientId from step 1 on the path.
+
+
+    Agent gotchas: recipientType is a fixed enum (privateCorporation, nonProfit,
+    soleProprietor, etc.); taxId is the EIN/SSN of the recipient; a funding
+    account attached to a recipient accepts only use: credit (we send funds to
+    it); the ACH paymentMethod routingNumber must be exactly 9 digits and the
+    accountNumber 9-12 digits. Every write requires a unique Idempotency-Key
+    header in UUID v4 format.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: set-up-a-funding-recipient
+    summary: Create a funding recipient, then optionally add extra accounts and owners.
+    description: >
+      Step 1 creates the funding recipient with its inline owner and funding
+      account and captures the recipientId. Steps 2 and 3 are optional and add an
+      additional funding account and an additional owner to the same recipient.
+    inputs:
+      type: object
+      required:
+        - recipientType
+        - taxId
+        - doingBusinessAs
+        - contactEmail
+        - routingNumber
+        - accountNumber
+      properties:
+        recipientType:
+          type: string
+          description: >
+            Type or legal structure of the funding recipient. One of
+            privateCorporation, publicCorporation, nonProfit, government,
+            privateLlc, publicLlc, privatePartnership, publicPartnership,
+            soleProprietor.
+          example: privateCorporation
+        taxId:
+          type: string
+          description: Employer identification number (EIN) or Social Security number (SSN) of the recipient.
+          example: 12-3456789
+        doingBusinessAs:
+          type: string
+          description: Trading name of the business or organization.
+          example: Pizza Doe
+        contactEmail:
+          type: string
+          description: Recipient's email address (a contact method of type email is mandatory).
+          example: jane.doe@example.com
+        routingNumber:
+          type: string
+          description: ACH routing number of the recipient's funding account. Exactly 9 digits.
+          example: '063100277'
+        accountNumber:
+          type: string
+          description: ACH account number of the recipient's funding account. 9 to 12 digits.
+          example: '321831591'
+    steps:
+      - stepId: createFundingRecipient
+        description: >
+          Create the funding recipient. Owners and funding accounts are supplied
+          inline here - at least one owner and at least one credit funding
+          account are required. The gateway returns the recipientId used by all
+          follow-on actions, and the fundingAccountId of the inline credit
+          funding account (the destination that funding instructions target).
+        operationId: createFundingRecipient
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: 8e03978e-40d5-43e8-bc93-6894a57f9324
+        requestBody:
+          contentType: application/json
+          payload:
+            recipientType: $inputs.recipientType
+            taxId: $inputs.taxId
+            doingBusinessAs: $inputs.doingBusinessAs
+            address:
+              address1: 1 Example Ave.
+              address2: Example Address Line 2
+              city: Chicago
+              state: Illinois
+              country: US
+              postalCode: '60056'
+            contactMethods:
+              - type: email
+                value: $inputs.contactEmail
+              - type: phone
+                value: '2025550164'
+            owners:
+              - firstName: Jane
+                middleName: Helen
+                lastName: Doe
+                dateOfBirth: '1964-03-22'
+                address:
+                  address1: 1 Example Ave.
+                  city: Chicago
+                  state: Illinois
+                  country: US
+                  postalCode: '60056'
+                identifiers:
+                  - type: nationalId
+                    value: 000-00-4320
+                contactMethods:
+                  - type: email
+                    value: jane.doe@example.com
+                  - type: phone
+                    value: '2025550164'
+                relationship:
+                  equityPercentage: 48.5
+                  title: CFO
+                  isControlProng: true
+                  isAuthorizedSignatory: false
+            fundingAccounts:
+              - type: checking
+                use: credit
+                nameOnAccount: Jane Doe
+                paymentMethods:
+                  - type: ach
+                    value:
+                      routingNumber: $inputs.routingNumber
+                      accountNumber: $inputs.accountNumber
+            metadata:
+              yourCustomField: abc123
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          recipientId: $response.body#/recipientId
+          fundingAccountId: $response.body#/fundingAccounts/0/fundingAccountId
+      - stepId: addFundingAccount
+        description: >
+          OPTIONAL. Add an additional funding account to the recipient beyond the
+          one supplied inline at creation. A recipient's funding account accepts
+          only use: credit. Reuses the recipientId from step 1.
+        operationId: createFundRecipientFundingAccount
+        parameters:
+          - name: recipientId
+            in: path
+            value: $steps.createFundingRecipient.outputs.recipientId
+          - name: Idempotency-Key
+            in: header
+            value: 1b9d5a1e-6a2c-4d7f-8e3b-2c4d6e8f0a12
+        requestBody:
+          contentType: application/json
+          payload:
+            type: savings
+            use: credit
+            nameOnAccount: Fred Nerk
+            paymentMethods:
+              - type: ach
+                value:
+                  routingNumber: '053200983'
+                  accountNumber: '987654321'
+            metadata:
+              responsiblePerson: Jane Doe
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          additionalFundingAccountId: $response.body#/fundingAccountId
+      - stepId: addOwner
+        description: >
+          OPTIONAL. Add an additional owner to the recipient beyond the one
+          supplied inline at creation. Only one owner across the recipient can be
+          the control prong. Reuses the recipientId from step 1.
+        operationId: createFundRecipientOwner
+        parameters:
+          - name: recipientId
+            in: path
+            value: $steps.createFundingRecipient.outputs.recipientId
+          - name: Idempotency-Key
+            in: header
+            value: 3c7e0f42-8b1d-4e9a-a5c6-7d9e1f2a3b4c
+        requestBody:
+          contentType: application/json
+          payload:
+            firstName: Fred
+            middleName: Jim
+            lastName: Nerk
+            dateOfBirth: '1980-01-19'
+            address:
+              address1: 2 Example Ave.
+              city: Chicago
+              state: Illinois
+              country: US
+              postalCode: '60056'
+            identifiers:
+              - type: nationalId
+                value: 000-00-9876
+            contactMethods:
+              - type: email
+                value: fred.nerk@example.com
+              - type: phone
+                value: '2025550110'
+            relationship:
+              equityPercentage: 51.5
+              title: CEO
+              isControlProng: false
+              isAuthorizedSignatory: true
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          ownerId: $response.body#/ownerId
+    outputs:
+      recipientId: $steps.createFundingRecipient.outputs.recipientId
+      fundingAccountId: $steps.createFundingRecipient.outputs.fundingAccountId
+      additionalFundingAccountId: $steps.addFundingAccount.outputs.additionalFundingAccountId
+      ownerId: $steps.addOwner.outputs.ownerId

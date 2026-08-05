@@ -1,0 +1,114 @@
+arazzo: 1.0.0
+info:
+  title: Update a funding account
+  summary: Find a funding account, then update its details.
+  description: >
+    Updates the details of a funding account - the bank/ACH destination account
+    Payroc uses for settlement and funding. Discover the account, retrieve it,
+    then update it.
+
+    Agent gotchas:
+    - A funding account's fundingAccountId is an integer, not one of the
+      alphanumeric ids used elsewhere in the API.
+    - Update only applies to a funding account associated with a FUNDING
+      RECIPIENT. You cannot update a funding account associated with a processing
+      account - the API rejects those. For a funding-recipient account, `use` must
+      be `credit`.
+    - `updateFundingAccount` returns 204 No Content, so there is no response body
+      to capture. All of type, use, nameOnAccount, and paymentMethods are required
+      in the body.
+
+    To remove a funding account instead, use the delete-a-funding-account
+    workflow. Mutually exclusive with delete for the same account.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: update-a-funding-account
+    summary: List, retrieve, then update a funding account.
+    description: >
+      Optionally list funding accounts (listFundingAccounts) and retrieve one
+      (getFundingAccount) to confirm it, then update it (updateFundingAccount).
+      The list/retrieve steps are optional when you already hold the
+      fundingAccountId. Update is valid only for a funding account associated with
+      a funding recipient.
+    inputs:
+      type: object
+      required:
+        - fundingAccountId
+      properties:
+        fundingAccountId:
+          type: integer
+          description: Unique identifier of the funding account to update.
+          example: 123
+        limit:
+          type: integer
+          description: Maximum number of funding accounts to return per page when listing.
+          example: 2
+    steps:
+      - stepId: listFundingAccounts
+        description: >
+          Optional discovery step. List the funding accounts on your account to
+          discover a fundingAccountId. Returns a paginated envelope; accounts are
+          under `data`. Skip if you already hold the fundingAccountId.
+        operationId: listFundingAccount
+        parameters:
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstFundingAccountId: $response.body#/data/0/fundingAccountId
+
+      - stepId: getFundingAccount
+        description: >
+          Optional. Retrieve the full detail of the funding account by its
+          fundingAccountId (account holder name, ACH payment method, status, and
+          use) before updating.
+        operationId: getFundingAccount
+        parameters:
+          - name: fundingAccountId
+            in: path
+            value: $inputs.fundingAccountId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          fundingAccountId: $response.body#/fundingAccountId
+          status: $response.body#/status
+          use: $response.body#/use
+
+      - stepId: updateFundingAccount
+        description: >
+          Update a funding account's details (type, account holder name, ACH
+          information, metadata). Valid only for a funding account associated with
+          a funding recipient - the API rejects updates to a processing-account
+          funding account. For a funding-recipient account, `use` must be `credit`.
+          All of type, use, nameOnAccount, and paymentMethods are required in the
+          body. Returns 204 with no body.
+        operationId: updateFundingAccount
+        parameters:
+          - name: fundingAccountId
+            in: path
+            value: $inputs.fundingAccountId
+        requestBody:
+          contentType: application/json
+          payload:
+            type: savings
+            use: credit
+            nameOnAccount: Fred Nerk
+            paymentMethods:
+              - type: ach
+                value:
+                  routingNumber: '063100277'
+                  accountNumber: '321831591'
+            metadata:
+              responsiblePerson: Jane Doe
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      fundingAccountId: $inputs.fundingAccountId

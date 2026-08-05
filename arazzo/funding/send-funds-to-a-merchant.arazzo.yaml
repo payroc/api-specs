@@ -1,0 +1,187 @@
+arazzo: 1.0.0
+info:
+  title: Send funds to a merchant
+  summary: Set up a funding recipient, check the available balance, then issue a funding instruction.
+  description: >
+    Distributes funds held in a merchant's funding balance to one or more
+    funding accounts by creating a funding instruction. This is a COMPOSITE
+    workflow: it first composes set-up-a-funding-recipient to create the
+    recipient and its credit funding account (the destination), optionally
+    checks the merchant's available balance, then issues the funding
+    instruction that moves the money.
+
+
+    A funding instruction carries an array of merchant instructions. Each
+    merchant instruction names the merchantId whose funding balance is being
+    distributed and an array of recipients; each recipient names the target
+    fundingAccountId, the paymentMethod (ACH), and the amount to send. The
+    gateway returns the instructionId and a status of accepted, and each
+    individual payment instruction then moves through its own lifecycle
+    (accepted -> pending -> released -> funded, or failed / rejected / onHold).
+
+
+    Variants (one workflow family): SINGLE RECIPIENT is the primary path modeled
+    here - one recipients entry sending the whole amount to one funding account.
+    SPLIT FUNDING ACROSS RECIPIENTS is the same call with additional entries in
+    the recipients array (and/or additional merchants entries), each with its own
+    fundingAccountId and amount, so a single request fans a merchant's balance
+    out to several destinations.
+
+
+    Agent gotchas: amounts are integers in the currency's lowest denomination
+    (cents), not decimals; paymentMethod is the fixed enum ACH; the destination
+    is a fundingAccountId (the recipient's credit funding account), not the
+    recipientId or the merchantId; getFundingBalance reports funds, pending, and
+    available separately - only the available amount can be distributed; the
+    balance check is OPTIONAL. Every write requires a unique Idempotency-Key
+    header in UUID v4 format.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+  - name: set-up-a-funding-recipient
+    url: ./set-up-a-funding-recipient.arazzo.yaml
+    type: arazzo
+
+workflows:
+  - workflowId: send-funds-to-a-merchant
+    summary: Create a funding recipient, optionally check the balance, then send funds via a funding instruction.
+    description: >
+      Step 1 composes the set-up-a-funding-recipient sub-workflow to create the
+      recipient and its credit funding account, capturing the recipientId and
+      fundingAccountId. Step 2 is OPTIONAL and reads the merchant's funding
+      balance so you can confirm sufficient available funds before distributing
+      them. Step 3 creates the funding instruction that sends the amount from the
+      merchant's balance to the recipient's funding account. Model the single
+      recipient path; for split funding, add further recipients entries to the
+      instruction payload.
+    inputs:
+      type: object
+      required:
+        - merchantId
+        - recipientType
+        - taxId
+        - doingBusinessAs
+        - contactEmail
+        - routingNumber
+        - accountNumber
+        - amount
+      properties:
+        merchantId:
+          type: string
+          description: Unique identifier that the processor assigned to the merchant whose funding balance is distributed.
+          example: '4525644354'
+        recipientType:
+          type: string
+          description: >
+            Type or legal structure of the funding recipient passed to the
+            set-up-a-funding-recipient sub-workflow. One of privateCorporation,
+            publicCorporation, nonProfit, government, privateLlc, publicLlc,
+            privatePartnership, publicPartnership, soleProprietor.
+          example: privateCorporation
+        taxId:
+          type: string
+          description: Employer identification number (EIN) or Social Security number (SSN) of the recipient.
+          example: 12-3456789
+        doingBusinessAs:
+          type: string
+          description: Trading name of the recipient business or organization.
+          example: Pizza Doe
+        contactEmail:
+          type: string
+          description: Recipient's email address (a contact method of type email is mandatory).
+          example: jane.doe@example.com
+        routingNumber:
+          type: string
+          description: ACH routing number of the recipient's credit funding account. Exactly 9 digits.
+          example: '063100277'
+        accountNumber:
+          type: string
+          description: ACH account number of the recipient's credit funding account. 9 to 12 digits.
+          example: '321831591'
+        amount:
+          type: integer
+          description: Amount to send to the funding account, in the currency's lowest denomination (cents).
+          example: 120000
+    steps:
+      - stepId: setUpRecipient
+        description: >
+          Compose the set-up-a-funding-recipient sub-workflow to create the
+          funding recipient together with its inline owner and credit funding
+          account. Surfaces the recipientId and fundingAccountId used as the
+          destination of the funding instruction.
+        workflowId: $sourceDescriptions.set-up-a-funding-recipient.set-up-a-funding-recipient
+        parameters:
+          - name: recipientType
+            value: $inputs.recipientType
+          - name: taxId
+            value: $inputs.taxId
+          - name: doingBusinessAs
+            value: $inputs.doingBusinessAs
+          - name: contactEmail
+            value: $inputs.contactEmail
+          - name: routingNumber
+            value: $inputs.routingNumber
+          - name: accountNumber
+            value: $inputs.accountNumber
+        outputs:
+          recipientId: $outputs.recipientId
+          fundingAccountId: $outputs.fundingAccountId
+      - stepId: checkBalance
+        description: >
+          OPTIONAL. Read the merchant's funding balances and confirm sufficient
+          available funds before distributing them. The response reports funds,
+          pending, and available separately - only the available amount can be
+          sent in a funding instruction. Filter to the target merchant with the
+          merchantId query parameter.
+        operationId: getFundingBalance
+        parameters:
+          - name: merchantId
+            in: query
+            value: $inputs.merchantId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          availableBalance: $response.body#/data/0/available
+      - stepId: createInstruction
+        description: >
+          Create the funding instruction that moves funds from the merchant's
+          balance to the recipient's funding account. The single merchants entry
+          names the merchantId being distributed; its single recipients entry
+          targets the fundingAccountId from the sub-workflow, with paymentMethod
+          ACH and the amount in cents. For SPLIT FUNDING, add more recipients
+          entries (each with its own fundingAccountId and amount) and/or more
+          merchants entries. Requires a unique Idempotency-Key header.
+        operationId: createInstruction
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        requestBody:
+          contentType: application/json
+          payload:
+            merchants:
+              - merchantId: $inputs.merchantId
+                recipients:
+                  - fundingAccountId: $steps.setUpRecipient.outputs.fundingAccountId
+                    paymentMethod: ACH
+                    amount:
+                      value: $inputs.amount
+                      currency: USD
+                    metadata:
+                      yourCustomField: abc123
+            metadata:
+              instructionCreatedBy: Jane Doe
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.body#/status == accepted
+        outputs:
+          instructionId: $response.body#/instructionId
+          status: $response.body#/status
+    outputs:
+      recipientId: $steps.setUpRecipient.outputs.recipientId
+      fundingAccountId: $steps.setUpRecipient.outputs.fundingAccountId
+      instructionId: $steps.createInstruction.outputs.instructionId
+      status: $steps.createInstruction.outputs.status

@@ -1,0 +1,82 @@
+arazzo: 1.0.0
+info:
+  title: Patch a pricing intent
+  summary: Partially update an existing pricing intent with an RFC 6902 JSON Patch (PATCH).
+  description: >
+    Partial update of a pricing intent - the reusable pricing template assigned
+    to a processing account during boarding. Changes only specific fields via an
+    RFC 6902 JSON Patch document (PATCH).
+
+    Agent gotchas:
+    - Partially update requires a unique `Idempotency-Key` header (UUID v4);
+      replaying the same key returns the original result rather than applying the
+      patch twice.
+    - The body is an RFC 6902 JSON Patch document (an array of `op`/`path`/`value`
+      operations), NOT a plain resource object. PATCH returns 200 with the updated
+      pricing intent body.
+    - Updating a pricing intent never affects merchants you have already
+      onboarded; it only changes the template for future assignments.
+
+    To overwrite the whole resource, use the replace-a-pricing-intent workflow
+    (full replace, PUT) instead - a given amendment uses one or the other, not
+    both.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: patch-a-pricing-intent
+    summary: Partially update a pricing intent via PATCH.
+    description: >
+      Apply an RFC 6902 JSON Patch document to change only specific fields of the
+      pricing intent identified by `pricingIntentId` (patchPricingIntent).
+      Requires the `Idempotency-Key` header. Returns 200 with the updated body.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - pricingIntentId
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per patch request to make it idempotent.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        pricingIntentId:
+          type: string
+          description: Identifier Payroc assigned to the pricing intent to patch.
+          example: '5'
+    steps:
+      - stepId: patchPricingIntent
+        description: >
+          Apply an RFC 6902 JSON Patch document to change only specific fields via
+          PATCH. Requires the `Idempotency-Key` header. Returns 200 with the
+          updated pricing intent body.
+        operationId: patchPricingIntent
+        parameters:
+          - name: pricingIntentId
+            in: path
+            value: $inputs.pricingIntentId
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            - op: replace
+              path: /processor/card/fees/mastercardVisaDiscover/volume
+              value: 1.5
+            - op: replace
+              path: /gateway/fees/additionalServiceMonthly
+              value: 16
+            - op: replace
+              path: /base/addressVerification
+              value: 6
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/status
+    outputs:
+      status: $steps.patchPricingIntent.outputs.status

@@ -1,0 +1,97 @@
+arazzo: 1.0.0
+info:
+  title: Look up BIN information for a card
+  summary: Retrieve card brand, type, and issuer details from a bank identification number.
+  description: >
+    Looks up information about a card from its bank identification number (BIN)
+    so an integrator can make routing, acceptance, and surcharging decisions
+    before taking a payment. The single operation (binLookup) returns the card
+    brand (type), masked card number, issuing country, currency, and whether the
+    card is a debit or healthcare (FSA/HSA) card.
+
+    The request `card` object is polymorphic (discriminated by `type`). The
+    primary path shown here is the `cardBin` variant, where only the leading
+    digits (`bin`) are supplied — the lightest input for a routing/acceptance
+    decision. The same operation also accepts a full `card`, a `secureToken`, or
+    a `digitalWallet` payload if the caller already holds fuller payment details;
+    swap the `card` payload accordingly.
+
+    Surcharging is optional: to have the gateway confirm the card supports
+    surcharging and return the surcharge, include `amount` and `currency` in the
+    request. Omit them for a plain BIN lookup, in which case the response
+    `surcharging` object is not returned.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: look-up-bin
+    summary: Look up card details from a BIN.
+    description: >
+      Single-step lookup. Sends a card's BIN to the gateway and returns the
+      brand, masked card number, issuing country, and debit/healthcare flags.
+      Include `amount` and `currency` to additionally check surcharge support.
+    inputs:
+      type: object
+      required: [bin]
+      properties:
+        bin:
+          type: string
+          minLength: 6
+          maxLength: 12
+          description: Bank identification number (leading digits) of the card to look up.
+          example: '123456789012'
+        processingTerminalId:
+          type: string
+          minLength: 4
+          maxLength: 50
+          description: Unique identifier that we assigned to the terminal.
+          example: '1234001'
+        amount:
+          type: integer
+          format: int64
+          description: >
+            Optional. Transaction amount used to check the surcharge amount, in
+            the currency's lowest denomination (for example, cents). Supply
+            together with `currency` to have the gateway return surcharging info.
+          example: 4999
+        currency:
+          type: string
+          description: Optional. ISO 4217 currency of the transaction; supply with `amount` to check surcharging.
+          example: USD
+    steps:
+      - stepId: lookUpBin
+        description: >
+          Look up the card's details from its BIN. The primary path uses the
+          `cardBin` payload (type `cardBin` + `bin`). To check surcharge support,
+          add `amount` and `currency` (both optional and omitted for a plain
+          lookup). Alternatively, replace the `card` payload with a full `card`,
+          `secureToken`, or `digitalWallet` object — the operation accepts any of
+          these discriminated variants.
+        operationId: binLookup
+        requestBody:
+          contentType: application/json
+          payload:
+            processingTerminalId: $inputs.processingTerminalId
+            card:
+              type: cardBin
+              bin: $inputs.bin
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          type: $response.body#/type
+          cardNumber: $response.body#/cardNumber
+          country: $response.body#/country
+          currency: $response.body#/currency
+          debit: $response.body#/debit
+          healthcare: $response.body#/healthcare
+    outputs:
+      type: $steps.lookUpBin.outputs.type
+      cardNumber: $steps.lookUpBin.outputs.cardNumber
+      country: $steps.lookUpBin.outputs.country
+      currency: $steps.lookUpBin.outputs.currency
+      debit: $steps.lookUpBin.outputs.debit
+      healthcare: $steps.lookUpBin.outputs.healthcare

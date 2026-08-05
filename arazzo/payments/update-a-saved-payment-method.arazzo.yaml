@@ -1,0 +1,152 @@
+arazzo: 1.0.0
+info:
+  title: Update a saved payment method (secure token)
+  summary: Find a stored secure token, then update its saved details with an RFC 6902 JSON Patch.
+  description: >
+    Updates the saved details of a reusable secure token (a customer's stored
+    card, ACH, or PAD payment method) when you hold the raw details. Discover the
+    token, retrieve it, then patch it.
+
+    Agent gotchas:
+      - `secureTokenId` versus `token`. The path parameter is the `secureTokenId`
+        (format `MREF_...`) — the durable handle. The `token` field on the
+        resource is the short numeric value you replay in a transaction. They are
+        different values.
+      - `updateSecureToken` (PATCH) body is an RFC 6902 JSON Patch document (an
+        array of `op`/`path`/`value` operations), NOT a plain resource object.
+        Immutable fields (processingTerminalId, type, token, status, and the
+        sensitive source fields such as cardNumber/routingNumber) cannot be
+        patched. Requires a unique `Idempotency-Key` header. Returns 200.
+
+    To refresh the stored details from a Hosted Fields single-use token instead,
+    use refresh-a-saved-payment-method. To remove the token, use
+    delete-a-saved-payment-method.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: update-a-saved-payment-method
+    summary: List, retrieve, then update a secure token via JSON Patch.
+    description: >
+      Optionally list secure tokens (listSecureTokens) and retrieve one
+      (getSecureToken) to confirm its state, then patch the saved details
+      (updateSecureToken). The list/retrieve steps are optional when you already
+      hold the secureTokenId.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - secureTokenId
+        - idempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier for the terminal that owns the secure token.
+          example: '1234001'
+        secureTokenId:
+          type: string
+          description: Durable identifier for the saved payment method. If you do not have it, the discovery step can locate it.
+          example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+        customerName:
+          type: string
+          description: Customer name filter for the discovery step (URL-encoded).
+          example: Sarah%20Hazel%20Hopper
+        limit:
+          type: integer
+          description: Maximum number of secure tokens to return per page.
+          example: 10
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 sent as the `Idempotency-Key` header on the update step.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        patchDocument:
+          type: array
+          description: >
+            RFC 6902 JSON Patch document for `updateSecureToken` — an array of
+            `op`/`path`/`value` operations. Example (rename the cardholder and
+            recipient): `[{ op: replace, path: /customer/lastName, value: Reed }]`.
+          example:
+            - op: replace
+              path: /customer/lastName
+              value: Reed
+            - op: replace
+              path: /shippingAddress/recipientName
+              value: Sarah Reed
+            - op: replace
+              path: /source/cardDetails/cardholderName
+              value: Sarah Reed
+          items:
+            type: object
+    steps:
+      - stepId: listSecureTokens
+        description: >
+          Optional discovery step. Lists secure tokens on the terminal, filtered by
+          customer name, and extracts the first result's `secureTokenId`. Skip if
+          you already hold the `secureTokenId`.
+        operationId: listSecureTokens
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: customerName
+            in: query
+            value: $inputs.customerName
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstSecureTokenId: $response.body#/data/0/secureTokenId
+          hasMore: $response.body#/hasMore
+
+      - stepId: getSecureToken
+        description: >
+          Optional. Retrieve the secure token to confirm its current state before
+          patching. Surfaces the token `status` and the replayable `token` value.
+        operationId: getSecureToken
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: secureTokenId
+            in: path
+            value: $inputs.secureTokenId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          secureTokenId: $response.body#/secureTokenId
+          status: $response.body#/status
+          token: $response.body#/token
+
+      - stepId: updateSecureToken
+        description: >
+          Partially update the secure token with an RFC 6902 JSON Patch document
+          (the `patchDocument` input), NOT a plain resource object. Immutable
+          fields (processingTerminalId, type, token, status, and sensitive source
+          fields such as cardNumber/routingNumber) cannot be patched. Requires a
+          unique `Idempotency-Key` header. Returns 200.
+        operationId: updateSecureToken
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: secureTokenId
+            in: path
+            value: $inputs.secureTokenId
+        requestBody:
+          contentType: application/json
+          payload: $inputs.patchDocument
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          secureTokenId: $response.body#/secureTokenId
+    outputs:
+      secureTokenId: $steps.updateSecureToken.outputs.secureTokenId

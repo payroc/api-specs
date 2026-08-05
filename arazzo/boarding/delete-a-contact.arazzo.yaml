@@ -1,0 +1,101 @@
+arazzo: 1.0.0
+info:
+  title: Delete a processing account's contact
+  summary: Find a contact on a processing account, then delete it.
+  description: >
+    Removes one of the contacts attached to a processing account. This workflow
+    finds a contact and deletes it.
+
+    Agent gotchas:
+    - contactId is an integer (e.g. 1543), not a string; it is issued by the
+      gateway when the processing account is created and is also discoverable via
+      the list step.
+    - You cannot delete the last contact on a processing account — the API
+      requires at least one contact to remain and rejects the deletion.
+    - deleteContact returns 204 No Content and is destructive and irreversible;
+      run only when the contact should be removed.
+
+    To amend a contact instead, use the update-a-contact workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: delete-a-contact
+    summary: List, retrieve, then delete a processing account's contact.
+    description: >
+      Optionally list the processing account's contacts (listContacts) and
+      retrieve one (getContact) to confirm it, then delete it (deleteContact). The
+      list/retrieve steps are optional when you already hold the contactId.
+    inputs:
+      type: object
+      required:
+        - processingAccountId
+        - contactId
+      properties:
+        processingAccountId:
+          type: string
+          description: Unique identifier that the gateway assigned to the processing account.
+          example: 38765
+        contactId:
+          type: integer
+          description: >
+            Unique identifier of the contact to delete. An integer issued by the
+            gateway; also returned by the list step.
+          example: 1543
+        limit:
+          type: integer
+          description: Maximum number of contacts to return per page in the list step.
+          example: 2
+    steps:
+      - stepId: listContacts
+        description: >
+          Optional. List the contacts associated with the processing account to
+          discover the contactId. Supports before/after/limit cursor pagination.
+          Skip if you already hold the contactId.
+        operationId: listProcessingAccountContacts
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $inputs.processingAccountId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstContactId: $response.body#/data/0/contactId
+
+      - stepId: getContact
+        description: >
+          Optional. Retrieve the full details of the contact by its contactId
+          before deleting it.
+        operationId: getContact
+        parameters:
+          - name: contactId
+            in: path
+            value: $inputs.contactId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          contactId: $response.body#/contactId
+          type: $response.body#/type
+
+      - stepId: deleteContact
+        description: >
+          Delete the contact from the processing account. Destructive and
+          irreversible; run only when the contact should be removed. The API
+          rejects this call if the contact is the last one on the processing
+          account. Returns 204 No Content with no response body.
+        operationId: deleteContact
+        parameters:
+          - name: contactId
+            in: path
+            value: $inputs.contactId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      contactId: $inputs.contactId

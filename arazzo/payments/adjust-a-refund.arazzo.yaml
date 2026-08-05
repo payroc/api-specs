@@ -1,0 +1,161 @@
+arazzo: 1.0.0
+info:
+  title: Adjust a refund
+  summary: Find a card refund, retrieve it, then adjust it while it is in an open batch.
+  description: >
+    Adjust an existing card refund (created via a referenced or unreferenced
+    refund) while it is still in an open batch. Read-then-act: list refunds with
+    filters, take a result, retrieve it to confirm the action is permitted, then
+    adjust it. Adjust is CARD ONLY - there is no bank-transfer adjust operation.
+
+    Agent gotchas captured by this workflow:
+      - List responses are paginated: refunds live in the `data` array alongside
+        `count`, `hasMore`, and `limit`. To act on a result, reach into
+        `data/0/refundId` - not a top-level field. On a single retrieved refund,
+        `refundId` IS top-level.
+      - `adjustRefund` changes the refund's status or customer details via a
+        polymorphic `adjustments` array discriminated by `type` (`status` or
+        `customer`).
+      - The list/retrieve operations are GET (200). adjust is POST (200, not 201)
+        and requires a unique `Idempotency-Key` header in UUID v4 format.
+
+    To cancel a refund instead of adjusting it, use the reverse-a-refund workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: adjust-a-refund
+    summary: List, retrieve, then adjust a card refund.
+    description: >
+      Find the card refund (listRefunds -> getRefund), confirm from the retrieved
+      refund's `supportedOperations` that it is still adjustable, then adjust it
+      (adjustRefund). The list and retrieve steps are optional when you already
+      hold the refundId.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - idempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Processing terminal to filter the refund list by.
+          example: '1234001'
+        orderId:
+          type: string
+          description: Filter refunds by the order identifier the merchant assigned.
+          example: OrderRef6543
+        status:
+          type: string
+          description: >
+            Filter the list by refund status. Only a refund in an open batch can
+            be adjusted.
+          example: ready
+        dateFrom:
+          type: string
+          format: date-time
+          description: Return refunds processed on or after this ISO 8601 timestamp.
+          example: '2024-07-01T15:30:00Z'
+        limit:
+          type: integer
+          description: Maximum number of refunds to return per page.
+          example: 2
+        idempotencyKey:
+          type: string
+          description: >
+            Unique UUID v4 you generate for the adjust request, sent as the
+            `Idempotency-Key` header.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        operator:
+          type: string
+          description: Operator who requested the adjustment.
+          example: Jane
+        adjustments:
+          type: array
+          description: >
+            Array of polymorphic adjustment objects, each discriminated by `type`
+            (`status` or `customer`). Example (move the refund to ready):
+            `[{ type: status, toStatus: ready }]`.
+          example:
+            - type: status
+              toStatus: ready
+          items:
+            type: object
+    steps:
+      - stepId: listRefunds
+        description: >
+          Optional. List card refunds filtered by terminal, order, status, and
+          date. The response is paginated - refunds are in the `data` array. This
+          step extracts the first refund's `refundId` for the follow-on steps.
+        operationId: listRefunds
+        parameters:
+          - name: processingTerminalId
+            in: query
+            value: $inputs.processingTerminalId
+          - name: orderId
+            in: query
+            value: $inputs.orderId
+          - name: status
+            in: query
+            value: $inputs.status
+          - name: dateFrom
+            in: query
+            value: $inputs.dateFrom
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstRefundId: $response.body#/data/0/refundId
+          hasMore: $response.body#/hasMore
+
+      - stepId: getRefund
+        description: >
+          Optional. Retrieve the full detail of the first card refund from the
+          list. Inspect `supportedOperations` and `transactionResult.status` to
+          confirm the refund can be adjusted before acting.
+        operationId: getRefund
+        parameters:
+          - name: refundId
+            in: path
+            value: $steps.listRefunds.outputs.firstRefundId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          refundId: $response.body#/refundId
+          status: $response.body#/transactionResult/status
+          supportedOperations: $response.body#/supportedOperations
+
+      - stepId: adjustRefund
+        description: >
+          Adjust the refund in an open batch using the `refundId` from getRefund.
+          The body is a polymorphic `adjustments` array discriminated by `type`:
+          `status` (move to `ready`/`pending` via `toStatus`) or `customer`
+          (update contact methods / shipping address). Requires a unique
+          `Idempotency-Key` header. Returns 200.
+        operationId: adjustRefund
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: refundId
+            in: path
+            value: $steps.getRefund.outputs.refundId
+        requestBody:
+          contentType: application/json
+          payload:
+            operator: $inputs.operator
+            adjustments: $inputs.adjustments
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          refundId: $response.body#/refundId
+          status: $response.body#/transactionResult/status
+    outputs:
+      refundId: $steps.adjustRefund.outputs.refundId
+      status: $steps.adjustRefund.outputs.status

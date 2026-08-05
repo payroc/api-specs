@@ -1,0 +1,134 @@
+arazzo: 1.0.0
+info:
+  title: Re-present an ACH payment
+  summary: Retrieve why an ACH payment was returned, then resubmit it for collection.
+  description: >
+    When an ACH (bank transfer) payment is returned, this workflow retrieves the
+    return reason and resubmits the payment for collection.
+
+
+    Critical agent gotcha: the re-presentment does NOT use the paymentId of the
+    original payment. Retrieve the original payment, then read the NEW paymentId
+    from the `returns` array (`returns[0].paymentId`) and re-present against that
+    id. Re-presenting against the original paymentId will fail.
+
+
+    By default the gateway reuses the bank account details from the original
+    payment, so the request body is optional. Supply an updated `paymentMethod`
+    (an `ach` variant, or a `secureToken` variant) only if the customer corrected
+    their bank details before resubmission.
+
+
+    A payment can be re-presented up to two times. If the first re-presentment is
+    itself returned, repeat both steps: retrieve the failed re-presentment, read
+    the fresh `returns[0].paymentId`, and re-present against that id for the final
+    attempt.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: represent-ach-payment
+    summary: Retrieve an ACH return reason and re-present the payment.
+    description: >
+      Two steps: (1) retrieve the returned bank transfer payment to read the
+      return reason and the return's paymentId; (2) re-present the payment using
+      that return paymentId. The optional third pass from the guide (a second and
+      final re-presentment) is the same two steps repeated against the newly
+      returned paymentId, and is documented in the description rather than modelled
+      as duplicate steps.
+    inputs:
+      type: object
+      required: [paymentId, idempotencyKey]
+      properties:
+        paymentId:
+          type: string
+          description: >
+            paymentId of the original ACH payment that was returned. Used only to
+            RETRIEVE the payment; it is NOT the id you re-present against.
+          example: E29U8OU8Q4
+        idempotencyKey:
+          type: string
+          description: >
+            Unique UUID v4 you generate for the re-presentment request
+            (Idempotency-Key header).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        nameOnAccount:
+          type: string
+          description: >
+            Optional. Corrected account holder name, only when supplying updated
+            bank details in the re-presentment.
+          example: Sarah Hazel Hopper
+        accountNumber:
+          type: string
+          description: Optional. Corrected ACH account number for the updated bank details.
+          example: '321831591'
+        routingNumber:
+          type: string
+          description: Optional. Corrected ACH routing number for the updated bank details.
+          example: '063100277'
+        secCode:
+          type: string
+          description: Optional. NACHA Standard Entry Class code for the updated ACH details.
+          example: web
+    steps:
+      - stepId: viewPayment
+        description: >
+          Retrieve the returned ACH payment to read the return reason and, most
+          importantly, the return's own paymentId from the `returns` array. Save
+          `returns[0].paymentId` — the re-presentment step needs it, not the
+          original paymentId.
+        operationId: getBankTransferPayment
+        parameters:
+          - name: paymentId
+            in: path
+            value: $inputs.paymentId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          originalPaymentId: $response.body#/paymentId
+          returnPaymentId: $response.body#/returns/0/paymentId
+          returnCode: $response.body#/returns/0/returnCode
+          returnReason: $response.body#/returns/0/returnReason
+          transactionStatus: $response.body#/transactionResult/status
+      - stepId: representPayment
+        description: >
+          Re-present the payment against the return's paymentId
+          (`$steps.viewPayment.outputs.returnPaymentId`), NOT the original
+          paymentId. The request body is optional: omit it to reuse the original
+          bank details, or send an updated `paymentMethod` (the `ach` variant is
+          shown here; a `secureToken` variant is also supported) if the customer
+          corrected their details. If this re-presentment is itself returned,
+          repeat viewPayment + representPayment against the new
+          `returns[0].paymentId` for a second and final attempt.
+        operationId: representBankTransferPayment
+        parameters:
+          - name: paymentId
+            in: path
+            value: $steps.viewPayment.outputs.returnPaymentId
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            paymentMethod:
+              type: ach
+              accountType: checking
+              nameOnAccount: $inputs.nameOnAccount
+              accountNumber: $inputs.accountNumber
+              routingNumber: $inputs.routingNumber
+              secCode: $inputs.secCode
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          representedPaymentId: $response.body#/paymentId
+          representedStatus: $response.body#/transactionResult/status
+    outputs:
+      returnPaymentId: $steps.viewPayment.outputs.returnPaymentId
+      returnReason: $steps.viewPayment.outputs.returnReason
+      representedPaymentId: $steps.representPayment.outputs.representedPaymentId
+      representedStatus: $steps.representPayment.outputs.representedStatus

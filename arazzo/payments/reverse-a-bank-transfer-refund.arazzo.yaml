@@ -1,0 +1,148 @@
+arazzo: 1.0.0
+info:
+  title: Reverse a bank-transfer refund
+  summary: Find a bank-transfer (ACH) refund, retrieve it, then cancel (reverse) it while it is in an open batch.
+  description: >
+    Cancel an existing bank-transfer / ACH refund while it is still in an open
+    batch, so no funds are returned. Read-then-act: list bank-transfer refunds
+    with filters, take a result, retrieve it to confirm the action is permitted,
+    then reverse it. Note there is NO adjust operation for bank-transfer refunds -
+    reverse is the only lifecycle action.
+
+    Agent gotchas captured by this workflow:
+      - List responses are paginated: refunds live in the `data` array alongside
+        `count`, `hasMore`, and `limit`. To act on a result, reach into
+        `data/0/refundId` - not a top-level field. On a single retrieved refund,
+        `refundId` IS top-level.
+      - `reverseBankTransferRefund` cancels the refund while it is in an open
+        batch, removing it so no funds are returned - after a reverse,
+        `transactionResult.status` is `reversal`.
+      - The list/retrieve operations are GET (200). reverse is POST (200, not
+        201) and requires a unique `Idempotency-Key` header in UUID v4 format.
+      - The card and bank operationIds are distinct - do not send a card refundId
+        to a bank-transfer endpoint or vice versa.
+
+    To reverse or adjust a card refund, use the reverse-a-refund /
+    adjust-a-refund workflows.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: reverse-a-bank-transfer-refund
+    summary: List, retrieve, then reverse (cancel) a bank-transfer refund.
+    description: >
+      Find the bank-transfer refund (listBankTransferRefunds ->
+      getBankTransferRefund), confirm from the retrieved refund's
+      `transactionResult.status` that it is still reversible, then reverse it
+      (reverseBankTransferRefund). The list and retrieve steps are optional when
+      you already hold the refundId. `processingTerminalId` is required on the
+      list.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - idempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Processing terminal to filter the refund list by. Required on the bank-transfer list.
+          example: '1234001'
+        orderId:
+          type: string
+          description: Filter refunds by the order identifier the merchant assigned.
+          example: OrderRef6543
+        status:
+          type: string
+          description: >
+            Filter the list by refund status. Only a refund in an open batch can
+            be reversed.
+          example: ready
+        dateFrom:
+          type: string
+          format: date-time
+          description: Return refunds processed on or after this ISO 8601 timestamp.
+          example: '2024-07-01T15:30:00Z'
+        limit:
+          type: integer
+          description: Maximum number of refunds to return per page.
+          example: 2
+        idempotencyKey:
+          type: string
+          description: >
+            Unique UUID v4 you generate for the reverse request, sent as the
+            `Idempotency-Key` header.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+    steps:
+      - stepId: listBankTransferRefunds
+        description: >
+          Optional. List bank-transfer refunds filtered by terminal, order,
+          status, and date. `processingTerminalId` is required here. The response
+          is paginated - refunds are in the `data` array. Extracts the first
+          refund's `refundId`.
+        operationId: listBankTransferRefunds
+        parameters:
+          - name: processingTerminalId
+            in: query
+            value: $inputs.processingTerminalId
+          - name: orderId
+            in: query
+            value: $inputs.orderId
+          - name: status
+            in: query
+            value: $inputs.status
+          - name: dateFrom
+            in: query
+            value: $inputs.dateFrom
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstRefundId: $response.body#/data/0/refundId
+          hasMore: $response.body#/hasMore
+
+      - stepId: getBankTransferRefund
+        description: >
+          Optional. Retrieve the full detail of the first bank-transfer refund
+          from the list. Check `transactionResult.status` to confirm the refund is
+          still in an open batch before reversing it.
+        operationId: getBankTransferRefund
+        parameters:
+          - name: refundId
+            in: path
+            value: $steps.listBankTransferRefunds.outputs.firstRefundId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          refundId: $response.body#/refundId
+          status: $response.body#/transactionResult/status
+
+      - stepId: reverseBankTransferRefund
+        description: >
+          Cancel the bank-transfer refund while it is in an open batch using the
+          `refundId` from getBankTransferRefund; no funds are returned. There is
+          no bank-transfer adjust operation - reverse is the only lifecycle
+          action. Requires a unique `Idempotency-Key` header. Returns 200 with
+          `transactionResult.status` == `reversal`.
+        operationId: reverseBankTransferRefund
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: refundId
+            in: path
+            value: $steps.getBankTransferRefund.outputs.refundId
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.body#/transactionResult/status == reversal
+        outputs:
+          refundId: $response.body#/refundId
+          status: $response.body#/transactionResult/status
+    outputs:
+      refundId: $steps.reverseBankTransferRefund.outputs.refundId
+      status: $steps.reverseBankTransferRefund.outputs.status

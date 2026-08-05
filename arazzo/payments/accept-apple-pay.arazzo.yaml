@@ -1,0 +1,214 @@
+arazzo: 1.0.0
+info:
+  title: Accept Apple Pay
+  summary: Enable a merchant for Apple Pay, validate the wallet session, then run a sale with the Apple Pay token.
+  description: >
+    Accept an Apple Pay payment through the Payroc gateway. This is the wallet
+    variant of "take a payment": the cardholder authorises the charge in Apple
+    Pay, Apple returns encrypted payment data, and the integrator runs a standard
+    payment with that data.
+
+
+    Two-step API flow modelled as ONE workflow family:
+
+    - Step `startApplePaySession` (POST
+      /processing-terminals/{processingTerminalId}/apple-pay-sessions,
+      operationId `applePaySessions`): starts and validates the Apple Pay
+      merchant session. Returns a `startSessionResponse` blob that the browser
+      hands back to the Apple Pay JS API so Apple will release the encrypted
+      payment data.
+
+    - Step `runApplePaySale` (POST /payments, operationId `payment`): runs the
+      sale using the encrypted wallet data.
+
+
+    Web vs in-app variant (collapsed into this one family):
+
+    - Web: both steps run. The merchant session MUST be validated server-side
+      via `applePaySessions` before the browser can obtain the payment token.
+
+    - In-app (native iOS / PassKit): the app obtains the payment token directly
+      from Apple without a validated merchant session, so `startApplePaySession`
+      is skipped and only `runApplePaySale` runs. Step 1 is therefore marked
+      optional/web-only.
+
+
+    Agent gotchas captured here:
+
+    - Merchant enablement is a prerequisite performed OUTSIDE the API: the
+      merchant's domain is registered in the Self-Care Portal, which issues the
+      `appleDomainId`. There is no API operation for this; it is an
+      external-system step supplying an input.
+
+    - The `appleValidationUrl` comes from the Apple Pay JS API on the client, not
+      from Payroc.
+
+    - In the payment payload the wallet is expressed as
+      `paymentMethod.type: digitalWallet` with `serviceProvider: apple` and the
+      `encryptedData` field (Apple's encrypted payment data converted to
+      hexadecimal) — NOT a `card` or `token` object.
+
+    - Idempotency-Key: POST /payments REQUIRES a unique UUID v4 `Idempotency-Key`
+      header per request. The apple-pay-sessions endpoint does not.
+
+
+    The terminal outcome is a created payment (HTTP 201) with a `paymentId` and a
+    `transactionResult` a later workflow can retrieve, adjust, reverse, or refund.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: accept-apple-pay
+    summary: Validate an Apple Pay merchant session, then run a sale with the wallet token.
+    description: >
+      Web flow: run `startApplePaySession` first to validate the merchant
+      session with Apple, use the returned `startSessionResponse` client-side to
+      obtain the cardholder's encrypted payment data, then run `runApplePaySale`.
+
+
+      In-app flow: skip `startApplePaySession` (the native app already holds the
+      Apple Pay token) and run only `runApplePaySale`.
+
+
+      Prerequisite (not an API step): the merchant's domain is registered in the
+      Self-Care Portal, which issues the `appleDomainId` supplied as an input.
+    x-actors:
+      - id: cardholder
+        name: Cardholder
+        type: human
+        description: Customer who authorises the charge in Apple Pay on their device.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API on the cardholder's behalf.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: apple
+        name: Apple Pay
+        type: external-system
+        description: >
+          Issues the merchant session and the encrypted payment data via the
+          Apple Pay JS API / PassKit; not directly callable through this API.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - processingTerminalId
+        - appleDomainId
+        - appleValidationUrl
+        - orderId
+        - amount
+        - currency
+        - encryptedData
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 sent in the Idempotency-Key header of the payment request. Generate a fresh value per request.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal that starts the session and runs the sale.
+          example: '1234001'
+        appleDomainId:
+          type: string
+          description: Unique identifier of the merchant's domain, issued by the Self-Care Portal when the domain was registered for Apple Pay.
+          example: DUHDZJHGYY
+        appleValidationUrl:
+          type: string
+          description: Validation URL provided by the Apple Pay JS API on the client (web flow only).
+          example: https://apple-pay-gateway.apple.com/paymentservices/startSession
+        operator:
+          type: string
+          description: Operator who ran the transaction.
+          example: Jane
+        orderId:
+          type: string
+          description: Merchant-assigned unique identifier for the order.
+          example: OrderRef6543
+        description:
+          type: string
+          description: Description of the transaction.
+          example: Large Pepperoni Pizza
+        amount:
+          type: integer
+          description: Total transaction amount in the currency's lowest denomination (for example, cents).
+          example: 4999
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: USD
+        encryptedData:
+          type: string
+          description: >
+            Encrypted Apple Pay payment data returned by the Apple Pay JS API,
+            converted to hexadecimal. 128–20480 characters.
+          example: 7b2264617461223a2259314b37626731573479755568587473
+    steps:
+      - stepId: startApplePaySession
+        x-actor: merchant
+        description: >
+          OPTIONAL — web flow only. Start and validate the Apple Pay merchant
+          session by POSTing the `appleDomainId` and `appleValidationUrl` to the
+          apple-pay-sessions endpoint. The returned `startSessionResponse` is
+          passed to the Apple Pay JS API in the browser so Apple releases the
+          cardholder's encrypted payment data. Skip this step for the in-app
+          (native PassKit) flow, where the app obtains the token directly from
+          Apple.
+        operationId: applePaySessions
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        requestBody:
+          contentType: application/json
+          payload:
+            appleDomainId: $inputs.appleDomainId
+            appleValidationUrl: $inputs.appleValidationUrl
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          startSessionResponse: $response.body#/startSessionResponse
+      - stepId: runApplePaySale
+        x-actor: cardholder
+        description: >
+          Run the sale with the Apple Pay wallet data by POSTing to /payments.
+          The payment method is a digital wallet: `type: digitalWallet`,
+          `serviceProvider: apple`, and `encryptedData` set to Apple's encrypted
+          payment data in hexadecimal. This is the same operation as a card sale,
+          only the paymentMethod differs. The default `autoCapture: true` runs a
+          normal sale that stays adjustable in the open batch.
+        operationId: payment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            channel: web
+            processingTerminalId: $inputs.processingTerminalId
+            operator: $inputs.operator
+            order:
+              orderId: $inputs.orderId
+              description: $inputs.description
+              currency: $inputs.currency
+              amount: $inputs.amount
+            paymentMethod:
+              type: digitalWallet
+              serviceProvider: apple
+              encryptedData: $inputs.encryptedData
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          paymentId: $response.body#/paymentId
+          status: $response.body#/transactionResult/status
+    outputs:
+      startSessionResponse: $steps.startApplePaySession.outputs.startSessionResponse
+      paymentId: $steps.runApplePaySale.outputs.paymentId
+      status: $steps.runApplePaySale.outputs.status
