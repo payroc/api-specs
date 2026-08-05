@@ -1,0 +1,179 @@
+arazzo: 1.0.0
+info:
+  title: Save a customer's payment method (secure token)
+  summary: Tokenize a customer's card or bank account into a reusable secure token.
+  description: >
+    Saves a customer's payment details to the Payroc vault as a reusable secure
+    token, so later payments and refunds can be run without re-collecting the
+    card or bank account. The terminal outcome is a secure token: the response
+    carries both a secureTokenId (the token's identifier) and a token (the value
+    that stands in for the payment details).
+
+    Critical agent gotcha (prior-art W4): in a follow-on payment or refund the
+    paymentMethod.token field takes the token VALUE returned here, NOT the
+    secureTokenId. Confusing the two is the single most common field error. The
+    token value is reusable, 12-19 digits, and begins 296753; the secureTokenId
+    is a merchant- or gateway-assigned reference (for example
+    MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa).
+
+    This is one workflow family with two branches selected by the source.type
+    discriminator:
+      - Card (primary path): source.type = card with cardDetails.
+      - Bank account: source.type = ach (US) or pad (Canada) with the account
+        number and routing/transit details instead of cardDetails.
+    Follow only the branch that matches the payment method being saved; both go
+    through the same createSecureToken operation. You can also obtain a secure
+    token as a side effect of running a sale (set tokenize=true on the payment),
+    but this workflow covers saving details without running a sale.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: save-a-payment-method
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder / account holder who presents the payment details to be saved.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API on the customer's behalf to vault the details.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface that stores the details and returns the secure token.
+    summary: Create a reusable secure token from a customer's card or bank account.
+    description: >
+      Single-step workflow that POSTs the customer's payment details to the
+      secure-tokens endpoint for a processing terminal. The primary path models
+      the card branch; the bank account (ach / pad) branch runs the same step
+      with a bank-account source object instead of cardDetails. Supply your own
+      secureTokenId to control the token identifier, or omit it and the gateway
+      generates one. An Idempotency-Key header is required.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - idempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the terminal the secure token is created under (path parameter).
+          example: 1234001
+        idempotencyKey:
+          type: string
+          description: UUID v4 that makes the create request idempotent (Idempotency-Key header).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        secureTokenId:
+          type: string
+          description: >
+            Optional merchant-assigned identifier for the secure token. If omitted, the
+            gateway generates one and returns it. This is the token's reference, not the
+            reusable token value used in follow-on payments.
+          example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+        operator:
+          type: string
+          description: Operator who saved the customer's payment details.
+          example: Jane
+        mitAgreement:
+          type: string
+          description: >
+            How the merchant may reuse the stored details, as agreed by the customer:
+            unscheduled, recurring, or installment.
+          example: recurring
+        customerFirstName:
+          type: string
+          description: Customer's first name.
+          example: Sarah
+        customerLastName:
+          type: string
+          description: Customer's last name.
+          example: Hopper
+        customerEmail:
+          type: string
+          description: Customer's email address.
+          example: sarah.hopper@example.com
+        cardNumber:
+          type: string
+          description: Card branch. Customer's card number (plain-text keyed entry).
+          example: 4539858876047062
+        expiryDate:
+          type: string
+          description: Card branch. Card expiry date in MMYY format.
+          example: 1230
+        cvv:
+          type: string
+          description: Card branch. Card security code.
+          example: 234
+        cardholderName:
+          type: string
+          description: Card branch. Name on the card.
+          example: Sarah Hazel Hopper
+    steps:
+      - stepId: createSecureToken
+        description: >
+          Save the customer's payment details to the vault and return a reusable
+          secure token. Primary path shown is the card branch (source.type = card,
+          keyed plain-text cardDetails). For the bank account branch, replace the
+          source object with an ach source (type, accountType, secCode, nameOnAccount,
+          accountNumber, routingNumber) for US accounts or a pad source (type,
+          nameOnAccount, accountNumber, transitNumber, institutionNumber) for Canadian
+          accounts. Requires an Idempotency-Key header. Remember: the token value in
+          the response - not secureTokenId - is what later payment.paymentMethod.token
+          expects.
+        x-actor: customer
+        operationId: $sourceDescriptions.payroc-api.createSecureToken
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        requestBody:
+          contentType: application/json
+          payload:
+            secureTokenId: $inputs.secureTokenId
+            operator: $inputs.operator
+            mitAgreement: $inputs.mitAgreement
+            customer:
+              firstName: $inputs.customerFirstName
+              lastName: $inputs.customerLastName
+              dateOfBirth: "1990-07-15"
+              referenceNumber: Customer-12
+              billingAddress:
+                address1: 1 Example Ave.
+                address2: Example Address Line 2
+                city: Chicago
+                state: Illinois
+                country: US
+                postalCode: "60056"
+              contactMethods:
+                - type: email
+                  value: $inputs.customerEmail
+              notificationLanguage: en
+            source:
+              type: card
+              cardDetails:
+                entryMethod: keyed
+                cardholderName: $inputs.cardholderName
+                keyedData:
+                  dataFormat: plainText
+                  cardNumber: $inputs.cardNumber
+                  expiryDate: $inputs.expiryDate
+                  cvv: $inputs.cvv
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          secureTokenId: $response.body#/secureTokenId
+          token: $response.body#/token
+          status: $response.body#/status
+    outputs:
+      secureTokenId: $steps.createSecureToken.outputs.secureTokenId
+      token: $steps.createSecureToken.outputs.token
+      status: $steps.createSecureToken.outputs.status

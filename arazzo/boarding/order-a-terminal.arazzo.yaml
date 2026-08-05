@@ -1,0 +1,168 @@
+arazzo: 1.0.0
+info:
+  title: Order a terminal for a processing account
+  summary: Provision one or more physical terminals against a processing account.
+  description: >
+    Orders and configures terminals for an already-boarded processing account,
+    then optionally tracks the order to fulfilment. You need the
+    processingAccountId of the target account before you start (obtain it from
+    the merchant-platform / processing-account boarding flow).
+
+
+    Step 1 (createTerminalOrder) is the substantive action: it POSTs the order
+    items (each an addressable "solution" identified by solutionTemplateId),
+    plus optional shipping, per-solution setup (timezone, industry template,
+    gateway/device/application settings, batch closure, taxes, tips,
+    tokenization) and an optional paymentIntent describing who pays and how.
+    Only orderItems is required at the top level; shipping defaults to the
+    account's DBA address and paymentIntent is omitted when Payroc is not
+    charging for the hardware.
+
+
+    Agent gotchas: createTerminalOrder requires an Idempotency-Key header (UUID
+    v4). The order does not become a terminal instantly - the response status is
+    typically `open` and moves through held/dispatched/fulfilled/cancelled
+    asynchronously, so callers should either poll getTerminalOrder (step 2) or
+    subscribe to the terminalOrder.status.changed event rather than expect a
+    provisioned terminal from step 1. This is a single-actor workflow driven by
+    the integrator, so no actor annotations are used.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: order-a-terminal
+    summary: Create a terminal order for a processing account and track its status.
+    description: >
+      Two steps. createTerminalOrder places the order against a known
+      processingAccountId and returns a terminalOrderId plus an initial status.
+      getTerminalOrder (optional) re-reads the order by that id to follow its
+      status to fulfilment; it is only needed when the caller wants to poll
+      rather than rely on the terminalOrder.status.changed webhook event.
+    inputs:
+      type: object
+      required:
+        - processingAccountId
+        - idempotencyKey
+      properties:
+        processingAccountId:
+          type: string
+          description: Unique identifier of the processing account the terminal is ordered for.
+          example: 38765
+        idempotencyKey:
+          type: string
+          description: Caller-generated UUID v4 that makes the create request idempotent.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        solutionTemplateId:
+          type: string
+          description: Identifier of the solution (device/bundle) to order for each order item.
+          example: Roc Services_DX8000
+    steps:
+      - stepId: createTerminalOrder
+        description: >
+          Place the terminal order against the processing account. Sends the
+          order items (at least one solution), optional shipping details, the
+          per-solution setup, and an optional paymentIntent (shown here for a
+          merchant-paid purchase). Requires the Idempotency-Key header. Returns
+          the terminalOrderId and an initial status (usually `open`).
+        operationId: createTerminalOrder
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $inputs.processingAccountId
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            trainingProvider: payroc
+            shipping:
+              preferences:
+                method: nextDay
+                saturdayDelivery: true
+              address:
+                recipientName: Jane Doe
+                businessName: Example Corp
+                addressLine1: 1 Example Ave.
+                addressLine2: Example Address Line 2
+                city: Chicago
+                state: Illinois
+                postalCode: "60056"
+                email: jane.doe@example.com
+                phone: "2025550164"
+            orderItems:
+              - type: solution
+                solutionTemplateId: $inputs.solutionTemplateId
+                solutionQuantity: 1
+                deviceCondition: new
+                solutionSetup:
+                  timezone: Pacific/Midway
+                  industryTemplateId: Retail
+                  gatewaySettings:
+                    merchantPortfolioId: Example Corp
+                    merchantTemplateId: Example Corp Merchant Template
+                    userTemplateId: Example Corp User Template
+                    terminalTemplateId: Example Corp Terminal Template
+                  applicationSettings:
+                    clerkPrompt: true
+                    security:
+                      refundPassword: true
+                      keyedSalePassword: false
+                      reversalPassword: true
+                  deviceSettings:
+                    numberOfMobileUsers: 2
+                    communicationType: wifi
+                  batchClosure:
+                    batchCloseType: automatic
+                    batchCloseTime: "13:55"
+                  receiptNotifications:
+                    emailReceipt: true
+                    smsReceipt: false
+                  taxes:
+                    - taxRate: 5.0
+                      taxLabel: Sales Tax
+                  tips:
+                    enabled: false
+                  tokenization: true
+            paymentIntent:
+              paymentIntentType: purchase
+              payment:
+                payer: merchant
+                method: hostedPaymentPage
+                frequency:
+                  type: singlePayment
+              costBreakdown:
+                items:
+                  - name: Terminal
+                    quantity: 1
+                    unitCost: 4999
+                shippingCost: 599
+              subTotal: 5598
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          terminalOrderId: $response.body#/terminalOrderId
+          status: $response.body#/status
+      - stepId: getTerminalOrder
+        description: >
+          Optional. Re-read the terminal order by its id to track status as it
+          moves through open -> held -> dispatched -> fulfilled (or cancelled).
+          Poll this step, or instead subscribe to the terminalOrder.status.changed
+          event; it is not required to complete the order.
+        operationId: getTerminalOrder
+        parameters:
+          - name: terminalOrderId
+            in: path
+            value: $steps.createTerminalOrder.outputs.terminalOrderId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          terminalOrderId: $response.body#/terminalOrderId
+          status: $response.body#/status
+    outputs:
+      terminalOrderId: $steps.createTerminalOrder.outputs.terminalOrderId
+      status: $steps.getTerminalOrder.outputs.status

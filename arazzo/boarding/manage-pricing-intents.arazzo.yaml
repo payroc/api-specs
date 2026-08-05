@@ -1,0 +1,190 @@
+arazzo: 1.0.0
+info:
+  title: Manage pricing intents
+  summary: Create, discover, retrieve, and delete the reusable pricing-template resource.
+  description: >
+    Create, discover, retrieve, and delete a pricing intent - the reusable
+    pricing template that you later assign to a processing account when boarding
+    a merchant (via Create Merchant Platform or Create Processing Account). The
+    terminal outcome is a pricing intent that exists and is eventually deleted
+    when no longer needed.
+
+    Agent gotchas:
+    - Create requires a unique `Idempotency-Key` header (UUID v4); replaying the
+      same key returns the original result rather than creating a duplicate.
+    - A newly created pricing intent is returned with `status: pendingReview` -
+      Payroc must approve it (status becomes `active`) before it is usable in
+      boarding. Approval is out-of-band and is not a step here.
+    - The write payload is MPA version 5.2 (`writePricingIntent`); `country`,
+      `version`, `base`, and `key` are required. Fee amounts are integers in the
+      currency's lowest denomination (cents).
+    - Deletion is irreversible - a deleted pricing intent cannot be recovered or
+      assigned to a boarding application.
+    - Deleting a pricing intent does not affect merchants that are already boarded -
+      the pricing data was applied to their processing account at boarding time.
+
+    To amend an existing pricing intent, use the replace-a-pricing-intent (full
+    replace, PUT) or patch-a-pricing-intent (partial JSON Patch, PATCH) workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: manage-pricing-intents
+    summary: Create, list, retrieve, and delete a pricing intent.
+    description: >
+      Ordered lifecycle for a pricing intent. Step 1 creates the template and
+      captures its id. Steps 2-3 discover and retrieve it. Step 4 deletes it. The
+      list and retrieve reads are convenience steps for an agent that does not
+      already hold the pricingIntentId.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - pricingIntentId
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per create request to make it idempotent.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        key:
+          type: string
+          description: Your own reference for the pricing intent, stored for your records.
+          example: Your-Unique-Identifier
+        pricingIntentId:
+          type: string
+          description: Identifier Payroc assigned to the pricing intent; needed to retrieve or delete it.
+          example: '5'
+        limit:
+          type: integer
+          description: Maximum number of pricing intents to return when listing.
+          example: 10
+    steps:
+      - stepId: createPricingIntent
+        description: >
+          Create a pricing intent (MPA 5.2 template) with base, processor
+          (card + ACH), and gateway fees. Requires the `Idempotency-Key` header.
+          Returns 201 with the intent in `status: pendingReview`; capture its
+          `id` for the follow-on steps.
+        operationId: createPricingIntent
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            key: $inputs.key
+            metadata:
+              yourCustomField: abc123
+            country: US
+            version: '5.2'
+            base:
+              addressVerification: 5
+              annualFee:
+                billInMonth: june
+                amount: 9900
+              regulatoryAssistanceProgram: 15
+              pciNonCompliance: 4995
+              platinumSecurity:
+                billingFrequency: monthly
+              maintenance: 500
+              minimum: 100
+              voiceAuthorization: 95
+              chargeback: 2500
+              retrieval: 1500
+              batch: 1500
+              earlyTermination: 57500
+            processor:
+              card:
+                planType: interchangePlus
+                fees:
+                  mastercardVisaDiscover:
+                    volume: 1.25
+                    transaction: 5
+                  amex:
+                    type: optBlue
+                    volume: 1.25
+                    transaction: 5
+                  pinDebit:
+                    additionalDiscount: 1.25
+                    transaction: 10
+                    monthlyAccess: 1200
+                  electronicBenefitsTransfer:
+                    transaction: 10
+                  specialityCards:
+                    transaction: 10
+              ach:
+                fees:
+                  transaction: 50
+                  batch: 5
+                  returns: 400
+                  unauthorizedReturn: 1999
+                  statement: 800
+                  monthlyMinimum: 20000
+                  accountVerification: 10
+                  discountRateUnder10000: 5.25
+                  discountRateAbove10000: 10
+            gateway:
+              fees:
+                monthly: 2000
+                setup: 5000
+                perTransaction: 2000
+                perDeviceMonthly: 10
+            services:
+              - name: hardwareAdvantagePlan
+                enabled: true
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          pricingIntentId: $response.body#/id
+          status: $response.body#/status
+
+      - stepId: listPricingIntents
+        description: >
+          List the pricing intents associated with the ISV (paginated). Use this
+          to discover a pricingIntentId when you do not already have one. All
+          query parameters (`before`, `after`, `limit`) are optional; only
+          `limit` is passed here.
+        operationId: listPricingIntents
+        parameters:
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          pricingIntents: $response.body#/data
+
+      - stepId: getPricingIntent
+        description: >
+          Retrieve a single pricing intent by id, including its fees and its
+          approval `status` (`active`, `pendingReview`, or `rejected`).
+        operationId: getPricingIntent
+        parameters:
+          - name: pricingIntentId
+            in: path
+            value: $inputs.pricingIntentId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/status
+
+      - stepId: deletePricingIntent
+        description: >
+          Permanently delete the pricing intent. Irreversible - it cannot be
+          recovered or assigned to a boarding application afterwards. Does not
+          affect merchants that are already boarded. Returns 204 No Content.
+        operationId: deletePricingIntent
+        parameters:
+          - name: pricingIntentId
+            in: path
+            value: $inputs.pricingIntentId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      pricingIntentId: $steps.createPricingIntent.outputs.pricingIntentId
+      status: $steps.getPricingIntent.outputs.status

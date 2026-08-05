@@ -1,0 +1,88 @@
+arazzo: 1.0.0
+info:
+  title: Verify a bank account
+  summary: Validate a customer's bank account details before an ACH sale or funding setup.
+  description: >
+    Headline single-operation workflow. Sends a customer's bank account details
+    to the Payroc gateway and returns whether they are valid, so an integrator
+    can gate a downstream ACH sale or funding setup on the result.
+
+
+    The gateway verifies two kinds of bank details, selected by the
+    `bankAccount.type` discriminator:
+      - `ach` — Automated Clearing House details (routingNumber + secCode). This
+        is the primary path modelled below.
+      - `pad` — Pre-Authorized Debit details (transitNumber + institutionNumber).
+        Same operation and step; swap the `bankAccount` payload for the PAD shape,
+        e.g. `{ type: pad, accountType: checking, nameOnAccount: Sarah Hazel
+        Hopper, accountNumber: "1234567890", transitNumber: "76543",
+        institutionNumber: "543" }`.
+
+
+    Gotchas: the request requires an `Idempotency-Key` header (UUID v4). The
+    terminal is identified by `processingTerminalId`, not a merchant id. Success
+    returns HTTP 200 with a `verified` boolean — a 200 does NOT mean the account
+    is valid; you must inspect `verified` (it can be `false` for a well-formed
+    but unverifiable account).
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: verify-a-bank-account
+    summary: Verify a customer's ACH (or PAD) bank account details.
+    description: >
+      Single step: call verifyBankAccount with the terminal id and the customer's
+      bank account details. The primary path uses ACH details; for PAD, supply the
+      PAD variant of the bankAccount payload (see the info description).
+    inputs:
+      type: object
+      required: [idempotencyKey, processingTerminalId, bankAccount]
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per request, sent as the Idempotency-Key header.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        processingTerminalId:
+          type: string
+          description: Unique identifier that Payroc assigned to the terminal.
+          example: "1234001"
+        bankAccount:
+          type: object
+          description: >
+            Polymorphic bank account object. For ACH use type `ach` with
+            routingNumber and secCode; for PAD use type `pad` with transitNumber
+            and institutionNumber.
+          example:
+            type: ach
+            accountType: checking
+            nameOnAccount: Sarah Hazel Hopper
+            accountNumber: "11101010"
+            routingNumber: "053200983"
+            secCode: web
+    steps:
+      - stepId: verifyBankAccount
+        description: >
+          Verify the customer's bank account details. Returns HTTP 200 with a
+          `verified` flag indicating whether the details are valid. Inspect
+          `verified` rather than relying on the 200 status alone.
+        operationId: $sourceDescriptions.payroc-api.verifyBankAccount
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            processingTerminalId: $inputs.processingTerminalId
+            bankAccount: $inputs.bankAccount
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          processingTerminalId: $response.body#/processingTerminalId
+          verified: $response.body#/verified
+    outputs:
+      verified: $steps.verifyBankAccount.outputs.verified

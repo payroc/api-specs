@@ -1,0 +1,134 @@
+arazzo: 1.0.0
+info:
+  title: Create a pricing intent
+  summary: Create a reusable fee template that you assign to processing accounts.
+  description: >
+    Creates a pricing intent: a reusable template of fees (base, processor, and
+    gateway) that you apply to processing accounts when boarding merchants. The
+    same pricing intent can be assigned to many processing accounts, so this
+    workflow is a leaf that composes into board-a-merchant.
+
+    Agent gotchas: base fees are always required; processor fees carry the
+    pricing program (planType, e.g. interchangePlus / interchangePlusPlus /
+    tiered) and per-transaction fees; gateway fees are optional. The create
+    request is idempotent and requires an Idempotency-Key header (UUID v4). On
+    success the gateway returns the new pricing intent with status pendingReview
+    and its identifier at the top-level `id` field (not `pricingIntentId`) - that
+    value is what later boarding calls pass as pricingIntentId to assign the
+    template to a processing account.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: create-pricing-intent
+    summary: Create a reusable pricing intent (fee template) for processing accounts.
+    description: >
+      Single step: POST the fee template to /pricing-intents. The example models
+      the interchangePlus card plan with ACH and gateway fees; swap the
+      processor.card.planType and fee shape for interchangePlusPlus or a tiered
+      plan as needed - the branch is the fee structure inside the same request,
+      not a different operation. Capture the returned id to assign this pricing
+      intent to a processing account (create-merchant-platform /
+      add-processing-account).
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - country
+        - version
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per request; makes the create idempotent.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        key:
+          type: string
+          description: Your own reference key for the pricing intent.
+          example: Your-Unique-Identifier
+        country:
+          type: string
+          description: Country the pricing intent applies to (ISO 3166-1 alpha-2).
+          example: US
+        version:
+          type: string
+          description: Merchant Processing Agreement (MPA) version the fees follow.
+          example: "5.2"
+    steps:
+      - stepId: createPricingIntent
+        description: >
+          Create the pricing intent. Sends base fees (required), processor card
+          and ACH fees with the pricing program, and gateway fees. Returns 201
+          with the pricing intent in status pendingReview.
+        operationId: createPricingIntent
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            key: $inputs.key
+            metadata:
+              yourCustomField: abc123
+            country: $inputs.country
+            version: $inputs.version
+            base:
+              addressVerification: 5
+              annualFee:
+                billInMonth: june
+                amount: 9900
+              regulatoryAssistanceProgram: 15
+              pciNonCompliance: 4995
+              platinumSecurity:
+                billingFrequency: monthly
+              maintenance: 500
+              minimum: 100
+              voiceAuthorization: 95
+              chargeback: 2500
+              retrieval: 1500
+              batch: 1000
+              earlyTermination: 57500
+            processor:
+              card:
+                planType: interchangePlus
+                fees:
+                  mastercardVisaDiscover:
+                    volume: 0.12
+                    transaction: 0
+                  amex:
+                    type: optBlue
+                    volume: 0.12
+                    transaction: 0
+              ach:
+                fees:
+                  transaction: 50
+                  batch: 5
+                  returns: 400
+                  unauthorizedReturn: 500
+                  statement: 250
+                  monthlyMinimum: 500
+                  accountVerification: 10
+                  discountRateUnder10000: 0.5
+                  discountRateAbove10000: 1
+            gateway:
+              fees:
+                monthly: 2000
+                setup: 5000
+                perTransaction: 2000
+                perDeviceMonthly: 10
+            services:
+              - name: hardwareAdvantagePlan
+                enabled: true
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.body#/status == pendingReview
+        outputs:
+          pricingIntentId: $response.body#/id
+          status: $response.body#/status
+    outputs:
+      pricingIntentId: $steps.createPricingIntent.outputs.pricingIntentId
+      status: $steps.createPricingIntent.outputs.status

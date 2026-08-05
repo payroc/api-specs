@@ -1,0 +1,139 @@
+arazzo: 1.0.0
+info:
+  title: Update a funding recipient
+  summary: Find a funding recipient, retrieve it, then replace its details with a full PUT.
+  description: >
+    Updates the legal/contact details of a funding recipient. Because the update
+    is a full-object PUT that echoes the recipient's owners and funding accounts,
+    you must retrieve the recipient first to carry those summaries into the
+    payload.
+
+    Agent gotchas:
+    - The path parameter is recipientId (an integer).
+    - updateFundingRecipient is a full-object PUT that returns 204 No Content (no
+      body); it does not return the updated resource. Significant changes may
+      trigger re-approval (status returns to pending).
+    - owners and fundingAccounts are read-only summaries echoed back in the
+      payload from the retrieve step; the mutable fields are recipientType, taxId,
+      charityId, doingBusinessAs, address, contactMethods, and metadata.
+
+    To remove a recipient instead, use the delete-a-funding-recipient workflow.
+    Mutually exclusive with delete for the same recipient.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: update-a-funding-recipient
+    summary: List, retrieve, then update (full PUT) a funding recipient.
+    description: >
+      Optionally list recipients (listRecipients), retrieve the target recipient
+      (getRecipient - required, as its owners/fundingAccounts summaries are echoed
+      into the PUT), then update it (updateRecipient). The list step is optional
+      when you already hold the recipientId.
+    inputs:
+      type: object
+      required:
+        - recipientId
+      properties:
+        recipientId:
+          type: integer
+          description: Unique identifier of the funding recipient to update.
+          example: 234
+        limit:
+          type: integer
+          description: Maximum number of funding recipients to return per page when listing.
+          example: 25
+        recipientType:
+          type: string
+          description: Type or legal structure of the funding recipient.
+          example: privateCorporation
+        taxId:
+          type: string
+          description: Employer identification number (EIN) or Social Security number.
+          example: 12-3456789
+        doingBusinessAs:
+          type: string
+          description: Trading name of the business or organization.
+          example: Doe Hot Dogs
+        contactEmail:
+          type: string
+          description: Email contact for the recipient (at least one email is required).
+          example: fred.nerk@example.com
+    steps:
+      - stepId: listRecipients
+        description: >
+          Optional discovery step. Return a paginated list of funding recipients so
+          the caller can find the target recipientId. Skip if the recipientId is
+          already known.
+        operationId: listFundingRecipients
+        parameters:
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstRecipientId: $response.body#/data/0/recipientId
+
+      - stepId: getRecipient
+        description: >
+          Retrieve the target funding recipient. Required before the update: its
+          owners and fundingAccounts summaries are echoed back into the full-object
+          PUT payload.
+        operationId: getFundingRecipient
+        parameters:
+          - name: recipientId
+            in: path
+            value: $inputs.recipientId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          recipientId: $response.body#/recipientId
+          status: $response.body#/status
+          owners: $response.body#/owners
+          fundingAccounts: $response.body#/fundingAccounts
+
+      - stepId: updateRecipient
+        description: >
+          Update the recipient's details with a full-object PUT. Returns 204 No
+          Content (no response body). Significant changes may require re-approval,
+          which resets status to pending. owners and fundingAccounts are read-only
+          summaries echoed back from the retrieve step; the mutable fields are
+          recipientType, taxId, charityId, doingBusinessAs, address,
+          contactMethods, and metadata.
+        operationId: updateFundingRecipient
+        parameters:
+          - name: recipientId
+            in: path
+            value: $inputs.recipientId
+        requestBody:
+          contentType: application/json
+          payload:
+            recipientType: $inputs.recipientType
+            taxId: $inputs.taxId
+            doingBusinessAs: $inputs.doingBusinessAs
+            address:
+              address1: 2 Example Ave.
+              address2: Example Address Line 2
+              city: Chicago
+              state: Illinois
+              country: US
+              postalCode: "60056"
+            contactMethods:
+              - type: email
+                value: $inputs.contactEmail
+              - type: phone
+                value: "2025550110"
+            owners: $steps.getRecipient.outputs.owners
+            fundingAccounts: $steps.getRecipient.outputs.fundingAccounts
+            metadata:
+              responsiblePerson: Jane Doe
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      recipientId: $steps.getRecipient.outputs.recipientId
+      status: $steps.getRecipient.outputs.status

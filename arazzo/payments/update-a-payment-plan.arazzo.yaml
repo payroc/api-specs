@@ -1,0 +1,139 @@
+arazzo: 1.0.0
+info:
+  title: Update a payment plan
+  summary: Find a payment plan, then partially update it with an RFC 6902 JSON Patch.
+  description: >
+    Amends a reusable recurring-billing payment plan. Discover the plan, retrieve
+    it, then patch it.
+
+    Agent gotchas:
+      - `paymentPlanId` is merchant-assigned and is the `{paymentPlanId}` path
+        parameter.
+      - `updatePaymentPlan` is a PATCH whose body is an RFC 6902 JSON Patch
+        document (an array of `op`/`path`/`value` operations), NOT a plain plan
+        object. Every property except `paymentPlanId` can be patched. Requires a
+        unique `Idempotency-Key` header. Returns 200.
+      - Whether the change reaches existing subscriptions depends on the plan's
+        `onUpdate` value (`update` vs `continue`), set at create time.
+
+    To remove a plan instead, use the delete-a-payment-plan workflow. Mutually
+    exclusive with delete for the same plan.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: update-a-payment-plan
+    summary: List, retrieve, then update a payment plan via JSON Patch.
+    description: >
+      Optionally list payment plans (listPaymentPlans) and retrieve one
+      (getPaymentPlan) to confirm its state, then patch it (updatePaymentPlan).
+      The list/retrieve steps are optional when you already hold the
+      paymentPlanId.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - paymentPlanId
+        - idempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier for the terminal that owns the payment plan.
+          example: '1234001'
+        paymentPlanId:
+          type: string
+          description: Merchant-assigned identifier of the payment plan to update (path parameter).
+          example: PlanRef8765
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 sent as the `Idempotency-Key` header on the update step.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        limit:
+          type: integer
+          description: Maximum number of payment plans to return per page in the discovery step.
+          example: 10
+        patchDocument:
+          type: array
+          description: >
+            RFC 6902 JSON Patch document for `updatePaymentPlan` — an array of
+            `op`/`path`/`value` operations. Every property except `paymentPlanId`
+            can be patched.
+          example:
+            - op: replace
+              path: /setupOrder/amount
+              value: 2999
+            - op: replace
+              path: /frequency
+              value: yearly
+          items:
+            type: object
+    steps:
+      - stepId: listPaymentPlans
+        description: >
+          Optional discovery step. Returns a paginated list of the terminal's
+          payment plans and extracts the first result's `paymentPlanId`. Skip if
+          you already hold the `paymentPlanId`.
+        operationId: listPaymentPlans
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstPaymentPlanId: $response.body#/data/0/paymentPlanId
+          hasMore: $response.body#/hasMore
+
+      - stepId: getPaymentPlan
+        description: >
+          Optional. Retrieve the payment plan to confirm its current state before
+          patching. Surfaces the plan `name`, `frequency`, and `type`.
+        operationId: getPaymentPlan
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: paymentPlanId
+            in: path
+            value: $inputs.paymentPlanId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentPlanId: $response.body#/paymentPlanId
+          name: $response.body#/name
+          frequency: $response.body#/frequency
+
+      - stepId: updatePaymentPlan
+        description: >
+          Partially update the payment plan with an RFC 6902 JSON Patch document
+          (the `patchDocument` input), NOT a plain plan object. Every property
+          except `paymentPlanId` can be patched. Whether the change reaches
+          existing subscriptions depends on the plan's `onUpdate` value. Requires a
+          unique `Idempotency-Key` header. Returns 200.
+        operationId: updatePaymentPlan
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: paymentPlanId
+            in: path
+            value: $inputs.paymentPlanId
+        requestBody:
+          contentType: application/json
+          payload: $inputs.patchDocument
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentPlanId: $response.body#/paymentPlanId
+    outputs:
+      paymentPlanId: $steps.updatePaymentPlan.outputs.paymentPlanId

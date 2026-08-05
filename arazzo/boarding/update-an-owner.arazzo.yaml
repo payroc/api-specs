@@ -1,0 +1,130 @@
+arazzo: 1.0.0
+info:
+  title: Update an owner
+  summary: Find an owner, then update their details with a full PUT.
+  description: >
+    Updates one of the owners (individuals who own or control the business)
+    attached to a processing account or funding recipient. Owners are NOT created
+    here (they are supplied inline in the Create Processing Account payload during
+    boarding); this workflow finds an owner and updates them.
+
+    Agent gotcha (load-bearing): ownership operations are shared between boarding
+    (processing-account owners) and funding (funding-recipient owners). Listing
+    and retrieving work for a processing account's owners, but updateOwner only
+    takes effect for owners associated with a FUNDING RECIPIENT - the API rejects
+    updating an owner of a processing account (400). updateOwner is a full PUT, so
+    include every field you want to persist; it returns 204 No Content.
+
+    To remove an owner instead, use the delete-an-owner workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: update-an-owner
+    summary: List, retrieve, then update (full PUT) an owner.
+    description: >
+      Optionally list the owners (listOwners) and retrieve one (getOwner) to
+      confirm it, then update it (updateOwner). Update only affects
+      funding-recipient owners; against a processing-account owner it is rejected
+      with a 400. The list/retrieve steps are optional when you already hold the
+      ownerId.
+    inputs:
+      type: object
+      required: [processingAccountId, ownerId]
+      properties:
+        processingAccountId:
+          type: string
+          description: Unique identifier of the processing account whose owners you are listing.
+          example: 38765
+        ownerId:
+          type: integer
+          description: >
+            Unique identifier of the owner to update. Returned by Create
+            Processing Account or by the List Owners step.
+          example: 4564
+        limit:
+          type: integer
+          description: Optional maximum number of owners to return per page in the list step.
+          example: 2
+    steps:
+      - stepId: listOwners
+        description: >
+          Optional. List the owners of the processing account to discover the
+          numeric ownerId. Supports before/after/limit cursor pagination. Skip if
+          you already hold the ownerId.
+        operationId: listMerchantOwners
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $inputs.processingAccountId
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstOwnerId: $response.body#/data/0/ownerId
+          hasMore: $response.body#/hasMore
+
+      - stepId: getOwner
+        description: >
+          Optional. Retrieve the full details of a single owner (name, date of
+          birth, address, contact methods, and relationship) before updating.
+        operationId: getOwner
+        parameters:
+          - name: ownerId
+            in: path
+            value: $inputs.ownerId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          ownerId: $response.body#/ownerId
+          equityPercentage: $response.body#/relationship/equityPercentage
+          isControlProng: $response.body#/relationship/isControlProng
+
+      - stepId: updateOwner
+        description: >
+          Update an owner's personal, identification, contact, and relationship
+          details. IMPORTANT: this only takes effect for an owner associated with
+          a funding recipient; the API rejects updating an owner of a processing
+          account (400). Sends the full owner representation (PUT), so include
+          every field you want to persist. Returns 204 No Content.
+        operationId: updateOwner
+        parameters:
+          - name: ownerId
+            in: path
+            value: $inputs.ownerId
+        requestBody:
+          contentType: application/json
+          payload:
+            firstName: Jane
+            middleName: Helen
+            lastName: Doe
+            dateOfBirth: '1964-03-22'
+            address:
+              address1: 1 Example Ave.
+              address2: Example Address Line 2
+              address3: Example Address Line 3
+              city: Chicago
+              state: Illinois
+              country: US
+              postalCode: '60056'
+            identifiers:
+              - type: nationalId
+                value: 000-00-4320
+            contactMethods:
+              - type: email
+                value: jane.doe@example.com
+            relationship:
+              equityPercentage: 48.5
+              title: CFO
+              isControlProng: true
+              isAuthorizedSignatory: false
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      ownerId: $inputs.ownerId

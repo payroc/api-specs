@@ -1,0 +1,155 @@
+arazzo: 1.0.0
+info:
+  title: Delete a funding instruction
+  summary: Find a funding instruction, retrieve it, then delete it.
+  description: >
+    Post-creation deletion of a funding instruction. A funding instruction tells
+    Payroc how to distribute a merchant's available funding balance to one or more
+    funding accounts by ACH. Once an instruction exists (created via Create Funding
+    Instruction, operationId `createInstruction`, which is out of scope here), this
+    workflow lets you find it, confirm its status, and delete it. Read-then-act:
+    list instructions in a date range, take a result, retrieve it to confirm the
+    action is permitted, then delete it.
+
+    Agent gotchas captured by this workflow:
+      - `instructionId` is an INTEGER, not a string (example 64643131). The path
+        parameter, the list `data` entries, and the retrieved resource all use the
+        integer form.
+      - The list response is paginated: instructions live in the `data` array
+        alongside pagination fields. To act on a result, reach into
+        `data/0/instructionId` - not a top-level field. On a single retrieved
+        instruction, `instructionId` IS top-level.
+      - `listInstructions` REQUIRES both `dateFrom` and `dateTo` query parameters
+        (YYYY-MM-DD); `before`/`after`/`limit` are the optional pagination filters.
+      - You can delete an instruction ONLY while its `status` is `accepted`.
+        Retrieve first and check `status`; acting on a non-`accepted` instruction
+        returns 409 Conflict (cannot be modified).
+      - `deleteInstructions` is a DELETE that returns 204 No Content - there is
+        nothing to capture from its response. The list and retrieve steps are
+        GET (200).
+
+    To update a funding instruction instead, use the update-a-funding-instruction
+    workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: delete-a-funding-instruction
+    summary: List, retrieve, then delete a funding instruction.
+    description: >
+      First list funding instructions within a date range (listInstructions),
+      take the first result's `instructionId`, and retrieve it (getInstruction) to
+      confirm its `status` is `accepted`. Then delete it (deleteInstructions).
+      The delete requires the instruction to still be in `accepted` status,
+      otherwise the gateway returns 409. The list and retrieve steps are optional
+      when you already hold the instructionId.
+    inputs:
+      type: object
+      required:
+        - dateFrom
+        - dateTo
+      properties:
+        dateFrom:
+          type: string
+          format: date
+          description: >
+            Required. Return funding instructions sent on or after this date, in
+            YYYY-MM-DD format. Instructions older than two years are not listable.
+          example: '2024-07-01'
+        dateTo:
+          type: string
+          format: date
+          description: Required. Return funding instructions sent on or before this date, in YYYY-MM-DD format.
+          example: '2024-07-03'
+        before:
+          type: string
+          description: >
+            Optional pagination cursor. Return the previous page of results before
+            this value. Cannot be sent together with `after`.
+          example: '25'
+        after:
+          type: string
+          description: >
+            Optional pagination cursor. Return the next page of results after this
+            value. Cannot be sent together with `before`.
+          example: '25'
+        limit:
+          type: integer
+          description: Optional. Maximum number of funding instructions to return per page.
+          example: 2
+        instructionId:
+          type: integer
+          description: >
+            Integer identifier of the funding instruction to delete. Normally
+            taken from the list step, but can be supplied directly (for example,
+            to reach an instruction older than two years).
+          example: 64643131
+
+    steps:
+      - stepId: listInstructions
+        description: >
+          Optional. List funding instructions sent within the required
+          `dateFrom`/`dateTo` window, optionally paginated with
+          `before`/`after`/`limit`. The response is paginated - instructions are
+          in the `data` array. This step extracts the first instruction's integer
+          `instructionId` for the follow-on steps.
+        operationId: listInstructions
+        parameters:
+          - name: dateFrom
+            in: query
+            value: $inputs.dateFrom
+          - name: dateTo
+            in: query
+            value: $inputs.dateTo
+          - name: before
+            in: query
+            value: $inputs.before
+          - name: after
+            in: query
+            value: $inputs.after
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstInstructionId: $response.body#/data/0/instructionId
+          firstInstructionStatus: $response.body#/data/0/status
+
+      - stepId: getInstruction
+        description: >
+          Optional. Retrieve the full detail of the first funding instruction from
+          the list. Inspect `status` (`accepted`, `pending`, or `completed`) to
+          confirm the instruction can still be deleted - only an `accepted`
+          instruction may be modified. `instructionId` is top-level here.
+        operationId: getInstruction
+        parameters:
+          - name: instructionId
+            in: path
+            value: $steps.listInstructions.outputs.firstInstructionId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          instructionId: $response.body#/instructionId
+          status: $response.body#/status
+
+      - stepId: deleteInstruction
+        description: >
+          Delete the funding instruction retrieved above, using its integer
+          `instructionId`. Only works while `status` is `accepted`; otherwise the
+          gateway returns 409 (cannot be modified). This is a DELETE that returns
+          204 No Content - there is no response body to capture.
+        operationId: deleteInstructions
+        parameters:
+          - name: instructionId
+            in: path
+            value: $steps.getInstruction.outputs.instructionId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      instructionId: $steps.getInstruction.outputs.instructionId
+      status: $steps.getInstruction.outputs.status

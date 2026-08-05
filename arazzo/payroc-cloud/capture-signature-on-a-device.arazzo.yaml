@@ -1,0 +1,189 @@
+arazzo: 1.0.0
+info:
+  title: Capture a signature on a device
+  summary: Prompt for and retrieve a customer's signature on a Payroc Cloud payment device.
+  description: >
+    Captures a handwritten customer signature on an in-person Payroc Cloud
+    payment device and retrieves the resulting image. The integrator submits a
+    signature instruction to the device (identified by its serialNumber), the
+    customer signs on the device, and the integrator then polls the instruction
+    and retrieves the stored signature.
+
+
+    The flow is asynchronous and device-mediated:
+
+    - Submit signature instruction: POST
+      /devices/{serialNumber}/signature-instructions (operationId
+      `sendSignatureInstruction`). Returns HTTP 202 with a
+      `signatureInstructionId` and an initial `status` of `inProgress`.
+
+    - Retrieve signature instruction: GET
+      /signature-instructions/{signatureInstructionId} (operationId
+      `getSignatureInstruction`). Poll this until `status` is `completed`; the
+      completed response carries a HATEOAS `link` (rel `signature`) whose `href`
+      ends with the `signatureId` you need to fetch the image.
+
+    - Retrieve signature: GET /signatures/{signatureId} (operationId
+      `retrieveSignature`). Returns HTTP 200 with the Base64-encoded image, its
+      `contentType`, and the capture date.
+
+
+    Agent gotchas captured here:
+
+    - Device vs terminal: `sendSignatureInstruction` is keyed by the device
+      `serialNumber` in the PATH, while the REQUIRED request body carries the
+      `processingTerminalId`. They are different identifiers — do not swap them.
+
+    - Idempotency-Key: the submit request REQUIRES a unique UUID v4
+      `Idempotency-Key` header (a missing key is a 400).
+
+    - status polling: right after submit the `status` is `inProgress`; you must
+      poll `getSignatureInstruction` until `status` is `completed` before a
+      signature exists. A `failure` or `canceled` status means no signature.
+
+    - signatureId source: the gateway does NOT return a discrete `signatureId`
+      field on the instruction — it returns a `link.href` (for example
+      https://api.payroc.com/v1/signatures/JDN4ILZB0T). The `signatureId` is the
+      final path segment of that URL, which you pass to `retrieveSignature`.
+
+    - Cancel: to cancel a still-pending instruction instead of retrieving the
+      signature (only while `inProgress`; a `completed`/`failed` instruction
+      cannot be canceled, 409), use the cancel-a-device-signature-instruction
+      workflow.
+
+
+    The terminal outcome is a retrieved signature image (HTTP 200) linked to the
+    processing terminal, which a caller can attach to a receipt or record of
+    sale. This workflow composes into run-a-sale-on-a-device.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: capture-signature-on-a-device
+    summary: Submit a signature instruction to a device, then retrieve the captured signature.
+    description: >
+      Ordered flow: submit a signature instruction to the device, poll the
+      instruction until the customer has signed, then retrieve the signature
+      image. To abandon a signature the customer has not yet completed, use the
+      cancel-a-device-signature-instruction workflow instead of the retrieve steps.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Person at the point of sale who signs on the payment device.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to prompt for and retrieve the signature.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: device
+        name: Payment device
+        type: external-system
+        description: In-person Payroc Cloud device that displays the prompt and captures the signature; driven via instructions, not directly callable.
+    inputs:
+      type: object
+      required:
+        - serialNumber
+        - processingTerminalId
+        - idempotencyKey
+      properties:
+        serialNumber:
+          type: string
+          description: Serial number that identifies the merchant's payment device (PATH parameter of the submit request).
+          example: '1850010868'
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal (sent in the submit request BODY, distinct from the device serialNumber).
+          example: '1234001'
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 sent in the Idempotency-Key header of the submit request. Generate a fresh value per request. Required.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        signatureId:
+          type: string
+          description: >
+            Identifier of the captured signature, used to fetch the image. This
+            is the final path segment of the `link.href` returned by
+            getSignatureInstruction once its status is `completed` (the gateway
+            does not expose it as a discrete field).
+          example: JDN4ILZB0T
+    steps:
+      - stepId: submitSignatureInstruction
+        x-actor: merchant
+        description: >
+          Submit an instruction to capture a signature on the device identified
+          by `serialNumber` in the path; the target terminal is sent as
+          `processingTerminalId` in the body. Requires a UUID v4 Idempotency-Key
+          header. The gateway returns 202 with a `signatureInstructionId` and an
+          initial `status` of `inProgress`; the device then prompts the customer
+          to sign.
+        operationId: sendSignatureInstruction
+        parameters:
+          - name: serialNumber
+            in: path
+            value: $inputs.serialNumber
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            processingTerminalId: $inputs.processingTerminalId
+        successCriteria:
+          - condition: $statusCode == 202
+        outputs:
+          signatureInstructionId: $response.body#/signatureInstructionId
+          status: $response.body#/status
+      - stepId: getSignatureInstruction
+        x-actor: merchant
+        description: >
+          Retrieve the signature instruction by its `signatureInstructionId`.
+          Poll this step until `status` is `completed` (it stays `inProgress`
+          while the customer is signing; `failure` or `canceled` means no
+          signature). The completed response includes a `link` whose `href` ends
+          with the `signatureId` needed for the next step. The signature itself
+          is produced by the customer on the device between submit and this poll.
+        operationId: getSignatureInstruction
+        parameters:
+          - name: signatureInstructionId
+            in: path
+            value: $steps.submitSignatureInstruction.outputs.signatureInstructionId
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.body#/status == "completed"
+        outputs:
+          status: $response.body#/status
+          signatureLink: $response.body#/link/href
+      - stepId: retrieveSignature
+        x-actor: merchant
+        description: >
+          Retrieve the captured signature by its `signatureId` (the final path
+          segment of the `signatureLink` from the previous step). Returns 200
+          with the Base64-encoded image in `signature`, its `contentType` (for
+          example image/png), and the `createdOn` capture date, linked to the
+          `processingTerminalId`.
+        operationId: retrieveSignature
+        parameters:
+          - name: signatureId
+            in: path
+            value: $inputs.signatureId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          signatureId: $response.body#/signatureId
+          contentType: $response.body#/contentType
+          signature: $response.body#/signature
+          createdOn: $response.body#/createdOn
+    outputs:
+      signatureInstructionId: $steps.submitSignatureInstruction.outputs.signatureInstructionId
+      signatureId: $steps.retrieveSignature.outputs.signatureId
+      contentType: $steps.retrieveSignature.outputs.contentType
+      signature: $steps.retrieveSignature.outputs.signature
+      createdOn: $steps.retrieveSignature.outputs.createdOn

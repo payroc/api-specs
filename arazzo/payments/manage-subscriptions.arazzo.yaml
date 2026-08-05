@@ -1,0 +1,289 @@
+arazzo: 1.0.0
+info:
+  title: Manage subscriptions
+  summary: Create, find, inspect, update, and manually pay a customer's subscription
+  description: >
+    Lifecycle of a customer's assignment to a payment plan (a subscription).
+    Create a subscription that links a stored secure token to a payment plan,
+    discover and retrieve it, update its settings, and — for manual subscriptions
+    — collect a payment on demand.
+
+    Agent gotchas captured by this workflow:
+      - `subscriptionId` is a string that the merchant assigns in the create
+        request (for example `SubRef7654`); it is not a gateway-generated id and
+        it is not the integer id used by the separate events-subscriptions
+        endpoints. Reuse the same value on every follow-on path.
+      - `paymentMethod` carries a secure token, but the field is `token` (the
+        short numeric value the gateway assigned to the stored payment details),
+        NOT `secureTokenId`. The payload is `{ type: secureToken, token: <...> }`.
+      - `type` (`manual` vs `automatic`) decides collection. Only a `manual`
+        subscription can be charged with `paySubscription` — for an `automatic`
+        subscription the terminal collects each payment itself, so the pay step
+        does not apply.
+      - `updateSubscription` is an RFC 6902 JSON Patch (an array of
+        `op`/`path`/`value` operations), NOT a plain resource object. You cannot
+        PATCH `currentState`, `type`, `frequency`, or `paymentPlan`, and cannot
+        remove `recurringOrder`, `description`, or `name`.
+      - To stop or restart collection, use the deactivate-a-subscription /
+        reactivate-a-subscription workflows - deactivating stops collection,
+        reactivating resumes it, and they are mutually exclusive actions.
+      - Idempotency: `createSubscription`, `updateSubscription`, and
+        `paySubscription` each require a unique `Idempotency-Key` (UUID v4)
+        header. The read steps do not.
+      - Verbs and statuses: `createSubscription` and `paySubscription` are POST
+        (201); `listSubscriptions` and `getSubscription` are GET (200);
+        `updateSubscription` is PATCH (200). `listSubscriptions` is paginated —
+        subscriptions live in the `data` array.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: manage-subscriptions
+    summary: Create, list, retrieve, update, and manually pay a subscription
+    description: >
+      Step 1 creates the subscription, linking a stored secure token to a
+      payment plan on the terminal, and returns the merchant-assigned
+      `subscriptionId`. Step 2 (optional discovery) lists subscriptions on the
+      terminal, filtered by customer, and extracts the first result's
+      `subscriptionId` — skip it if you already hold the id. Step 3 (optional)
+      retrieves the subscription to confirm its `status`, `type`, and
+      `nextDueDate`. Step 4 (optional) updates the subscription with an RFC 6902
+      JSON Patch. Step 5 (optional) manually collects a payment and applies only
+      to a `manual`-type subscription.
+
+      To stop or restart collection, use the deactivate-a-subscription /
+      reactivate-a-subscription workflows.
+
+      The `subscriptionId` handle comes from `$inputs.subscriptionId` (the value
+      you assigned on create, or the discovery step's output); every follow-on
+      step reuses it on the path.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - subscriptionId
+        - paymentPlanId
+        - token
+        - startDate
+        - createIdempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier for the terminal that owns the subscription.
+          example: '1234001'
+        subscriptionId:
+          type: string
+          description: >
+            Unique identifier that the merchant assigns to the subscription on
+            create and reuses on every follow-on action.
+          example: SubRef7654
+        paymentPlanId:
+          type: string
+          description: >
+            Unique identifier of the payment plan the subscription is linked to.
+            Locate it with the List Payment Plans method if you do not hold it.
+          example: PlanRef8765
+        token:
+          type: string
+          description: >
+            Numeric secure token that represents the customer's stored payment
+            details. Sent in `paymentMethod.token` (not `secureTokenId`).
+          example: '296753123456'
+        startDate:
+          type: string
+          description: 'Date to start collecting payments. Format: YYYY-MM-DD.'
+          example: '2024-05-02'
+        createIdempotencyKey:
+          type: string
+          description: >
+            Unique UUID v4 `Idempotency-Key` header for the Create Subscription
+            request (step 1).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        updateIdempotencyKey:
+          type: string
+          description: >
+            Unique UUID v4 `Idempotency-Key` header for the optional Update
+            Subscription request (step 4). Must differ from the other keys.
+          example: a1b2c3d4-e5f6-4789-9abc-def012345678
+        payIdempotencyKey:
+          type: string
+          description: >
+            Unique UUID v4 `Idempotency-Key` header for the optional Pay
+            Subscription request (step 5). Must differ from the other keys.
+          example: b2c3d4e5-f6a7-4890-8bcd-ef0123456789
+        customerName:
+          type: string
+          description: Customer name filter for the discovery step (URL-encoded).
+          example: Sarah%20Hazel%20Hopper
+        limit:
+          type: integer
+          description: Maximum number of subscriptions to return per page.
+          example: 10
+        patchDocument:
+          type: array
+          description: >
+            RFC 6902 JSON Patch document for `updateSubscription` — an array of
+            `op`/`path`/`value` operations. You cannot patch `currentState`,
+            `type`, `frequency`, or `paymentPlan`.
+          example:
+            - op: replace
+              path: /recurringOrder/amount
+              value: 3999
+          items:
+            type: object
+        payAmount:
+          type: integer
+          description: >
+            Amount to collect for a manual payment, in the currency's lowest
+            denomination (for example, cents).
+          example: 4999
+
+    steps:
+      - stepId: createSubscription
+        description: >
+          Assign the customer to a payment plan by creating the subscription.
+          The body links the payment plan (`paymentPlanId`) and the stored
+          secure token (`paymentMethod`, where the field is `token`, not
+          `secureTokenId`) and sets `startDate`. `subscriptionId` is the
+          merchant-assigned handle reused by every later step. Requires a unique
+          `Idempotency-Key` header. Returns 201.
+        operationId: createSubscription
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.createIdempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        requestBody:
+          contentType: application/json
+          payload:
+            subscriptionId: $inputs.subscriptionId
+            paymentPlanId: $inputs.paymentPlanId
+            paymentMethod:
+              type: secureToken
+              token: $inputs.token
+            name: Premium Club
+            description: Monthly Premium Club subscription
+            startDate: $inputs.startDate
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          subscriptionId: $response.body#/subscriptionId
+          status: $response.body#/currentState/status
+          type: $response.body#/type
+
+      - stepId: listSubscriptions
+        description: >
+          Optional discovery step. Lists subscriptions on the terminal, filtered
+          by customer name, and extracts the first result's `subscriptionId`.
+          The response is paginated — subscriptions are in the `data` array.
+          Skip this step if you already hold the `subscriptionId`.
+        operationId: listSubscriptions
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: customerName
+            in: query
+            value: $inputs.customerName
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstSubscriptionId: $response.body#/data/0/subscriptionId
+          hasMore: $response.body#/hasMore
+
+      - stepId: getSubscription
+        description: >
+          Optional. Retrieve the subscription to confirm its current state
+          before acting. Surfaces the `status`, the collection `type` (`manual`
+          vs `automatic`), and the `nextDueDate`.
+        operationId: getSubscription
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: subscriptionId
+            in: path
+            value: $inputs.subscriptionId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscriptionId: $response.body#/subscriptionId
+          status: $response.body#/currentState/status
+          type: $response.body#/type
+          nextDueDate: $response.body#/currentState/nextDueDate
+
+      - stepId: updateSubscription
+        description: >
+          Optional. Partially updates the subscription with an RFC 6902 JSON
+          Patch document (the `patchDocument` input: an array of
+          `op`/`path`/`value` operations), NOT a plain resource object. You
+          cannot patch `currentState`, `type`, `frequency`, or `paymentPlan`,
+          and cannot remove `recurringOrder`, `description`, or `name`. Requires
+          a unique `Idempotency-Key` header. Returns 200.
+        operationId: updateSubscription
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.updateIdempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: subscriptionId
+            in: path
+            value: $inputs.subscriptionId
+        requestBody:
+          contentType: application/json
+          payload: $inputs.patchDocument
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscriptionId: $response.body#/subscriptionId
+          status: $response.body#/currentState/status
+
+      - stepId: paySubscription
+        description: >
+          Optional, and ONLY for a `manual`-type subscription. For an
+          `automatic` subscription the terminal collects each payment itself, so
+          running this step would take an unintended extra charge — confirm
+          `type` is `manual` (step 3) before calling it. The body carries an
+          `order` object with the amount to collect.
+          Requires a unique `Idempotency-Key` header. Returns 201, and the
+          `paymentId` for follow-on actions lives at `payment/paymentId`.
+        operationId: paySubscription
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.payIdempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: subscriptionId
+            in: path
+            value: $inputs.subscriptionId
+        requestBody:
+          contentType: application/json
+          payload:
+            operator: Jane
+            order:
+              orderId: OrderRef6543
+              amount: $inputs.payAmount
+              description: Monthly Premium Club subscription
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          paymentId: $response.body#/payment/paymentId
+          status: $response.body#/currentState/status
+
+    outputs:
+      subscriptionId: $inputs.subscriptionId
+      status: $steps.getSubscription.outputs.status
+      paymentId: $steps.paySubscription.outputs.paymentId

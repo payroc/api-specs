@@ -1,0 +1,168 @@
+arazzo: 1.0.0
+info:
+  title: Run a card sale
+  summary: Take funds from a customer using a payment card.
+  description: >
+    The headline "take a payment" capability of the Payroc API for cards. A
+    merchant runs a card sale to immediately capture funds from a customer who
+    presents a payment card, digital wallet, secure token, or single-use token.
+
+    Runs POST /payments (operationId `payment`).
+
+    Agent gotchas captured here:
+
+    - autoCapture / processAsSale: for a SALE leave `autoCapture` at its default
+      of `true`. Setting `autoCapture: false` runs a pre-authorization instead
+      (see the run-a-pre-authorization workflow). If `processAsSale: true` the
+      gateway immediately settles and the payment can no longer be adjusted, and
+      it ignores `autoCapture`.
+
+    - Idempotency-Key: the POST REQUIRES a unique UUID v4 `Idempotency-Key`
+      header per request.
+
+    - 3-D Secure variant: for an e-commerce card sale you can first run an MPI
+      check (an external, non-API step at payments.payroc.com/merchant/mpi) and
+      then pass the returned reference in a `threeDSecure` object with
+      `serviceProvider: gateway` and `mpiReference`. The MPI call is not a Payroc
+      API operation, so it is documented, not modelled as a step.
+
+    - Surcharge / MOTO variants: a surcharge is added under
+      `order.breakdown.surcharge`; a mail-order/telephone-order (card-not-present)
+      sale sets `channel: moto` instead of `web` or `pos`. Both are field-level
+      variations of the same card step.
+
+    To take a bank-transfer (ACH/PAD) sale instead, use the run-a-bank-transfer-sale
+    workflow.
+
+    The terminal outcome is a created payment (HTTP 201) with a `paymentId` and a
+    `transactionResult` that a later workflow can retrieve, adjust, reverse, or
+    refund.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: run-a-card-sale
+    summary: Run a card sale.
+    description: >
+      Run a card sale by POSTing to /payments. The default `autoCapture: true`
+      and `processAsSale: false` produce a normal sale that stays adjustable in
+      the open batch.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder who presents the payment method.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API on the customer's behalf.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream processor / card scheme that authorizes the funds; not directly callable.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - processingTerminalId
+        - orderId
+        - amount
+        - currency
+        - cardNumber
+        - expiryDate
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 sent in the Idempotency-Key header. Generate a fresh value per request.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal that runs the sale.
+          example: '1234001'
+        operator:
+          type: string
+          description: Operator who ran the transaction.
+          example: Jane
+        orderId:
+          type: string
+          description: Merchant-assigned unique identifier for the order.
+          example: OrderRef6543
+        description:
+          type: string
+          description: Description of the transaction.
+          example: Large Pepperoni Pizza
+        amount:
+          type: integer
+          description: Total transaction amount in the currency's lowest denomination (for example, cents).
+          example: 4999
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: USD
+        cardNumber:
+          type: string
+          description: Card number.
+          example: '4539858876047062'
+        expiryDate:
+          type: string
+          description: Card expiry date in MMYY format.
+          example: '1230'
+    steps:
+      - stepId: runCardSale
+        x-actor: customer
+        description: >
+          Run a card sale by POSTing to /payments. The default
+          `autoCapture: true` and `processAsSale: false` produce a normal sale
+          that stays adjustable in the open batch.
+
+          Variants of this same step (documented, not separate steps):
+
+          - Surcharge: add an `order.breakdown.surcharge` object to the payload.
+
+          - MOTO / card-not-present: set `channel: moto` instead of `web`.
+
+          - 3-D Secure (e-commerce): first run an MPI check off-API at
+            payments.payroc.com/merchant/mpi, then add a `threeDSecure` object
+            with `serviceProvider: gateway` and the returned `mpiReference` to
+            this payload. The MPI call is an external-system step, so it is not
+            modelled here.
+        operationId: payment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            channel: web
+            processingTerminalId: $inputs.processingTerminalId
+            operator: $inputs.operator
+            order:
+              orderId: $inputs.orderId
+              description: $inputs.description
+              currency: $inputs.currency
+              amount: $inputs.amount
+            paymentMethod:
+              type: card
+              cardDetails:
+                entryMethod: keyed
+                keyedData:
+                  dataFormat: plainText
+                  cardNumber: $inputs.cardNumber
+                  expiryDate: $inputs.expiryDate
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          paymentId: $response.body#/paymentId
+          status: $response.body#/transactionResult/status
+    outputs:
+      paymentId: $steps.runCardSale.outputs.paymentId
+      status: $steps.runCardSale.outputs.status

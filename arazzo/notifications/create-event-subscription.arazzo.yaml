@@ -1,0 +1,157 @@
+arazzo: 1.0.0
+info:
+  title: Create and manage an event subscription
+  summary: Subscribe to webhook notifications for Payroc events, then discover, retrieve, and delete the subscription.
+  description: >
+    Sets up webhook notifications so Payroc calls your endpoint when an event
+    occurs (for example processingAccount.status.changed, and boarding, funding,
+    payment, or dispute events). The workflow creates a subscription, then covers
+    the additive lifecycle: discover subscriptions, retrieve one, and delete it.
+
+
+    Agent gotchas:
+
+    - The response id field is the subscriptionId. The create/list/get responses
+      return it at `#/id` (an int64), and every follow-on step ({subscriptionId}
+      path parameter) takes that value. Do not confuse it with the eventTypes or
+      notification objects.
+
+    - The secret you send is masked in every response (last 6 characters shown,
+      first 10 masked, e.g. `**********oP3456`), so you cannot read it back —
+      keep your own copy.
+
+    - To amend a subscription, use the update-an-event-subscription (PUT full
+      replace) or patch-an-event-subscription (PATCH partial) workflow — those are
+      two mutually-exclusive update paths.
+
+    - Idempotency-Key (UUID v4) is a required header on the create operation.
+
+    - The webhook receiver itself (return a 200 to each delivery, verify the
+      Payroc-Secret header, handle the CloudEvents payload) is caller-side and
+      is not a Payroc API operation, so it is not a step here.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: create-event-subscription
+    summary: Create an event subscription, then discover, retrieve, and delete it.
+    description: >
+      Primary path: create the subscription (step 1). The remaining steps are the
+      additive management lifecycle (list, retrieve, delete) and can be run as
+      needed against the subscriptionId returned by create. To update a
+      subscription, see update-an-event-subscription / patch-an-event-subscription.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - eventType
+        - notificationUri
+        - secret
+        - supportEmailAddress
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per create request. Sent in the Idempotency-Key header.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        eventType:
+          type: string
+          description: Event to subscribe to. See the Events List for the full set (boarding, funding, payment, dispute, etc.).
+          example: processingAccount.status.changed
+        notificationUri:
+          type: string
+          description: Public endpoint that Payroc sends webhook POST requests to.
+          example: https://my-server/notification/endpoint
+        secret:
+          type: string
+          description: 16-64 character shared secret returned (masked) in the Payroc-Secret header so you can verify deliveries.
+          example: aBcD1234eFgH5678iJkL9012mNoP3456
+        supportEmailAddress:
+          type: string
+          description: Email address Payroc contacts if it cannot deliver notifications to your endpoint.
+          example: jane.doe@example.com
+        subscriptionStatusFilter:
+          type: string
+          description: Optional status filter used when listing subscriptions.
+          example: registered
+    steps:
+      - stepId: createSubscription
+        description: >
+          Create the event subscription. Sends the events to subscribe to plus the
+          webhook notification target. Returns the subscriptionId at #/id, which
+          every management step below reuses.
+        operationId: createEventSubscription
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            enabled: true
+            eventTypes:
+              - $inputs.eventType
+            notifications:
+              - type: webhook
+                uri: $inputs.notificationUri
+                secret: $inputs.secret
+                supportEmailAddress: $inputs.supportEmailAddress
+            metadata:
+              yourCustomField: abc123
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.body#/status == "registered"
+        outputs:
+          subscriptionId: $response.body#/id
+          status: $response.body#/status
+
+      - stepId: listSubscriptions
+        description: >
+          Optional discovery step. List event subscriptions, optionally filtered by
+          status or event type, to find a subscriptionId when you did not retain the
+          one from create.
+        operationId: listEventSubscriptions
+        parameters:
+          - name: status
+            in: query
+            value: $inputs.subscriptionStatusFilter
+          - name: event
+            in: query
+            value: $inputs.eventType
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscriptions: $response.body#/data
+
+      - stepId: getSubscription
+        description: Retrieve the full details of the subscription created above.
+        operationId: getEventSubscription
+        parameters:
+          - name: subscriptionId
+            in: path
+            value: $steps.createSubscription.outputs.subscriptionId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          subscriptionId: $response.body#/id
+          status: $response.body#/status
+
+      - stepId: deleteSubscription
+        description: >
+          Optional. Delete the subscription. This is irreversible and stops all
+          notifications from it. To pause notifications without deleting, patch the
+          subscription and set enabled to false instead (see
+          patch-an-event-subscription). Returns 204 No Content.
+        operationId: deleteEventSubscription
+        parameters:
+          - name: subscriptionId
+            in: path
+            value: $steps.createSubscription.outputs.subscriptionId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      subscriptionId: $steps.createSubscription.outputs.subscriptionId
+      status: $steps.getSubscription.outputs.status

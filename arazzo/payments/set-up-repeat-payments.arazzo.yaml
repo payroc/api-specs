@@ -1,0 +1,306 @@
+arazzo: 1.0.0
+info:
+  title: Set up repeat payments (recurring billing)
+  summary: Compose a payment plan, a saved payment method, and a subscription to bill a customer on a recurring schedule.
+  description: >
+    End-to-end recurring-billing setup: create a reusable payment plan (the
+    schedule template), save the customer's payment method as a secure token,
+    then assign the customer to the plan by creating a subscription. The
+    terminal outcome is an active subscription that bills the customer on the
+    plan's schedule; for a manual plan you also collect payments on demand.
+
+    This is a COMPOSITE workflow (prior-art W2). Each step invokes an existing
+    sub-workflow as an Arazzo workflow reference so the reuse is
+    machine-readable:
+      - `manage-payment-plans` creates the reusable schedule template.
+      - `save-a-payment-method` tokenizes the customer's card or bank account.
+      - `manage-subscriptions` links the stored token to the plan and (for a
+        manual plan) collects payments.
+
+    Agent gotchas carried up from the sub-workflows:
+      - A payment plan is a reusable schedule TEMPLATE; a subscription is one
+        customer's ASSIGNMENT to that plan. You create the plan once and attach
+        many subscriptions to it.
+      - `subscription.paymentMethod.token` takes the secure token VALUE returned
+        by save-a-payment-method (the short numeric `token`, for example
+        296753123456), NOT the `secureTokenId` reference. Confusing the two is
+        the single most common field error, so this workflow threads the save
+        step's `token` output straight into the subscription step.
+      - `paymentPlanId` and `subscriptionId` are BOTH merchant-assigned: you
+        supply them in the create bodies and reuse the same values on later
+        paths. The gateway does not mint them.
+      - Plan `type` selects the collection model. `automatic` (the gateway
+        collects each payment on schedule) requires a `recurringOrder`; `manual`
+        (the merchant collects each payment itself via Pay Manual Subscription)
+        does not. Only a `manual` subscription can be charged with the optional
+        pay step.
+
+    Two variants collapse into this one family, selected by who drives
+    collection:
+      - Use our gateway (primary path): create a payment plan + subscription and
+        the gateway schedules and collects each payment automatically.
+      - Use your own software: save the payment method as a secure token, then
+        drive each charge yourself on your own schedule (the manual-collection
+        branch, exercised by the optional pay step inside manage-subscriptions).
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+  - name: manage-payment-plans
+    url: ./manage-payment-plans.arazzo.yaml
+    type: arazzo
+  - name: save-a-payment-method
+    url: ./save-a-payment-method.arazzo.yaml
+    type: arazzo
+  - name: manage-subscriptions
+    url: ./manage-subscriptions.arazzo.yaml
+    type: arazzo
+
+workflows:
+  - workflowId: set-up-repeat-payments
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder who agrees to recurring billing and supplies the payment method to be stored.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to build the plan, save the token, and create the subscription on the customer's behalf.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call; for an automatic plan it also schedules and collects each recurring payment.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream processor behind the gateway that settles each collected payment; not directly callable.
+    summary: Create a payment plan, save the customer's payment method, then subscribe the customer to the plan.
+    description: >
+      Step 1 sets up the reusable payment plan (manage-payment-plans
+      sub-workflow) and returns the merchant-assigned `paymentPlanId`. Step 2
+      saves the customer's payment method (save-a-payment-method sub-workflow)
+      and returns the reusable secure `token` value. Step 3 creates the
+      subscription (manage-subscriptions sub-workflow), linking the plan and the
+      token so the gateway can bill the customer on the plan's schedule; for a
+      manual plan the same sub-workflow's optional pay step collects each
+      payment on demand.
+
+      Order matters: the subscription in step 3 depends on both the
+      `paymentPlanId` from step 1 and the `token` from step 2, so step 3 depends
+      on both. The primary path models an `automatic` gateway-collected plan;
+      the "use your own software" variant runs the same first two steps then
+      drives collection itself via the manual branch inside manage-subscriptions.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - paymentPlanIdempotencyKey
+        - savePaymentMethodIdempotencyKey
+        - subscriptionIdempotencyKey
+        - paymentPlanId
+        - subscriptionId
+        - startDate
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the terminal that owns the plan, token, and subscription (path parameter throughout).
+          example: '1234001'
+        paymentPlanIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the manage-payment-plans create step (step 1). Must differ from the other keys.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        savePaymentMethodIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the save-a-payment-method create step (step 2). Must differ from the other keys.
+          example: a1b2c3d4-e5f6-4789-9abc-def012345678
+        subscriptionIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the manage-subscriptions create step (step 3). Must differ from the other keys.
+          example: b2c3d4e5-f6a7-4890-8bcd-ef0123456789
+        paymentPlanId:
+          type: string
+          description: Merchant-assigned unique identifier for the payment plan. Supplied on create and reused as the subscription's plan link.
+          example: PlanRef8765
+        planName:
+          type: string
+          description: Human-readable name of the payment plan.
+          example: Premium Club
+        currency:
+          type: string
+          description: Three-letter ISO currency code for the plan and its charges.
+          example: USD
+        frequency:
+          type: string
+          description: How often the gateway collects a payment. One of weekly, fortnightly, monthly, quarterly, yearly.
+          example: monthly
+        length:
+          type: integer
+          description: Number of payments in the plan. Send 0 to run indefinitely.
+          example: 12
+        subscriptionId:
+          type: string
+          description: Merchant-assigned unique identifier for the customer's subscription (their assignment to the plan).
+          example: SubRef7654
+        startDate:
+          type: string
+          description: 'Date the gateway starts collecting payments for the subscription. Format: YYYY-MM-DD.'
+          example: '2024-05-02'
+        secureTokenId:
+          type: string
+          description: >
+            Optional merchant-assigned identifier for the stored secure token. If omitted the
+            gateway generates one. This is the token's REFERENCE, not the reusable token value
+            threaded into the subscription.
+          example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+        operator:
+          type: string
+          description: Operator who saved the customer's payment details.
+          example: Jane
+        mitAgreement:
+          type: string
+          description: How the merchant may reuse the stored details, as agreed by the customer (unscheduled, recurring, or installment).
+          example: recurring
+        customerFirstName:
+          type: string
+          description: Customer's first name.
+          example: Sarah
+        customerLastName:
+          type: string
+          description: Customer's last name.
+          example: Hopper
+        customerEmail:
+          type: string
+          description: Customer's email address.
+          example: sarah.hopper@example.com
+        cardNumber:
+          type: string
+          description: Card branch. Customer's card number (plain-text keyed entry).
+          example: '4539858876047062'
+        expiryDate:
+          type: string
+          description: Card branch. Card expiry date in MMYY format.
+          example: '1230'
+        cvv:
+          type: string
+          description: Card branch. Card security code.
+          example: '234'
+        cardholderName:
+          type: string
+          description: Card branch. Name on the card.
+          example: Sarah Hazel Hopper
+    steps:
+      - stepId: setUpPaymentPlan
+        x-actor: merchant
+        description: >
+          Set up the reusable payment plan on the terminal by invoking the
+          manage-payment-plans sub-workflow. The plan is the schedule template
+          later subscriptions attach to; the primary path is an `automatic`
+          plan (gateway collects each payment on schedule). Passes the
+          merchant-assigned `paymentPlanId`, which the gateway does not mint.
+          The sub-workflow's create step returns 201; this step surfaces the
+          confirmed `paymentPlanId`.
+        workflowId: $sourceDescriptions.manage-payment-plans.manage-payment-plans
+        parameters:
+          - name: processingTerminalId
+            value: $inputs.processingTerminalId
+          - name: paymentPlanId
+            value: $inputs.paymentPlanId
+          - name: idempotencyKey
+            value: $inputs.paymentPlanIdempotencyKey
+          - name: name
+            value: $inputs.planName
+          - name: currency
+            value: $inputs.currency
+          - name: frequency
+            value: $inputs.frequency
+          - name: length
+            value: $inputs.length
+        successCriteria:
+          - condition: $steps.setUpPaymentPlan.outputs.paymentPlanId == $inputs.paymentPlanId
+        outputs:
+          paymentPlanId: $steps.setUpPaymentPlan.outputs.paymentPlanId
+
+      - stepId: savePaymentMethod
+        x-actor: customer
+        description: >
+          Save the customer's payment method as a reusable secure token by
+          invoking the save-a-payment-method sub-workflow. The primary path is
+          the card branch; the bank-account branch (ach / pad) runs the same
+          sub-workflow with a bank-account source. The sub-workflow returns 201
+          and both a `secureTokenId` (reference) and a `token` (the reusable
+          VALUE). This step surfaces the `token` value, which step 3 threads
+          into the subscription — do NOT substitute the secureTokenId.
+        workflowId: $sourceDescriptions.save-a-payment-method.save-a-payment-method
+        parameters:
+          - name: processingTerminalId
+            value: $inputs.processingTerminalId
+          - name: idempotencyKey
+            value: $inputs.savePaymentMethodIdempotencyKey
+          - name: secureTokenId
+            value: $inputs.secureTokenId
+          - name: operator
+            value: $inputs.operator
+          - name: mitAgreement
+            value: $inputs.mitAgreement
+          - name: customerFirstName
+            value: $inputs.customerFirstName
+          - name: customerLastName
+            value: $inputs.customerLastName
+          - name: customerEmail
+            value: $inputs.customerEmail
+          - name: cardNumber
+            value: $inputs.cardNumber
+          - name: expiryDate
+            value: $inputs.expiryDate
+          - name: cvv
+            value: $inputs.cvv
+          - name: cardholderName
+            value: $inputs.cardholderName
+        successCriteria:
+          - condition: $steps.savePaymentMethod.outputs.token != null
+        outputs:
+          secureTokenId: $steps.savePaymentMethod.outputs.secureTokenId
+          token: $steps.savePaymentMethod.outputs.token
+
+      - stepId: subscribeCustomerToPlan
+        x-actor: merchant
+        description: >
+          Assign the customer to the plan by invoking the manage-subscriptions
+          sub-workflow. Links the plan (`paymentPlanId` from step 1) and the
+          stored secure token (`token` from step 2 — the token VALUE, sent in
+          `paymentMethod.token`, not `secureTokenId`) and sets the `startDate`.
+          For an `automatic` plan the gateway now collects each payment on
+          schedule; for a `manual` plan the sub-workflow's optional pay step
+          (paySubscription, 201) collects payments on demand — this is the "use
+          your own software" branch. The create step returns 201; this step
+          surfaces the confirmed `subscriptionId` and its status.
+        workflowId: $sourceDescriptions.manage-subscriptions.manage-subscriptions
+        parameters:
+          - name: processingTerminalId
+            value: $inputs.processingTerminalId
+          - name: subscriptionId
+            value: $inputs.subscriptionId
+          - name: paymentPlanId
+            value: $steps.setUpPaymentPlan.outputs.paymentPlanId
+          - name: token
+            value: $steps.savePaymentMethod.outputs.token
+          - name: startDate
+            value: $inputs.startDate
+          - name: createIdempotencyKey
+            value: $inputs.subscriptionIdempotencyKey
+        successCriteria:
+          - condition: $steps.subscribeCustomerToPlan.outputs.subscriptionId == $inputs.subscriptionId
+        outputs:
+          subscriptionId: $steps.subscribeCustomerToPlan.outputs.subscriptionId
+          status: $steps.subscribeCustomerToPlan.outputs.status
+          paymentId: $steps.subscribeCustomerToPlan.outputs.paymentId
+    outputs:
+      paymentPlanId: $steps.setUpPaymentPlan.outputs.paymentPlanId
+      secureTokenId: $steps.savePaymentMethod.outputs.secureTokenId
+      token: $steps.savePaymentMethod.outputs.token
+      subscriptionId: $steps.subscribeCustomerToPlan.outputs.subscriptionId
+      status: $steps.subscribeCustomerToPlan.outputs.status
+      paymentId: $steps.subscribeCustomerToPlan.outputs.paymentId

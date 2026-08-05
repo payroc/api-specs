@@ -1,0 +1,90 @@
+arazzo: 1.0.0
+info:
+  title: Cancel a device payment instruction
+  summary: Abort a still-in-progress Payroc Cloud device payment instruction before it completes.
+  description: >
+    Cancels a payment instruction that was submitted to a Payroc Cloud payment
+    device (via the run-a-sale-on-a-device workflow) while it is still
+    `inProgress` — for example if the cardholder walks away — so the sale never
+    completes.
+
+    Agent gotchas captured here:
+
+    - You can cancel an instruction with `deletePaymentInstruction` only while its
+      `status` is `inProgress`; once it has `completed` (or `failure`/`canceled`),
+      cancelling is no longer possible. Confirm the status with
+      `getPaymentInstruction` first.
+
+    - `deletePaymentInstruction` returns HTTP 204 (No Content) — there is no
+      response body to capture.
+
+    - Cancelling is mutually exclusive with letting the instruction complete (see
+      the run-a-sale-on-a-device workflow, whose terminal outcome is a completed
+      payment).
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: cancel-a-device-payment-instruction
+    summary: Confirm an instruction is in progress, then cancel it.
+    description: >
+      Optionally confirm the instruction is still `inProgress`
+      (getPaymentInstruction), then cancel it (deletePaymentInstruction) using the
+      `paymentInstructionId` returned when the instruction was submitted.
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator POS
+        type: client
+        description: The POS integration calling the Payroc API to abort the pending sale.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: device
+        name: Payment device
+        type: external-system
+        description: Physical Payroc Cloud terminal that holds the pending instruction; not directly callable as an API step.
+    inputs:
+      type: object
+      required:
+        - paymentInstructionId
+      properties:
+        paymentInstructionId:
+          type: string
+          description: Identifier of the payment instruction to cancel, as returned by submitPaymentInstruction in the run-a-sale-on-a-device workflow.
+          example: a37439165d134678a9100ebba3b29597
+    steps:
+      - stepId: getPaymentInstruction
+        x-actor: merchant
+        description: >
+          Optional. Confirm the instruction is still `inProgress` before
+          cancelling, via GET /payment-instructions/{paymentInstructionId}. Cancel
+          is only allowed while the status is `inProgress`.
+        operationId: getPaymentInstruction
+        parameters:
+          - name: paymentInstructionId
+            in: path
+            value: $inputs.paymentInstructionId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/status
+      - stepId: cancelPaymentInstruction
+        x-actor: merchant
+        description: >
+          Cancel the payment instruction via DELETE
+          /payment-instructions/{paymentInstructionId}. Valid only while the
+          instruction's status is `inProgress`. Returns HTTP 204 with no body.
+        operationId: deletePaymentInstruction
+        parameters:
+          - name: paymentInstructionId
+            in: path
+            value: $inputs.paymentInstructionId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      paymentInstructionId: $inputs.paymentInstructionId

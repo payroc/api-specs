@@ -1,0 +1,130 @@
+arazzo: 1.0.0
+info:
+  title: Check dynamic currency conversion eligibility
+  summary: Verify whether a card is eligible for DCC and quote a conversion rate.
+  description: >
+    Checks whether a customer's card is eligible for Dynamic Currency Conversion
+    (DCC) and, if so, returns a quoted conversion rate for the transaction amount.
+    DCC lets a customer pay in their card's currency instead of the merchant's
+    currency (e.g. an American cardholder paying in USD at an Irish merchant).
+
+
+    This is a single-operation, read-only inquiry (POST /fx-rates, operationId
+    getFxRates) and does not create or move money. Agent-gotchas:
+
+    - `baseAmount` / `baseCurrency` are the merchant-currency amount to convert;
+      the response's `baseAmount` is restated in the local currency.
+    - Eligibility is signalled by `inquiryResult.dccOffered` (boolean), NOT by the
+      HTTP status — a 200 is returned whether or not DCC is offered. When
+      `dccOffered` is false, `inquiryResult.causeOfRejection` explains why and no
+      `dccOffer` object is present.
+    - When eligible, the `dccOffer` object carries the fields you must forward to a
+      subsequent sale or unreferenced refund to honour the quote: `offerReference`,
+      `fxAmount`, `fxCurrency`, `fxRate`, and `markup`.
+    - `paymentMethod` is polymorphic (`card`, `secureToken`, or `digitalWallet`).
+      The primary path below uses keyed `card` details; substitute a `secureToken`
+      or `digitalWallet` payload of the same shape for the other channels.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: check-dcc-eligibility
+    summary: Verify DCC eligibility and retrieve a currency conversion quote for a card.
+    description: >
+      Single step: submit the terminal, transaction amount/currency, and payment
+      method to POST /fx-rates. Inspect `inquiryResult.dccOffered` to decide the
+      branch — if true, capture the `dccOffer` fields for a later DCC sale/refund;
+      if false, read `inquiryResult.causeOfRejection`.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - channel
+        - baseAmount
+        - baseCurrency
+        - cardNumber
+        - expiryDate
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier that we assigned to the terminal.
+          example: '1234001'
+        channel:
+          type: string
+          description: Channel used to receive the payment details (pos, web, or moto).
+          enum:
+            - pos
+            - web
+            - moto
+          example: web
+        operator:
+          type: string
+          description: Operator who ran the transaction.
+          example: Jane
+        baseAmount:
+          type: integer
+          description: >
+            Transaction amount in the merchant's currency, in the currency's
+            lowest denomination (e.g. cents).
+          example: 4999
+        baseCurrency:
+          type: string
+          description: Merchant currency of the transaction (ISO 4217).
+          example: USD
+        cardholderName:
+          type: string
+          description: Name of the cardholder.
+          example: Sarah Hazel Hopper
+        cardNumber:
+          type: string
+          description: Card number (PAN) to check for DCC eligibility.
+          example: '4539858876047062'
+        expiryDate:
+          type: string
+          description: Card expiry date in MMYY format.
+          example: '1230'
+    steps:
+      - stepId: getFxRates
+        description: >
+          Submit the DCC eligibility inquiry. Success is a 200 regardless of the
+          eligibility outcome; branch on `inquiryResult.dccOffered`. When true,
+          the response includes a `dccOffer` with the quote fields needed for a
+          subsequent DCC-enabled sale or unreferenced refund.
+        operationId: getFxRates
+        requestBody:
+          contentType: application/json
+          payload:
+            channel: $inputs.channel
+            operator: $inputs.operator
+            processingTerminalId: $inputs.processingTerminalId
+            baseAmount: $inputs.baseAmount
+            baseCurrency: $inputs.baseCurrency
+            paymentMethod:
+              type: card
+              cardDetails:
+                entryMethod: keyed
+                cardholderName: $inputs.cardholderName
+                keyedData:
+                  dataFormat: plainText
+                  cardNumber: $inputs.cardNumber
+                  expiryDate: $inputs.expiryDate
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          dccOffered: $response.body#/inquiryResult/dccOffered
+          causeOfRejection: $response.body#/inquiryResult/causeOfRejection
+          offerReference: $response.body#/dccOffer/offerReference
+          fxAmount: $response.body#/dccOffer/fxAmount
+          fxCurrency: $response.body#/dccOffer/fxCurrency
+          fxRate: $response.body#/dccOffer/fxRate
+          markup: $response.body#/dccOffer/markup
+    outputs:
+      dccOffered: $steps.getFxRates.outputs.dccOffered
+      offerReference: $steps.getFxRates.outputs.offerReference
+      fxAmount: $steps.getFxRates.outputs.fxAmount
+      fxCurrency: $steps.getFxRates.outputs.fxCurrency
+      fxRate: $steps.getFxRates.outputs.fxRate

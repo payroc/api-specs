@@ -1,0 +1,315 @@
+arazzo: 1.0.0
+info:
+  title: Create and share a payment link
+  summary: Create a pay-by-link, email it to a customer, track sharing, and manage the link lifecycle.
+  description: >
+    Creates a Payroc payment link, shares it with a customer by email, tracks the
+    sharing events, and manages the link over its lifecycle (retrieve, update,
+    list, deactivate). The terminal outcome is a shared, active payment link the
+    customer can use to pay; the customer pays through the hosted link (outside
+    these API steps) and the merchant can then track and manage the link.
+
+
+    Agent gotchas:
+
+    - The create body is polymorphic on `type`: `multiUse` (a reusable link the
+      merchant can take multiple payments with) vs `singleUse` (a one-off link
+      for a single payment). This workflow models the reusable `multiUse` variant
+      as the primary path; the one-off variant is identical in shape but sends
+      `type: singleUse`, requires an `order.orderId` and `expiresOn`, and the link
+      moves to `completed` after the single payment. Collapse both into this one
+      family - do not split files.
+
+    - Inside `order.charge` the amount ownership is also polymorphic on `type`:
+      `prompt` (the customer enters the amount - send only `currency`) vs `preset`
+      (the merchant sets the amount - send `amount` and `currency`). The primary
+      path uses `prompt`.
+
+    - `createPaymentLink` and `listPaymentLinks` are keyed by the
+      `processingTerminalId` (path). Every follow-on action (share, retrieve,
+      update, deactivate, list sharing events) is keyed by the `paymentLinkId`
+      that create returns.
+
+    - `updatePaymentLink` is an RFC 6902 JSON Patch (`PATCH`) - the body is an
+      array of patch operations (e.g. replace `/expiresOn`), NOT a full resource.
+      Updating a single-use link regenerates its payment URL, so the original link
+      stops working.
+
+    - Write requests (create, share, update) require a unique `Idempotency-Key`
+      header (UUID v4). Use a fresh key per request; reusing a key replays the
+      original response. `deactivatePaymentLink` and the read/list steps take no
+      idempotency key.
+
+    - Deactivation is terminal: once deactivated the link cannot be used or
+      reactivated.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: collect-with-payment-link
+    summary: Create a payment link, share it by email, track sharing events, and manage its lifecycle.
+    description: >
+      Step 1 creates the payment link on a processing terminal (primary path:
+      reusable multiUse link with a customer-prompted amount). Step 2 emails the
+      link to the customer. Step 3 lists the sharing events for the link. Steps 4
+      to 7 are optional lifecycle-management actions: retrieve the link, partially
+      update it (JSON Patch), list all links on the terminal, and deactivate it.
+      The customer paying through the hosted link happens outside these API steps.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Recipient who receives the payment link by email and pays through the hosted page.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to create, share, and manage the payment link on the customer's behalf.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call; also hosts the payment page and emails the link.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream processor that settles the payment when the customer pays through the link; not directly callable.
+    inputs:
+      type: object
+      required:
+        - createIdempotencyKey
+        - shareIdempotencyKey
+        - processingTerminalId
+        - merchantReference
+        - description
+        - currency
+        - customerName
+        - customerEmail
+      properties:
+        createIdempotencyKey:
+          type: string
+          format: uuid
+          description: Unique UUID v4 Idempotency-Key for the Create Payment Link request (step 1).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        shareIdempotencyKey:
+          type: string
+          format: uuid
+          description: Unique UUID v4 Idempotency-Key for the Share Payment Link request (step 2). Must differ from the other keys.
+          example: a1b2c3d4-e5f6-4789-9abc-def012345678
+        updateIdempotencyKey:
+          type: string
+          format: uuid
+          description: Unique UUID v4 Idempotency-Key for the optional Update Payment Link request (step 5). Must differ from the other keys.
+          example: b2c3d4e5-f6a7-4890-8bcd-ef0123456789
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal the payment link belongs to.
+          example: '1234001'
+        merchantReference:
+          type: string
+          description: Unique identifier that the merchant assigns to the payment link.
+          example: LinkRef6543
+        description:
+          type: string
+          description: Brief description of the transaction shown on the payment link.
+          example: Pie It Forward charitable trust donation
+        currency:
+          type: string
+          description: ISO 4217 currency code for the transaction.
+          example: USD
+        customerName:
+          type: string
+          description: Name of the customer that the link is shared with.
+          example: Sarah Hazel Hopper
+        customerEmail:
+          type: string
+          description: Email address of the customer that the link is shared with.
+          example: sarah.hopper@example.com
+        message:
+          type: string
+          description: Message the merchant sends with the payment link email.
+          example: |
+            Dear Sarah,
+            You can pay for your order via the link below.
+        newExpiresOn:
+          type: string
+          format: date
+          description: New expiry date (YYYY-MM-DD) applied by the optional update step.
+          example: '2024-10-25'
+    steps:
+      - stepId: createPaymentLink
+        x-actor: merchant
+        description: >
+          Create the payment link on the processing terminal. Primary path: a
+          reusable multiUse link where the customer enters the amount
+          (order.charge.type = prompt). For a one-off link send type = singleUse
+          with an order.orderId and expiresOn, and use charge.type = preset with an
+          amount to fix the price. Save the returned paymentLinkId - every
+          follow-on step needs it - and the assets.paymentUrl to share manually.
+        operationId: createPaymentLink
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.createIdempotencyKey
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+        requestBody:
+          contentType: application/json
+          payload:
+            type: multiUse
+            merchantReference: $inputs.merchantReference
+            order:
+              description: $inputs.description
+              charge:
+                type: prompt
+                currency: $inputs.currency
+            authType: sale
+            paymentMethods:
+              - card
+              - bankTransfer
+            customLabels:
+              - element: paymentButton
+                label: SUPPORT US
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.body#/status == active
+        outputs:
+          paymentLinkId: $response.body#/paymentLinkId
+          paymentUrl: $response.body#/assets/paymentUrl
+          status: $response.body#/status
+
+      - stepId: sharePaymentLink
+        x-actor: merchant
+        description: >
+          Email the payment link to the customer. Requires the paymentLinkId from
+          step 1. Send sharingMethod = email plus a recipients array (name and
+          email are required); set merchantCopy = true to also send the merchant a
+          copy. Returns a sharingEventId used to track this send.
+        operationId: sharePaymentLink
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.shareIdempotencyKey
+          - name: paymentLinkId
+            in: path
+            value: $steps.createPaymentLink.outputs.paymentLinkId
+        requestBody:
+          contentType: application/json
+          payload:
+            sharingMethod: email
+            merchantCopy: true
+            message: $inputs.message
+            recipients:
+              - name: $inputs.customerName
+                email: $inputs.customerEmail
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          sharingEventId: $response.body#/sharingEventId
+
+      - stepId: listSharingEvents
+        x-actor: merchant
+        description: >
+          List the sharing events for the payment link to confirm and track when
+          and to whom it was sent. Paginated; filter by recipientName or
+          recipientEmail. Keyed by paymentLinkId.
+        operationId: listPaymentLinkShareEvents
+        parameters:
+          - name: paymentLinkId
+            in: path
+            value: $steps.createPaymentLink.outputs.paymentLinkId
+          - name: recipientEmail
+            in: query
+            value: $inputs.customerEmail
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          count: $response.body#/count
+          firstSharingEventId: $response.body#/data/0/sharingEventId
+
+      - stepId: retrievePaymentLink
+        x-actor: merchant
+        description: >
+          OPTIONAL lifecycle read. Retrieve the current state of the payment link
+          by paymentLinkId - for example to check whether the customer has paid
+          (status = completed). Returns the same polymorphic link object as create.
+        operationId: retrievePaymentLink
+        parameters:
+          - name: paymentLinkId
+            in: path
+            value: $steps.createPaymentLink.outputs.paymentLinkId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/status
+
+      - stepId: updatePaymentLink
+        x-actor: merchant
+        description: >
+          OPTIONAL lifecycle update. Partially update the payment link with an RFC
+          6902 JSON Patch document - the body is an ARRAY of patch operations, not
+          a full resource. This example replaces the expiry date. Note: updating a
+          single-use link regenerates its payment URL, invalidating the original.
+        operationId: updatePaymentLink
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.updateIdempotencyKey
+          - name: paymentLinkId
+            in: path
+            value: $steps.createPaymentLink.outputs.paymentLinkId
+        requestBody:
+          contentType: application/json
+          payload:
+            - op: replace
+              path: /expiresOn
+              value: $inputs.newExpiresOn
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/status
+
+      - stepId: listPaymentLinks
+        x-actor: merchant
+        description: >
+          OPTIONAL. List the payment links on the processing terminal, e.g. to find
+          a link when you don't have its paymentLinkId. Paginated; filter by
+          merchantReference, linkType, chargeType, status, recipient, or dates.
+          Keyed by processingTerminalId (not paymentLinkId).
+        operationId: listPaymentLinks
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: merchantReference
+            in: query
+            value: $inputs.merchantReference
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          count: $response.body#/count
+
+      - stepId: deactivatePaymentLink
+        x-actor: merchant
+        description: >
+          OPTIONAL and TERMINAL. Deactivate the payment link so the customer can no
+          longer use it. Takes no idempotency key. Deactivation cannot be reversed -
+          the link can't be reactivated. Returns the link with status = deactivated.
+        operationId: deactivatePaymentLink
+        parameters:
+          - name: paymentLinkId
+            in: path
+            value: $steps.createPaymentLink.outputs.paymentLinkId
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.body#/status == deactivated
+        outputs:
+          status: $response.body#/status
+    outputs:
+      paymentLinkId: $steps.createPaymentLink.outputs.paymentLinkId
+      paymentUrl: $steps.createPaymentLink.outputs.paymentUrl
+      sharingEventId: $steps.sharePaymentLink.outputs.sharingEventId
+      finalStatus: $steps.deactivatePaymentLink.outputs.status

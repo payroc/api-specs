@@ -1,0 +1,118 @@
+arazzo: 1.0.0
+info:
+  title: Reverse (void) a bank-transfer payment
+  summary: Cancel a bank-transfer (ACH) payment that is still in an open batch.
+  description: >
+    Reverses (voids) a bank-transfer / ACH payment before it settles, removing it
+    from the merchant's open batch so no funds move. Reversal is distinct from a
+    refund: a reversal cancels an unsettled payment in an open batch, whereas a
+    refund returns funds for an already-settled payment in a closed batch. Agents
+    routinely conflate the two - if the batch has closed, use the
+    refund-a-bank-transfer-payment workflow instead.
+
+    Optionally look up the payment first (listBankTransferPayments), then reverse
+    it (reverseBankTransferPayment). This endpoint has no request body, so the
+    reversal is always for the full amount.
+
+    Note: if you run a referenced refund against a bank-transfer payment that is
+    still in an open batch, the gateway automatically reverses it instead.
+
+    To reverse a card payment instead, use the reverse-a-card-payment workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: reverse-a-bank-transfer-payment
+    summary: Look up and reverse a bank-transfer payment in an open batch.
+    description: >
+      Optionally list bank-transfer payments to find the paymentId
+      (listBankTransferPayments), then reverse it (reverseBankTransferPayment).
+      The list step is optional - use it only when you do not already hold the
+      paymentId. processingTerminalId is required for the list.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Account holder who requested that the payment be cancelled.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to look up and reverse the payment.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream processor that clears the open batch; not directly callable.
+    inputs:
+      type: object
+      required:
+        - paymentId
+        - idempotencyKey
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the terminal, required to filter the bank-transfer payment list.
+          example: 1234001
+        orderId:
+          type: string
+          description: Order ID to filter the payment list by when searching for the payment.
+          example: OrderRef6543
+        paymentId:
+          type: string
+          description: Unique identifier of the payment to reverse.
+          example: M2MJOG6O2Y
+        idempotencyKey:
+          type: string
+          description: UUID v4 that makes the reversal request idempotent (Idempotency-Key header).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+    steps:
+      - stepId: listBankTransferPayments
+        description: >
+          Optional. List bank transfer payments matching the search filters to
+          find the paymentId to reverse. processingTerminalId is required for this
+          list. Skip if you already hold the paymentId.
+        x-actor: merchant
+        operationId: $sourceDescriptions.payroc-api.listBankTransferPayments
+        parameters:
+          - name: processingTerminalId
+            in: query
+            value: $inputs.processingTerminalId
+          - name: orderId
+            in: query
+            value: $inputs.orderId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstPaymentId: $response.body#/data/0/paymentId
+
+      - stepId: reverseBankTransferPayment
+        description: >
+          Reverse (void) the bank transfer payment in the open batch. Takes the
+          paymentId in the path and a required Idempotency-Key header; this
+          endpoint has no request body (the amount cannot be varied here). Success
+          returns transactionResult.status == reversal.
+        x-actor: merchant
+        operationId: $sourceDescriptions.payroc-api.reverseBankTransferPayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: paymentId
+            in: path
+            value: $inputs.paymentId
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.body#/transactionResult/status == "reversal"
+        outputs:
+          paymentId: $response.body#/paymentId
+          status: $response.body#/transactionResult/status
+    outputs:
+      paymentId: $steps.reverseBankTransferPayment.outputs.paymentId
+      status: $steps.reverseBankTransferPayment.outputs.status

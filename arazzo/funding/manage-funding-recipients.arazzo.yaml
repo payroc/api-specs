@@ -1,0 +1,117 @@
+arazzo: 1.0.0
+info:
+  title: Review funding recipients and their accounts
+  summary: Discover and read funding recipients, and read their nested funding accounts and owners.
+  description: >
+    Read/discovery for funding recipients - businesses or organizations that can
+    receive funds but cannot run transactions (for example, a charity). A caller
+    lists recipients to find the one they need, retrieves its full detail, and
+    reads its nested funding accounts and owners.
+
+    Agent gotchas:
+    - The path parameter is recipientId (an integer), returned as recipientId in
+      create/list/get responses. It is NOT the fundingAccountId or ownerId of the
+      nested resources.
+    - Contacts and owners are supplied inline in the recipient payload - there is
+      no standalone createContact/createOwner operation.
+
+    To amend or remove a recipient, use the update-a-funding-recipient or
+    delete-a-funding-recipient workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: manage-funding-recipients
+    summary: Discover a funding recipient, retrieve it, and read its nested accounts and owners.
+    description: >
+      Steps run in this order: list recipients (optional discovery), retrieve the
+      target recipient, list its funding accounts, and list its owners. All steps
+      are read-only. To amend or delete a recipient, use the
+      update-a-funding-recipient / delete-a-funding-recipient workflows.
+
+      Optional step: listRecipients (skip if the recipientId is already known).
+    inputs:
+      type: object
+      required:
+        - recipientId
+      properties:
+        recipientId:
+          type: integer
+          description: Unique identifier of the funding recipient to read.
+          example: 234
+        limit:
+          type: integer
+          description: Maximum number of funding recipients to return per page when listing.
+          example: 25
+    steps:
+      - stepId: listRecipients
+        description: >
+          Optional discovery step. Return a paginated list of funding recipients
+          linked to the account so the caller can find the target recipientId.
+          Skip this step if the recipientId is already known.
+        operationId: listFundingRecipients
+        parameters:
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstRecipientId: $response.body#/data/0/recipientId
+
+      - stepId: getRecipient
+        description: >
+          Retrieve the full detail of the target funding recipient by recipientId:
+          legal information (taxId, doingBusinessAs), address, contact methods, and
+          summaries of its linked owners and funding accounts.
+        operationId: getFundingRecipient
+        parameters:
+          - name: recipientId
+            in: path
+            value: $inputs.recipientId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          recipientId: $response.body#/recipientId
+          status: $response.body#/status
+          owners: $response.body#/owners
+          fundingAccounts: $response.body#/fundingAccounts
+
+      - stepId: listRecipientFundingAccounts
+        description: >
+          Return the funding accounts associated with the recipient: account
+          holder name, ACH details, and status. Each entry carries a
+          fundingAccountId for follow-on actions.
+        operationId: listFundRecipientFundingAccounts
+        parameters:
+          - name: recipientId
+            in: path
+            value: $inputs.recipientId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstFundingAccountId: $response.body#/0/fundingAccountId
+
+      - stepId: listRecipientOwners
+        description: >
+          Return the owners of the recipient: name, date of birth, address,
+          contact details, and relationship. Each entry carries an ownerId for
+          follow-on actions.
+        operationId: listFundRecipientOwners
+        parameters:
+          - name: recipientId
+            in: path
+            value: $inputs.recipientId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstOwnerId: $response.body#/0/ownerId
+    outputs:
+      recipientId: $steps.getRecipient.outputs.recipientId
+      status: $steps.getRecipient.outputs.status
+      firstFundingAccountId: $steps.listRecipientFundingAccounts.outputs.firstFundingAccountId
+      firstOwnerId: $steps.listRecipientOwners.outputs.firstOwnerId

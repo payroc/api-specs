@@ -1,0 +1,110 @@
+arazzo: 1.0.0
+info:
+  title: Add an attachment to a processing account
+  summary: Upload a supporting document to a processing account and retrieve it.
+  description: >
+    Uploads a supporting document (e.g. banking evidence, questionnaires, or
+    personal identification for a merchant application) to a processing account,
+    then optionally retrieves the attachment to check its upload status.
+
+    Agent gotchas:
+    - The upload step is NOT JSON. It accepts a file upload, so the request
+      Content-Type must be multipart/form-data, carrying an `attachment` object
+      (only `type` is required) plus the binary `file`. Only one attachment per
+      request; each file must be uncompressed and under 50 MB.
+    - The upload response returns an `attachmentId` at the top level and an
+      `uploadStatus` of `pending`, `accepted`, or `rejected`. A 201 means the
+      request was received, not that the file is accepted — poll the retrieve
+      step to observe `uploadStatus` transition to `accepted`.
+    - Retrieval uses the standalone `GET /attachments/{attachmentId}` operation
+      (the Attachments domain), not a processing-account-scoped path. It returns
+      metadata about the file, never the file bytes themselves.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: add-attachment
+    summary: Upload a document to a processing account, then optionally retrieve it.
+    description: >
+      Step 1 uploads the document to the processing account and returns an
+      attachmentId. Step 2 is optional: retrieve the attachment by its id to
+      confirm the upload status. This is a single-actor workflow — the
+      integrator calls both operations.
+    inputs:
+      type: object
+      required:
+        - processingAccountId
+        - idempotencyKey
+        - attachmentType
+      properties:
+        processingAccountId:
+          type: string
+          description: Unique identifier of the processing account to attach the document to.
+          example: 38765
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per request to make the upload idempotent.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        attachmentType:
+          type: string
+          description: >
+            Type of attachment. One of bankingEvidence, questionnairesAndLicenses,
+            merchantStatements, taxDocuments, mpaOrAmendment, proofOfBusiness,
+            financialStatements, personalIdentification, other.
+          example: personalIdentification
+        attachmentDescription:
+          type: string
+          description: Short description of the attachment.
+          example: Passport as identification for lease agreement
+    steps:
+      - stepId: uploadAttachment
+        description: >
+          Upload the document to the processing account. The request is
+          multipart/form-data (NOT application/json): the `attachment` object
+          carries the type/description/metadata and the binary `file` carries the
+          document. Returns a 201 with the attachmentId and an initial
+          uploadStatus of `pending`.
+        operationId: createProcessingAccountAttachment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: processingAccountId
+            in: path
+            value: $inputs.processingAccountId
+        requestBody:
+          contentType: multipart/form-data
+          payload:
+            attachment:
+              type: $inputs.attachmentType
+              description: $inputs.attachmentDescription
+              metadata:
+                documentId: '2345'
+            file: JohnSmithPassport.pdf
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          attachmentId: $response.body#/attachmentId
+          uploadStatus: $response.body#/uploadStatus
+      - stepId: getAttachment
+        description: >
+          Optional. Retrieve the attachment by its id to confirm the upload
+          status (expect uploadStatus to become `accepted`). Returns metadata
+          about the file, not the file bytes.
+        operationId: getAttachment
+        parameters:
+          - name: attachmentId
+            in: path
+            value: $steps.uploadAttachment.outputs.attachmentId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          attachmentId: $response.body#/attachmentId
+          uploadStatus: $response.body#/uploadStatus
+    outputs:
+      attachmentId: $steps.uploadAttachment.outputs.attachmentId
+      uploadStatus: $steps.getAttachment.outputs.uploadStatus

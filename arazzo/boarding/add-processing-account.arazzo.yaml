@@ -1,0 +1,216 @@
+arazzo: 1.0.0
+info:
+  title: Add a processing account to a merchant platform
+  summary: Add a processing account (with inline owners and contacts) to an existing merchant platform, then optionally remind the merchant to sign.
+  description: >
+    Adds an additional processing account to an existing merchant platform so it can
+    run transactions. The whole account is created in a single POST: business details,
+    owners, contacts, processing estimates, funding accounts, pricing, and signature
+    method are all supplied inline in the create payload.
+
+    Agent gotchas:
+    - Owners and contacts are supplied INLINE in this payload. There are no standalone
+      createOwner / createContact operations in the published spec (the "add a contact"
+      and "add an owner" guides pin non-existent endpoints in their frontmatter). Use
+      the owners[] and contacts[] arrays here instead.
+    - Exactly one owner must be the control prong (relationship.isControlProng: true).
+    - pricing.type: intent references a reusable pricing intent by pricingIntentId; the
+      pricing intent must already exist (see manage-pricing-intents).
+    - The create returns HTTP 201 with a top-level processingAccountId and an initial
+      status of "entered" while Payroc reviews the account. Subscribe to
+      processingAccount.status.changed for status transitions.
+    - The optional reminder step (Step 2) only works when signature.type is
+      requestedViaEmail. If you request the signature via a direct link
+      (signature.type: requestedViaDirectLink) you cannot send reminders and Step 2
+      must be skipped.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: add-processing-account
+    summary: Create a processing account on a merchant platform, then optionally remind the merchant to sign.
+    description: >
+      Step 1 creates the processing account against an existing merchantPlatformId,
+      with owners and contacts inline. Step 2 is optional and only applies when the
+      signature was requested by email: it prompts the merchant to sign the pricing
+      agreement by sending another email.
+
+      Variant: contacts and owners are both supplied inline in Step 1's payload (the
+      "add a contact" / "add an owner" flows are not separate operations). To board an
+      account with a direct-link signature instead of email, set
+      signature.type to requestedViaDirectLink in Step 1 and skip Step 2.
+    inputs:
+      type: object
+      required:
+        - merchantPlatformId
+        - idempotencyKey
+        - doingBusinessAs
+        - businessStartDate
+        - timezone
+      properties:
+        merchantPlatformId:
+          type: string
+          description: Unique identifier of the existing merchant platform to add the processing account to.
+          example: '12345'
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per request for idempotency.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        doingBusinessAs:
+          type: string
+          description: Doing Business As (DBA) name of the business.
+          example: Pizza Doe
+        businessStartDate:
+          type: string
+          description: Date the business started trading (YYYY-MM-DD).
+          example: '2020-01-01'
+        timezone:
+          type: string
+          description: IANA timezone of the business.
+          example: America/Chicago
+        categoryCode:
+          type: string
+          description: Merchant Category Code (MCC).
+          example: '5999'
+        pricingIntentId:
+          type: string
+          description: Identifier of an existing pricing intent to apply to the account.
+          example: '6123'
+    steps:
+      - stepId: createProcessingAccount
+        description: >
+          Create the processing account on the merchant platform. Owners and contacts
+          are supplied inline (no separate create operations exist). Exactly one owner
+          is marked as the control prong. signature.type is requestedViaEmail here so
+          the optional reminder step is available; use requestedViaDirectLink instead
+          if you generate a signing link (and skip Step 2). Returns 201 with a
+          top-level processingAccountId and status "entered".
+        operationId: createProcessingAccount
+        parameters:
+          - name: merchantPlatformId
+            in: path
+            value: $inputs.merchantPlatformId
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            doingBusinessAs: $inputs.doingBusinessAs
+            website: www.example.com
+            businessType: restaurant
+            categoryCode: $inputs.categoryCode
+            processor: tsys
+            merchandiseOrServiceSold: Pizza
+            businessStartDate: $inputs.businessStartDate
+            timezone: $inputs.timezone
+            owners:
+              - firstName: Jane
+                middleName: Helen
+                lastName: Doe
+                dateOfBirth: '1964-03-22'
+                address:
+                  address1: 1 Example Ave.
+                  address2: Example Address Line 2
+                  address3: Example Address Line 3
+                  city: Chicago
+                  state: Illinois
+                  country: US
+                  postalCode: '60056'
+                identifiers:
+                  - type: nationalId
+                    value: 000-00-4320
+                contactMethods:
+                  - type: email
+                    value: jane.doe@example.com
+                relationship:
+                  equityPercentage: 100
+                  title: CFO
+                  isControlProng: true
+                  isAuthorizedSignatory: true
+            address:
+              address1: 1 Example Ave.
+              address2: Example Address Line 2
+              address3: Example Address Line 3
+              city: Chicago
+              state: Illinois
+              country: US
+              postalCode: '60056'
+            contactMethods:
+              - type: email
+                value: jane.doe@example.com
+            contacts:
+              - type: manager
+                firstName: Fred
+                middleName: Jim
+                lastName: Nerk
+                identifiers:
+                  - type: nationalId
+                    value: 000-00-9876
+                contactMethods:
+                  - type: email
+                    value: fred.nerk@example.com
+            processing:
+              transactionAmounts:
+                average: 4500
+                highest: 50000
+              monthlyAmounts:
+                average: 3000
+                highest: 100000
+              volumeBreakdown:
+                cardPresent: 80
+                mailOrTelephone: 20
+                ecommerce: 0
+            funding:
+              fundingSchedule: nextday
+              dailyDiscount: false
+              fundingAccounts:
+                - type: checking
+                  use: creditAndDebit
+                  nameOnAccount: Jane Doe
+                  paymentMethods:
+                    - type: ach
+                      value:
+                        routingNumber: '123456789'
+                        accountNumber: '1234567890'
+            pricing:
+              type: intent
+              pricingIntentId: $inputs.pricingIntentId
+            signature:
+              type: requestedViaEmail
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.body#/status == entered
+        outputs:
+          processingAccountId: $response.body#/processingAccountId
+          status: $response.body#/status
+      - stepId: createReminder
+        description: >
+          Optional. Prompt the merchant to sign the pricing agreement by sending another
+          email. Only valid when Step 1 used signature.type: requestedViaEmail; skip this
+          step if the signature was requested via a direct link, if the contract is
+          already signed, or if no pricing agreement exists. Returns 201.
+        operationId: createReminder
+        parameters:
+          - name: processingAccountId
+            in: path
+            value: $steps.createProcessingAccount.outputs.processingAccountId
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            type: pricingAgreement
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          reminderId: $response.body#/reminderId
+    outputs:
+      processingAccountId: $steps.createProcessingAccount.outputs.processingAccountId
+      status: $steps.createProcessingAccount.outputs.status
+      reminderId: $steps.createReminder.outputs.reminderId

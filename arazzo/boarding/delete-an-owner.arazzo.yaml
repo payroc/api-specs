@@ -1,0 +1,95 @@
+arazzo: 1.0.0
+info:
+  title: Delete an owner
+  summary: Find an owner, then delete them.
+  description: >
+    Removes one of the owners attached to a funding recipient. This workflow finds
+    an owner and deletes them.
+
+    Agent gotchas (load-bearing):
+    - deleteOwner only works for owners associated with a FUNDING RECIPIENT. The
+      API rejects attempts to delete an owner of a processing account with a 400
+      error.
+    - You cannot delete the last owner on a funding recipient — the API requires
+      at least one owner to remain and rejects the deletion.
+    - The list step requires a `recipientId`, not a `processingAccountId`. The
+      recipientId is returned when you create a funding recipient; use the
+      list-funding-recipients operation to look it up if needed.
+    - deleteOwner returns 204 No Content.
+
+    To amend an owner instead, use the update-an-owner workflow.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: delete-an-owner
+    summary: List, retrieve, then delete an owner of a funding recipient.
+    description: >
+      Optionally list the owners of the funding recipient (listFundRecipientOwners)
+      and retrieve one (getOwner) to confirm it, then delete it (deleteOwner).
+      Delete only affects funding-recipient owners; against a processing-account
+      owner it is rejected with a 400. The list/retrieve steps are optional when
+      you already hold the ownerId.
+    inputs:
+      type: object
+      required: [recipientId, ownerId]
+      properties:
+        recipientId:
+          type: string
+          description: Unique identifier of the funding recipient whose owners you are listing.
+          example: 4ab5c
+        ownerId:
+          type: integer
+          description: >
+            Unique identifier of the owner to delete. Returned by Create Funding
+            Recipient or by the List Owners step.
+          example: 4564
+    steps:
+      - stepId: listOwners
+        description: >
+          Optional. List the owners of the funding recipient to discover the
+          numeric ownerId. Skip if you already hold the ownerId.
+        operationId: listFundRecipientOwners
+        parameters:
+          - name: recipientId
+            in: path
+            value: $inputs.recipientId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstOwnerId: $response.body#/0/ownerId
+
+      - stepId: getOwner
+        description: >
+          Optional. Retrieve the full details of a single owner before deleting.
+        operationId: getOwner
+        parameters:
+          - name: ownerId
+            in: path
+            value: $inputs.ownerId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          ownerId: $response.body#/ownerId
+          equityPercentage: $response.body#/relationship/equityPercentage
+          isControlProng: $response.body#/relationship/isControlProng
+
+      - stepId: deleteOwner
+        description: >
+          Delete an owner. Only valid for a funding recipient's owner — the API
+          rejects attempts against a processing account's owner (400). The API
+          also rejects this call if the owner is the last one on the funding
+          recipient. Returns no body on success.
+        operationId: deleteOwner
+        parameters:
+          - name: ownerId
+            in: path
+            value: $inputs.ownerId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      ownerId: $inputs.ownerId

@@ -1,0 +1,163 @@
+arazzo: 1.0.0
+info:
+  title: Find and adjust a payment
+  summary: Filter the payment list, confirm the payment is adjustable, then adjust it
+  description: >
+    Read-then-act flow for post-sale changes to a card payment (for example,
+    adding a tip/gratuity, changing the sale amount, updating the status, or
+    updating cardholder contact/shipping details). List payments with filters,
+    take the first result, retrieve it to confirm the change is permitted, then
+    submit the adjustment.
+
+    Agent gotchas captured by this workflow:
+      - List responses are paginated: payments live in the `data` array
+        alongside `count`, `hasMore`, and `limit`. To act on a result, reach
+        into `data/0/paymentId` — not a top-level field.
+      - `getPayment` returns a `supportedOperations` object describing which
+        follow-on actions the payment allows. Inspect it before adjusting so you
+        do not attempt an unsupported adjustment (adjust only applies to a
+        payment in an open batch).
+      - The adjust request body is an `adjustments` array of POLYMORPHIC objects
+        discriminated by `type`. Choose the right variant: `order` (change the
+        sale amount / tip), `status` (move to `ready` or `pending`), `customer`
+        (update contact methods / shipping address), or `signature` (attach the
+        cardholder signature — cannot be changed once set). The primary path
+        below uses an `order` adjustment; the others are documented on the
+        adjust step.
+      - `listPayments` and `getPayment` are GET (200); `adjustPayment` is POST
+        (200, not 201) and requires a unique `Idempotency-Key` header.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: adjust-a-payment
+    summary: List payments, retrieve the target payment, then adjust it
+    description: >
+      Step 1 lists payments filtered by terminal, status, and date, and extracts
+      the first payment's `paymentId`. Step 2 retrieves that payment and surfaces
+      its `supportedOperations` so the caller can confirm the payment can be
+      adjusted. Step 3 adjusts the payment with the supplied `adjustments` array.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - idempotencyKey
+        - adjustments
+      properties:
+        processingTerminalId:
+          type: string
+          description: Processing terminal to filter the payment list by.
+          example: '1234001'
+        status:
+          type: string
+          description: >
+            Payment status to filter the list by. Only payments in an adjustable
+            status (for example `ready`) can be adjusted in step 3.
+          example: ready
+        dateFrom:
+          type: string
+          format: date-time
+          description: Return payments processed on or after this ISO 8601 timestamp.
+          example: '2024-07-01T15:30:00Z'
+        limit:
+          type: integer
+          description: Maximum number of payments to return per page.
+          example: 10
+        idempotencyKey:
+          type: string
+          description: >
+            Unique UUID v4 you generate for the adjust request, sent as the
+            `Idempotency-Key` header.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        operator:
+          type: string
+          description: Operator who performed the adjustment.
+          example: Jane
+        adjustments:
+          type: array
+          description: >
+            Array of polymorphic adjustment objects, each discriminated by
+            `type` (`order`, `status`, `customer`, or `signature`). Example
+            (change the sale amount): `[{ type: order, amount: 4999 }]`.
+          example:
+            - type: order
+              amount: 4999
+          items:
+            type: object
+
+    steps:
+      - stepId: listPayments
+        description: >
+          List payments filtered by terminal, status, and date. The response is
+          paginated — payments are in the `data` array. This step extracts the
+          first payment's `paymentId` for the follow-on steps.
+        operationId: listPayments
+        parameters:
+          - name: processingTerminalId
+            in: query
+            value: $inputs.processingTerminalId
+          - name: status
+            in: query
+            value: $inputs.status
+          - name: dateFrom
+            in: query
+            value: $inputs.dateFrom
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstPaymentId: $response.body#/data/0/paymentId
+          hasMore: $response.body#/hasMore
+
+      - stepId: getPayment
+        description: >
+          Retrieve the full detail of the first payment from the list. Inspect
+          the returned `supportedOperations` to confirm the payment can be
+          adjusted before calling the adjust step.
+        operationId: getPayment
+        parameters:
+          - name: paymentId
+            in: path
+            value: $steps.listPayments.outputs.firstPaymentId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentId: $response.body#/paymentId
+          supportedOperations: $response.body#/supportedOperations
+
+      - stepId: adjustPayment
+        description: >
+          Adjust the payment using the `paymentId` from the retrieve step. The
+          body is an `adjustments` array of polymorphic objects — choose the
+          right `type` discriminator:
+            - `order`   — change the sale amount and/or tip breakdown (primary path).
+            - `status`  — move the transaction to `ready` or `pending` via `toStatus`.
+            - `customer`— update `shippingAddress` and/or `contactMethods`.
+            - `signature` — attach `cardholderSignature` (cannot be adjusted once set).
+          Requires a unique `Idempotency-Key` header. Returns 200.
+        operationId: adjustPayment
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+          - name: paymentId
+            in: path
+            value: $steps.getPayment.outputs.paymentId
+        requestBody:
+          contentType: application/json
+          payload:
+            operator: $inputs.operator
+            adjustments: $inputs.adjustments
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          paymentId: $response.body#/paymentId
+
+    outputs:
+      paymentId: $steps.adjustPayment.outputs.paymentId

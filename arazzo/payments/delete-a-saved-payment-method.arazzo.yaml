@@ -1,0 +1,113 @@
+arazzo: 1.0.0
+info:
+  title: Delete a saved payment method (secure token)
+  summary: Find a stored secure token, then delete it from the vault.
+  description: >
+    Removes a reusable secure token (a customer's stored card, ACH, or PAD
+    payment method) from the vault. Discover the token, retrieve it, then delete
+    it.
+
+    Agent gotchas:
+      - The path parameter is the `secureTokenId` (format `MREF_...`), the durable
+        handle for the stored payment method.
+      - `deleteSecureToken` is a DELETE that returns 204 (no body). It is
+        irreversible — the token and its `secureTokenId` cannot be recovered or
+        reused.
+
+    To amend the saved details instead, use update-a-saved-payment-method or
+    refresh-a-saved-payment-method.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: delete-a-saved-payment-method
+    summary: List, retrieve, then delete a secure token.
+    description: >
+      Optionally list secure tokens (listSecureTokens) and retrieve one
+      (getSecureToken) to confirm its state, then delete it (deleteSecureToken).
+      The list/retrieve steps are optional when you already hold the
+      secureTokenId.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - secureTokenId
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier for the terminal that owns the secure token.
+          example: '1234001'
+        secureTokenId:
+          type: string
+          description: Durable identifier for the saved payment method. If you do not have it, the discovery step can locate it.
+          example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
+        customerName:
+          type: string
+          description: Customer name filter for the discovery step (URL-encoded).
+          example: Sarah%20Hazel%20Hopper
+        limit:
+          type: integer
+          description: Maximum number of secure tokens to return per page.
+          example: 10
+    steps:
+      - stepId: listSecureTokens
+        description: >
+          Optional discovery step. Lists secure tokens on the terminal, filtered by
+          customer name, and extracts the first result's `secureTokenId`. Skip if
+          you already hold the `secureTokenId`.
+        operationId: listSecureTokens
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: customerName
+            in: query
+            value: $inputs.customerName
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstSecureTokenId: $response.body#/data/0/secureTokenId
+          hasMore: $response.body#/hasMore
+
+      - stepId: getSecureToken
+        description: >
+          Optional. Retrieve the secure token to confirm its current state before
+          deleting.
+        operationId: getSecureToken
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: secureTokenId
+            in: path
+            value: $inputs.secureTokenId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          secureTokenId: $response.body#/secureTokenId
+          status: $response.body#/status
+
+      - stepId: deleteSecureToken
+        description: >
+          Delete the secure token and its stored payment details from the vault.
+          Irreversible — the token and its `secureTokenId` cannot be recovered or
+          reused. Returns 204 with no body.
+        operationId: deleteSecureToken
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: secureTokenId
+            in: path
+            value: $inputs.secureTokenId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      secureTokenId: $inputs.secureTokenId

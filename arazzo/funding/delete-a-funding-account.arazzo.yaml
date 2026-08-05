@@ -1,0 +1,98 @@
+arazzo: 1.0.0
+info:
+  title: Delete a funding account
+  summary: Find a funding account, then delete it.
+  description: >
+    Removes a funding account - the bank/ACH destination account Payroc uses for
+    settlement and funding. Discover the account, retrieve it, then delete it.
+
+    Agent gotchas:
+    - A funding account's fundingAccountId is an integer, not one of the
+      alphanumeric ids used elsewhere in the API.
+    - Delete only applies to a funding account associated with a FUNDING
+      RECIPIENT. You cannot delete a funding account associated with a processing
+      account - the API rejects those.
+    - You cannot delete the last funding account on a funding recipient — the API
+      requires at least one funding account to remain and rejects the deletion.
+    - `deleteFundingAccount` returns 204 No Content, so there is no response body
+      to capture.
+
+    To amend a funding account instead, use the update-a-funding-account workflow.
+    Mutually exclusive with update for the same account.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: delete-a-funding-account
+    summary: List, retrieve, then delete a funding account.
+    description: >
+      Optionally list funding accounts (listFundingAccounts) and retrieve one
+      (getFundingAccount) to confirm it, then delete it (deleteFundingAccount).
+      The list/retrieve steps are optional when you already hold the
+      fundingAccountId. Delete is valid only for a funding account associated with
+      a funding recipient.
+    inputs:
+      type: object
+      required:
+        - fundingAccountId
+      properties:
+        fundingAccountId:
+          type: integer
+          description: Unique identifier of the funding account to delete.
+          example: 123
+        limit:
+          type: integer
+          description: Maximum number of funding accounts to return per page when listing.
+          example: 2
+    steps:
+      - stepId: listFundingAccounts
+        description: >
+          Optional discovery step. List the funding accounts on your account to
+          discover a fundingAccountId. Returns a paginated envelope; accounts are
+          under `data`. Skip if you already hold the fundingAccountId.
+        operationId: listFundingAccount
+        parameters:
+          - name: limit
+            in: query
+            value: $inputs.limit
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          firstFundingAccountId: $response.body#/data/0/fundingAccountId
+
+      - stepId: getFundingAccount
+        description: >
+          Optional. Retrieve the full detail of the funding account by its
+          fundingAccountId before deleting.
+        operationId: getFundingAccount
+        parameters:
+          - name: fundingAccountId
+            in: path
+            value: $inputs.fundingAccountId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          fundingAccountId: $response.body#/fundingAccountId
+          status: $response.body#/status
+          use: $response.body#/use
+
+      - stepId: deleteFundingAccount
+        description: >
+          Delete the funding account. Valid only for a funding account associated
+          with a funding recipient - the API rejects deletes of a
+          processing-account funding account. The API also rejects this call if
+          the account is the last one on the funding recipient. Returns 204 with
+          no body. Run only when you intend to permanently remove the account.
+        operationId: deleteFundingAccount
+        parameters:
+          - name: fundingAccountId
+            in: path
+            value: $inputs.fundingAccountId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      fundingAccountId: $inputs.fundingAccountId

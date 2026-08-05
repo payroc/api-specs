@@ -1,0 +1,108 @@
+arazzo: 1.0.0
+info:
+  title: Verify a customer's card
+  summary: Run a zero-value account verification on a customer's card details.
+  description: >
+    Verifies a customer's card details with a zero-value authorization, before
+    storing the card as a secure token or charging it. The terminal outcome is a
+    verification result: the response carries a boolean verified flag plus a
+    transactionResult object (status, responseCode, responseMessage) that reports
+    what the processor returned.
+
+    This is a headline single-operation workflow. No money moves - it confirms the
+    card is valid and usable in follow-on actions such as saving a secure token
+    (save-a-payment-method) or running a sale (run-a-card-sale). An Idempotency-Key
+    header is required.
+
+    Agent gotcha: read the boolean verified flag, not just $statusCode. A 200
+    response means the request was processed, but verified can still be false when
+    the processor rejects the card. Assert both. The card object is polymorphic via
+    a type discriminator, but verifyCard only accepts the card variant (keyed or
+    encrypted card details) - it does not accept a single-use token here.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: verify-a-card
+    summary: Verify a customer's card with a zero-value authorization.
+    description: >
+      Single-step workflow that POSTs the customer's card details to the
+      /cards/verify endpoint for a processing terminal. Requires an Idempotency-Key
+      header. The primary path models keyed plain-text card details; the same step
+      also accepts other entry methods (for example encrypted keyedData) under the
+      same card source. Success asserts both the 200 status and the verified flag.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - idempotencyKey
+        - cardNumber
+        - expiryDate
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier that we assigned to the terminal the verification runs under.
+          example: 1234001
+        idempotencyKey:
+          type: string
+          description: UUID v4 that makes the verify request idempotent (Idempotency-Key header).
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        operator:
+          type: string
+          description: Operator who requested to verify the card.
+          example: Jane
+        cardholderName:
+          type: string
+          description: Name on the card being verified.
+          example: Sarah Hazel Hopper
+        cardNumber:
+          type: string
+          description: Customer's card number (plain-text keyed entry).
+          example: 4539858876047062
+        expiryDate:
+          type: string
+          description: Card expiry date in MMYY format.
+          example: 1230
+    steps:
+      - stepId: verifyCard
+        description: >
+          Verify the customer's card details with a zero-value authorization.
+          Primary path shown is a keyed plain-text card (card.type = card,
+          entryMethod = keyed). Requires an Idempotency-Key header. Do not treat a
+          200 as success on its own: check the response verified flag (and
+          transactionResult.status) - a valid request can still return
+          verified = false when the card is rejected.
+        operationId: $sourceDescriptions.payroc-api.verifyCard
+        parameters:
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            processingTerminalId: $inputs.processingTerminalId
+            operator: $inputs.operator
+            card:
+              type: card
+              cardDetails:
+                entryMethod: keyed
+                cardholderName: $inputs.cardholderName
+                keyedData:
+                  dataFormat: plainText
+                  cardNumber: $inputs.cardNumber
+                  expiryDate: $inputs.expiryDate
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.body#/verified == true
+        outputs:
+          verified: $response.body#/verified
+          transactionStatus: $response.body#/transactionResult/status
+          responseCode: $response.body#/transactionResult/responseCode
+    outputs:
+      verified: $steps.verifyCard.outputs.verified
+      transactionStatus: $steps.verifyCard.outputs.transactionStatus
+      responseCode: $steps.verifyCard.outputs.responseCode

@@ -1,0 +1,62 @@
+arazzo: 1.0.0
+info:
+  title: Reactivate a subscription
+  summary: Restart collection for a previously deactivated subscription.
+  description: >
+    Restarts collection on a previously deactivated subscription (a customer's
+    assignment to a payment plan). POST with no request body; returns 200.
+
+    Agent gotchas:
+      - `subscriptionId` is the merchant-assigned string (for example
+        `SubRef7654`) used on create, not a gateway-generated id.
+      - `reactivateSubscription` requires no request body and no Idempotency-Key
+        header.
+
+    To stop collection, use the deactivate-a-subscription workflow - deactivate
+    and reactivate are mutually exclusive collection-state actions.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: reactivate-a-subscription
+    summary: Reactivate a subscription to resume collection.
+    description: >
+      Restarts collection for the previously deactivated subscription identified
+      by `subscriptionId` on the terminal (reactivateSubscription). Returns 200.
+    inputs:
+      type: object
+      required:
+        - processingTerminalId
+        - subscriptionId
+      properties:
+        processingTerminalId:
+          type: string
+          description: Unique identifier for the terminal that owns the subscription.
+          example: '1234001'
+        subscriptionId:
+          type: string
+          description: Merchant-assigned identifier of the subscription to reactivate.
+          example: SubRef7654
+    steps:
+      - stepId: reactivateSubscription
+        description: >
+          Restarts collection for a previously deactivated subscription. POST with
+          no request body; returns 200.
+        operationId: reactivateSubscription
+        parameters:
+          - name: processingTerminalId
+            in: path
+            value: $inputs.processingTerminalId
+          - name: subscriptionId
+            in: path
+            value: $inputs.subscriptionId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/currentState/status
+    outputs:
+      status: $steps.reactivateSubscription.outputs.status

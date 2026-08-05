@@ -1,0 +1,88 @@
+arazzo: 1.0.0
+info:
+  title: Cancel a device refund instruction
+  summary: Abort a still-in-progress Payroc Cloud device refund instruction before it completes.
+  description: >
+    Cancels a refund instruction that was submitted to a Payroc Cloud payment
+    device (via the refund-on-a-device workflow) while it is still `inProgress`,
+    so the refund never completes.
+
+    Agent gotchas captured here:
+
+    - You can cancel an instruction with `deleteRefundInstruction` only while its
+      `status` is `inProgress`; once the instruction has `completed`, cancelling is
+      no longer possible. Confirm the status with `getRefundInstruction` first.
+
+    - `deleteRefundInstruction` returns HTTP 204 (No Content) — there is no
+      response body to capture.
+
+    - Cancelling is mutually exclusive with letting the instruction complete (see
+      the refund-on-a-device workflow, whose terminal outcome is a completed
+      refund).
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: cancel-a-device-refund-instruction
+    summary: Confirm an instruction is in progress, then cancel it.
+    description: >
+      Optionally confirm the instruction is still `inProgress`
+      (getRefundInstruction), then cancel it (deleteRefundInstruction) using the
+      `refundInstructionId` returned when the instruction was submitted.
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: POS integration that calls the Payroc API to abort the pending refund.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: payment-device
+        name: Payroc Cloud payment device
+        type: external-system
+        description: Physical device that holds the pending refund instruction; not directly callable as an API step.
+    inputs:
+      type: object
+      required:
+        - refundInstructionId
+      properties:
+        refundInstructionId:
+          type: string
+          description: Identifier of the refund instruction to cancel, as returned by sendRefundInstruction in the refund-on-a-device workflow.
+          example: a37439165d134678a9100ebba3b29597
+    steps:
+      - stepId: getRefundInstruction
+        x-actor: merchant
+        description: >
+          Optional. Confirm the instruction is still `inProgress` before
+          cancelling, via GET /refund-instructions/{refundInstructionId}. Cancel
+          is only allowed while the status is `inProgress`.
+        operationId: getRefundInstruction
+        parameters:
+          - name: refundInstructionId
+            in: path
+            value: $inputs.refundInstructionId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/status
+      - stepId: deleteRefundInstruction
+        x-actor: merchant
+        description: >
+          Cancel the refund instruction via DELETE
+          /refund-instructions/{refundInstructionId}. Allowed only while the
+          instruction's `status` is `inProgress`; returns HTTP 204.
+        operationId: deleteRefundInstruction
+        parameters:
+          - name: refundInstructionId
+            in: path
+            value: $inputs.refundInstructionId
+        successCriteria:
+          - condition: $statusCode == 204
+    outputs:
+      refundInstructionId: $inputs.refundInstructionId

@@ -1,0 +1,299 @@
+arazzo: 1.0.0
+info:
+  title: Board a merchant
+  summary: Board a business end to end - pricing, merchant platform, extra processing accounts, terminals, and supporting documents.
+  description: >
+    Flagship onboarding journey. Composes the leaf boarding workflows into the
+    full path from "no merchant" to "a merchant platform with processing
+    account(s) submitted for approval to process". Terminal outcome: once Payroc
+    reviews and approves the boarded account (an external underwriting step that
+    is not an API call), the merchant can process transactions.
+
+
+    Composition (each step invokes an already-authored sub-workflow by
+    workflowId): create-pricing-intent, create-merchant-platform,
+    add-processing-account, order-a-terminal, and add-attachment (the last lives
+    in the attachments domain). This workflow only threads inputs and outputs
+    between those sub-workflows; the operation-level detail lives in each leaf
+    file.
+
+
+    Agent gotchas:
+    - Step 1 (create the pricing intent) is OPTIONAL. Pricing can instead be
+      supplied inline as a pricing agreement inside the create-merchant payload
+      (pricing.type: agreement). When you do create a pricing intent, its
+      identifier is returned at the top-level `id` field and is passed onward as
+      `pricingIntentId`.
+    - Owners and contacts are supplied INLINE in the create-merchant /
+      create-processing-account payloads. There are NO standalone createOwner /
+      createContact operations.
+    - Step 3 (add an additional processing account) is OPTIONAL - the
+      create-merchant payload already nests the first processing account. Only
+      run it for a business that operates more than one account.
+    - Step 5 (add a supporting document) is OPTIONAL and repeatable, one
+      attachment per request.
+    - The MPA/signing step that returns a signed agreement
+      (submitSignedProcessingAgreement) is x-internal and out of the public
+      surface, so it is not a step here; the merchant signs the pricing
+      agreement out of band (email or direct link - see create-merchant-platform).
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+  - name: create-pricing-intent
+    url: ./create-pricing-intent.arazzo.yaml
+    type: arazzo
+  - name: create-merchant-platform
+    url: ./create-merchant-platform.arazzo.yaml
+    type: arazzo
+  - name: add-processing-account
+    url: ./add-processing-account.arazzo.yaml
+    type: arazzo
+  - name: order-a-terminal
+    url: ./order-a-terminal.arazzo.yaml
+    type: arazzo
+  - name: add-attachment
+    url: ../attachments/add-attachment.arazzo.yaml
+    type: arazzo
+
+workflows:
+  - workflowId: board-a-merchant
+    x-actors:
+      - id: merchant
+        name: Merchant / business owner
+        type: human
+        description: >
+          The business being boarded. Provides its legal details, owners and
+          contacts, and signs the pricing agreement out of band (email or direct
+          link). Not an API caller.
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Drives the boarding journey by calling the Payroc API on the merchant's behalf.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: underwriting
+        name: Payroc underwriting
+        type: external-system
+        description: >
+          Payroc's account review process that approves the boarded account to
+          process. Runs after boarding and is not directly callable; observe it
+          via the processingAccount.status.changed event.
+    summary: Create pricing, board the merchant platform, add accounts/terminals, and upload documents.
+    description: >
+      Ordered composition of the boarding leaf workflows:
+
+      1. create-pricing-intent (OPTIONAL) - build a reusable fee template and
+         capture its id; skip it if you supply an inline pricing agreement in
+         step 2 instead.
+      2. create-merchant-platform - board the business and its first processing
+         account (owners and contacts inline), referencing the pricing intent
+         from step 1. Returns merchantPlatformId and processingAccountId.
+      3. add-processing-account (OPTIONAL) - add a further processing account to
+         the merchant platform for multi-account businesses.
+      4. order-a-terminal - order a physical terminal for the processing account.
+      5. add-attachment (OPTIONAL, repeatable) - upload a supporting document to
+         the processing account.
+
+      Optional steps are marked in their descriptions. After boarding, Payroc
+      underwriting reviews and approves the account (external, non-API) before it
+      can process.
+    inputs:
+      type: object
+      required:
+        - merchantPlatformIdempotencyKey
+        - terminalOrderIdempotencyKey
+        - businessName
+        - taxId
+        - organizationType
+        - doingBusinessAs
+        - businessStartDate
+        - timezone
+      properties:
+        pricingIntentIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the optional create-pricing-intent sub-workflow (step 1). Must differ from the other keys.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        merchantPlatformIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the create-merchant-platform sub-workflow (step 2). Must differ from the other keys.
+          example: a1b2c3d4-e5f6-4789-9abc-def012345678
+        processingAccountIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the optional add-processing-account sub-workflow (step 3). Must differ from the other keys.
+          example: b2c3d4e5-f6a7-4890-8bcd-ef0123456789
+        terminalOrderIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the order-a-terminal sub-workflow (step 4). Must differ from the other keys.
+          example: c3d4e5f6-a7b8-4901-9cde-f01234567890
+        attachmentIdempotencyKey:
+          type: string
+          description: Unique UUID v4 Idempotency-Key for the optional add-attachment sub-workflow (step 5). Use a fresh key for each attachment when repeating the step.
+          example: d4e5f6a7-b8c9-4012-8def-012345678901
+        pricingKey:
+          type: string
+          description: Your own reference key for the optional pricing intent (step 1).
+          example: Your-Unique-Identifier
+        country:
+          type: string
+          description: Country the pricing intent applies to (ISO 3166-1 alpha-2).
+          example: US
+        pricingVersion:
+          type: string
+          description: Merchant Processing Agreement (MPA) version the pricing-intent fees follow.
+          example: "5.2"
+        businessName:
+          type: string
+          description: Legal name of the business.
+          example: Example Corp
+        taxId:
+          type: string
+          description: Tax ID (EIN) of the business.
+          example: 12-3456789
+        organizationType:
+          type: string
+          description: Type of organization.
+          example: privateCorporation
+        doingBusinessAs:
+          type: string
+          description: Trading (DBA) name of the processing account.
+          example: Pizza Doe
+        businessStartDate:
+          type: string
+          description: Date the business started trading (YYYY-MM-DD).
+          example: '2020-01-01'
+        timezone:
+          type: string
+          description: IANA timezone of the business.
+          example: America/Chicago
+        categoryCode:
+          type: string
+          description: Merchant Category Code (MCC) for an additional processing account (step 3).
+          example: '5999'
+        solutionTemplateId:
+          type: string
+          description: Identifier of the solution (device/bundle) to order for the terminal (step 4).
+          example: Roc Services_DX8000
+        attachmentType:
+          type: string
+          description: >
+            Type of supporting document for the optional attachment step (step 5).
+            One of bankingEvidence, questionnairesAndLicenses, merchantStatements,
+            taxDocuments, mpaOrAmendment, proofOfBusiness, financialStatements,
+            personalIdentification, other.
+          example: personalIdentification
+        attachmentDescription:
+          type: string
+          description: Short description of the supporting document (step 5).
+          example: Passport as identification for lease agreement
+    steps:
+      - stepId: pricingIntent
+        description: >
+          OPTIONAL. Sub-workflow create-pricing-intent: build the reusable fee
+          template. Skip this step and supply an inline pricing agreement in the
+          create-merchant payload instead. Captures pricingIntentId for step 2.
+        x-actor: integrator
+        workflowId: $sourceDescriptions.create-pricing-intent.create-pricing-intent
+        parameters:
+          - name: idempotencyKey
+            value: $inputs.pricingIntentIdempotencyKey
+          - name: key
+            value: $inputs.pricingKey
+          - name: country
+            value: $inputs.country
+          - name: version
+            value: $inputs.pricingVersion
+        outputs:
+          pricingIntentId: $outputs.pricingIntentId
+      - stepId: merchantPlatform
+        description: >
+          Sub-workflow create-merchant-platform: board the business and its first
+          processing account (owners and contacts inline), applying the pricing
+          intent from step 1. Returns merchantPlatformId and processingAccountId
+          used by the later steps.
+        x-actor: integrator
+        workflowId: $sourceDescriptions.create-merchant-platform.create-merchant-platform
+        parameters:
+          - name: idempotencyKey
+            value: $inputs.merchantPlatformIdempotencyKey
+          - name: businessName
+            value: $inputs.businessName
+          - name: taxId
+            value: $inputs.taxId
+          - name: organizationType
+            value: $inputs.organizationType
+          - name: doingBusinessAs
+            value: $inputs.doingBusinessAs
+          - name: pricingIntentId
+            value: $steps.pricingIntent.outputs.pricingIntentId
+        outputs:
+          merchantPlatformId: $outputs.merchantPlatformId
+          processingAccountId: $outputs.processingAccountId
+      - stepId: additionalProcessingAccount
+        description: >
+          OPTIONAL. Sub-workflow add-processing-account: add a further processing
+          account to the merchant platform created in step 2. Run this only for a
+          business that operates more than one account; the create-merchant call
+          already boarded the first one.
+        x-actor: integrator
+        workflowId: $sourceDescriptions.add-processing-account.add-processing-account
+        parameters:
+          - name: merchantPlatformId
+            value: $steps.merchantPlatform.outputs.merchantPlatformId
+          - name: idempotencyKey
+            value: $inputs.processingAccountIdempotencyKey
+          - name: doingBusinessAs
+            value: $inputs.doingBusinessAs
+          - name: businessStartDate
+            value: $inputs.businessStartDate
+          - name: timezone
+            value: $inputs.timezone
+          - name: categoryCode
+            value: $inputs.categoryCode
+        outputs:
+          additionalProcessingAccountId: $outputs.processingAccountId
+      - stepId: terminalOrder
+        description: >
+          Sub-workflow order-a-terminal: order a physical terminal for the
+          processing account boarded in step 2. Returns a terminalOrderId that
+          fulfils asynchronously.
+        x-actor: integrator
+        workflowId: $sourceDescriptions.order-a-terminal.order-a-terminal
+        parameters:
+          - name: processingAccountId
+            value: $steps.merchantPlatform.outputs.processingAccountId
+          - name: idempotencyKey
+            value: $inputs.terminalOrderIdempotencyKey
+          - name: solutionTemplateId
+            value: $inputs.solutionTemplateId
+        outputs:
+          terminalOrderId: $outputs.terminalOrderId
+      - stepId: supportingDocument
+        description: >
+          OPTIONAL, repeatable. Sub-workflow add-attachment: upload a supporting
+          document (e.g. personal identification, banking evidence) to the
+          processing account boarded in step 2. One attachment per invocation.
+        x-actor: integrator
+        workflowId: $sourceDescriptions.add-attachment.add-attachment
+        parameters:
+          - name: processingAccountId
+            value: $steps.merchantPlatform.outputs.processingAccountId
+          - name: idempotencyKey
+            value: $inputs.attachmentIdempotencyKey
+          - name: attachmentType
+            value: $inputs.attachmentType
+          - name: attachmentDescription
+            value: $inputs.attachmentDescription
+        outputs:
+          attachmentId: $outputs.attachmentId
+    outputs:
+      pricingIntentId: $steps.pricingIntent.outputs.pricingIntentId
+      merchantPlatformId: $steps.merchantPlatform.outputs.merchantPlatformId
+      processingAccountId: $steps.merchantPlatform.outputs.processingAccountId
+      additionalProcessingAccountId: $steps.additionalProcessingAccount.outputs.additionalProcessingAccountId
+      terminalOrderId: $steps.terminalOrder.outputs.terminalOrderId
+      attachmentId: $steps.supportingDocument.outputs.attachmentId

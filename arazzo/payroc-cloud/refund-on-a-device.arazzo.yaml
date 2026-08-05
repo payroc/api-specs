@@ -1,0 +1,201 @@
+arazzo: 1.0.0
+info:
+  title: Refund on a device
+  summary: Return funds to a cardholder by sending a refund instruction to a Payroc Cloud payment device.
+  description: >
+    Runs an unreferenced refund through a physical Payroc Cloud payment device.
+    The POS submits a refund instruction to the device (addressed by its
+    `serialNumber`), the device prompts the cardholder, and the merchant then
+    polls the instruction until it completes and, optionally, retrieves the
+    resulting refund.
+
+    For a referenced refund (tied to an earlier transaction), use the Create
+    Referenced Refund endpoint in the Payments API instead — referenced refunds
+    are not supported via Payroc Cloud devices.
+
+    Agent gotchas captured here:
+
+    - This is device-mediated via the refund-instruction resource — it is NOT the
+      card/bank `POST /refunds` unreferenced-refund endpoint (see the
+      run-unreferenced-card-refund / run-unreferenced-bank-transfer-refund
+      workflows for that). The device is addressed by its `serialNumber` in the
+      path.
+
+    - The submit call returns HTTP 202 (Accepted), not 201 — the refund is not yet
+      complete. You get a `refundInstructionId` and a `status` of `inProgress`.
+
+    - Poll `getRefundInstruction` until `status` becomes `completed`. The gateway
+      holds each poll open for up to a minute waiting for a status change; wait for
+      one response before sending the next request. When complete, the response
+      carries a HATEOAS `link` to the refund (`link.href` ends with the refundId) —
+      there is no bare `refundId` field on the instruction, so parse it from the
+      link.
+
+    - To abort a still-`inProgress` instruction instead of letting it complete, use
+      the cancel-a-device-refund-instruction workflow — cancelling is mutually
+      exclusive with completion.
+
+
+    The terminal outcome is a completed refund instruction whose linked refund
+    (retrievable via `getRefund`) returns the funds to the cardholder.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: refund-on-a-device
+    summary: Submit a refund instruction to a device, poll it to completion, and retrieve the refund.
+    description: >
+      Ordered flow:
+
+      1. `sendRefundInstruction` (required) — submit the refund instruction to the
+         device; returns a `refundInstructionId` with `status: inProgress`.
+
+      2. `getRefundInstruction` (required) — poll the instruction until `status`
+         becomes `completed`; the completed response includes a HATEOAS link to the
+         refund.
+
+      3. `getRefund` (OPTIONAL) — retrieve the resulting refund to confirm the
+         processor approved it. Needs the `refundId` parsed from the completed
+         instruction's `link.href`.
+    x-actors:
+      - id: customer
+        name: Customer
+        type: human
+        description: Cardholder present at the payment device who receives the returned funds.
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: POS integration that calls the Payroc API to drive and monitor the refund.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: payment-device
+        name: Payroc Cloud payment device
+        type: external-system
+        description: Physical device (addressed by serialNumber) that executes the instruction with the downstream processor; not directly callable as an API step.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - serialNumber
+        - processingTerminalId
+        - orderId
+        - description
+        - amount
+        - currency
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 sent in the Idempotency-Key header on the submit request. Generate a fresh value per request.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        serialNumber:
+          type: string
+          description: Serial number of the merchant's payment device that runs the refund.
+          example: '1850010868'
+        processingTerminalId:
+          type: string
+          description: Unique identifier of the processing terminal that runs the refund.
+          example: '1234001'
+        operator:
+          type: string
+          description: Operator who initiated the refund.
+          example: Jane
+        orderId:
+          type: string
+          description: Merchant-assigned unique identifier for the refund order.
+          example: OrderRef6543
+        description:
+          type: string
+          description: Description of the refund.
+          example: Refund for order OrderRef6543
+        amount:
+          type: integer
+          description: Refund amount in the currency's lowest denomination (for example, cents).
+          example: 4999
+        currency:
+          type: string
+          description: ISO 4217 currency code of the refund.
+          example: USD
+        refundId:
+          type: string
+          description: Identifier of the resulting refund, parsed from the completed instruction's link.href (used only by the optional getRefund step).
+          example: CD3HN88U9F
+    steps:
+      - stepId: sendRefundInstruction
+        x-actor: customer
+        description: >
+          Required. Submit the refund instruction to the device via
+          POST /devices/{serialNumber}/refund-instructions. The cardholder is
+          present at the device to authorize the return of funds. Returns HTTP 202
+          (Accepted) with a `refundInstructionId` and `status: inProgress` — the
+          refund is not yet complete. Requires a UUID v4 Idempotency-Key header.
+        operationId: sendRefundInstruction
+        parameters:
+          - name: serialNumber
+            in: path
+            value: $inputs.serialNumber
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            operator: $inputs.operator
+            processingTerminalId: $inputs.processingTerminalId
+            order:
+              orderId: $inputs.orderId
+              description: $inputs.description
+              amount: $inputs.amount
+              currency: $inputs.currency
+            customizationOptions:
+              entryMethod: manualEntry
+        successCriteria:
+          - condition: $statusCode == 202
+        outputs:
+          refundInstructionId: $response.body#/refundInstructionId
+          status: $response.body#/status
+      - stepId: getRefundInstruction
+        x-actor: merchant
+        description: >
+          Required. Poll GET /refund-instructions/{refundInstructionId} until
+          `status` becomes `completed`. The gateway holds each poll open for up to a
+          minute waiting for a status change; wait for a response before polling
+          again. When complete, the response includes a HATEOAS `link` to the
+          refund — parse the refundId from `link.href` for the optional getRefund
+          step (there is no top-level refundId field on the instruction).
+        operationId: getRefundInstruction
+        parameters:
+          - name: refundInstructionId
+            in: path
+            value: $steps.sendRefundInstruction.outputs.refundInstructionId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body#/status
+          refundLink: $response.body#/link/href
+      - stepId: getRefund
+        x-actor: merchant
+        description: >
+          OPTIONAL. Retrieve the resulting refund via GET /refunds/{refundId} to
+          confirm the processor approved it and to read the refund details. Supply
+          the refundId parsed from the completed instruction's link.href.
+        operationId: getRefund
+        parameters:
+          - name: refundId
+            in: path
+            value: $inputs.refundId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          refundId: $response.body#/refundId
+          refundStatus: $response.body#/transactionResult/status
+    outputs:
+      refundInstructionId: $steps.sendRefundInstruction.outputs.refundInstructionId
+      instructionStatus: $steps.getRefundInstruction.outputs.status
+      refundLink: $steps.getRefundInstruction.outputs.refundLink
+      refundId: $steps.getRefund.outputs.refundId

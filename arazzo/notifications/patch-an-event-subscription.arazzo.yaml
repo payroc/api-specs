@@ -1,0 +1,73 @@
+arazzo: 1.0.0
+info:
+  title: Patch an event subscription (partial update)
+  summary: Partially update an existing event subscription with an RFC 6902 JSON Patch (PATCH).
+  description: >
+    Partial update of an event subscription (webhook notification registration).
+    Applies an RFC 6902 JSON Patch document via PATCH — here, disabling
+    notifications by setting enabled to false.
+
+    Agent gotchas:
+    - PATCH (patchEventSubscription) returns 200 with the updated body. Requires
+      the Idempotency-Key header (UUID v4).
+    - The body is a JSON Patch array of `op`/`path`/`value` operations, NOT a plain
+      resource object.
+    - The subscriptionId is the int64 id returned by create at `#/id`.
+
+    To overwrite the whole subscription, use the update-an-event-subscription
+    workflow (full replace, PUT) instead - a given amendment uses one or the
+    other, not both.
+  version: 1.0.0
+
+sourceDescriptions:
+  - name: payroc-api
+    url: ../../external/universal-api-v1.yaml
+    type: openapi
+
+workflows:
+  - workflowId: patch-an-event-subscription
+    summary: Partially update an event subscription via PATCH.
+    description: >
+      Apply an RFC 6902 JSON Patch to the event subscription identified by
+      `subscriptionId` (patchEventSubscription). Requires the Idempotency-Key
+      header. Returns 200 with the updated body.
+    inputs:
+      type: object
+      required:
+        - idempotencyKey
+        - subscriptionId
+      properties:
+        idempotencyKey:
+          type: string
+          description: Unique UUID v4 you generate per patch request. Sent in the Idempotency-Key header.
+          example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
+        subscriptionId:
+          type: integer
+          description: Identifier (int64) of the event subscription to patch, as returned by create at #/id.
+          example: 1122334455
+    steps:
+      - stepId: patchSubscription
+        description: >
+          Apply a partial change via PATCH (RFC 6902 JSON Patch) — here disabling
+          notifications by setting enabled to false — and return 200 with the
+          updated body. Requires the Idempotency-Key header.
+        operationId: patchEventSubscription
+        parameters:
+          - name: subscriptionId
+            in: path
+            value: $inputs.subscriptionId
+          - name: Idempotency-Key
+            in: header
+            value: $inputs.idempotencyKey
+        requestBody:
+          contentType: application/json
+          payload:
+            - op: replace
+              path: /enabled
+              value: false
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          enabled: $response.body#/enabled
+    outputs:
+      enabled: $steps.patchSubscription.outputs.enabled
