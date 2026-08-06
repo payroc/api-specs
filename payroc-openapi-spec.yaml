@@ -12553,6 +12553,7 @@ paths:
                     description: Unique identifier of the terminal that the subscription is linked to.
                     example: '1234001'
                   payment:
+                    description: Object that contains information about a manual payment that the customer made to a subscription.
                     required: &ref_266
                       - amount
                       - currency
@@ -12561,7 +12562,6 @@ paths:
                       - status
                       - responseCode
                     type: object
-                    description: Object that contains information about a payment.
                     properties: &ref_267
                       paymentId:
                         maxLength: 10
@@ -17145,7 +17145,18 @@ paths:
                       status:
                         type: string
                         example: ready
-                        description: Current status of the transaction.
+                        description: |
+                          Status of the transaction. The value is one of the following:  
+                          - `ready` - Successful transaction. We added the payment to the open batch.  
+                          - `pending` - Successful transaction. We added the payment to the open batch, but we don't collect the funds until the merchant [captures the transaction](https://docs.payroc.com/api/schema/card-payments/payments/capture).
+                          - `declined` - Unsuccessful transaction. The cardholder's issuing bank declined the transaction. 
+                          - `complete` - Successful transaction. The funds have moved to the merchant's bank account. 
+                          - `referral` - Unsuccessful transaction. The issuing bank identified an issue with the transaction. You should treat a `referral` status as a declined transaction. 
+                          - `pickup` - Unsuccessful transaction. The issuing bank has reported that the card is lost or stolen. 
+                          - `reversal` - Transaction cancelled. The transaction was cancelled, and we removed the transaction from the open batch. 
+                          - `admin` - Transaction under review. We have flagged an issue with the transaction. 
+                          - `expired` - Transaction expired. If a transaction stays in `pending` status for too long, it expires. 
+                          - `accepted` - Transaction in progress. The transaction is in progress with the processor but we can't confirm the result yet. 
                         enum:
                           - ready
                           - pending
@@ -22267,7 +22278,7 @@ paths:
                         example: payment
                       status:
                         type: string
-                        description: Status of the transaction.
+                        description: "Status of the transaction. The value is one of the following:  \n- `ready` - Successful transaction. We added the payment to the open batch.  \n- `pending` - Successful transaction. We added the payment to the open batch, but we don’t collect the funds when the batch is closed.  \n-\t`declined` - Unsuccessful transaction. The customer's bank declined the transfer.  \n-\t`complete` - Successful transaction. The funds have moved to the merchant’s bank account.  \n-\t`admin` - Transaction under review. We have flagged an issue with the transaction.  \n-\t`reversal` - Transaction cancelled. The transaction was cancelled, and we removed the transaction from the open batch.  \n-\t`returned` - Unsuccessful transaction. Automated clearing house (ACH) returned the transaction due to an error. For more information about the error, view the **returns** object.  \n"
                         enum:
                           - ready
                           - pending
