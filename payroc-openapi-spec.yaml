@@ -13786,7 +13786,7 @@ paths:
                           description: E-commerce indicator (ECI) result of a the 3-D Secure check.
                           enum:
                             - fullyAuthenticated
-                            - attemptedAuthentication
+                            - authAttempted
                           example: fullyAuthenticated
                         xid:
                           maxLength: 50
