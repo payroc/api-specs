@@ -31466,7 +31466,7 @@ paths:
           headers:
             Location:
               description: URI reference to created resource
-              schema: &ref_1197
+              schema: &ref_1203
                 type: string
           content:
             application/json:
@@ -31477,7 +31477,7 @@ paths:
                 required: *ref_385
               examples:
                 createdEventSubscription:
-                  summary: Event subscription created
+                  summary: Create event subscription
                   description: Example of a created event subscription.
                   value: &ref_1178
                     id: 2565435189324
@@ -31493,7 +31493,7 @@ paths:
                     metadata:
                       yourCustomField: abc123
                 eventSubscriptionCreatedMetadata:
-                  summary: Event subscription created metadata
+                  summary: Create event subscription with metadata
                   description: Example of a created event subscription.
                   value: &ref_1179
                     id: 2565435189324
@@ -31755,11 +31755,6 @@ paths:
                   - op: test
                     path: /enabled
                     value: true
-              patchOperations:
-                summary: Example patch operations that apply the RFC 6902 standard
-                description: |
-                  Example patch operations that apply the RFC 6902 standard.
-                value: *ref_136
       responses:
         '200':
           description: Successful request. We updated the event subscription.
@@ -31772,11 +31767,108 @@ paths:
                 required: *ref_385
               examples:
                 patchedEventSubscription:
-                  summary: Patched event subscription
+                  summary: Partially update event subscription
                   description: Example of a patched event subscription.
                   value: &ref_1189
                     id: 2565435189324
                     enabled: false
+                    status: registered
+                    eventTypes:
+                      - processingAccount.status.changed
+                    notifications:
+                      - type: webhook
+                        uri: https://my-service/notification/endpoint
+                        secret: '**********oP3456'
+                        supportEmailAddress: jane.doe@example.com
+                    metadata:
+                      yourCustomField: abc123
+                patchEventSubscriptionAdd:
+                  summary: 'Update event subscription: add'
+                  description: Event subscription after adding a new event type.
+                  value: &ref_1190
+                    id: 2565435189324
+                    enabled: true
+                    status: registered
+                    eventTypes:
+                      - processingAccount.status.changed
+                      - terminalOrder.status.changed
+                    notifications:
+                      - type: webhook
+                        uri: https://my-service/notification/endpoint
+                        secret: '**********oP3456'
+                        supportEmailAddress: jane.doe@example.com
+                    metadata:
+                      yourCustomField: abc123
+                patchEventSubscriptionRemove:
+                  summary: 'Update event subscription: remove'
+                  description: Event subscription after removing a metadata field.
+                  value: &ref_1191
+                    id: 2565435189324
+                    enabled: true
+                    status: registered
+                    eventTypes:
+                      - processingAccount.status.changed
+                    notifications:
+                      - type: webhook
+                        uri: https://my-service/notification/endpoint
+                        secret: '**********oP3456'
+                        supportEmailAddress: jane.doe@example.com
+                    metadata: {}
+                patchEventSubscriptionReplace:
+                  summary: 'Update event subscription: replace'
+                  description: Event subscription after replacing the enabled value.
+                  value: &ref_1192
+                    id: 2565435189324
+                    enabled: true
+                    status: registered
+                    eventTypes:
+                      - processingAccount.status.changed
+                    notifications:
+                      - type: webhook
+                        uri: https://my-service/notification/endpoint
+                        secret: '**********oP3456'
+                        supportEmailAddress: jane.doe@example.com
+                    metadata:
+                      yourCustomField: abc123
+                patchEventSubscriptionMove:
+                  summary: 'Update event subscription: move'
+                  description: Event subscription after moving a value within the eventTypes array.
+                  value: &ref_1193
+                    id: 2565435189324
+                    enabled: true
+                    status: registered
+                    eventTypes:
+                      - processingAccount.status.changed
+                    notifications:
+                      - type: webhook
+                        uri: https://my-service/notification/endpoint
+                        secret: '**********oP3456'
+                        supportEmailAddress: jane.doe@example.com
+                    metadata:
+                      yourCustomField: abc123
+                patchEventSubscriptionCopy:
+                  summary: 'Update event subscription: copy'
+                  description: Event subscription after copying the webhook URI into metadata.
+                  value: &ref_1194
+                    id: 2565435189324
+                    enabled: true
+                    status: registered
+                    eventTypes:
+                      - processingAccount.status.changed
+                    notifications:
+                      - type: webhook
+                        uri: https://my-service/notification/endpoint
+                        secret: '**********oP3456'
+                        supportEmailAddress: jane.doe@example.com
+                    metadata:
+                      yourCustomField: abc123
+                      webhookBackup: https://my-service/notification/endpoint
+                patchEventSubscriptionTest:
+                  summary: 'Update event subscription: test'
+                  description: Event subscription returned unchanged after a test (assert-only) operation.
+                  value: &ref_1195
+                    id: 2565435189324
+                    enabled: true
                     status: registered
                     eventTypes:
                       - processingAccount.status.changed
@@ -31900,7 +31992,7 @@ paths:
                 terminalOrder:
                   summary: Terminal order
                   description: Terminal order
-                  value: &ref_1190
+                  value: &ref_1196
                     terminalOrderId: '2346'
                     status: open
                     trainingProvider: payroc
@@ -32147,7 +32239,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated ACH deposits
-                  value: &ref_1191
+                  value: &ref_1197
                     limit: 2
                     count: 1
                     hasMore: false
@@ -32253,7 +32345,7 @@ paths:
               examples:
                 achDepositRetrieve:
                   summary: Retrieve ACH deposit
-                  value: &ref_1192
+                  value: &ref_1198
                     achDepositId: 99
                     associationDate: '2024-07-02'
                     achDate: '2024-07-02'
@@ -32291,7 +32383,7 @@ paths:
                 idError:
                   summary: Bad Request
                   description: One or more validation errors occurred
-                  value: &ref_1193
+                  value: &ref_1199
                     type: https://docs.payroc.com/api/errors#bad-request
                     title: Bad request
                     status: 400
@@ -32439,7 +32531,7 @@ paths:
               examples:
                 paginatedList:
                   summary: Paginated ACH deposit fees
-                  value: &ref_1194
+                  value: &ref_1200
                     limit: 2
                     count: 1
                     hasMore: false
@@ -32532,7 +32624,7 @@ paths:
                 attachment:
                   summary: Upload Attachment
                   description: Upload a file attachment
-                  value: &ref_1195
+                  value: &ref_1201
                     attachmentId: '15387'
                     type: personalIdentification
                     uploadStatus: accepted
@@ -32742,7 +32834,7 @@ paths:
                 paginatedResults:
                   summary: Device
                   description: Device Paginated List
-                  value: &ref_1196
+                  value: &ref_1202
                     limit: 2
                     count: 2
                     hasMore: true
@@ -36542,11 +36634,11 @@ components:
       description: Create an event subscription
       value: *ref_1177
     eventSubscriptionCreated:
-      summary: Event subscription created
+      summary: Create event subscription
       description: Example of a created event subscription.
       value: *ref_1178
     eventSubscriptionCreatedMetadata:
-      summary: Event subscription created metadata
+      summary: Create event subscription with metadata
       description: Example of a created event subscription.
       value: *ref_1179
     eventSubscription:
@@ -36589,34 +36681,58 @@ components:
       description: Test operation validates that a value at the target location equals the specified value.
       value: *ref_1188
     patchEventSubscription:
-      summary: Patched event subscription
+      summary: Partially update event subscription
       description: Example of a patched event subscription.
       value: *ref_1189
+    patchEventSubscriptionAddResponse:
+      summary: 'Update event subscription: add'
+      description: Event subscription after adding a new event type.
+      value: *ref_1190
+    patchEventSubscriptionRemoveResponse:
+      summary: 'Update event subscription: remove'
+      description: Event subscription after removing a metadata field.
+      value: *ref_1191
+    patchEventSubscriptionReplaceResponse:
+      summary: 'Update event subscription: replace'
+      description: Event subscription after replacing the enabled value.
+      value: *ref_1192
+    patchEventSubscriptionMoveResponse:
+      summary: 'Update event subscription: move'
+      description: Event subscription after moving a value within the eventTypes array.
+      value: *ref_1193
+    patchEventSubscriptionCopyResponse:
+      summary: 'Update event subscription: copy'
+      description: Event subscription after copying the webhook URI into metadata.
+      value: *ref_1194
+    patchEventSubscriptionTestResponse:
+      summary: 'Update event subscription: test'
+      description: Event subscription returned unchanged after a test (assert-only) operation.
+      value: *ref_1195
     terminalOrder:
       summary: Terminal order
       description: Terminal order
-      value: *ref_1190
+      value: *ref_1196
     paginatedAchDeposits:
       summary: Paginated ACH deposits
-      value: *ref_1191
+      value: *ref_1197
     achDepositRetrieve:
       summary: Retrieve ACH deposit
-      value: *ref_1192
+      value: *ref_1198
     achDepositIdError:
       summary: Bad Request
       description: One or more validation errors occurred
-      value: *ref_1193
+      value: *ref_1199
     paginatedAchDepositFees:
       summary: Paginated ACH deposit fees
-      value: *ref_1194
+      value: *ref_1200
     getAttachment:
       summary: Upload Attachment
       description: Upload a file attachment
-      value: *ref_1195
+      value: *ref_1201
     paginatedDevice:
       summary: Device
       description: Device Paginated List
-      value: *ref_1196
+      value: *ref_1202
   responses:
     '400':
       description: Invalid request
@@ -36652,7 +36768,7 @@ components:
       examples: *ref_25
     location-2:
       description: URI reference to created resource
-      schema: *ref_1197
+      schema: *ref_1203
 x-tagGroups:
   - name: Attachments
     tags:
