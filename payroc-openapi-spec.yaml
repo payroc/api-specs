@@ -21499,7 +21499,7 @@ paths:
                   summary: BIN lookup
                   description: BIN lookup
                   value: &ref_1117
-                    type: MASTERCARD
+                    type: Visa Credit
                     cardNumber: 453985******7062
                     country: US
                     currency: USD
