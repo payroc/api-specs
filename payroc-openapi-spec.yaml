@@ -32860,9 +32860,6 @@ paths:
         '401':
           description: Identity could not be verified
           content: *ref_12
-        '404':
-          description: Resource not found
-          content: *ref_18
         '500':
           description: An error has occured
           content: *ref_14
@@ -32989,9 +32986,6 @@ paths:
         '401':
           description: Identity could not be verified
           content: *ref_12
-        '404':
-          description: Resource not found
-          content: *ref_18
         '406':
           description: Not acceptable
           content: *ref_19
