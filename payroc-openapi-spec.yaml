@@ -5806,6 +5806,9 @@ paths:
       responses:
         '204':
           description: Successful request. We deleted the pricing intent.
+        '400':
+          description: Invalid request
+          content: *ref_15
         '401':
           description: Identity could not be verified
           content: *ref_12
