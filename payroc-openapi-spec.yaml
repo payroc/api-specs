@@ -11598,7 +11598,7 @@ paths:
 
                             - `web` – Online transaction.
                             - `tel` – Telephone transaction.
-                            - `ccd` – Corporate credit card or debit card transaction.
+                            - `ccd` – Corporate credit or debit entry for a business bank account.
                             - `ppd` – Pre-arranged transaction.
 
                             **Note:** This field is mandatory when the secure token represents ACH bank account details.
@@ -13890,7 +13890,7 @@ paths:
 
                             - `web` – Online transaction.
                             - `tel` – Telephone transaction.
-                            - `ccd` – Corporate credit card or debit card transaction.
+                            - `ccd` – Corporate credit or debit entry for a business bank account.
                             - `ppd` – Pre-arranged transaction.
 
                             **Note:** This field is mandatory for ACH payments and unreferenced refunds.
@@ -14674,7 +14674,7 @@ paths:
 
                             - `web` – Online transaction.
                             - `tel` – Telephone transaction.
-                            - `ccd` – Corporate credit card or debit card transaction.
+                            - `ccd` – Corporate credit or debit entry for a business bank account.
                             - `ppd` – Pre-arranged transaction.
 
                             **Note:** This field is mandatory when the single-use token represents ACH bank account details.
@@ -23523,7 +23523,7 @@ paths:
 
                               - `web` – Online transaction.  
                               - `tel` – Telephone transaction.  
-                              - `ccd` – Corporate credit card or debit card transaction.  
+                              - `ccd` – Corporate credit or debit entry for a business bank account.
                               - `ppd` – Pre-arranged transaction.
                             enum:
                               - web
