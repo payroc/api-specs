@@ -20930,9 +20930,12 @@ paths:
                     description: Object that contains the details of the payment card.
                     properties: *ref_262
                   payment:
+                    description: |
+                      Object that contains information about the payment that the refund is linked to. 
+
+                      **Note:** We don't return this object for unreferenced refunds. 
                     required: *ref_263
                     type: object
-                    description: Object that contains information about a payment.
                     properties: *ref_264
                   supportedOperations:
                     type: array
@@ -25031,9 +25034,12 @@ paths:
                         description: Object that contains the customer's account details.
                         properties: *ref_309
                   payment:
+                    description: |
+                      Object that contains information about the payment that the refund is linked to. 
+
+                      **Note:** We don't return this object for unreferenced refunds. 
                     required: *ref_263
                     type: object
-                    description: Object that contains information about a payment.
                     properties: *ref_264
                   transactionResult:
                     type: object
