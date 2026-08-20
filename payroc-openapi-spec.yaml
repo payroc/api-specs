@@ -18884,7 +18884,7 @@ paths:
                     operator: Jane
                     order:
                       orderId: OrderRef6543
-                      dateTime: '2026-08-19T16:16:22+01:00'
+                      dateTime: '2024-07-02T15:30:00Z'
                       description: Large Pepperoni Pizza
                       amount: 9999
                       currency: USD
@@ -18925,7 +18925,7 @@ paths:
                     transactionResult:
                       type: sale
                       status: pending
-                      approvalCode: '582235'
+                      approvalCode: OK3
                       authorizedAmount: 9999
                       currency: USD
                       responseCode: A
@@ -19863,7 +19863,7 @@ paths:
                     operator: Jane
                     order:
                       orderId: OrderRef6543
-                      dateTime: '2026-08-19T16:16:22+01:00'
+                      dateTime: '2024-07-02T15:30:00Z'
                       description: Large Pepperoni Pizza
                       amount: 3999
                       currency: USD
@@ -19894,7 +19894,7 @@ paths:
                     transactionResult:
                       type: sale
                       status: pending
-                      approvalCode: '582235'
+                      approvalCode: OK3
                       authorizedAmount: 3999
                       currency: USD
                       responseCode: A
@@ -20096,7 +20096,7 @@ paths:
                     operator: Jane
                     order:
                       orderId: OrderRef6543
-                      dateTime: '2026-08-19T16:16:22+01:00'
+                      dateTime: '2024-07-02T15:30:00Z'
                       description: Large Pepperoni Pizza
                       amount: 3999
                       currency: USD
@@ -20127,7 +20127,7 @@ paths:
                     transactionResult:
                       type: sale
                       status: ready
-                      approvalCode: '582235'
+                      approvalCode: OK3
                       authorizedAmount: 3999
                       currency: USD
                       responseCode: A
