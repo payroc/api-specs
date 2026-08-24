@@ -23412,8 +23412,8 @@ paths:
                       fxCurrencyExponent: 0
                       fxRate: 161.2542
                       markup: 3
-                      provider: FEXCO
-                      source: REUTERS WHOLESALE INTERBANK
+                      provider: DCC Provider Inc.
+                      source: European Central Bank
                     cardInfo:
                       type: MASTERCARD
                       cardNumber: 453985******7062
