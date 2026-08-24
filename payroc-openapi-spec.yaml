@@ -27039,7 +27039,7 @@ paths:
                           previouslyTerminatedForAch: false
                           refunds:
                             writtenRefundPolicy: true
-                            refundPolicyUrl: www.example.com/refund-poilcy-url
+                            refundPolicyUrl: http://www.example.com/refunds
                           estimatedMonthlyTransactions: 3000
                           limits:
                             singleTransaction: 10000
@@ -27048,7 +27048,7 @@ paths:
                           transactionTypes:
                             - prearrangedPayment
                             - other
-                          transactionTypesOther: anotherTransactionType
+                          transactionTypesOther: recurringBilling
                         cardAcceptance:
                           debitOnly: false
                           hsaFsa: false
@@ -28723,7 +28723,7 @@ paths:
                       previouslyTerminatedForAch: false
                       refunds:
                         writtenRefundPolicy: true
-                        refundPolicyUrl: www.example.com/refund-poilcy-url
+                        refundPolicyUrl: http://www.example.com/refunds
                       estimatedMonthlyTransactions: 3000
                       limits:
                         singleTransaction: 10000
@@ -28732,7 +28732,7 @@ paths:
                       transactionTypes:
                         - prearrangedPayment
                         - other
-                      transactionTypesOther: anotherTransactionType
+                      transactionTypesOther: recurringBilling
                     cardAcceptance:
                       debitOnly: false
                       hsaFsa: false
@@ -29011,7 +29011,7 @@ paths:
                         previouslyTerminatedForAch: false
                         refunds:
                           writtenRefundPolicy: true
-                          refundPolicyUrl: www.example.com/refund-poilcy-url
+                          refundPolicyUrl: http://www.example.com/refunds
                         estimatedMonthlyTransactions: 3000
                         limits:
                           singleTransaction: 10000
@@ -29020,7 +29020,7 @@ paths:
                         transactionTypes:
                           - prearrangedPayment
                           - other
-                        transactionTypesOther: anotherTransactionType
+                        transactionTypesOther: recurringBilling
                       cardAcceptance:
                         debitOnly: false
                         hsaFsa: false
@@ -29487,7 +29487,7 @@ paths:
                         previouslyTerminatedForAch: false
                         refunds:
                           writtenRefundPolicy: true
-                          refundPolicyUrl: www.example.com/refund-poilcy-url
+                          refundPolicyUrl: http://www.example.com/refunds
                         estimatedMonthlyTransactions: 3000
                         limits:
                           singleTransaction: 10000
@@ -29496,7 +29496,7 @@ paths:
                         transactionTypes:
                           - prearrangedPayment
                           - other
-                        transactionTypesOther: anotherTransactionType
+                        transactionTypesOther: recurringBilling
                       cardAcceptance:
                         debitOnly: false
                         hsaFsa: false
@@ -31010,7 +31010,7 @@ paths:
                       method: nextDay
                       saturdayDelivery: true
                     address:
-                      recipientName: Recipient Name
+                      recipientName: Sarah Hopper
                       businessName: Company Ltd
                       addressLine1: 1 Example Ave.
                       addressLine2: Example Address Line 2
@@ -31396,7 +31396,7 @@ paths:
                           method: nextDay
                           saturdayDelivery: true
                         address:
-                          recipientName: Recipient Name
+                          recipientName: Sarah Hopper
                           businessName: Company Ltd
                           addressLine1: 1 Example Ave.
                           addressLine2: Example Address Line 2
@@ -31924,8 +31924,8 @@ paths:
                           recurringPayments: true
                           paymentLinks:
                             enabled: true
-                            logoUrl: LogoPayLink
-                            footerNotes: FooterNotesPayLink
+                            logoUrl: https://www.example.com/logo.png
+                            footerNotes: Thank you for your business.
                           preAuthorizations: true
                           offlinePayments: true
                         security:
@@ -32086,7 +32086,7 @@ paths:
                   fileName:
                     type: string
                     description: Name of the file.
-                    example: JohnSmithPassport.pdf
+                    example: JaneDoePassport.pdf
                     maxLength: 150
                   contentType:
                     type: string
@@ -32264,8 +32264,8 @@ paths:
                       recurringPayments: true
                       paymentLinks:
                         enabled: true
-                        logoUrl: LogoPayLink
-                        footerNotes: FooterNotesPayLink
+                        logoUrl: https://www.example.com/logo.png
+                        footerNotes: Thank you for your business.
                       preAuthorizations: true
                       offlinePayments: true
                     security:
@@ -33118,7 +33118,7 @@ paths:
                           - processingAccount.status.changed
                         notifications:
                           - type: webhook
-                            uri: https://my-service/notification/endpoint
+                            uri: https://my-server/notification/endpoint
                             secret: '**********oP3456'
                             supportEmailAddress: jane.doe@example.com
                         metadata:
@@ -33130,7 +33130,7 @@ paths:
                           - processingAccount.riskStatus.changed
                         notifications:
                           - type: webhook
-                            uri: https://my-service/notification/endpoint
+                            uri: https://my-server/notification/endpoint
                             secret: '**********oP3456'
                             supportEmailAddress: jane.doe@example.com
                         metadata:
@@ -33226,7 +33226,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-service/notification/endpoint
+                        uri: https://my-server/notification/endpoint
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -33333,7 +33333,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-service/notification/endpoint
+                        uri: https://my-server/notification/endpoint
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -33513,7 +33513,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-service/notification/endpoint
+                        uri: https://my-server/notification/endpoint
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -33530,7 +33530,7 @@ paths:
                       - terminalOrder.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-service/notification/endpoint
+                        uri: https://my-server/notification/endpoint
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -33546,7 +33546,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-service/notification/endpoint
+                        uri: https://my-server/notification/endpoint
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata: {}
@@ -33561,7 +33561,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-service/notification/endpoint
+                        uri: https://my-server/notification/endpoint
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -33577,7 +33577,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-service/notification/endpoint
+                        uri: https://my-server/notification/endpoint
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -33593,7 +33593,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-service/notification/endpoint
+                        uri: https://my-server/notification/endpoint
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -33610,7 +33610,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-service/notification/endpoint
+                        uri: https://my-server/notification/endpoint
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -34364,9 +34364,9 @@ paths:
                     attachmentId: '15387'
                     type: personalIdentification
                     uploadStatus: accepted
-                    fileName: oliviaDoePassport.pdf
+                    fileName: JaneDoePassport.pdf
                     contentType: application/pdf
-                    description: Passport for Olivia Doe
+                    description: Passport for Jane Doe
                     entity:
                       type: processingAccount
                       id: '2585'
