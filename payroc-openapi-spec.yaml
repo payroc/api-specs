@@ -9186,7 +9186,9 @@ paths:
                     expiresOn:
                       type: string
                       format: date
-                      description: Last date that the customer can use the payment link. The format of this value is **YYYY-MM-DD**.
+                      description: |
+                        Last date that the customer can use the payment link. The format of this value is **YYYY-MM-DD**.  
+                        **Note:** If you don't provide an expiration date, the default expiration period applies. You can change the default expiration period on the Self-Care Portal.  
                       example: '2024-08-02'
                     credentialOnFile:
                       type: object
