@@ -581,7 +581,7 @@ paths:
                             method: get
                             href: <uri>
             examples:
-              createFundingRecipient:
+              createFundingRecipientRequest:
                 summary: Create funding recipient
                 description: Create a new funding recipient with owners and funding accounts.
                 value: &ref_965
@@ -1384,7 +1384,7 @@ paths:
                 title: funding recipient
                 properties: *ref_8
               examples:
-                fundingRecipient:
+                retrieveFundingRecipientResponse:
                   summary: Funding recipient.
                   description: Funding recipients.
                   value: &ref_968
@@ -1511,7 +1511,7 @@ paths:
               title: funding recipient
               properties: *ref_8
             examples:
-              updateFundingRecipient:
+              updateFundingRecipientRequest:
                 summary: Update funding recipient
                 description: Update the details of a funding recipient.
                 value: &ref_969
@@ -1644,7 +1644,7 @@ paths:
                   title: funding account
                   properties: *ref_21
               examples:
-                fundingAccounts:
+                listFundingRecipientFundingAccountsResponse:
                   summary: List of funding accounts
                   description: List of funding accounts.
                   value: &ref_970
@@ -1727,7 +1727,7 @@ paths:
               title: funding account
               properties: *ref_21
             examples:
-              createFundingAccount:
+              createFundingAccountRequest:
                 summary: Create funding account
                 description: Create a funding account and add it to a funding recipient.
                 value: &ref_971
@@ -1752,7 +1752,7 @@ paths:
                 title: funding account
                 properties: *ref_21
               examples:
-                fundingAccount:
+                createFundingAccountResponse:
                   summary: Create funding account
                   description: Funding account that we created and added to the funding recipient.
                   value: &ref_972
@@ -1910,7 +1910,7 @@ paths:
               required: *ref_30
               properties: *ref_31
             examples:
-              createOwner:
+              createFundingRecipientOwnerRequest:
                 summary: Create funding recipient owner
                 description: Add an additional owner to a funding recipient.
                 value: &ref_973
@@ -1948,7 +1948,7 @@ paths:
                 required: *ref_30
                 properties: *ref_31
               examples:
-                createOwnerResponse:
+                createFundingRecipientOwnerResponse:
                   summary: Create funding recipient owner
                   description: Owner that we created and added to the funding recipient.
                   value: &ref_974
@@ -2144,7 +2144,7 @@ paths:
                           - rel: parent
                             href: https://api.payroc.com/v1/funding-recipients/234
                             method: get
-                noResults:
+                listFundingAccountsNoResultsFoundResponse:
                   summary: No results found
                   description: No results found
                   value: &ref_976
@@ -2206,7 +2206,7 @@ paths:
                 title: funding account
                 properties: *ref_21
               examples:
-                fundingAccountExample:
+                retrieveFundingAccountResponse:
                   summary: Masked funding account example.
                   value: &ref_977
                     fundingAccountId: 123
@@ -2264,7 +2264,7 @@ paths:
               title: funding account
               properties: *ref_21
             examples:
-              updateFundingAccount:
+              updateFundingAccountRequest:
                 summary: Update funding account
                 description: Update the details of a funding account associated with a funding recipient.
                 value: &ref_978
@@ -2389,7 +2389,7 @@ paths:
                 required: *ref_30
                 properties: *ref_31
               examples:
-                retrievedOwner:
+                retrieveOwnerResponse:
                   summary: Retrieve owner
                   description: Retrieve a specific owner.
                   value: &ref_979
@@ -2468,7 +2468,7 @@ paths:
               required: *ref_30
               properties: *ref_31
             examples:
-              updateOwner:
+              updateOwnerRequest:
                 summary: Update owner
                 description: Update a specific owner.
                 value: &ref_980
@@ -4705,7 +4705,7 @@ paths:
                   description: Object that contains information about a pricing intent for Merchant Processing Agreement (MPA) 5.2.
                   allOf: *ref_87
             examples:
-              interchangePlus:
+              createPricingIntentInterchangePlusRequest:
                 summary: Interchange Plus
                 description: Create a pricing intent.
                 value: &ref_983
@@ -4816,7 +4816,7 @@ paths:
                   services:
                     - name: hardwareAdvantagePlan
                       enabled: true
-              tiered3:
+              createPricingIntentTiered3Request:
                 summary: Tiered 3
                 description: Create a pricing intent.
                 value: &ref_985
@@ -4886,7 +4886,7 @@ paths:
                   services:
                     - name: hardwareAdvantagePlan
                       enabled: true
-              tiered4:
+              createPricingIntentTiered4Request:
                 summary: Tiered 4
                 description: Create a pricing intent.
                 value: &ref_986
@@ -4959,7 +4959,7 @@ paths:
                   services:
                     - name: hardwareAdvantagePlan
                       enabled: true
-              tiered6:
+              createPricingIntentTiered6Request:
                 summary: Tiered 6
                 description: Create a pricing intent.
                 value: &ref_987
@@ -5038,7 +5038,7 @@ paths:
                   services:
                     - name: hardwareAdvantagePlan
                       enabled: true
-              flatRate:
+              createPricingIntentFlatRateRequest:
                 summary: Flat Rate
                 description: Create a pricing intent.
                 value: &ref_988
@@ -5081,7 +5081,7 @@ paths:
                   services:
                     - name: hardwareAdvantagePlan
                       enabled: true
-              consumerChoice:
+              createPricingIntentConsumerChoiceRequest:
                 summary: Consumer Choice
                 description: Create a pricing intent.
                 value: &ref_989
@@ -5115,7 +5115,7 @@ paths:
                   services:
                     - name: hardwareAdvantagePlan
                       enabled: true
-              rewardPayChoice:
+              createPricingIntentRewardPayChoiceRequest:
                 summary: Reward Pay Choice
                 description: Create a pricing intent.
                 value: &ref_990
@@ -5168,7 +5168,7 @@ paths:
                 description: Object that contains information about a pricing intent.
                 oneOf: *ref_88
               examples:
-                createdPricingIntent:
+                createPricingIntentResponse:
                   summary: Created pricing intent
                   description: Successful response. We created the pricing intent and it is waiting for approval.
                   value: &ref_991
@@ -5323,7 +5323,7 @@ paths:
                 description: Polymorphic object that contains pricing intent information.
                 oneOf: *ref_89
               examples:
-                pricingIntent:
+                retrievePricingIntentResponse:
                   summary: Pricing intent
                   description: Pricing intent
                   value: &ref_90
@@ -5707,7 +5707,7 @@ paths:
                   path: /a/b/c
                   value: dog
             examples:
-              patchPricingIntentRealistic:
+              partiallyUpdatePricingIntentRealisticRequest:
                 summary: Partially update pricing intent
                 description: |
                   Partially update an existing pricing intent.
@@ -5723,7 +5723,7 @@ paths:
                   - op: replace
                     path: /base/addressVerification
                     value: 6
-              patchPricingIntentAdd:
+              partiallyUpdatePricingIntentAddRequest:
                 summary: 'Update pricing intent: add'
                 description: Add operation adds a new value to an object or array.
                 value: &ref_994
@@ -5732,34 +5732,34 @@ paths:
                     value:
                       name: fraudProtection
                       enabled: true
-              patchPricingIntentRemove:
+              partiallyUpdatePricingIntentRemoveRequest:
                 summary: 'Update pricing intent: remove'
                 description: Remove operation deletes a value from the pricing intent.
                 value: &ref_995
                   - op: remove
                     path: /metadata/yourCustomField
-              patchPricingIntentReplace:
+              partiallyUpdatePricingIntentReplaceRequest:
                 summary: 'Update pricing intent: replace'
                 description: Replace operation updates an existing value.
                 value: &ref_996
                   - op: replace
                     path: /processor/card/fees/mastercardVisaDiscover/volume
                     value: 1.75
-              patchPricingIntentMove:
+              partiallyUpdatePricingIntentMoveRequest:
                 summary: 'Update pricing intent: move'
                 description: Move operation relocates a value from one location to another.
                 value: &ref_997
                   - op: move
                     from: /services/0
                     path: /services/1
-              patchPricingIntentCopy:
+              partiallyUpdatePricingIntentCopyRequest:
                 summary: 'Update pricing intent: copy'
                 description: Copy operation duplicates a value from one location to another.
                 value: &ref_998
                   - op: copy
                     from: /processor/card/fees/mastercardVisaDiscover/volume
                     path: /processor/card/fees/amex/volume
-              patchPricingIntentTest:
+              partiallyUpdatePricingIntentTestRequest:
                 summary: 'Update pricing intent: test'
                 description: Test operation validates that a value at the target location equals the specified value.
                 value: &ref_999
@@ -5801,7 +5801,7 @@ paths:
                 description: Object that contains information about a pricing intent.
                 oneOf: *ref_88
               examples:
-                pricingIntent:
+                retrievePricingIntentResponse:
                   summary: Pricing intent
                   description: Pricing intent
                   value: *ref_90
@@ -6050,7 +6050,7 @@ paths:
                   example:
                     yourCustomField: abc123
             examples:
-              createFundingInstruction:
+              createFundingInstructionRequest:
                 summary: Funding instruction
                 description: Create a funding instruction to distribute merchant funds to funding accounts.
                 value: &ref_1005
@@ -6066,7 +6066,7 @@ paths:
                             yourCustomField: abc123
                   metadata:
                     yourCustomField: abc123
-              createFundingInstructionMetadata:
+              createFundingInstructionMetadataRequest:
                 summary: Funding instruction with metadata
                 description: Create a funding instruction to distribute merchant funds to funding accounts.
                 value: &ref_1006
@@ -6121,7 +6121,7 @@ paths:
                           href: https://api.payroc.com/v1/processing-accounts/4525644354
                     metadata:
                       yourCustomField: abc123
-                newInstructionAcceptedMetadata:
+                createFundingInstructionMetadataResponse:
                   summary: Funding instruction with metadata
                   value: &ref_1008
                     instructionId: 64643131
@@ -6179,7 +6179,7 @@ paths:
                   summary: Idempotency key missing
                   description: Idempotency key must be supplied
                   value: *ref_26
-                fundingAccountsRestrcited:
+                fundingAccountsRestricted:
                   summary: Funding accounts restricted
                   description: Funding accounts restricted.
                   value: &ref_94
@@ -6546,7 +6546,7 @@ paths:
               title: funding instruction
               properties: *ref_91
             examples:
-              updateFundingInstruction:
+              updateFundingInstructionRequest:
                 summary: Update funding instruction
                 description: Update an existing funding instruction to modify merchant funds distribution.
                 value: &ref_1009
@@ -6586,7 +6586,7 @@ paths:
                   summary: Bad request
                   description: One or more validation errors occurred.
                   value: *ref_93
-                fundingAccountsRestrcited:
+                fundingAccountsRestricted:
                   summary: Funding accounts restricted
                   description: Funding accounts restricted.
                   value: *ref_94
@@ -6954,7 +6954,7 @@ paths:
                     required:
                       - data
               examples:
-                paginatedList:
+                listFundingActivityResponse:
                   summary: Paginated activity records
                   description: Valid payfac account with activity for date range.
                   value: &ref_1011
@@ -7408,7 +7408,7 @@ paths:
                 title: batch
                 properties: *ref_99
               examples:
-                retrievedBatch:
+                retrieveBatchResponse:
                   summary: Retrieved batch
                   value: &ref_1014
                     batchId: 65
@@ -7913,7 +7913,7 @@ paths:
                 description: Object that contains information about the transaction.
                 properties: *ref_105
               examples:
-                retrievedTransaction:
+                retrieveTransactionResponse:
                   summary: Retrieve transaction
                   value: &ref_1016
                     transactionId: 442233
@@ -8393,7 +8393,7 @@ paths:
                 description: Object that contains information about the authorization.
                 properties: *ref_113
               examples:
-                retrievedAuthorization:
+                retrieveAuthorizationResponse:
                   summary: Retrieve authorization
                   value: &ref_1019
                     authorizationId: 65
@@ -9343,7 +9343,7 @@ paths:
                       description: Object that contains information about saving the customer’s payment details.
                       properties: *ref_124
             examples:
-              multiUsePaymentLinkRequest:
+              createPaymentLinkMultiUseRequest:
                 summary: Multi-use payment link
                 description: Create a multi-use payment link.
                 value: &ref_1022
@@ -9361,7 +9361,7 @@ paths:
                   customLabels:
                     - element: paymentButton
                       label: SUPPORT US
-              singleUsePaymentLinkRequest:
+              createPaymentLinkSingleUseRequest:
                 summary: Single-use payment link
                 description: Create a single-use payment link.
                 value: &ref_1023
@@ -9428,7 +9428,7 @@ paths:
                         text-decoration: none; border-radius: 30px; padding: 14px 28px; display: inline-block;">SUPPORT US</a>
                     status: active
                     createdOn: '2024-09-24'
-                createdSingleUsePaymentLink:
+                createPaymentLinkSingleUseResponse:
                   summary: Single-use payment link
                   description: Single-use payment link that we created.
                   value: &ref_1025
@@ -9944,7 +9944,7 @@ paths:
               items: *ref_133
               example: *ref_134
             examples:
-              patchPaymentLinkRealistic:
+              partiallyUpdatePaymentLinkRealisticRequest:
                 summary: Partially update payment link
                 description: |
                   Partially update an existing payment link.  
@@ -9953,7 +9953,7 @@ paths:
                   - op: replace
                     path: /expiresOn
                     value: '2024-10-25'
-              patchPaymentLinkAdd:
+              partiallyUpdatePaymentLinkAddRequest:
                 summary: 'Update payment link: add'
                 description: Add operation adds a new value to an object or array.
                 value: &ref_1030
@@ -9962,34 +9962,34 @@ paths:
                     value:
                       element: paymentButton
                       label: DONATE NOW
-              patchPaymentLinkRemove:
+              partiallyUpdatePaymentLinkRemoveRequest:
                 summary: 'Update payment link: remove'
                 description: Remove operation deletes a value from the payment link.
                 value: &ref_1031
                   - op: remove
                     path: /customLabels
-              patchPaymentLinkReplace:
+              partiallyUpdatePaymentLinkReplaceRequest:
                 summary: 'Update payment link: replace'
                 description: Replace operation updates an existing value.
                 value: &ref_1032
                   - op: replace
                     path: /expiresOn
                     value: '2024-11-30'
-              patchPaymentLinkMove:
+              partiallyUpdatePaymentLinkMoveRequest:
                 summary: 'Update payment link: move'
                 description: Move operation relocates a value from one location to another.
                 value: &ref_1033
                   - op: move
                     from: /customLabels/0
                     path: /customLabels/1
-              patchPaymentLinkCopy:
+              partiallyUpdatePaymentLinkCopyRequest:
                 summary: 'Update payment link: copy'
                 description: Copy operation duplicates a value from one location to another.
                 value: &ref_1034
                   - op: copy
                     from: /order/description
                     path: /merchantReference
-              patchPaymentLinkTest:
+              partiallyUpdatePaymentLinkTestRequest:
                 summary: 'Update payment link: test'
                 description: Test operation validates that a value at the target location equals the specified value.
                 value: &ref_1035
@@ -10272,7 +10272,7 @@ paths:
                     description: Object that contains information about a single-use payment link.
                     properties: *ref_128
               examples:
-                deactivatedPaymentLink:
+                deactivatePaymentLinkResponse:
                   summary: Payment link
                   description: Deactivated multi-use payment link.
                   value: &ref_1043
@@ -10448,7 +10448,7 @@ paths:
                     description: Object that contains the information about a sharing event that the merchant sent by email.
                     properties: *ref_138
               examples:
-                paymentLinkShareEvent:
+                sharePaymentLinkResponse:
                   summary: Share a payment link
                   description: Payment link sharing event
                   value: &ref_1046
@@ -10863,7 +10863,7 @@ paths:
                               type: object
                               allOf: *ref_144
             examples:
-              paymentPlanRequest:
+              createPaymentPlanRequest:
                 summary: Payment Plan
                 description: Payment Plan
                 value: &ref_1048
@@ -11199,7 +11199,7 @@ paths:
               items: *ref_133
               example: *ref_134
             examples:
-              patchPaymentPlanRealistic:
+              partiallyUpdatePaymentPlanRealisticRequest:
                 summary: Update payment plan
                 description: |
                   Make changes to an existing payment plan.
@@ -11215,41 +11215,41 @@ paths:
                   - op: replace
                     path: /frequency
                     value: yearly
-              patchPaymentPlanAdd:
+              partiallyUpdatePaymentPlanAddRequest:
                 summary: 'Update payment plan: add'
                 description: Add operation adds a new value to an object or array.
                 value: &ref_1050
                   - op: add
                     path: /customFieldNames/-
                     value: loyaltyPoints
-              patchPaymentPlanRemove:
+              partiallyUpdatePaymentPlanRemoveRequest:
                 summary: 'Update payment plan: remove'
                 description: Remove operation deletes a value from the payment plan.
                 value: &ref_1051
                   - op: remove
                     path: /description
-              patchPaymentPlanReplace:
+              partiallyUpdatePaymentPlanReplaceRequest:
                 summary: 'Update payment plan: replace'
                 description: Replace operation updates an existing value.
                 value: &ref_1052
                   - op: replace
                     path: /frequency
                     value: yearly
-              patchPaymentPlanMove:
+              partiallyUpdatePaymentPlanMoveRequest:
                 summary: 'Update payment plan: move'
                 description: Move operation relocates a value from one location to another.
                 value: &ref_1053
                   - op: move
                     from: /customFieldNames/0
                     path: /customFieldNames/1
-              patchPaymentPlanCopy:
+              partiallyUpdatePaymentPlanCopyRequest:
                 summary: 'Update payment plan: copy'
                 description: Copy operation duplicates a value from one location to another.
                 value: &ref_1054
                   - op: copy
                     from: /name
                     path: /description
-              patchPaymentPlanTest:
+              partiallyUpdatePaymentPlanTestRequest:
                 summary: 'Update payment plan: test'
                 description: Test operation validates that a value at the target location equals the specified value.
                 value: &ref_1055
@@ -11267,7 +11267,7 @@ paths:
                 type: object
                 allOf: *ref_146
               examples:
-                patchPaymentPlanRealisticResponse:
+                partiallyUpdatePaymentPlanRealisticResponse:
                   summary: Update payment plan
                   description: Payment plan after we applied the requested changes.
                   value: &ref_1056
@@ -11299,7 +11299,7 @@ paths:
                     onDelete: complete
                     customFieldNames:
                       - yourCustomField
-                patchPaymentPlanAddResponse:
+                partiallyUpdatePaymentPlanAddResponse:
                   summary: 'Update payment plan: add'
                   description: Payment plan after we added the new custom field name.
                   value: &ref_1057
@@ -11332,7 +11332,7 @@ paths:
                     customFieldNames:
                       - yourCustomField
                       - loyaltyPoints
-                patchPaymentPlanRemoveResponse:
+                partiallyUpdatePaymentPlanRemoveResponse:
                   summary: 'Update payment plan: remove'
                   description: Payment plan after we removed the description.
                   value: &ref_1058
@@ -11363,7 +11363,7 @@ paths:
                     onDelete: complete
                     customFieldNames:
                       - yourCustomField
-                patchPaymentPlanReplaceResponse:
+                partiallyUpdatePaymentPlanReplaceResponse:
                   summary: 'Update payment plan: replace'
                   description: Payment plan after we replaced the frequency.
                   value: &ref_1059
@@ -11395,7 +11395,7 @@ paths:
                     onDelete: complete
                     customFieldNames:
                       - yourCustomField
-                patchPaymentPlanMoveResponse:
+                partiallyUpdatePaymentPlanMoveResponse:
                   summary: 'Update payment plan: move'
                   description: |
                     Payment plan after we moved the custom field name. The array contains only one entry, so the order of the entries doesn't change.
@@ -11428,7 +11428,7 @@ paths:
                     onDelete: complete
                     customFieldNames:
                       - yourCustomField
-                patchPaymentPlanCopyResponse:
+                partiallyUpdatePaymentPlanCopyResponse:
                   summary: 'Update payment plan: copy'
                   description: Payment plan after we copied the name into the description.
                   value: &ref_1061
@@ -11460,7 +11460,7 @@ paths:
                     onDelete: complete
                     customFieldNames:
                       - yourCustomField
-                patchPaymentPlanTestResponse:
+                partiallyUpdatePaymentPlanTestResponse:
                   summary: 'Update payment plan: test'
                   description: |
                     Payment plan after the test operation. A test operation asserts a value, so the payment plan doesn't change.
@@ -12722,7 +12722,7 @@ paths:
               items: *ref_133
               example: *ref_134
             examples:
-              patchSubscriptionRealistic:
+              partiallyUpdateSubscriptionRealisticRequest:
                 summary: Update subscription
                 description: |
                   Make changes to a subscription.
@@ -12738,7 +12738,7 @@ paths:
                   - op: replace
                     path: /frequency
                     value: yearly
-              patchSubscriptionAdd:
+              partiallyUpdateSubscriptionAddRequest:
                 summary: 'Update subscription: add'
                 description: Add operation adds a new value to an object or array.
                 value: &ref_1066
@@ -12747,34 +12747,34 @@ paths:
                     value:
                       name: membershipLevel
                       value: premium
-              patchSubscriptionRemove:
+              partiallyUpdateSubscriptionRemoveRequest:
                 summary: 'Update subscription: remove'
                 description: Remove operation deletes a value from the subscription.
                 value: &ref_1067
                   - op: remove
                     path: /description
-              patchSubscriptionReplace:
+              partiallyUpdateSubscriptionReplaceRequest:
                 summary: 'Update subscription: replace'
                 description: Replace operation updates an existing value.
                 value: &ref_1068
                   - op: replace
                     path: /recurringOrder/amount
                     value: 3999
-              patchSubscriptionMove:
+              partiallyUpdateSubscriptionMoveRequest:
                 summary: 'Update subscription: move'
                 description: Move operation relocates a value from one location to another.
                 value: &ref_1069
                   - op: move
                     from: /customFields/0
                     path: /customFields/1
-              patchSubscriptionCopy:
+              partiallyUpdateSubscriptionCopyRequest:
                 summary: 'Update subscription: copy'
                 description: Copy operation duplicates a value from one location to another.
                 value: &ref_1070
                   - op: copy
                     from: /name
                     path: /description
-              patchSubscriptionTest:
+              partiallyUpdateSubscriptionTestRequest:
                 summary: 'Update subscription: test'
                 description: Test operation validates that a value at the target location equals the specified value.
                 value: &ref_1071
@@ -12791,7 +12791,7 @@ paths:
                 type: object
                 properties: *ref_163
               examples:
-                patchSubscriptionRealisticResponse:
+                partiallyUpdateSubscriptionRealisticResponse:
                   summary: Update subscription
                   description: Subscription after we applied the requested changes.
                   value: &ref_1072
@@ -12853,7 +12853,7 @@ paths:
                     customFields:
                       - name: yourCustomField
                         value: abc123
-                patchSubscriptionAddResponse:
+                partiallyUpdateSubscriptionAddResponse:
                   summary: 'Update subscription: add'
                   description: Subscription after we added the new custom field.
                   value: &ref_1073
@@ -12917,7 +12917,7 @@ paths:
                         value: abc123
                       - name: membershipLevel
                         value: premium
-                patchSubscriptionRemoveResponse:
+                partiallyUpdateSubscriptionRemoveResponse:
                   summary: 'Update subscription: remove'
                   description: Subscription after we removed the description.
                   value: &ref_1074
@@ -12978,7 +12978,7 @@ paths:
                     customFields:
                       - name: yourCustomField
                         value: abc123
-                patchSubscriptionReplaceResponse:
+                partiallyUpdateSubscriptionReplaceResponse:
                   summary: 'Update subscription: replace'
                   description: Subscription after we replaced the amount of the recurring order.
                   value: &ref_1075
@@ -13040,7 +13040,7 @@ paths:
                     customFields:
                       - name: yourCustomField
                         value: abc123
-                patchSubscriptionMoveResponse:
+                partiallyUpdateSubscriptionMoveResponse:
                   summary: 'Update subscription: move'
                   description: |
                     Subscription after we moved the custom field. The array contains only one entry, so the order of the entries doesn't change.
@@ -13103,7 +13103,7 @@ paths:
                     customFields:
                       - name: yourCustomField
                         value: abc123
-                patchSubscriptionCopyResponse:
+                partiallyUpdateSubscriptionCopyResponse:
                   summary: 'Update subscription: copy'
                   description: Subscription after we copied the name into the description.
                   value: &ref_1077
@@ -13165,7 +13165,7 @@ paths:
                     customFields:
                       - name: yourCustomField
                         value: abc123
-                patchSubscriptionTestResponse:
+                partiallyUpdateSubscriptionTestResponse:
                   summary: 'Update subscription: test'
                   description: |
                     Subscription after the test operation. A test operation asserts a value, so the subscription doesn't change.
@@ -13309,7 +13309,7 @@ paths:
                 type: object
                 properties: *ref_163
               examples:
-                deactivateSubscription:
+                deactivateSubscriptionResponse:
                   summary: Deactivate subscription
                   description: Deactivate a subscription
                   value: &ref_1079
@@ -13526,7 +13526,7 @@ paths:
                     type: object
                     properties: *ref_161
             examples:
-              subscriptionPaymentRequest:
+              payManualSubscriptionRequest:
                 summary: Subscription manual payment
                 description: Subscription manual payment
                 value: &ref_1080
@@ -13656,7 +13656,7 @@ paths:
                       type: object
                       properties: *ref_161
               examples:
-                subscriptionPaymentResponse:
+                payManualSubscriptionResponse:
                   summary: Subscription manual payment
                   description: Subscription manual payment
                   value: &ref_1081
@@ -15755,7 +15755,7 @@ paths:
               items: *ref_133
               example: *ref_134
             examples:
-              patchSecureTokenRealistic:
+              partiallyUpdateSecureTokenRealisticRequest:
                 summary: Update secure token
                 description: |
                   Update the customer's payment details that are represented by the secure token.
@@ -15771,7 +15771,7 @@ paths:
                   - op: replace
                     path: /source/cardDetails/cardholderName
                     value: Sarah Reed
-              patchSecureTokenAdd:
+              partiallyUpdateSecureTokenAddRequest:
                 summary: 'Update secure token: add'
                 description: Add operation adds a new value to an object or array.
                 value: &ref_1087
@@ -15780,34 +15780,34 @@ paths:
                     value:
                       name: loyaltyTier
                       value: gold
-              patchSecureTokenRemove:
+              partiallyUpdateSecureTokenRemoveRequest:
                 summary: 'Update secure token: remove'
                 description: Remove operation deletes a value from the secure token.
                 value: &ref_1088
                   - op: remove
                     path: /customer/dateOfBirth
-              patchSecureTokenReplace:
+              partiallyUpdateSecureTokenReplaceRequest:
                 summary: 'Update secure token: replace'
                 description: Replace operation updates an existing value.
                 value: &ref_1089
                   - op: replace
                     path: /customer/lastName
                     value: Reed
-              patchSecureTokenMove:
+              partiallyUpdateSecureTokenMoveRequest:
                 summary: 'Update secure token: move'
                 description: Move operation relocates a value from one location to another.
                 value: &ref_1090
                   - op: move
                     from: /customFields/0
                     path: /customFields/1
-              patchSecureTokenCopy:
+              partiallyUpdateSecureTokenCopyRequest:
                 summary: 'Update secure token: copy'
                 description: Copy operation duplicates a value from one location to another.
                 value: &ref_1091
                   - op: copy
                     from: /customer/firstName
                     path: /customer/lastName
-              patchSecureTokenTest:
+              partiallyUpdateSecureTokenTestRequest:
                 summary: 'Update secure token: test'
                 description: Test operation validates that a value at the target location equals the specified value.
                 value: &ref_1092
@@ -16712,7 +16712,7 @@ paths:
                     If a merchant wants to update a customer's payment details that are linked to a secure token, include the secureTokenId in your request.  
                   example: MREF_abc1de23-f4a5-6789-bcd0-12e345678901fa
             examples:
-              createSessionRequest:
+              createHostedFieldsSessionRequest:
                 summary: Create session
                 description: Create session request.
                 value: &ref_1105
@@ -16750,7 +16750,7 @@ paths:
                     description: Date and time that the token expires. We return this value in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
                     example: '2025-07-02T15:30:00.000+02:00'
               examples:
-                createSessionResponse:
+                createHostedFieldsSessionResponse:
                   summary: Create session
                   description: Create session response.
                   value: &ref_1106
@@ -16838,7 +16838,7 @@ paths:
                   description: Validation URL from the Apple Pay JS API.
                   example: https://apple-pay-gateway.apple.com/paymentservices/startSession
             examples:
-              applePaySessions:
+              startApplePaySessionRequest:
                 summary: Apple Pay session
                 description: Start a session with Apple to accept a payment with Apple Pay.
                 value: &ref_1107
@@ -16876,7 +16876,7 @@ paths:
                         "pspId": "17D4AAA8D9357D26D771ABA0DAA0B9D3BB462AD1585492E1FE688AF8BB9558E5"
                       }
               examples:
-                applePayResponseSession:
+                startApplePaySessionResponse:
                   summary: Apple Pay session
                   description: Wrapper for the content that Apple returns after starting the Apple Pay session.
                   value: &ref_1108
@@ -17901,7 +17901,7 @@ paths:
                     type: object
                     properties: *ref_161
             examples:
-              paymentRequest:
+              createPaymentCardRequest:
                 summary: Card Payment
                 description: Payment
                 value: &ref_1110
@@ -17948,7 +17948,7 @@ paths:
                   customFields:
                     - name: yourCustomField
                       value: abc123
-              applePaySaleRequest:
+              createPaymentApplePayRequest:
                 summary: Apple Pay Payment
                 value: &ref_1111
                   channel: web
@@ -18049,7 +18049,7 @@ paths:
                   customFields:
                     - name: yourCustomField
                       value: abc123
-              createPreAuthorization:
+              createPaymentPreAuthorizationRequest:
                 summary: Create a pre-authorization
                 description: Create a pre-authorization
                 value: &ref_1114
@@ -18702,7 +18702,7 @@ paths:
                     customFields:
                       - name: yourCustomField
                         value: abc123
-                applePaySaleResponse:
+                createPaymentApplePayResponse:
                   summary: Apple Pay Payment
                   value: &ref_1116
                     paymentId: J9VULKIKFP
@@ -18877,7 +18877,7 @@ paths:
                     customFields:
                       - name: yourCustomField
                         value: abc123
-                createPreAuthorization:
+                createPaymentPreAuthorizationResponse:
                   summary: Create a pre-authorization
                   description: Create a pre-authorization
                   value: &ref_1119
@@ -19778,7 +19778,7 @@ paths:
                           postalCode: '60056'
                     - type: order
                       amount: 3999
-              adjustPreAuthorization:
+              adjustPaymentPreAuthorizationRequest:
                 summary: Adjust pre-authorization
                 description: Adjust the amount of a pre-authorization
                 value: &ref_1122
@@ -19856,7 +19856,7 @@ paths:
                     customFields:
                       - name: yourCustomField
                         value: abc123
-                adjustPreAuthorization:
+                adjustPaymentPreAuthorizationResponse:
                   summary: Adjust pre-authorization
                   description: Adjust the amount of a pre-authorization
                   value: &ref_1124
@@ -20398,7 +20398,7 @@ paths:
                   description: Reason for the refund.
                   example: Customer requested a refund due to a wrong order.
             examples:
-              refundPaymentRequest:
+              createReferencedRefundRequest:
                 summary: Refund Payment
                 description: Refund Payment
                 value: &ref_1131
@@ -20700,7 +20700,7 @@ paths:
                     **Note:** If the value for **processAsSale** is `true`, the gateway ignores the value in **autoCapture**.
                   example: false
             examples:
-              paymentInstructionRequest:
+              submitPaymentInstructionRequest:
                 summary: Payment Instruction
                 description: Submit an instruction for initiating a payment on a physical device.
                 value: &ref_1133
@@ -20713,7 +20713,7 @@ paths:
                   customizationOptions:
                     entryMethod: deviceRead
                   autoCapture: true
-              paymentInstructionRequestMiFare:
+              submitPaymentInstructionMifareClosedLoopOptionsRequest:
                 summary: Payment Instruction with MiFare closed-loop options
                 description: Submit an instruction for initiating a payment on a physical device with MiFare closed-loop options.
                 value: &ref_1134
@@ -20868,7 +20868,7 @@ paths:
                 type: object
                 allOf: *ref_254
               examples:
-                paymentInstruction:
+                retrievePaymentInstructionCompletedResponse:
                   summary: Payment instruction
                   description: Object that contains information about the progress of the payment instruction.
                   value: &ref_1137
@@ -20878,7 +20878,7 @@ paths:
                       rel: payment
                       method: GET
                       href: https://api.payroc.com/v1/payments/M2MJOG6O2Y
-                paymentInstructionMiFare:
+                retrievePaymentInstructionMifareCardResponse:
                   summary: Payment instruction for MiFare card
                   description: Object that contains information about the progress of the payment instruction for a MiFare card.
                   value: &ref_1138
@@ -21626,7 +21626,7 @@ paths:
                 description: Object that contains information about the retrieved refund.
                 properties: *ref_268
               examples:
-                refundResponse:
+                createUnreferencedRefundResponse:
                   summary: Refund
                   description: Refund
                   value: *ref_269
@@ -22012,7 +22012,7 @@ paths:
                   description: Object that contains available options to customize certain aspects of an instruction.
                   properties: *ref_276
             examples:
-              refundInstructionRequest:
+              submitRefundInstructionRequest:
                 summary: Refund instruction
                 description: Submit an instruction for initiating a refund on a physical device.
                 value: &ref_1146
@@ -22131,7 +22131,7 @@ paths:
                 type: object
                 allOf: *ref_279
               examples:
-                refundInstruction:
+                retrieveRefundInstructionResponse:
                   summary: Refund instruction
                   description: Object that contains information about the progress of the refund instruction.
                   value: &ref_1148
@@ -22280,7 +22280,7 @@ paths:
                   description: Unique identifier that we assigned to the terminal.
                   example: '1234001'
             examples:
-              signatureInstructionRequest:
+              submitSignatureInstructionRequest:
                 summary: Signature Instruction
                 description: Submit an instruction for capturing a signature on a physical device.
                 value: &ref_1151
@@ -22390,7 +22390,7 @@ paths:
                 type: object
                 allOf: *ref_283
               examples:
-                signatureInstruction:
+                retrieveSignatureInstructionResponse:
                   summary: Signature instruction
                   description: Object that contains information about the progress of the signature instruction.
                   value: &ref_1153
@@ -22625,7 +22625,7 @@ paths:
                       cardType: MiFareClassic
                       uid: 04134ee21f1d80
               examples:
-                closedLoopResponse:
+                retrieveClosedLoopReadResponse:
                   summary: Closed Loop Read
                   description: A closed loop read response example.
                   value: &ref_1157
@@ -22715,7 +22715,7 @@ paths:
                       description: Object that contains information about the customer’s payment card.
                       properties: *ref_199
             examples:
-              cardVerificationRequest:
+              verifyCardRequest:
                 summary: Card Verification
                 description: Card Verification
                 value: &ref_1158
@@ -22774,7 +22774,7 @@ paths:
                     properties: *ref_236
                     description: Object that contains information about the transaction response details.
               examples:
-                cardVerificationResponse:
+                verifyCardResponse:
                   summary: Card Verification
                   description: Card Verification
                   value: &ref_1159
@@ -22901,7 +22901,7 @@ paths:
                       description: Object that contains information about the single-use token, which represents the customer’s payment details.
                       properties: *ref_213
             examples:
-              cardBalanceRequest:
+              viewEbtBalanceRequest:
                 summary: Card Balance
                 description: Card Balance
                 value: &ref_1160
@@ -22982,7 +22982,7 @@ paths:
                     description: Response description from the payment processor, for example, Refer to Card Issuer.
                     example: Refer to Card Issuer
               examples:
-                cardBalanceResponse:
+                viewEbtBalanceResponse:
                   summary: Card Balance
                   description: Card Balance
                   value: &ref_1161
@@ -23115,7 +23115,7 @@ paths:
                       description: Object that contains information about the payment details in the customer’s digital wallet.
                       properties: *ref_289
             examples:
-              binLookupRequest:
+              lookUpBinInformationRequest:
                 summary: BIN lookup
                 description: BIN lookup
                 value: &ref_1162
@@ -23181,7 +23181,7 @@ paths:
                     properties: *ref_291
                 description: Object that contains information about the card.
               examples:
-                binLookupResponse:
+                lookUpBinInformationResponse:
                   summary: BIN lookup
                   description: BIN lookup
                   value: &ref_1163
@@ -23309,7 +23309,7 @@ paths:
                       description: Object that contains information about the payment details in the customer’s digital wallet.
                       properties: *ref_289
             examples:
-              fxRateRequest:
+              verifyDccEligibilityRequest:
                 summary: Fx-Rate
                 description: Fx-Rate
                 value: &ref_1164
@@ -23396,7 +23396,7 @@ paths:
                     properties: *ref_293
                     description: Object that contains information about the card.
               examples:
-                fxRateResponse:
+                verifyDccEligibilityResponse:
                   summary: Fx-Rate
                   description: Fx-Rate
                   value: &ref_1165
@@ -24524,7 +24524,7 @@ paths:
                   summary: Store Token Bank Transfer Payment
                   description: Bank Transfer Payment with ACH payload and token storage
                   value: *ref_301
-                bankTransferPaymentDeclined:
+                retrievePaymentDeclinedResponse:
                   summary: Declined Payment
                   description: Bank Transfer Payment that was declined with return information
                   value: &ref_1172
@@ -24632,7 +24632,7 @@ paths:
                 description: Object that contains information about the sale and the customer's bank details.
                 properties: *ref_300
               examples:
-                reverseBankTransferPayment:
+                reversePaymentResponse:
                   summary: Reverse Bank Transfer Payment
                   description: Reverse Bank Transfer Payment
                   value: &ref_1173
@@ -25230,7 +25230,7 @@ paths:
                     type: object
                     properties: *ref_161
             examples:
-              bankTransferUnreferencedRefundRequest:
+              createUnreferencedRefundRequest:
                 summary: Bank Transfer Unreferenced Refund
                 description: Bank Transfer Unreferenced Refund
                 value: &ref_1179
@@ -25333,7 +25333,7 @@ paths:
                       type: object
                       properties: *ref_161
               examples:
-                bankTransferUnreferencedRefundResponse:
+                createUnreferencedRefundResponse:
                   summary: Bank Transfer Unreferenced Refund
                   description: Bank Transfer Unreferenced Refund
                   value: &ref_314
@@ -25902,7 +25902,7 @@ paths:
                       description: Object that contains information about the payment details for the customer’s preauthorized electronic debit (PAD) transactions.
                       properties: *ref_197
             examples:
-              bankAccountVerificationRequestPad:
+              verifyBankAccountPadRequest:
                 summary: PAD Bank Account Verification
                 description: Bank Account Verification Request for PAD
                 value: &ref_1181
@@ -25914,7 +25914,7 @@ paths:
                     accountNumber: '1234567890'
                     transitNumber: '76543'
                     institutionNumber: '543'
-              bankAccountVerificationRequestAch:
+              verifyBankAccountAchRequest:
                 summary: ACH Bank Account Verification
                 description: Bank Account Verification Request for ACH
                 value: &ref_1182
@@ -25952,13 +25952,13 @@ paths:
                       - `false` - Account details are not valid.
                     example: true
               examples:
-                bankAccountVerificationPadResponse:
+                verifyBankAccountPadResponse:
                   summary: PAD Bank Account Verification
                   description: Result of verifying a customer's PAD bank account details.
                   value: &ref_1183
                     processingTerminalId: '1234001'
                     verified: true
-                bankAccountVerificationAchResponse:
+                verifyBankAccountAchResponse:
                   summary: ACH Bank Account Verification
                   description: Result of verifying a customer's ACH bank account details.
                   value: &ref_1184
@@ -26956,7 +26956,7 @@ paths:
                   example:
                     customerId: '2345'
             examples:
-              createMerchantPlatform:
+              createMerchantPlatformRequest:
                 summary: Create merchant platform
                 description: Create a merchant platform.
                 value: &ref_1186
@@ -27103,7 +27103,7 @@ paths:
                         customerId: '2345'
                   metadata:
                     customerId: '2345'
-              createMerchantPlatformWithAddendums:
+              createMerchantPlatformAddendumsRequest:
                 summary: Create merchant platform with addendums
                 description: Create a merchant platform with addendums appended to the Merchant Processing Agreement.
                 value: &ref_1187
@@ -27206,7 +27206,7 @@ paths:
                         customerId: '2345'
                   metadata:
                     customerId: '2345'
-              createMerchantPlatformFiservWithCloverAmendment:
+              createMerchantPlatformFiservCloverAmendmentRequest:
                 summary: Create Fiserv merchant platform with Clover Merchant Processing Amendment
                 description: Create a merchant platform for a Fiserv-bound merchant with the Clover Merchant Processing Amendment addendum including equipment line-item pre-fill data.
                 value: &ref_1188
@@ -27825,7 +27825,7 @@ paths:
                           required: *ref_330
                           properties: *ref_331
               examples:
-                listMerchantPlatforms:
+                listMerchantPlatformsResponse:
                   summary: Paginated list of merchant platforms
                   description: Retrieve a list of merchant platforms associated with your account.
                   value: &ref_1185
@@ -27960,7 +27960,7 @@ paths:
                 required: *ref_330
                 properties: *ref_331
               examples:
-                retrievedMerchantPlatforms:
+                retrieveMerchantPlatformResponse:
                   summary: Retrieve merchant platform
                   description: Retrieve a merchant platform.
                   value: &ref_1195
@@ -28399,7 +28399,7 @@ paths:
                                 example: *ref_6
                               example: []
               examples:
-                listProcessingAccounts:
+                listMerchantPlatformProcessingAccountsResponse:
                   summary: Paginated list of processing account
                   description: Retrieve processing accounts associated with a merchant platform.
                   value: &ref_1196
@@ -28658,7 +28658,7 @@ paths:
               type: object
               properties: *ref_339
             examples:
-              createProcessingAccount:
+              createProcessingAccountMerchantPlatformRequest:
                 summary: Create merchant platform
                 description: Create a merchant platform.
                 value: &ref_1197
@@ -28785,7 +28785,7 @@ paths:
                           value: jane.doe@example.com
                   metadata:
                     customerId: '2345'
-              createProcessingAccountWithAddendums:
+              createProcessingAccountAddendumsRequest:
                 summary: Create processing account with addendums
                 description: Create a processing account with addendums appended to the Merchant Processing Agreement.
                 value: &ref_1198
@@ -28868,7 +28868,7 @@ paths:
                     - type: firearmsV1
                   metadata:
                     customerId: '2345'
-              createProcessingAccountFiserv:
+              createProcessingAccountFiservRequest:
                 summary: Create Fiserv processing account
                 description: Create a processing account for a Fiserv-bound merchant with no Clover devices.
                 value: &ref_1199
@@ -28958,7 +28958,7 @@ paths:
                 type: object
                 properties: *ref_341
               examples:
-                processingAccountCreated:
+                createProcessingAccountResponse:
                   summary: Retrieve merchant platform
                   description: Retrieve a merchant platform.
                   value: &ref_1200
@@ -29074,7 +29074,7 @@ paths:
                     addendums: []
                     metadata:
                       customerId: '2345'
-                processingAccountCreatedWithAddendums:
+                createProcessingAccountAddendumsResponse:
                   summary: Created processing account with addendums
                   description: Processing account created with addendums appended to the Merchant Processing Agreement.
                   value: &ref_1201
@@ -29156,7 +29156,7 @@ paths:
                       - type: firearmsV1
                     metadata:
                       customerId: '2345'
-                processingAccountCreatedFiservWithCloverAmendment:
+                createProcessingAccountFiservCloverAmendmentResponse:
                   summary: Created Fiserv processing account with Clover Merchant Processing Amendment
                   description: Processing account created for a Fiserv-bound merchant. The Clover Merchant Processing Amendment addendum is appended to the Merchant Processing Agreement with equipment line-item pre-fill data.
                   value: &ref_1202
@@ -29247,7 +29247,7 @@ paths:
                             totalPrice: 19800
                     metadata:
                       customerId: '2345'
-                processingAccountCreatedFiservNoClover:
+                createProcessingAccountFiservNoCloverResponse:
                   summary: Created Fiserv processing account without Clover devices
                   description: Processing account created for a Fiserv-bound merchant with no Clover devices ordered. No addendums are appended.
                   value: &ref_1203
@@ -30289,7 +30289,7 @@ paths:
                           required: *ref_30
                           properties: *ref_31
               examples:
-                listProcessingAccountOwners:
+                listOwnersResponse:
                   summary: Paginated list of processing account owners
                   description: Retrieve owners associated with a processing account.
                   value: &ref_1208
@@ -30429,7 +30429,7 @@ paths:
                         - pricingAgreement
                       example: pricingAgreement
             examples:
-              createReminderForProcessingAccount:
+              createReminderProcessingAccountRequest:
                 summary: Create reminder for processing account
                 description: |
                   When you create a processing account, we send a copy of the pricing agreement to the merchant to sign. You can choose to send them a copy of the pricing agreement by email, or you can generate a link to the pricing agreement.<br/>  
@@ -30453,7 +30453,7 @@ paths:
                     required: *ref_360
                     properties: *ref_361
               examples:
-                reminderCreated:
+                createReminderProcessingAccountResponse:
                   summary: Reminder created
                   description: Reminder created.
                   value: &ref_1210
@@ -32746,7 +32746,7 @@ paths:
                   - cutOffTime
                   - timezone
               examples:
-                closeBatchResponse:
+                closeBatchProcessingTerminalResponse:
                   summary: Close-batch response
                   description: Example response returned from a close-batch request
                   value: &ref_1220
@@ -32873,7 +32873,7 @@ paths:
               required: *ref_352
               properties: *ref_353
             examples:
-              updateContact:
+              updateContactRequest:
                 summary: Update contact
                 description: Update a specific contact.
                 value: &ref_1222
@@ -33173,7 +33173,7 @@ paths:
               properties: *ref_381
               required: *ref_382
             examples:
-              createEventSubscription:
+              createEventSubscriptionRequest:
                 summary: Create event subscription
                 description: Create an event subscription
                 value: &ref_1224
@@ -33187,7 +33187,7 @@ paths:
                       supportEmailAddress: jane.doe@example.com
                   metadata:
                     yourCustomField: abc123
-              createEventSubscriptionMetadata:
+              createEventSubscriptionMetadataRequest:
                 summary: Create event subscription with metadata
                 description: Create an event subscription
                 value: &ref_1225
@@ -33233,7 +33233,7 @@ paths:
                         supportEmailAddress: jane.doe@example.com
                     metadata:
                       yourCustomField: abc123
-                eventSubscriptionCreatedMetadata:
+                createEventSubscriptionMetadataResponse:
                   summary: Create event subscription with metadata
                   description: Example of a created event subscription.
                   value: &ref_1227
@@ -33324,7 +33324,7 @@ paths:
                 properties: *ref_381
                 required: *ref_382
               examples:
-                eventSubscription:
+                retrieveEventSubscriptionResponse:
                   summary: Event subscription
                   description: Example of an event subscription.
                   value: &ref_1228
@@ -33378,7 +33378,7 @@ paths:
               properties: *ref_381
               required: *ref_382
             examples:
-              updateEventSubscription:
+              updateEventSubscriptionRequest:
                 summary: Update event subscription
                 description: Update an event subscription
                 value: &ref_1229
@@ -33442,7 +33442,7 @@ paths:
               items: *ref_133
               example: *ref_134
             examples:
-              patchEventSubscriptionRealistic:
+              partiallyUpdateEventSubscriptionRealisticRequest:
                 summary: Partially update event subscription
                 description: |
                   Partially update an existing event subscription.
@@ -33452,41 +33452,41 @@ paths:
                   - op: replace
                     path: /enabled
                     value: false
-              patchEventSubscriptionAdd:
+              partiallyUpdateEventSubscriptionAddRequest:
                 summary: 'Update event subscription: add'
                 description: Add operation adds a new value to an object or array.
                 value: &ref_1231
                   - op: add
                     path: /eventTypes
                     value: terminalOrder.status.changed
-              patchEventSubscriptionRemove:
+              partiallyUpdateEventSubscriptionRemoveRequest:
                 summary: 'Update event subscription: remove'
                 description: Remove operation deletes a value from the event subscription.
                 value: &ref_1232
                   - op: remove
                     path: /metadata/yourCustomField
-              patchEventSubscriptionReplace:
+              partiallyUpdateEventSubscriptionReplaceRequest:
                 summary: 'Update event subscription: replace'
                 description: Replace operation updates an existing value.
                 value: &ref_1233
                   - op: replace
                     path: /enabled
                     value: true
-              patchEventSubscriptionMove:
+              partiallyUpdateEventSubscriptionMoveRequest:
                 summary: 'Update event subscription: move'
                 description: Move operation relocates a value from one location to another.
                 value: &ref_1234
                   - op: move
                     from: /eventTypes/0
                     path: /eventTypes/1
-              patchEventSubscriptionCopy:
+              partiallyUpdateEventSubscriptionCopyRequest:
                 summary: 'Update event subscription: copy'
                 description: Copy operation duplicates a value from one location to another.
                 value: &ref_1235
                   - op: copy
                     from: /notifications/0/uri
                     path: /metadata/webhookBackup
-              patchEventSubscriptionTest:
+              partiallyUpdateEventSubscriptionTestRequest:
                 summary: 'Update event subscription: test'
                 description: Test operation validates that a value at the target location equals the specified value.
                 value: &ref_1236
@@ -33727,7 +33727,7 @@ paths:
                 properties: *ref_373
                 required: *ref_374
               examples:
-                terminalOrder:
+                retrieveTerminalOrderResponse:
                   summary: Terminal order
                   description: Terminal order
                   value: &ref_1244
@@ -34081,7 +34081,7 @@ paths:
                 description: Object that contains information about the ACH deposit.
                 properties: *ref_383
               examples:
-                achDepositRetrieve:
+                retrieveAchDepositResponse:
                   summary: Retrieve ACH deposit
                   value: &ref_1246
                     achDepositId: 99
@@ -34460,7 +34460,7 @@ paths:
             type: string
             minLength: 1
             maxLength: 16
-          example: KSI0987654321
+          example: FFFF5B0991ABCD01
         - name: model
           in: query
           description: Filter by the model or type of the device.
@@ -34496,7 +34496,7 @@ paths:
                             deviceId:
                               type: string
                               description: Unique identifier that we assigned to the device.
-                              example: '29005019'
+                              example: H7KPQ2M4XN
                             tender:
                               type: string
                               description: |
@@ -34515,7 +34515,7 @@ paths:
                             ksi:
                               type: string
                               description: Key serial identifier (KSI) of the device.
-                              example: KSI0987654321
+                              example: FFFF5B0991ABCD01
                             createdDate:
                               type: string
                               format: date-time
@@ -34577,10 +34577,10 @@ paths:
                     count: 2
                     hasMore: true
                     data:
-                      - deviceId: '29005019'
+                      - deviceId: H7KPQ2M4XN
                         tender: creditDebit
                         serialNumber: '1850010868'
-                        ksi: KSI0987654321
+                        ksi: FFFF5B0991ABCD01
                         deviceType:
                           model: idtechKioskV
                           manufacturer: idtech
@@ -34589,14 +34589,10 @@ paths:
                           orderId: OrderRef6543
                           processingTerminalId: '1234001'
                           dateTime: '2024-06-15T14:25:00Z'
-                        links:
-                          - rel: self
-                            method: get
-                            href: https://api.payroc.com/v1/devices/29005019
-                      - deviceId: '29005020'
+                      - deviceId: R3TZB9WY6L
                         tender: ebt
                         serialNumber: WPC202833004712
-                        ksi: KSI1234567890
+                        ksi: FFFF5B0991ABCD02
                         deviceType:
                           model: paxA80
                           manufacturer: pax
@@ -34606,17 +34602,13 @@ paths:
                           orderId: OrderRef7654
                           processingTerminalId: '1234001'
                           dateTime: '2024-05-09T16:45:00Z'
-                        links:
-                          - rel: self
-                            method: get
-                            href: https://api.payroc.com/v1/devices/29005020
                     links:
                       - rel: next
                         method: get
-                        href: https://api.payroc.com/v1/devices?limit=2&after=29005020
+                        href: https://api.payroc.com/v1/devices?limit=2&after=R3TZB9WY6L
                       - rel: previous
                         method: get
-                        href: https://api.payroc.com/v1/devices?limit=2&before=29005019
+                        href: https://api.payroc.com/v1/devices?limit=2&before=H7KPQ2M4XN
                 noActivity:
                   summary: No records found
                   description: Valid request, but no records match the criteria.
@@ -37371,7 +37363,7 @@ components:
       type: object
       allOf: *ref_960
   examples:
-    paginatedFundRecipients:
+    listFundingRecipientsResponse:
       summary: Paginated funding recipients.
       description: Paginated list of funding recipients.
       value: *ref_961
@@ -37395,7 +37387,7 @@ components:
       summary: Api error
       description: Unable to process your request.
       value: *ref_964
-    createFundingRecipient:
+    createFundingRecipientRequest:
       summary: Create funding recipient
       description: Create a new funding recipient with owners and funding accounts.
       value: *ref_965
@@ -37419,7 +37411,7 @@ components:
       summary: Idempotency key in use
       description: Idempotency key in use
       value: *ref_29
-    fundingRecipient:
+    retrieveFundingRecipientResponse:
       summary: Funding recipient.
       description: Funding recipients.
       value: *ref_968
@@ -37427,132 +37419,132 @@ components:
       summary: Not found
       description: Resource could not be found
       value: *ref_372
-    updateFundingRecipient:
+    updateFundingRecipientRequest:
       summary: Update funding recipient
       description: Update the details of a funding recipient.
       value: *ref_969
-    fundingAccounts:
+    listFundingRecipientFundingAccountsResponse:
       summary: List of funding accounts
       description: List of funding accounts.
       value: *ref_970
-    createFundingAccount:
+    createFundingAccountRequest:
       summary: Create funding account
       description: Create a funding account and add it to a funding recipient.
       value: *ref_971
-    fundingAccount:
+    createFundingAccountResponse:
       summary: Create funding account
       description: Funding account that we created and added to the funding recipient.
       value: *ref_972
-    createOwner:
+    createFundingRecipientOwnerRequest:
       summary: Create funding recipient owner
       description: Add an additional owner to a funding recipient.
       value: *ref_973
-    createOwnerResponse:
+    createFundingRecipientOwnerResponse:
       summary: Create funding recipient owner
       description: Owner that we created and added to the funding recipient.
       value: *ref_974
-    listFundingAccountExample:
+    listFundingAccountsPaginatedResponse:
       summary: Paginated funding accounts
       value: *ref_975
-    noResults:
+    listFundingAccountsNoResultsFoundResponse:
       summary: No results found
       description: No results found
       value: *ref_976
-    fundingAccountExample:
+    retrieveFundingAccountResponse:
       summary: Masked funding account example.
       value: *ref_977
-    updateFundingAccount:
+    updateFundingAccountRequest:
       summary: Update funding account
       description: Update the details of a funding account associated with a funding recipient.
       value: *ref_978
-    retrievedOwner:
+    retrieveOwnerResponse:
       summary: Retrieve owner
       description: Retrieve a specific owner.
       value: *ref_979
-    updateOwner:
+    updateOwnerRequest:
       summary: Update owner
       description: Update a specific owner.
       value: *ref_980
-    paymentIntentResponse:
+    retrievePaymentIntentResponse:
       summary: Payment Intent
       description: Example of a payment intent response.
       value: *ref_981
-    paginatedPricingIntent:
+    listPricingIntentsResponse:
       summary: Paginated pricing intent
       description: Example of a paginated pricing intent.
       value: *ref_982
-    interchangePlus:
+    createPricingIntentInterchangePlusRequest:
       summary: Interchange Plus
       description: Create a pricing intent.
       value: *ref_983
-    interchangePlusPlus:
+    createPricingIntentInterchangePlusPlusRequest:
       summary: Interchange Plus Plus
       description: Create a pricing intent.
       value: *ref_984
-    tiered3:
+    createPricingIntentTiered3Request:
       summary: Tiered 3
       description: Create a pricing intent.
       value: *ref_985
-    tiered4:
+    createPricingIntentTiered4Request:
       summary: Tiered 4
       description: Create a pricing intent.
       value: *ref_986
-    tiered6:
+    createPricingIntentTiered6Request:
       summary: Tiered 6
       description: Create a pricing intent.
       value: *ref_987
-    flatRate:
+    createPricingIntentFlatRateRequest:
       summary: Flat Rate
       description: Create a pricing intent.
       value: *ref_988
-    consumerChoice:
+    createPricingIntentConsumerChoiceRequest:
       summary: Consumer Choice
       description: Create a pricing intent.
       value: *ref_989
-    rewardPayChoice:
+    createPricingIntentRewardPayChoiceRequest:
       summary: Reward Pay Choice
       description: Create a pricing intent.
       value: *ref_990
-    createdPricingIntent:
+    createPricingIntentResponse:
       summary: Created pricing intent
       description: Successful response. We created the pricing intent and it is waiting for approval.
       value: *ref_991
-    pricingIntent:
+    retrievePricingIntentResponse:
       summary: Pricing intent
       description: Pricing intent
       value: *ref_90
-    modifyPricingIntent:
+    updatePricingIntentRequest:
       summary: Create pricing intent
       description: Create a pricing intent.
       value: *ref_992
-    patchPricingIntentRealistic:
+    partiallyUpdatePricingIntentRealisticRequest:
       summary: Partially update pricing intent
       description: |
         Partially update an existing pricing intent.
 
         Structure your request to follow the RFC 6902 standard.
       value: *ref_993
-    patchPricingIntentAdd:
+    partiallyUpdatePricingIntentAddRequest:
       summary: 'Update pricing intent: add'
       description: Add operation adds a new value to an object or array.
       value: *ref_994
-    patchPricingIntentRemove:
+    partiallyUpdatePricingIntentRemoveRequest:
       summary: 'Update pricing intent: remove'
       description: Remove operation deletes a value from the pricing intent.
       value: *ref_995
-    patchPricingIntentReplace:
+    partiallyUpdatePricingIntentReplaceRequest:
       summary: 'Update pricing intent: replace'
       description: Replace operation updates an existing value.
       value: *ref_996
-    patchPricingIntentMove:
+    partiallyUpdatePricingIntentMoveRequest:
       summary: 'Update pricing intent: move'
       description: Move operation relocates a value from one location to another.
       value: *ref_997
-    patchPricingIntentCopy:
+    partiallyUpdatePricingIntentCopyRequest:
       summary: 'Update pricing intent: copy'
       description: Copy operation duplicates a value from one location to another.
       value: *ref_998
-    patchPricingIntentTest:
+    partiallyUpdatePricingIntentTestRequest:
       summary: 'Update pricing intent: test'
       description: Test operation validates that a value at the target location equals the specified value.
       value: *ref_999
@@ -37561,7 +37553,7 @@ components:
       description: |
         Example patch operations that apply the RFC 6902 standard.
       value: *ref_1000
-    listInstructionsExample:
+    listFundingInstructionsResponse:
       summary: Paginated instructions list
       value: *ref_1001
     parameterError:
@@ -37576,18 +37568,18 @@ components:
       summary: Bad request
       description: Requested data outside allowed range.
       value: *ref_1004
-    createFundingInstruction:
+    createFundingInstructionRequest:
       summary: Funding instruction
       description: Create a funding instruction to distribute merchant funds to funding accounts.
       value: *ref_1005
-    createFundingInstructionMetadata:
+    createFundingInstructionMetadataRequest:
       summary: Funding instruction with metadata
       description: Create a funding instruction to distribute merchant funds to funding accounts.
       value: *ref_1006
-    newInstructionAccepted:
+    createFundingInstructionResponse:
       summary: Funding instruction
       value: *ref_1007
-    newInstructionAcceptedMetadata:
+    createFundingInstructionMetadataResponse:
       summary: Funding instruction with metadata
       value: *ref_1008
     insufficientFunds:
@@ -37606,7 +37598,7 @@ components:
       summary: Bad request
       description: One or more validation errors occurred.
       value: *ref_93
-    updateFundingInstruction:
+    updateFundingInstructionRequest:
       summary: Update funding instruction
       description: Update an existing funding instruction to modify merchant funds distribution.
       value: *ref_1009
@@ -37614,11 +37606,11 @@ components:
       summary: Cannot be modified
       description: Resource cannot be modified.
       value: *ref_96
-    listBalancesExample:
+    listFundingBalancesResponse:
       summary: Paginated list of merchant balances
       description: Paginated list of merchant balances.
       value: *ref_1010
-    paginatedList:
+    listFundingActivityResponse:
       summary: Paginated activity records
       description: Valid payfac account with activity for date range.
       value: *ref_1011
@@ -37626,7 +37618,7 @@ components:
       summary: Bad request
       description: One or more validation errors occurred.
       value: *ref_1012
-    paginatedBatches:
+    listBatchesResponse:
       summary: Paginated batches
       value: *ref_1013
     parameterError-3:
@@ -37641,45 +37633,45 @@ components:
       summary: Bad Request
       description: One or more validation errors occurred
       value: *ref_100
-    retrievedBatch:
+    retrieveBatchResponse:
       summary: Retrieved batch
       value: *ref_1014
-    paginatedTransactions:
+    listTransactionsResponse:
       summary: Paginated transactions
       value: *ref_1015
-    retrievedTransaction:
+    retrieveTransactionResponse:
       summary: Retrieve transaction
       value: *ref_1016
     transactionIdError:
       summary: Bad Request
       description: One or more validation errors occurred
       value: *ref_1017
-    paginatedAuthorizations:
+    listAuthorizationsResponse:
       summary: Paginated authorizations
       value: *ref_1018
-    retrievedAuthorization:
+    retrieveAuthorizationResponse:
       summary: Retrieve authorization
       value: *ref_1019
-    paginatedDisputes:
+    listDisputesResponse:
       summary: Paginated disputes
       value: *ref_1020
-    paginatedPaymentLinks:
+    listPaymentLinksResponse:
       summary: Payment links
       description: Paginated list of payment links
       value: *ref_1021
-    multiUsePaymentLinkRequest:
+    createPaymentLinkMultiUseRequest:
       summary: Multi-use payment link
       description: Create a multi-use payment link.
       value: *ref_1022
-    singleUsePaymentLinkRequest:
+    createPaymentLinkSingleUseRequest:
       summary: Single-use payment link
       description: Create a single-use payment link.
       value: *ref_1023
-    createdMultiUsePaymentLink:
+    createPaymentLinkMultiUseResponse:
       summary: Multi-use payment link
       description: Multi-use payment link that we created.
       value: *ref_1024
-    createdSingleUsePaymentLink:
+    createPaymentLinkSingleUseResponse:
       summary: Single-use payment link
       description: Single-use payment link that we created.
       value: *ref_1025
@@ -37691,73 +37683,73 @@ components:
       summary: Unsupported media type
       description: The payload is in an unsupported format.
       value: *ref_1027
-    paymentLinkResponse:
+    retrievePaymentLinkResponse:
       summary: Payment Link
       description: Active multi-use payment link.
       value: *ref_1028
-    patchPaymentLinkRealistic:
+    partiallyUpdatePaymentLinkRealisticRequest:
       summary: Partially update payment link
       description: |
         Partially update an existing payment link.  
         Structure your request to follow the RFC 6902 standard.
       value: *ref_1029
-    patchPaymentLinkAdd:
+    partiallyUpdatePaymentLinkAddRequest:
       summary: 'Update payment link: add'
       description: Add operation adds a new value to an object or array.
       value: *ref_1030
-    patchPaymentLinkRemove:
+    partiallyUpdatePaymentLinkRemoveRequest:
       summary: 'Update payment link: remove'
       description: Remove operation deletes a value from the payment link.
       value: *ref_1031
-    patchPaymentLinkReplace:
+    partiallyUpdatePaymentLinkReplaceRequest:
       summary: 'Update payment link: replace'
       description: Replace operation updates an existing value.
       value: *ref_1032
-    patchPaymentLinkMove:
+    partiallyUpdatePaymentLinkMoveRequest:
       summary: 'Update payment link: move'
       description: Move operation relocates a value from one location to another.
       value: *ref_1033
-    patchPaymentLinkCopy:
+    partiallyUpdatePaymentLinkCopyRequest:
       summary: 'Update payment link: copy'
       description: Copy operation duplicates a value from one location to another.
       value: *ref_1034
-    patchPaymentLinkTest:
+    partiallyUpdatePaymentLinkTestRequest:
       summary: 'Update payment link: test'
       description: Test operation validates that a value at the target location equals the specified value.
       value: *ref_1035
-    patchPaymentLinkRealisticResponse:
+    partiallyUpdatePaymentLinkRealisticResponse:
       summary: Partially update payment link
       description: Payment link after we replaced its expiry date.
       value: *ref_1036
-    patchPaymentLinkAddResponse:
+    partiallyUpdatePaymentLinkAddResponse:
       summary: 'Update payment link: add'
       description: Payment link after we added a custom label.
       value: *ref_1037
-    patchPaymentLinkRemoveResponse:
+    partiallyUpdatePaymentLinkRemoveResponse:
       summary: 'Update payment link: remove'
       description: Payment link after we removed its custom labels.
       value: *ref_1038
-    patchPaymentLinkReplaceResponse:
+    partiallyUpdatePaymentLinkReplaceResponse:
       summary: 'Update payment link: replace'
       description: Payment link after we replaced its expiry date.
       value: *ref_1039
-    patchPaymentLinkMoveResponse:
+    partiallyUpdatePaymentLinkMoveResponse:
       summary: 'Update payment link: move'
       description: Payment link after we moved a custom label to a different position in the array.
       value: *ref_1040
-    patchPaymentLinkCopyResponse:
+    partiallyUpdatePaymentLinkCopyResponse:
       summary: 'Update payment link: copy'
       description: Payment link after we copied the order description to the merchant reference.
       value: *ref_1041
-    patchPaymentLinkTestResponse:
+    partiallyUpdatePaymentLinkTestResponse:
       summary: 'Update payment link: test'
       description: Payment link is unchanged because the test operation only asserts that a value matches.
       value: *ref_1042
-    deactivatedPaymentLink:
+    deactivatePaymentLinkResponse:
       summary: Payment link
       description: Deactivated multi-use payment link.
       value: *ref_1043
-    paginatedSharingEvents:
+    listPaymentLinkSharingEventsResponse:
       summary: Sharing events
       description: Paginated list of payment link sharing events
       value: *ref_1044
@@ -37765,252 +37757,252 @@ components:
       summary: Share a payment link
       description: Share a payment link.
       value: *ref_1045
-    paymentLinkShareEvent:
+    sharePaymentLinkResponse:
       summary: Share a payment link
       description: Payment link sharing event
       value: *ref_1046
-    paginatedPaymentPlan:
+    listPaymentPlansResponse:
       summary: Payment Plan
       description: Payment Plan
       value: *ref_1047
-    paymentPlanRequest:
+    createPaymentPlanRequest:
       summary: Payment Plan
       description: Payment Plan
       value: *ref_1048
-    paymentPlanResponse:
+    createPaymentPlanResponse:
       summary: Payment Plan
       description: Payment Plan
       value: *ref_147
-    patchPaymentPlanRealistic:
+    partiallyUpdatePaymentPlanRealisticRequest:
       summary: Update payment plan
       description: |
         Make changes to an existing payment plan.
 
         Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
       value: *ref_1049
-    patchPaymentPlanAdd:
+    partiallyUpdatePaymentPlanAddRequest:
       summary: 'Update payment plan: add'
       description: Add operation adds a new value to an object or array.
       value: *ref_1050
-    patchPaymentPlanRemove:
+    partiallyUpdatePaymentPlanRemoveRequest:
       summary: 'Update payment plan: remove'
       description: Remove operation deletes a value from the payment plan.
       value: *ref_1051
-    patchPaymentPlanReplace:
+    partiallyUpdatePaymentPlanReplaceRequest:
       summary: 'Update payment plan: replace'
       description: Replace operation updates an existing value.
       value: *ref_1052
-    patchPaymentPlanMove:
+    partiallyUpdatePaymentPlanMoveRequest:
       summary: 'Update payment plan: move'
       description: Move operation relocates a value from one location to another.
       value: *ref_1053
-    patchPaymentPlanCopy:
+    partiallyUpdatePaymentPlanCopyRequest:
       summary: 'Update payment plan: copy'
       description: Copy operation duplicates a value from one location to another.
       value: *ref_1054
-    patchPaymentPlanTest:
+    partiallyUpdatePaymentPlanTestRequest:
       summary: 'Update payment plan: test'
       description: Test operation validates that a value at the target location equals the specified value.
       value: *ref_1055
-    patchPaymentPlanRealisticResponse:
+    partiallyUpdatePaymentPlanRealisticResponse:
       summary: Update payment plan
       description: Payment plan after we applied the requested changes.
       value: *ref_1056
-    patchPaymentPlanAddResponse:
+    partiallyUpdatePaymentPlanAddResponse:
       summary: 'Update payment plan: add'
       description: Payment plan after we added the new custom field name.
       value: *ref_1057
-    patchPaymentPlanRemoveResponse:
+    partiallyUpdatePaymentPlanRemoveResponse:
       summary: 'Update payment plan: remove'
       description: Payment plan after we removed the description.
       value: *ref_1058
-    patchPaymentPlanReplaceResponse:
+    partiallyUpdatePaymentPlanReplaceResponse:
       summary: 'Update payment plan: replace'
       description: Payment plan after we replaced the frequency.
       value: *ref_1059
-    patchPaymentPlanMoveResponse:
+    partiallyUpdatePaymentPlanMoveResponse:
       summary: 'Update payment plan: move'
       description: |
         Payment plan after we moved the custom field name. The array contains only one entry, so the order of the entries doesn't change.
       value: *ref_1060
-    patchPaymentPlanCopyResponse:
+    partiallyUpdatePaymentPlanCopyResponse:
       summary: 'Update payment plan: copy'
       description: Payment plan after we copied the name into the description.
       value: *ref_1061
-    patchPaymentPlanTestResponse:
+    partiallyUpdatePaymentPlanTestResponse:
       summary: 'Update payment plan: test'
       description: |
         Payment plan after the test operation. A test operation asserts a value, so the payment plan doesn't change.
       value: *ref_1062
-    paginatedSubscription:
+    listSubscriptionsResponse:
       summary: Paginated Subscription
       description: Example of Paginated Subscription
       value: *ref_1063
-    subscriptionRequest:
+    createSubscriptionRequest:
       summary: Subscription with surcharge
       description: Subscription with surcharge
       value: *ref_1064
-    subscriptionWithSurchargeResponse:
+    createSubscriptionResponse:
       summary: Subscription with surcharge
       description: Subscription with surcharge
       value: *ref_164
-    subscriptionWithConvenienceFeeResponse:
+    retrieveSubscriptionConvenienceFeeResponse:
       summary: Subscription with convenience fee
       description: Subscription with convenience fee
       value: *ref_167
-    patchSubscriptionRealistic:
+    partiallyUpdateSubscriptionRealisticRequest:
       summary: Update subscription
       description: |
         Make changes to a subscription.
 
         Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
       value: *ref_1065
-    patchSubscriptionAdd:
+    partiallyUpdateSubscriptionAddRequest:
       summary: 'Update subscription: add'
       description: Add operation adds a new value to an object or array.
       value: *ref_1066
-    patchSubscriptionRemove:
+    partiallyUpdateSubscriptionRemoveRequest:
       summary: 'Update subscription: remove'
       description: Remove operation deletes a value from the subscription.
       value: *ref_1067
-    patchSubscriptionReplace:
+    partiallyUpdateSubscriptionReplaceRequest:
       summary: 'Update subscription: replace'
       description: Replace operation updates an existing value.
       value: *ref_1068
-    patchSubscriptionMove:
+    partiallyUpdateSubscriptionMoveRequest:
       summary: 'Update subscription: move'
       description: Move operation relocates a value from one location to another.
       value: *ref_1069
-    patchSubscriptionCopy:
+    partiallyUpdateSubscriptionCopyRequest:
       summary: 'Update subscription: copy'
       description: Copy operation duplicates a value from one location to another.
       value: *ref_1070
-    patchSubscriptionTest:
+    partiallyUpdateSubscriptionTestRequest:
       summary: 'Update subscription: test'
       description: Test operation validates that a value at the target location equals the specified value.
       value: *ref_1071
-    patchSubscriptionRealisticResponse:
+    partiallyUpdateSubscriptionRealisticResponse:
       summary: Update subscription
       description: Subscription after we applied the requested changes.
       value: *ref_1072
-    patchSubscriptionAddResponse:
+    partiallyUpdateSubscriptionAddResponse:
       summary: 'Update subscription: add'
       description: Subscription after we added the new custom field.
       value: *ref_1073
-    patchSubscriptionRemoveResponse:
+    partiallyUpdateSubscriptionRemoveResponse:
       summary: 'Update subscription: remove'
       description: Subscription after we removed the description.
       value: *ref_1074
-    patchSubscriptionReplaceResponse:
+    partiallyUpdateSubscriptionReplaceResponse:
       summary: 'Update subscription: replace'
       description: Subscription after we replaced the amount of the recurring order.
       value: *ref_1075
-    patchSubscriptionMoveResponse:
+    partiallyUpdateSubscriptionMoveResponse:
       summary: 'Update subscription: move'
       description: |
         Subscription after we moved the custom field. The array contains only one entry, so the order of the entries doesn't change.
       value: *ref_1076
-    patchSubscriptionCopyResponse:
+    partiallyUpdateSubscriptionCopyResponse:
       summary: 'Update subscription: copy'
       description: Subscription after we copied the name into the description.
       value: *ref_1077
-    patchSubscriptionTestResponse:
+    partiallyUpdateSubscriptionTestResponse:
       summary: 'Update subscription: test'
       description: |
         Subscription after the test operation. A test operation asserts a value, so the subscription doesn't change.
       value: *ref_1078
-    deactivateSubscription:
+    deactivateSubscriptionResponse:
       summary: Deactivate subscription
       description: Deactivate a subscription
       value: *ref_1079
-    subscriptionPaymentRequest:
+    payManualSubscriptionRequest:
       summary: Subscription manual payment
       description: Subscription manual payment
       value: *ref_1080
-    subscriptionPaymentResponse:
+    payManualSubscriptionResponse:
       summary: Subscription manual payment
       description: Subscription manual payment
       value: *ref_1081
-    paginatedSecureToken:
+    listSecureTokensResponse:
       summary: Paginated Secure Token
       description: Paginated Secure Token
       value: *ref_1082
-    secureTokenRequest:
+    createSecureTokenRequest:
       summary: Secure Token
       description: Secure Token
       value: *ref_1083
-    createSecureTokenSingleUseTokenRequest:
+    createSecureTokenFromSingleUseRequest:
       summary: Secure token created from a single-use token
       description: Create a secure token using a single-use token that represents card details.
       value: *ref_1084
-    secureTokenResponse:
+    createSecureTokenResponse:
       summary: Secure Token
       description: Secure Token
       value: *ref_191
-    createSecureTokenSingleUseTokenResponse:
+    createSecureTokenFromSingleUseResponse:
       summary: Secure token created from a single-use token
       description: Create a secure token using a single-use token that represents card details.
       value: *ref_1085
-    patchSecureTokenRealistic:
+    partiallyUpdateSecureTokenRealisticRequest:
       summary: Update secure token
       description: |
         Update the customer's payment details that are represented by the secure token.
 
         Structure your request to follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) standard.
       value: *ref_1086
-    patchSecureTokenAdd:
+    partiallyUpdateSecureTokenAddRequest:
       summary: 'Update secure token: add'
       description: Add operation adds a new value to an object or array.
       value: *ref_1087
-    patchSecureTokenRemove:
+    partiallyUpdateSecureTokenRemoveRequest:
       summary: 'Update secure token: remove'
       description: Remove operation deletes a value from the secure token.
       value: *ref_1088
-    patchSecureTokenReplace:
+    partiallyUpdateSecureTokenReplaceRequest:
       summary: 'Update secure token: replace'
       description: Replace operation updates an existing value.
       value: *ref_1089
-    patchSecureTokenMove:
+    partiallyUpdateSecureTokenMoveRequest:
       summary: 'Update secure token: move'
       description: Move operation relocates a value from one location to another.
       value: *ref_1090
-    patchSecureTokenCopy:
+    partiallyUpdateSecureTokenCopyRequest:
       summary: 'Update secure token: copy'
       description: Copy operation duplicates a value from one location to another.
       value: *ref_1091
-    patchSecureTokenTest:
+    partiallyUpdateSecureTokenTestRequest:
       summary: 'Update secure token: test'
       description: Test operation validates that a value at the target location equals the specified value.
       value: *ref_1092
-    patchSecureTokenRealisticResponse:
+    partiallyUpdateSecureTokenRealisticResponse:
       summary: Update secure token
       description: Secure token after we updated the customer's name and payment details.
       value: *ref_1093
-    patchSecureTokenAddResponse:
+    partiallyUpdateSecureTokenAddResponse:
       summary: 'Update secure token: add'
       description: Secure token after we added a custom field.
       value: *ref_1094
-    patchSecureTokenRemoveResponse:
+    partiallyUpdateSecureTokenRemoveResponse:
       summary: 'Update secure token: remove'
       description: Secure token after we removed the customer's date of birth.
       value: *ref_1095
-    patchSecureTokenReplaceResponse:
+    partiallyUpdateSecureTokenReplaceResponse:
       summary: 'Update secure token: replace'
       description: Secure token after we replaced the customer's last name.
       value: *ref_1096
-    patchSecureTokenMoveResponse:
+    partiallyUpdateSecureTokenMoveResponse:
       summary: 'Update secure token: move'
       description: Secure token after we moved a custom field to a different position in the array.
       value: *ref_1097
-    patchSecureTokenCopyResponse:
+    partiallyUpdateSecureTokenCopyResponse:
       summary: 'Update secure token: copy'
       description: Secure token after we copied the customer's first name over their last name.
       value: *ref_1098
-    patchSecureTokenTestResponse:
+    partiallyUpdateSecureTokenTestResponse:
       summary: 'Update secure token: test'
       description: Secure token is unchanged because the test operation only asserts that a value matches.
       value: *ref_1099
-    accountUpdateRequest:
+    updateAccountDetailsRequest:
       summary: Update account details
       description: Account update request by single use token
       value: *ref_1100
@@ -38022,73 +38014,73 @@ components:
       summary: Payload too large
       description: The payload submitted is too large
       value: *ref_1102
-    singleUseTokenRequest:
+    createSingleUseTokenRequest:
       summary: Create single-use token
       description: Create a single-use token. The token expires after 30 minutes.
       value: *ref_1103
-    singleUseTokenResponse:
+    createSingleUseTokenResponse:
       summary: Create single-use token
       description: Create a single-use token. The token expires after 30 minutes.
       value: *ref_1104
-    createSessionRequest:
+    createHostedFieldsSessionRequest:
       summary: Create session
       description: Create session request.
       value: *ref_1105
-    createSessionResponse:
+    createHostedFieldsSessionResponse:
       summary: Create session
       description: Create session response.
       value: *ref_1106
-    applePaySessions:
+    startApplePaySessionRequest:
       summary: Apple Pay session
       description: Start a session with Apple to accept a payment with Apple Pay.
       value: *ref_1107
-    applePayResponseSession:
+    startApplePaySessionResponse:
       summary: Apple Pay session
       description: Wrapper for the content that Apple returns after starting the Apple Pay session.
       value: *ref_1108
-    paginatedPayment:
+    listPaymentsResponse:
       summary: Payment
       description: Payment
       value: *ref_1109
-    paymentRequest:
+    createPaymentCardRequest:
       summary: Card Payment
       description: Payment
       value: *ref_1110
-    applePaySaleRequest:
+    createPaymentApplePayRequest:
       summary: Apple Pay Payment
       value: *ref_1111
-    paymentRequestSingleUseTokenSale:
+    createPaymentSingleUseTokenRequest:
       summary: Card sale with single-use token that we convert to a secure token
       description: Convert a single-use token to a secure token when running a card sale.
       value: *ref_1112
-    cardPaymentRequestSecureTokenRepeatPayment:
+    createPaymentSecureTokenRepeatRequest:
       summary: Card sale with secure token and is the first payment in a series
       description: Create the first payment in a recurring series using a secure token.
       value: *ref_1113
-    createPreAuthorization:
+    createPaymentPreAuthorizationRequest:
       summary: Create a pre-authorization
       description: Create a pre-authorization
       value: *ref_1114
-    cardPaymentResponse:
+    createPaymentCardResponse:
       summary: Card Payment
       description: Payment that we processed with a keyed card.
       value: *ref_1115
-    applePaySaleResponse:
+    createPaymentApplePayResponse:
       summary: Apple Pay Payment
       value: *ref_1116
-    paymentResponseSingleUseTokenSale:
+    createPaymentSingleUseTokenResponse:
       summary: Card sale with single-use token that we convert to a secure token
       description: Convert a single-use token to a secure token when running a card sale.
       value: *ref_1117
-    cardPaymentResponseSecureTokenRepeatPayment:
+    createPaymentSecureTokenRepeatResponse:
       summary: Card sale with secure token and is the first payment in a series
       description: Create the first payment in a recurring series using a secure token.
       value: *ref_1118
-    createPreAuthorization-2:
+    createPaymentPreAuthorizationResponse:
       summary: Create a pre-authorization
       description: Create a pre-authorization
       value: *ref_1119
-    paymentResponse:
+    retrievePaymentResponse:
       summary: Payment
       description: Payment
       value: *ref_1120
@@ -38096,7 +38088,7 @@ components:
       summary: Adjust Payment
       description: Adjust Payment
       value: *ref_1121
-    adjustPreAuthorization:
+    adjustPaymentPreAuthorizationRequest:
       summary: Adjust pre-authorization
       description: Adjust the amount of a pre-authorization
       value: *ref_1122
@@ -38104,63 +38096,63 @@ components:
       summary: Adjust Payment
       description: Adjust Payment
       value: *ref_1123
-    adjustPreAuthorization-2:
+    adjustPaymentPreAuthorizationResponse:
       summary: Adjust pre-authorization
       description: Adjust the amount of a pre-authorization
       value: *ref_1124
-    paymentCaptureRequest:
+    capturePaymentRequest:
       summary: Payment capture
       description: Capture a payment with itemized breakdown
       value: *ref_1125
-    capturePreAuthorizationRequest:
+    capturePaymentPreAuthorizationRequest:
       summary: Capture a pre-authorization
       description: Capture a pre-authorization
       value: *ref_1126
-    paymentCaptureResponse:
+    capturePaymentResponse:
       summary: Payment capture
       description: Payment that we captured.
       value: *ref_1127
-    capturePreAuthorizationResponse:
+    capturePaymentPreAuthorizationResponse:
       summary: Capture a pre-authorization
       description: Pre-authorization that we captured.
       value: *ref_1128
-    reversalPaymentRequest:
+    reversePaymentRequest:
       summary: Reversal Payment
       description: Reversal Payment
       value: *ref_1129
-    reversalPaymentResponse:
+    reversePaymentResponse:
       summary: Reversal Payment
       description: Reversal Payment
       value: *ref_1130
-    refundPaymentRequest:
+    createReferencedRefundRequest:
       summary: Refund Payment
       description: Refund Payment
       value: *ref_1131
-    refundPaymentResponse:
+    createReferencedRefundResponse:
       summary: Refund Payment
       description: Refund Payment
       value: *ref_1132
-    paymentInstructionRequest:
+    submitPaymentInstructionRequest:
       summary: Payment Instruction
       description: Submit an instruction for initiating a payment on a physical device.
       value: *ref_1133
-    paymentInstructionRequestMiFare:
+    submitPaymentInstructionMifareClosedLoopOptionsRequest:
       summary: Payment Instruction with MiFare closed-loop options
       description: Submit an instruction for initiating a payment on a physical device with MiFare closed-loop options.
       value: *ref_1134
-    paymentInstructionInProgress:
+    submitPaymentInstructionResponse:
       summary: Payment Instruction
       description: Object that contains information about the progress of the payment instruction.
       value: *ref_1135
-    paymentInstructionMiFareInProgress:
+    submitPaymentInstructionMifareClosedLoopOptionsResponse:
       summary: Payment Instruction with MiFare closed-loop options
       description: Object that contains information about the progress of the payment instruction for a MiFare card.
       value: *ref_1136
-    paymentInstruction:
+    retrievePaymentInstructionCompletedResponse:
       summary: Payment instruction
       description: Object that contains information about the progress of the payment instruction.
       value: *ref_1137
-    paymentInstructionMiFare:
+    retrievePaymentInstructionMifareCardResponse:
       summary: Payment instruction for MiFare card
       description: Object that contains information about the progress of the payment instruction for a MiFare card.
       value: *ref_1138
@@ -38172,15 +38164,15 @@ components:
       summary: Payment instruction failed
       description: Payment instruction failed
       value: *ref_1140
-    paginatedRefund:
+    listRefundsResponse:
       summary: Paginated Refund
       description: Paginated Refund
       value: *ref_1141
-    refundRequest:
+    createUnreferencedRefundRequest:
       summary: Refund
       description: Refund
       value: *ref_1142
-    refundResponse:
+    createUnreferencedRefundResponse:
       summary: Refund
       description: Refund
       value: *ref_269
@@ -38192,19 +38184,19 @@ components:
       summary: Adjust Refund
       description: Adjust Refund
       value: *ref_1144
-    reverseRefund:
+    reverseRefundResponse:
       summary: Reverse Refund
       description: Reverse Refund
       value: *ref_1145
-    refundInstructionRequest:
+    submitRefundInstructionRequest:
       summary: Refund instruction
       description: Submit an instruction for initiating a refund on a physical device.
       value: *ref_1146
-    refundInstructionInProgress:
+    submitRefundInstructionResponse:
       summary: Refund instruction
       description: Object that contains information about the progress of the refund instruction.
       value: *ref_1147
-    refundInstruction:
+    retrieveRefundInstructionResponse:
       summary: Refund instruction
       description: Object that contains information about the progress of the refund instruction.
       value: *ref_1148
@@ -38216,15 +38208,15 @@ components:
       summary: Refund instruction failed
       description: Refund instruction failed
       value: *ref_1150
-    signatureInstructionRequest:
+    submitSignatureInstructionRequest:
       summary: Signature Instruction
       description: Submit an instruction for capturing a signature on a physical device.
       value: *ref_1151
-    signatureInstructionInProgress:
+    submitSignatureInstructionResponse:
       summary: Signature Instruction
       description: Object that contains information about the progress of the signature instruction.
       value: *ref_1152
-    signatureInstruction:
+    retrieveSignatureInstructionResponse:
       summary: Signature instruction
       description: Object that contains information about the progress of the signature instruction.
       value: *ref_1153
@@ -38236,159 +38228,159 @@ components:
       summary: Signature instruction failed
       description: Signature instruction failed
       value: *ref_1155
-    signatureResponse:
+    retrieveSignatureResponse:
       summary: Signature
       description: A signature response example.
       value: *ref_1156
-    closedLoopResponse:
+    retrieveClosedLoopReadResponse:
       summary: Closed Loop Read
       description: A closed loop read response example.
       value: *ref_1157
-    cardVerificationRequest:
+    verifyCardRequest:
       summary: Card Verification
       description: Card Verification
       value: *ref_1158
-    cardVerificationResponse:
+    verifyCardResponse:
       summary: Card Verification
       description: Card Verification
       value: *ref_1159
-    cardBalanceRequest:
+    viewEbtBalanceRequest:
       summary: Card Balance
       description: Card Balance
       value: *ref_1160
-    cardBalanceResponse:
+    viewEbtBalanceResponse:
       summary: Card Balance
       description: Card Balance
       value: *ref_1161
-    binLookupRequest:
+    lookUpBinInformationRequest:
       summary: BIN lookup
       description: BIN lookup
       value: *ref_1162
-    binLookupResponse:
+    lookUpBinInformationResponse:
       summary: BIN lookup
       description: BIN lookup
       value: *ref_1163
-    fxRateRequest:
+    verifyDccEligibilityRequest:
       summary: Fx-Rate
       description: Fx-Rate
       value: *ref_1164
-    fxRateResponse:
+    verifyDccEligibilityResponse:
       summary: Fx-Rate
       description: Fx-Rate
       value: *ref_1165
-    paginatedBankTransferPayment:
+    listPaymentsResponse-2:
       summary: Bank Transfer Payment
       description: Bank Transfer Payment
       value: *ref_1166
-    bankTransferPaymentRequestStoreTokenRequest:
+    createPaymentStoreTokenRequest:
       summary: Store Token Bank Transfer Payment
       description: Bank Transfer Payment with ACH payload and token storage
       value: *ref_1167
-    bankTransferPaymentRequestSingleUseTokenSale:
+    createPaymentSingleUseTokenRequest-2:
       summary: Bank transfer sale with single-use token that we convert to a secure token
       description: Convert a single-use token to a secure token when running a bank transfer sale.
       value: *ref_1168
-    bankPaymentRequestSecureTokenRepeatPayment:
+    createPaymentSecureTokenRepeatRequest-2:
       summary: Bank transfer payment with a secure token
       description: Create an ACH payment using a secure token.
       value: *ref_1169
-    bankTransferPaymentResponseStoreToken:
+    createPaymentStoreTokenResponse:
       summary: Store Token Bank Transfer Payment
       description: Bank Transfer Payment with ACH payload and token storage
       value: *ref_301
-    bankTransferPaymentResponseSingleUseTokenSale:
+    createPaymentSingleUseTokenResponse-2:
       summary: Bank transfer sale with single-use token that we convert to a secure token
       description: Convert a single-use token to a secure token when running a bank transfer sale.
       value: *ref_1170
-    bankPaymentResponseSecureTokenRepeatPayment:
+    createPaymentSecureTokenRepeatResponse-2:
       summary: Bank transfer payment with a secure token
       description: Create an ACH payment using a secure token.
       value: *ref_1171
-    bankTransferPaymentDeclined:
+    retrievePaymentDeclinedResponse:
       summary: Declined Payment
       description: Bank Transfer Payment that was declined with return information
       value: *ref_1172
-    reverseBankTransferPayment:
+    reversePaymentResponse-2:
       summary: Reverse Bank Transfer Payment
       description: Reverse Bank Transfer Payment
       value: *ref_1173
-    refundBankTransferPaymentRequest:
+    createReferencedRefundRequest-2:
       summary: Refund Bank Transfer Payment
       description: Refund Bank Transfer Payment
       value: *ref_1174
-    refundBankTransferPaymentResponse:
+    createReferencedRefundResponse-2:
       summary: Refund Bank Transfer Payment
       description: Refund Bank Transfer Payment
       value: *ref_1175
-    representmentBankTransferPaymentRequest:
+    rePresentPaymentRequest:
       summary: Representment Bank Transfer Payment
       description: Representment Bank Transfer Payment
       value: *ref_1176
-    representmentBankTransferPaymentResponse:
+    rePresentPaymentResponse:
       summary: Representment Bank Transfer Payment
       description: Bank Transfer Payment that we represented with new ACH bank account details
       value: *ref_1177
-    paginatedBankTransferUnreferencedRefundResponse:
+    listRefundsResponse-2:
       summary: Paginated Bank Transfer Unreferenced Refund
       description: Paginated Bank Transfer Unreferenced Refund
       value: *ref_1178
-    bankTransferUnreferencedRefundRequest:
+    createUnreferencedRefundRequest-2:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
       value: *ref_1179
-    bankTransferUnreferencedRefundResponse:
+    createUnreferencedRefundResponse-2:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
       value: *ref_314
-    reverseBankTransferUnreferencedRefundResponse:
+    reverseRefundResponse-2:
       summary: Bank Transfer Unreferenced Refund
       description: Bank Transfer Unreferenced Refund
       value: *ref_1180
-    bankAccountVerificationRequestPad:
+    verifyBankAccountPadRequest:
       summary: PAD Bank Account Verification
       description: Bank Account Verification Request for PAD
       value: *ref_1181
-    bankAccountVerificationRequestAch:
+    verifyBankAccountAchRequest:
       summary: ACH Bank Account Verification
       description: Bank Account Verification Request for ACH
       value: *ref_1182
-    bankAccountVerificationPadResponse:
+    verifyBankAccountPadResponse:
       summary: PAD Bank Account Verification
       description: Result of verifying a customer's PAD bank account details.
       value: *ref_1183
-    bankAccountVerificationAchResponse:
+    verifyBankAccountAchResponse:
       summary: ACH Bank Account Verification
       description: Result of verifying a customer's ACH bank account details.
       value: *ref_1184
-    listMerchantPlatforms:
+    listMerchantPlatformsResponse:
       summary: Paginated list of merchant platforms
       description: Retrieve a list of merchant platforms associated with your account.
       value: *ref_1185
-    createMerchantPlatform:
+    createMerchantPlatformRequest:
       summary: Create merchant platform
       description: Create a merchant platform.
       value: *ref_1186
-    createMerchantPlatformWithAddendums:
+    createMerchantPlatformAddendumsRequest:
       summary: Create merchant platform with addendums
       description: Create a merchant platform with addendums appended to the Merchant Processing Agreement.
       value: *ref_1187
-    createMerchantPlatformFiservWithCloverAmendment:
+    createMerchantPlatformFiservCloverAmendmentRequest:
       summary: Create Fiserv merchant platform with Clover Merchant Processing Amendment
       description: Create a merchant platform for a Fiserv-bound merchant with the Clover Merchant Processing Amendment addendum including equipment line-item pre-fill data.
       value: *ref_1188
-    merchantPlatformCreated:
+    createMerchantPlatformResponse:
       summary: Created merchant platform
       description: New merchant platform created
       value: *ref_1189
-    merchantPlatformCreatedWithAddendums:
+    createMerchantPlatformAddendumsResponse:
       summary: Created merchant platform with addendums
       description: New merchant platform created with addendums appended to the Merchant Processing Agreement.
       value: *ref_1190
-    merchantPlatformCreatedFiservWithCloverAmendment:
+    createMerchantPlatformFiservCloverAmendmentResponse:
       summary: Created Fiserv merchant platform with Clover Merchant Processing Amendment
       description: New merchant platform created for a Fiserv-bound merchant. The Clover Merchant Processing Amendment addendum is appended to the Merchant Processing Agreement with equipment line-item pre-fill data.
       value: *ref_1191
-    processingAccountFailed:
+    createMerchantPlatformFailedProcessingAccountResponse:
       summary: Failed processing account
       description: We successfully created the merchant platform, but failed to add one or more processing accounts.
       value: *ref_1192
@@ -38432,70 +38424,70 @@ components:
       summary: National ID in use
       description: One or more supplied national IDs are not unique. All national IDs must be unique.
       value: *ref_1194
-    retrievedMerchantPlatforms:
+    retrieveMerchantPlatformResponse:
       summary: Retrieve merchant platform
       description: Retrieve a merchant platform.
       value: *ref_1195
-    listProcessingAccounts:
+    listMerchantPlatformProcessingAccountsResponse:
       summary: Paginated list of processing account
       description: Retrieve processing accounts associated with a merchant platform.
       value: *ref_1196
-    createProcessingAccount:
+    createProcessingAccountMerchantPlatformRequest:
       summary: Create merchant platform
       description: Create a merchant platform.
       value: *ref_1197
-    createProcessingAccountWithAddendums:
+    createProcessingAccountAddendumsRequest:
       summary: Create processing account with addendums
       description: Create a processing account with addendums appended to the Merchant Processing Agreement.
       value: *ref_1198
-    createProcessingAccountFiserv:
+    createProcessingAccountFiservRequest:
       summary: Create Fiserv processing account
       description: Create a processing account for a Fiserv-bound merchant with no Clover devices.
       value: *ref_1199
-    processingAccountCreated:
+    createProcessingAccountResponse:
       summary: Retrieve merchant platform
       description: Retrieve a merchant platform.
       value: *ref_1200
-    processingAccountCreatedWithAddendums:
+    createProcessingAccountAddendumsResponse:
       summary: Created processing account with addendums
       description: Processing account created with addendums appended to the Merchant Processing Agreement.
       value: *ref_1201
-    processingAccountCreatedFiservWithCloverAmendment:
+    createProcessingAccountFiservCloverAmendmentResponse:
       summary: Created Fiserv processing account with Clover Merchant Processing Amendment
       description: Processing account created for a Fiserv-bound merchant. The Clover Merchant Processing Amendment addendum is appended to the Merchant Processing Agreement with equipment line-item pre-fill data.
       value: *ref_1202
-    processingAccountCreatedFiservNoClover:
+    createProcessingAccountFiservNoCloverResponse:
       summary: Created Fiserv processing account without Clover devices
       description: Processing account created for a Fiserv-bound merchant with no Clover devices ordered. No addendums are appended.
       value: *ref_1203
-    retrieveProcessingAccount:
+    retrieveProcessingAccountResponse:
       summary: Retrieve processing account
       description: Retrieve a specific processing account.
       value: *ref_1204
-    listProcessingAccountFundingAccounts:
+    listProcessingAccountFundingAccountsResponse:
       summary: List of funding accounts
       description: List of funding accounts associated with a processing account.
       value: *ref_1205
-    listContactsPaginated:
+    listContactsResponse:
       summary: Paginated list of processing account contacts
       description: List of contacts associated with a processing account.
       value: *ref_1206
-    retrieveProcessingAccountPricingAgreement:
+    retrieveProcessingAccountPricingAgreementResponse:
       summary: Retrieve processing account pricing agreement
       description: Retrieve a pricing agreement for a processing account.
       value: *ref_1207
-    listProcessingAccountOwners:
+    listOwnersResponse:
       summary: Paginated list of processing account owners
       description: Retrieve owners associated with a processing account.
       value: *ref_1208
-    createReminderForProcessingAccount:
+    createReminderProcessingAccountRequest:
       summary: Create reminder for processing account
       description: |
         When you create a processing account, we send a copy of the pricing agreement to the merchant to sign. You can choose to send them a copy of the pricing agreement by email, or you can generate a link to the pricing agreement.<br/>  
         If you requested the merchant's signature by email and they don't respond, use our Reminders endpoint to create a reminder and to send another email.<br/>  
         **Note:** You can use the Reminders endpoint only if you request the merchant's signature by email. If you generate a link to the pricing agreement, you can't use the Reminders endpoint.  
       value: *ref_1209
-    reminderCreated:
+    createReminderProcessingAccountResponse:
       summary: Reminder created
       description: Reminder created.
       value: *ref_1210
@@ -38511,33 +38503,33 @@ components:
       summary: No pricing agreement exists for the processing account
       description: We couldn’t resend the email because there is no pricing agreement for the processing account.
       value: *ref_1213
-    listTerminalOrders:
+    listTerminalOrdersResponse:
       summary: Paginated list of Terminal Orders
       description: Retrieve terminal orders associated with a processing account.
       value: *ref_1214
-    createTerminalOrder:
+    createTerminalOrderRequest:
       summary: Terminal order
       description: |
         Use this method to order and configure terminals for a processing account. When you create an order, you specify the gateway settings, device settings, and application settings for the terminals. 
         **Note**: You need the ID of the merchant's processing account before you can create an order. If you don't know the processingAccountId, go to [Retrieve a Merchant Platform.](https://docs.payroc.com/api/schema/boarding/merchant-platforms/retrieve)
       value: *ref_1215
-    terminalOrderCreated:
+    createTerminalOrderResponse:
       summary: Terminal order
       description: Terminal order
       value: *ref_1216
-    listProcessingTemrinalsPaginated:
+    listProcessingTerminalsResponse:
       summary: Paginated list of processing terminals
       description: List of processing terminals associated with a processing account.
       value: *ref_1217
-    retrieveProcessingTerminal:
+    retrieveProcessingTerminalResponse:
       summary: Retrieve processing terminal
       description: Retrieve a specific processing terminal.
       value: *ref_1218
-    retrieveDeviceConfiguration:
+    retrieveDeviceConfigurationResponse:
       summary: Device Configuration
       description: An example Device Configuration response
       value: *ref_1219
-    closeBatchResponse:
+    closeBatchProcessingTerminalResponse:
       summary: Close-batch response
       description: Example response returned from a close-batch request
       value: *ref_1220
@@ -38545,119 +38537,119 @@ components:
       summary: Contact object
       description: Contact object
       value: *ref_1221
-    updateContact:
+    updateContactRequest:
       summary: Update contact
       description: Update a specific contact.
       value: *ref_1222
-    paginatedEventSubscriptions:
+    listEventSubscriptionsResponse:
       summary: Paginated list of Event subscriptions
       description: Example of a paginated list of event subscriptions
       value: *ref_1223
-    createEventSubscription:
+    createEventSubscriptionRequest:
       summary: Create event subscription
       description: Create an event subscription
       value: *ref_1224
-    createEventSubscriptionMetadata:
+    createEventSubscriptionMetadataRequest:
       summary: Create event subscription with metadata
       description: Create an event subscription
       value: *ref_1225
-    eventSubscriptionCreated:
+    createEventSubscriptionResponse:
       summary: Create event subscription
       description: Example of a created event subscription.
       value: *ref_1226
-    eventSubscriptionCreatedMetadata:
+    createEventSubscriptionMetadataResponse:
       summary: Create event subscription with metadata
       description: Example of a created event subscription.
       value: *ref_1227
-    eventSubscription:
+    retrieveEventSubscriptionResponse:
       summary: Event subscription
       description: Example of an event subscription.
       value: *ref_1228
-    updateEventSubscription:
+    updateEventSubscriptionRequest:
       summary: Update event subscription
       description: Update an event subscription
       value: *ref_1229
-    patchEventSubscriptionRealistic:
+    partiallyUpdateEventSubscriptionRealisticRequest:
       summary: Partially update event subscription
       description: |
         Partially update an existing event subscription.
 
         Structure your request to follow the RFC 6902 standard.
       value: *ref_1230
-    patchEventSubscriptionAdd:
+    partiallyUpdateEventSubscriptionAddRequest:
       summary: 'Update event subscription: add'
       description: Add operation adds a new value to an object or array.
       value: *ref_1231
-    patchEventSubscriptionRemove:
+    partiallyUpdateEventSubscriptionRemoveRequest:
       summary: 'Update event subscription: remove'
       description: Remove operation deletes a value from the event subscription.
       value: *ref_1232
-    patchEventSubscriptionReplace:
+    partiallyUpdateEventSubscriptionReplaceRequest:
       summary: 'Update event subscription: replace'
       description: Replace operation updates an existing value.
       value: *ref_1233
-    patchEventSubscriptionMove:
+    partiallyUpdateEventSubscriptionMoveRequest:
       summary: 'Update event subscription: move'
       description: Move operation relocates a value from one location to another.
       value: *ref_1234
-    patchEventSubscriptionCopy:
+    partiallyUpdateEventSubscriptionCopyRequest:
       summary: 'Update event subscription: copy'
       description: Copy operation duplicates a value from one location to another.
       value: *ref_1235
-    patchEventSubscriptionTest:
+    partiallyUpdateEventSubscriptionTestRequest:
       summary: 'Update event subscription: test'
       description: Test operation validates that a value at the target location equals the specified value.
       value: *ref_1236
-    patchEventSubscription:
+    partiallyUpdateEventSubscriptionRealisticResponse:
       summary: Partially update event subscription
       description: Example of a patched event subscription.
       value: *ref_1237
-    patchEventSubscriptionAddResponse:
+    partiallyUpdateEventSubscriptionAddResponse:
       summary: 'Update event subscription: add'
       description: Event subscription after adding a new event type.
       value: *ref_1238
-    patchEventSubscriptionRemoveResponse:
+    partiallyUpdateEventSubscriptionRemoveResponse:
       summary: 'Update event subscription: remove'
       description: Event subscription after removing a metadata field.
       value: *ref_1239
-    patchEventSubscriptionReplaceResponse:
+    partiallyUpdateEventSubscriptionReplaceResponse:
       summary: 'Update event subscription: replace'
       description: Event subscription after replacing the enabled value.
       value: *ref_1240
-    patchEventSubscriptionMoveResponse:
+    partiallyUpdateEventSubscriptionMoveResponse:
       summary: 'Update event subscription: move'
       description: Event subscription after moving a value within the eventTypes array.
       value: *ref_1241
-    patchEventSubscriptionCopyResponse:
+    partiallyUpdateEventSubscriptionCopyResponse:
       summary: 'Update event subscription: copy'
       description: Event subscription after copying the webhook URI into metadata.
       value: *ref_1242
-    patchEventSubscriptionTestResponse:
+    partiallyUpdateEventSubscriptionTestResponse:
       summary: 'Update event subscription: test'
       description: Event subscription returned unchanged after a test (assert-only) operation.
       value: *ref_1243
-    terminalOrder:
+    retrieveTerminalOrderResponse:
       summary: Terminal order
       description: Terminal order
       value: *ref_1244
-    paginatedAchDeposits:
+    listAchDepositsResponse:
       summary: Paginated ACH deposits
       value: *ref_1245
-    achDepositRetrieve:
+    retrieveAchDepositResponse:
       summary: Retrieve ACH deposit
       value: *ref_1246
     achDepositIdError:
       summary: Bad Request
       description: One or more validation errors occurred
       value: *ref_1247
-    paginatedAchDepositFees:
+    listAchDepositFeesResponse:
       summary: Paginated ACH deposit fees
       value: *ref_1248
-    getAttachment:
+    retrieveAttachmentResponse:
       summary: Upload Attachment
       description: Upload a file attachment
       value: *ref_1249
-    paginatedDevice:
+    searchDevicesResponse:
       summary: Device
       description: Device Paginated List
       value: *ref_1250
