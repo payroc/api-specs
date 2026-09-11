@@ -160,12 +160,12 @@ paths:
                 createdDate:
                   type: string
                   format: date-time
-                  example: '2024-07-02T15:30:00Z'
+                  example: '2024-07-02T15:30:00+00:00'
                   readOnly: true
                 lastModifiedDate:
                   type: string
                   format: date-time
-                  example: '2024-07-02T15:30:00Z'
+                  example: '2024-07-02T15:30:00+00:00'
                   readOnly: true
                 recipientType:
                   type: string
@@ -456,13 +456,13 @@ paths:
                         type: string
                         description: Date and time that we received your request to create the funding account in our system.
                         format: date-time
-                        example: '2024-07-02T12:00:00.000Z'
+                        example: '2024-07-02T12:00:00.000+00:00'
                         readOnly: true
                       lastModifiedDate:
                         type: string
                         description: Date and time that the funding account was last modified.
                         format: date-time
-                        example: '2024-07-02T12:00:00.000Z'
+                        example: '2024-07-02T12:00:00.000+00:00'
                         readOnly: true
                       status:
                         type: string
@@ -671,13 +671,13 @@ paths:
                     type: string
                     description: Date the funding recipient was created.
                     format: date-time
-                    example: '2024-07-02T15:30:00Z'
+                    example: '2024-07-02T15:30:00+00:00'
                     readOnly: true
                   lastModifiedDate:
                     type: string
                     description: Date the funding recipient was last modified.
                     format: date-time
-                    example: '2024-07-02T15:30:00Z'
+                    example: '2024-07-02T15:30:00+00:00'
                     readOnly: true
                   recipientType:
                     type: string
@@ -814,8 +814,8 @@ paths:
                   value: &ref_966
                     recipientId: 234
                     status: pending
-                    createdDate: '2024-07-02T15:30:00Z'
-                    lastModifiedDate: '2024-07-02T15:30:00Z'
+                    createdDate: '2024-07-02T15:30:00+00:00'
+                    lastModifiedDate: '2024-07-02T15:30:00+00:00'
                     recipientType: privateCorporation
                     taxId: 12-3456789
                     doingBusinessAs: Pizza Doe
@@ -1281,8 +1281,8 @@ paths:
                     data:
                       - recipientId: 234
                         status: approved
-                        createdDate: '2024-07-02T15:30:00Z'
-                        lastModifiedDate: '2024-07-02T15:30:00Z'
+                        createdDate: '2024-07-02T15:30:00+00:00'
+                        lastModifiedDate: '2024-07-02T15:30:00+00:00'
                         recipientType: privateCorporation
                         taxId: '123456789'
                         doingBusinessAs: Pizza Doe
@@ -1390,8 +1390,8 @@ paths:
                   value: &ref_968
                     recipientId: 234
                     status: approved
-                    createdDate: '2024-07-02T15:30:00Z'
-                    lastModifiedDate: '2024-07-02T15:30:00Z'
+                    createdDate: '2024-07-02T15:30:00+00:00'
+                    lastModifiedDate: '2024-07-02T15:30:00+00:00'
                     recipientType: privateCorporation
                     taxId: '123456789'
                     doingBusinessAs: Pizza Doe
@@ -1649,8 +1649,8 @@ paths:
                   description: List of funding accounts.
                   value: &ref_970
                     - fundingAccountId: 123
-                      createdDate: '2024-07-02T15:30:00Z'
-                      lastModifiedDate: '2024-07-02T15:30:00Z'
+                      createdDate: '2024-07-02T15:30:00+00:00'
+                      lastModifiedDate: '2024-07-02T15:30:00+00:00'
                       status: approved
                       type: checking
                       use: credit
@@ -1667,8 +1667,8 @@ paths:
                           href: https://api.payroc.com/v1/funding-recipients/234
                           method: get
                     - fundingAccountId: 124
-                      createdDate: '2024-07-02T15:30:00Z'
-                      lastModifiedDate: '2024-07-02T15:30:00Z'
+                      createdDate: '2024-07-02T15:30:00+00:00'
+                      lastModifiedDate: '2024-07-02T15:30:00+00:00'
                       status: pending
                       type: checking
                       use: debit
@@ -1757,8 +1757,8 @@ paths:
                   description: Funding account that we created and added to the funding recipient.
                   value: &ref_972
                     fundingAccountId: 123
-                    createdDate: '2024-07-02T15:30:00Z'
-                    lastModifiedDate: '2024-07-02T15:30:00Z'
+                    createdDate: '2024-07-02T15:30:00+00:00'
+                    lastModifiedDate: '2024-07-02T15:30:00+00:00'
                     status: pending
                     type: savings
                     use: credit
@@ -2109,8 +2109,8 @@ paths:
                         href: https://api.payroc.com/v1/funding-accounts?after=124&limit=2
                     data:
                       - fundingAccountId: 123
-                        createdDate: '2024-07-02T15:30:00Z'
-                        lastModifiedDate: '2024-07-02T15:30:00Z'
+                        createdDate: '2024-07-02T15:30:00+00:00'
+                        lastModifiedDate: '2024-07-02T15:30:00+00:00'
                         status: approved
                         type: checking
                         use: credit
@@ -2127,8 +2127,8 @@ paths:
                             href: https://api.payroc.com/v1/processing-accounts/4525644354
                             method: get
                       - fundingAccountId: 124
-                        createdDate: '2024-07-02T15:30:00Z'
-                        lastModifiedDate: '2024-07-02T15:30:00Z'
+                        createdDate: '2024-07-02T15:30:00+00:00'
+                        lastModifiedDate: '2024-07-02T15:30:00+00:00'
                         status: pending
                         type: checking
                         use: debit
@@ -2210,8 +2210,8 @@ paths:
                   summary: Masked funding account example.
                   value: &ref_977
                     fundingAccountId: 123
-                    createdDate: '2024-07-02T15:30:00Z'
-                    lastModifiedDate: '2024-07-02T15:30:00Z'
+                    createdDate: '2024-07-02T15:30:00+00:00'
+                    lastModifiedDate: '2024-07-02T15:30:00+00:00'
                     status: pending
                     type: checking
                     use: credit
@@ -16748,7 +16748,7 @@ paths:
                     format: date-time
                     readOnly: true
                     description: Date and time that the token expires. We return this value in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
-                    example: '2025-07-02T15:30:00.000+02:00'
+                    example: '2025-07-02T15:30:00.123456789+02:00'
               examples:
                 createHostedFieldsSessionResponse:
                   summary: Create session
@@ -16756,7 +16756,7 @@ paths:
                   value: &ref_1106
                     processingTerminalId: '1234001'
                     token: abcdef1234567890abcdef1234567890
-                    expiresAt: '2025-07-02T15:30:00.000+02:00'
+                    expiresAt: '2025-07-02T15:30:00.123456789+02:00'
           headers:
             location:
               description: URI reference to created resource.
@@ -27335,13 +27335,13 @@ paths:
                   createdDate:
                     type: string
                     format: date-time
-                    example: '2024-07-02T12:00:00.000Z'
+                    example: '2024-07-02T12:00:00.000+00:00'
                     readOnly: true
                     description: Date that the merchant platform was created. We return this value in the [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
                   lastModifiedDate:
                     type: string
                     format: date-time
-                    example: '2024-07-02T12:00:00.000Z'
+                    example: '2024-07-02T12:00:00.000+00:00'
                     readOnly: true
                     description: Date that the merchant platform was last modified. We return this value in the [ISO-8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
                   business:
@@ -27465,8 +27465,8 @@ paths:
                   description: New merchant platform created
                   value: &ref_1189
                     merchantPlatformId: '12345'
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                     business:
                       name: Example Corp
                       taxId: xxxxx6789
@@ -27505,8 +27505,8 @@ paths:
                   description: New merchant platform created with addendums appended to the Merchant Processing Agreement.
                   value: &ref_1190
                     merchantPlatformId: '12345'
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                     business:
                       name: Example Corp
                       taxId: xxxxx6789
@@ -27547,8 +27547,8 @@ paths:
                   description: New merchant platform created for a Fiserv-bound merchant. The Clover Merchant Processing Amendment addendum is appended to the Merchant Processing Agreement with equipment line-item pre-fill data.
                   value: &ref_1191
                     merchantPlatformId: '12347'
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                     business:
                       name: Example Corp
                       taxId: xxxxx6789
@@ -27595,8 +27595,8 @@ paths:
                   description: We successfully created the merchant platform, but failed to add one or more processing accounts.
                   value: &ref_1192
                     merchantPlatformId: '12346'
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                     business:
                       name: Example Corp
                       taxId: xxxxx6789
@@ -27841,8 +27841,8 @@ paths:
                         href: https://api.payroc.com/v1/merchant-platforms?after=12346&limit=2
                     data:
                       - merchantPlatformId: '12345'
-                        createdDate: '2024-07-02T12:00:00.000Z'
-                        lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                        createdDate: '2024-07-02T12:00:00.000+00:00'
+                        lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                         business:
                           name: Example Corp
                           taxId: xxxxx6789
@@ -27879,8 +27879,8 @@ paths:
                                 method: get
                             addendums: []
                       - merchantPlatformId: '12346'
-                        createdDate: '2024-07-02T12:00:00.000Z'
-                        lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                        createdDate: '2024-07-02T12:00:00.000+00:00'
+                        lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                         business:
                           name: Example Corp
                           taxId: xxxxx6789
@@ -27965,8 +27965,8 @@ paths:
                   description: Retrieve a merchant platform.
                   value: &ref_1195
                     merchantPlatformId: '12345'
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                     business:
                       name: Example Corp
                       taxId: xxxxx6789
@@ -28123,13 +28123,13 @@ paths:
                               format: date-time
                               readOnly: true
                               description: Date and time that we received your request to create the processing account in our system.
-                              example: '2024-07-02T12:00:00.000Z'
+                              example: '2024-07-02T12:00:00.000+00:00'
                             lastModifiedDate:
                               type: string
                               format: date-time
                               readOnly: true
                               description: Date and time that the processing account was last modified.
-                              example: '2024-07-02T12:00:00.000Z'
+                              example: '2024-07-02T12:00:00.000+00:00'
                             status:
                               type: string
                               description: |
@@ -28415,8 +28415,8 @@ paths:
                         href: https://api.payroc.com/v1/merchant-platforms/12345/processing-accounts?after=38766&limit=2
                     data:
                       - processingAccountId: '38765'
-                        createdDate: '2024-07-02T12:00:00.000Z'
-                        lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                        createdDate: '2024-07-02T12:00:00.000+00:00'
+                        lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                         status: approved
                         doingBusinessAs: Pizza Doe
                         owners:
@@ -28525,8 +28525,8 @@ paths:
                               method: get
                         addendums: []
                       - processingAccountId: '38766'
-                        createdDate: '2024-07-02T12:00:00.000Z'
-                        lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                        createdDate: '2024-07-02T12:00:00.000+00:00'
+                        lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                         status: approved
                         doingBusinessAs: Doe Hot Dogs
                         owners:
@@ -28963,8 +28963,8 @@ paths:
                   description: Retrieve a merchant platform.
                   value: &ref_1200
                     processingAccountId: '38765'
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                     status: entered
                     doingBusinessAs: Pizza Doe
                     owners:
@@ -29079,8 +29079,8 @@ paths:
                   description: Processing account created with addendums appended to the Merchant Processing Agreement.
                   value: &ref_1201
                     processingAccountId: '38765'
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                     status: entered
                     doingBusinessAs: Pizza Doe
                     owners:
@@ -29161,8 +29161,8 @@ paths:
                   description: Processing account created for a Fiserv-bound merchant. The Clover Merchant Processing Amendment addendum is appended to the Merchant Processing Agreement with equipment line-item pre-fill data.
                   value: &ref_1202
                     processingAccountId: '38766'
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                     status: entered
                     doingBusinessAs: Pizza Doe
                     owners:
@@ -29252,8 +29252,8 @@ paths:
                   description: Processing account created for a Fiserv-bound merchant with no Clover devices ordered. No addendums are appended.
                   value: &ref_1203
                     processingAccountId: '38767'
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                     status: entered
                     doingBusinessAs: Pizza Doe
                     owners:
@@ -29438,8 +29438,8 @@ paths:
                   description: Retrieve a specific processing account.
                   value: &ref_1204
                     processingAccountId: '38765'
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                     status: approved
                     doingBusinessAs: Pizza Doe
                     owners:
@@ -29617,8 +29617,8 @@ paths:
                   description: List of funding accounts associated with a processing account.
                   value: &ref_1205
                     - fundingAccountId: 123
-                      createdDate: '2024-07-02T12:00:00.000Z'
-                      lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                      createdDate: '2024-07-02T12:00:00.000+00:00'
+                      lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                       status: approved
                       type: checking
                       use: creditAndDebit
@@ -29635,8 +29635,8 @@ paths:
                           href: https://api.payroc.com/v1/processing-accounts/38765
                           method: get
                     - fundingAccountId: 124
-                      createdDate: '2024-07-02T12:00:00.000Z'
-                      lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                      createdDate: '2024-07-02T12:00:00.000+00:00'
+                      lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
                       status: pending
                       type: checking
                       use: creditAndDebit
@@ -31265,8 +31265,8 @@ paths:
                           tips:
                             enabled: false
                           tokenization: true
-                    createdDate: '2024-07-02T12:00:00.000Z'
-                    lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                    createdDate: '2024-07-02T12:00:00.000+00:00'
+                    lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
         '400':
           description: Bad request
           content:
@@ -31454,8 +31454,8 @@ paths:
                               rel: paymentIntent
                               method: get
                               href: https://api.payroc.com/v1/payment-intents/1542
-                      createdDate: '2024-07-02T12:00:00.000Z'
-                      lastModifiedDate: '2024-07-02T12:00:00.000Z'
+                      createdDate: '2024-07-02T12:00:00.000+00:00'
+                      lastModifiedDate: '2024-07-02T12:00:00.000+00:00'
         '400':
           description: Invalid request
           content: *ref_15
@@ -32124,11 +32124,13 @@ paths:
                     format: date-time
                     description: Date and time that we received your request to upload the attachment.
                     example: '2024-07-02T12:00:00.000Z'
+                    readOnly: true
                   lastModifiedDate:
                     type: string
                     format: date-time
                     description: Date and time the attachment was last modified.
                     example: '2024-07-02T12:00:00.000Z'
+                    readOnly: true
                   metadata:
                     type: object
                     additionalProperties:
@@ -34520,7 +34522,7 @@ paths:
                               type: string
                               format: date-time
                               description: Date and time that our gateway added the device to our systems. Our gateway returns this value in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
-                              example: '2024-01-01T12:00:00Z'
+                              example: '2024-01-01T12:00:00.000+00:00'
                             deactivatedDate:
                               type: string
                               format: date-time
@@ -34553,7 +34555,7 @@ paths:
                                   type: string
                                   format: date-time
                                   description: Date and time that the processing terminal processed the last transaction. Our gateway returns this value in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
-                                  example: '2024-07-02T15:30:00Z'
+                                  example: '2024-07-02T15:30:00.000+00:00'
                                 processingTerminalId:
                                   type: string
                                   description: Unique identifier that we assigned to the processing terminal.
@@ -34584,11 +34586,11 @@ paths:
                         deviceType:
                           model: idtechKioskV
                           manufacturer: idtech
-                        createdDate: '2024-01-15T10:20:30Z'
+                        createdDate: '2024-01-15T10:20:30.000+00:00'
                         lastTransaction:
                           orderId: OrderRef6543
                           processingTerminalId: '1234001'
-                          dateTime: '2024-06-15T14:25:00Z'
+                          dateTime: '2024-06-15T14:25:00.000+00:00'
                       - deviceId: R3TZB9WY6L
                         tender: ebt
                         serialNumber: WPC202833004712
@@ -34596,12 +34598,12 @@ paths:
                         deviceType:
                           model: paxA80
                           manufacturer: pax
-                        createdDate: '2023-02-20T11:30:40Z'
+                        createdDate: '2023-02-20T11:30:40.000+00:00'
                         deactivatedDate: '2024-05-10T09:15:00Z'
                         lastTransaction:
                           orderId: OrderRef7654
                           processingTerminalId: '1234001'
-                          dateTime: '2024-05-09T16:45:00Z'
+                          dateTime: '2024-05-09T16:45:00.000+00:00'
                     links:
                       - rel: next
                         method: get
