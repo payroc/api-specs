@@ -27541,7 +27541,7 @@ paths:
                         customerId: '2345'
                   metadata:
                     customerId: '2345'
-              createMerchantPlatformWithRocGiving:
+              createMerchantPlatformRocGivingRequest:
                 summary: Create a merchant platform with Roc Giving Addendum
                 description: Create a merchant platform with the Roc Giving Addendum appended to the Merchant Processing Agreement.
                 value: &ref_1195
@@ -29333,7 +29333,7 @@ paths:
                     type: requestedViaDirectLink
                   metadata:
                     customerId: '2345'
-              createProcessingAccountWithRocGiving:
+              createProcessingAccountRocGivingRequest:
                 summary: Create a processing account with Roc Giving Addendum
                 description: Create a processing account with the Roc Giving Addendum appended to the Merchant Processing Agreement.
                 value: &ref_1208
@@ -29802,7 +29802,7 @@ paths:
                     addendums: []
                     metadata:
                       customerId: '2345'
-                processingAccountCreatedWithRocGiving:
+                createProcessingAccountRocGivingResponse:
                   summary: Create a processing account with Roc Giving Addendum
                   description: Create a processing account with the Roc Giving Addendum appended to the Merchant Processing Agreement.
                   value: &ref_1213
@@ -39009,7 +39009,7 @@ components:
       summary: Create Fiserv merchant platform with Clover Merchant Processing Amendment
       description: Create a merchant platform for a Fiserv-bound merchant with the Clover Merchant Processing Amendment addendum including equipment line-item pre-fill data.
       value: *ref_1194
-    createMerchantPlatformWithRocGiving:
+    createMerchantPlatformRocGivingRequest:
       summary: Create a merchant platform with Roc Giving Addendum
       description: Create a merchant platform with the Roc Giving Addendum appended to the Merchant Processing Agreement.
       value: *ref_1195
@@ -39025,7 +39025,7 @@ components:
       summary: Create Fiserv merchant platform with Clover Merchant Processing Amendment
       description: New merchant platform created for a Fiserv-bound merchant. The Clover Merchant Processing Amendment addendum is appended to the Merchant Processing Agreement with equipment line-item pre-fill data.
       value: *ref_1198
-    merchantPlatformCreatedWithRocGiving:
+    createMerchantPlatformRocGivingResponse:
       summary: Create a merchant platform with Roc Giving Addendum
       description: Create a merchant platform with the Roc Giving Addendum appended to the Merchant Processing Agreement.
       value: *ref_1199
@@ -39093,7 +39093,7 @@ components:
       summary: Create Fiserv processing account
       description: Create a processing account for a Fiserv-bound merchant with no Clover devices.
       value: *ref_1207
-    createProcessingAccountWithRocGiving:
+    createProcessingAccountRocGivingRequest:
       summary: Create a processing account with Roc Giving Addendum
       description: Create a processing account with the Roc Giving Addendum appended to the Merchant Processing Agreement.
       value: *ref_1208
@@ -39113,7 +39113,7 @@ components:
       summary: Create Fiserv processing account
       description: Processing account created for a Fiserv-bound merchant with no Clover devices ordered. No addendums are appended.
       value: *ref_1212
-    processingAccountCreatedWithRocGiving:
+    createProcessingAccountRocGivingResponse:
       summary: Create a processing account with Roc Giving Addendum
       description: Create a processing account with the Roc Giving Addendum appended to the Merchant Processing Agreement.
       value: *ref_1213
