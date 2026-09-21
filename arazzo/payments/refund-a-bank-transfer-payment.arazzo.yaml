@@ -1,7 +1,7 @@
 arazzo: 1.0.0
 info:
   title: Refund a bank-transfer payment
-  summary: Return funds to a customer against an existing settled bank-transfer (ACH) payment.
+  summary: Return funds to a customer against an existing bank-transfer payment.
   description: >
     Runs a referenced refund - a refund tied to an originating paymentId - to
     return funds to a customer's bank account. The merchant optionally looks up
@@ -14,15 +14,23 @@ info:
       Returns 200.
 
     Agent gotchas: a referenced refund is a POST that returns 200 (not 201).
-    Every refund POST requires an `Idempotency-Key` header in UUID v4 format. A
-    refund only settles when the original payment is in a closed batch; if the
-    payment is still in an open batch the gateway reverses (cancels) it instead
-    of refunding - so this same endpoint doubles as a reversal, and a dedicated
-    reverse endpoint is not needed. Both full and partial refunds use the same
-    request; a partial refund simply sends an `amount` lower than the original
-    payment amount.
+    Every refund POST requires an `Idempotency-Key` header in UUID v4 format.
+    `amount` and `description` are both required in the body - the gateway does
+    not infer them from the original payment. If the payment is still in an open
+    batch the gateway reverses (cancels) it instead of refunding, and the
+    response carries `transactionResult.type` of `payment` with
+    `transactionResult.status` of `reversal`. Both full and partial refunds use
+    the same request; a partial refund simply sends an `amount` lower than the
+    original payment amount.
 
-    To refund a card payment instead, use the refund-a-card-payment workflow.
+    ACH: this workflow does not apply to an ACH payment in a closed batch. That
+    request fails with 400 `Bank transfer with status COMPLETE can not be
+    refunded`. Use the run-unreferenced-bank-transfer-refund workflow instead.
+    The restriction does not apply to PAD payments.
+
+    To cancel an open-batch payment explicitly rather than relying on the
+    gateway's conversion, use the reverse-a-bank-transfer-payment workflow. To
+    refund a card payment instead, use the refund-a-card-payment workflow.
   version: 1.0.0
 
 sourceDescriptions:
@@ -119,7 +127,9 @@ workflows:
           Optional. Retrieves the original bank-transfer payment by paymentId (GET
           /bank-transfer-payments/{paymentId}) to confirm its details and batch
           status before refunding. An open-batch payment is reversed rather than
-          refunded.
+          refunded. For ACH this step is not optional: a `transactionResult.status`
+          of `complete` means the batch has closed and the refund step will fail,
+          so switch to the unreferenced-refund workflow.
         operationId: $sourceDescriptions.payroc-api.getBankTransferPayment
         parameters:
           - name: paymentId
@@ -135,10 +145,12 @@ workflows:
         description: >
           Refunds the referenced bank-transfer payment (POST
           /bank-transfer-payments/{paymentId}/refund). Requires the
-          Idempotency-Key header and a body with `amount` and `description`.
-          Returns 200 with the refunded payment; the resulting transaction state
-          is in `transactionResult.status` (reversal when the payment was in an
-          open batch).
+          Idempotency-Key header and a body with `amount` and `description`, both
+          required. Returns 200 with the refunded payment; the resulting
+          transaction state is in `transactionResult.status` (reversal when the
+          payment was in an open batch, in which case `transactionResult.type`
+          stays `payment` and `authorizedAmount` is positive). Fails with 400 for
+          an ACH payment whose batch has closed.
         operationId: $sourceDescriptions.payroc-api.refundBankTransferPayment
         parameters:
           - name: Idempotency-Key
