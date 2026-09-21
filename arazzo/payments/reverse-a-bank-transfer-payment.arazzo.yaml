@@ -8,7 +8,9 @@ info:
     refund: a reversal cancels an unsettled payment in an open batch, whereas a
     refund returns funds for an already-settled payment in a closed batch. Agents
     routinely conflate the two - if the batch has closed, use the
-    refund-a-bank-transfer-payment workflow instead.
+    refund-a-bank-transfer-payment workflow instead, except for ACH, where a
+    closed-batch payment cannot be refunded through that workflow at all. For a
+    settled ACH payment use run-unreferenced-bank-transfer-refund.
 
     Optionally look up the payment first (listBankTransferPayments), then reverse
     it (reverseBankTransferPayment). This endpoint has no request body, so the
