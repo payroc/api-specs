@@ -12019,7 +12019,7 @@ paths:
                         description: Name of the custom field.
                         example: yourCustomField
                       value:
-                        maxLength: 100
+                        maxLength: 255
                         minLength: 1
                         type: string
                         description: Value for the custom field.
