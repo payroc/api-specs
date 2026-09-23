@@ -10877,7 +10877,7 @@ paths:
                       default: automatic
                       description: |
                         Indicates how the merchant takes the payment from the customer's account.
-                        - `manual` - The merchant manually collects payments from the customer.
+                        - `manual` - The merchant manually collects payments from the customer. Use the [Pay manual subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/pay) method to collect a manual payment. 
                         - `automatic` - The terminal automatically collects payments from the customer.
                       enum:
                         - manual
@@ -11973,17 +11973,19 @@ paths:
                   type: string
                   format: date
                   description: |
-                    Format: **YYYY-MM-DD**  
-                    Subscription's start date.
+                    Start date of the subscription in the format **YYYY-MM-DD**. 
+
+                    The date must be the current day or a day in the future. Our gateway uses Coordinated Universal Time (UTC) during the winter, and Irish Standard Time (IST) during the summer. 
                   example: '2024-05-02'
                 endDate:
                   type: string
                   format: date
                   description: |
-                    Format: **YYYY-MM-DD**  
-                    Subscription's end date.  
-                    **Note:** If you provide values for both **length** and **endDate**, 
-                    our gateway uses the value for **endDate** to determine when the subscription should end.
+                    End date of the subscription in the format **YYYY-MM-DD**. 
+
+                    Our gateway uses Coordinated Universal Time (UTC) during the winter, and Irish Standard Time (IST) during the summer. 
+
+                    **Note:** If you provide values for both **length** and **endDate**, our gateway uses the value for **endDate** to determine when the subscription should end.
                   example: '2025-05-02'
                 length:
                   minimum: 0
@@ -12298,17 +12300,19 @@ paths:
                     type: string
                     format: date
                     description: |
-                      Format: **YYYY-MM-DD**  
-                      Subscription's start date.
+                      Start date of the subscription in the format **YYYY-MM-DD**. 
+
+                      The date must be the current day or a day in the future. Our gateway uses Coordinated Universal Time (UTC) during the winter, and Irish Standard Time (IST) during the summer. 
                     example: '2024-05-02'
                   endDate:
                     type: string
                     format: date
                     description: |
-                      Format: **YYYY-MM-DD** 
-                      Subscription's end date.  
-                      **Note:** If you provide values for both **length** and **endDate**, 
-                      our gateway uses the value for **endDate** to determine when the subscription should end. 
+                      End date of the subscription in the format **YYYY-MM-DD**. 
+
+                      Our gateway uses Coordinated Universal Time (UTC) during the winter, and Irish Standard Time (IST) during the summer. 
+
+                      **Note:** If you provide values for both **length** and **endDate**, our gateway uses the value for **endDate** to determine when the subscription should end.
                     example: '2025-05-02'
                   length:
                     minimum: 0
@@ -12321,9 +12325,9 @@ paths:
                   type:
                     type: string
                     description: |
-                      How the merchant takes the payment from the customer’s account.  
-                      - `manual` – The merchant manually collects payments from the customer.  
-                      - `automatic` – The terminal automatically collects payments from the customer.
+                      Indicates how the merchant takes the payment from the customer's account.
+                      - `manual` - The merchant manually collects payments from the customer. Use the [Pay manual subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/pay) method to collect a manual payment. 
+                      - `automatic` - The terminal automatically collects payments from the customer.
                     enum:
                       - manual
                       - automatic
@@ -13631,15 +13635,17 @@ paths:
         - Subscriptions
       summary: Pay manual subscription
       description: |
-        Use this method to manually collect a payment linked to a subscription. You can manually collect a payment only if the merchant chose not to let our gateway automatically collect each payment.  
+        Use this method to manually collect a payment for a subscription.  
+
+        You can manually collect a payment only if the subscription **type** is `manual` and only when the payment is due. The **frequency** you set when you created the payment plan determines how often a payment is due, for example, weekly or monthly. If you've already collected the payment for the current period, our gateway rejects the request.
 
         To manually collect a payment, you need the subscriptionId of the subscription that's linked to the payment. You sent the subscriptionId in the request of the [Create Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/create) method.  
 
-        **Note:** If you don't have the subscriptionId, use our [List Subscriptions](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/list) method to search for the subscription.  
+        **Note:** If you don't have the subscriptionId, use our [List Subscriptions](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/list) method to search for the subscription.
 
-        The request includes an order object that contains information about the amount that you want to collect.  
+        The request includes an order object that contains information about the amount that you want to collect.
 
-        In the response, our gateway returns information about the payment and a paymentId. You can use the paymentId in follow-on actions with the [Payments](https://docs.payroc.com/api/schema/card-payments/payments) endpoints or [Bank Transfer Payments](https://docs.payroc.com/api/schema/bank-transfer-payments/payments) endpoints.  
+        In the response, our gateway returns information about the payment and a paymentId. You can use the paymentId in follow-on actions with the [Payments](https://docs.payroc.com/api/schema/card-payments/payments) endpoints or [Bank Transfer Payments](https://docs.payroc.com/api/schema/bank-transfer-payments/payments) endpoints.
       operationId: paySubscription
       parameters:
         - name: Idempotency-Key
@@ -16346,7 +16352,7 @@ paths:
 
         **Note:** If you don’t have the secureTokenId, use our [List Secure Tokens](https://docs.payroc.com/api/schema/tokenization/secure-tokens/list) method to search for the secure token.  
 
-        When you delete a secure token, you can’t recover it, and you can’t reuse its identifier for a new token.  
+        When you delete a secure token, you can’t recover it, and you can’t reuse its identifier for a new token. If you used the secure token in a transaction, you can still retrieve information about the transaction after you delete the token.    
       operationId: deleteSecureToken
       parameters:
         - name: processingTerminalId
