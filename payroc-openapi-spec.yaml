@@ -6748,6 +6748,9 @@ paths:
         '404':
           description: Resource not found
           content: *ref_18
+        '406':
+          description: Not acceptable
+          content: *ref_19
         '409':
           description: Conflict.
           content:
@@ -6806,6 +6809,9 @@ paths:
         '404':
           description: Resource not found
           content: *ref_18
+        '406':
+          description: Not acceptable
+          content: *ref_19
         '409':
           description: Conflict.
           content:
@@ -31201,6 +31207,9 @@ paths:
         '404':
           description: Resource not found
           content: *ref_18
+        '406':
+          description: Not acceptable
+          content: *ref_19
         '409':
           description: Conflict
           content:
@@ -31998,6 +32007,9 @@ paths:
                   summary: Not found
                   description: Resource could not be found
                   value: *ref_371
+        '406':
+          description: Not acceptable
+          content: *ref_19
         '409':
           description: Conflict
           content:
