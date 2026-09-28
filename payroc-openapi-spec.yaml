@@ -29132,6 +29132,9 @@ paths:
         '403':
           description: Do not have permissions to perform this action
           content: *ref_13
+        '404':
+          description: Resource not found
+          content: *ref_18
         '406':
           description: Not acceptable
           content: *ref_19
@@ -30085,6 +30088,9 @@ paths:
         '401':
           description: Identity could not be verified
           content: *ref_12
+        '403':
+          description: Do not have permissions to perform this action
+          content: *ref_13
         '404':
           description: Resource not found
           content: *ref_18
@@ -31065,6 +31071,9 @@ paths:
         '401':
           description: Identity could not be verified
           content: *ref_12
+        '403':
+          description: Do not have permissions to perform this action
+          content: *ref_13
         '404':
           description: Resource not found
           content: *ref_18
@@ -31201,6 +31210,9 @@ paths:
                   summary: Idempotency key missing
                   description: Idempotency key must be supplied
                   value: *ref_26
+        '401':
+          description: Identity could not be verified
+          content: *ref_12
         '403':
           description: Do not have permissions to perform this action
           content: *ref_13
