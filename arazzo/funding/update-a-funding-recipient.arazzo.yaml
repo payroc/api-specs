@@ -1,25 +1,25 @@
 arazzo: 1.0.0
 info:
   title: Update a funding recipient
-  summary: Find a funding recipient, retrieve it, then replace its details with a full PUT.
+  summary: Find a funding recipient, retrieve it, then replace its mutable details with a full PUT.
   description: >
-    Updates the legal/contact details of a funding recipient. Because the update
-    is a full-object PUT that echoes the recipient's owners and funding accounts,
-    you must retrieve the recipient first to carry those summaries into the
-    payload.
+    Updates the legal/contact details of a funding recipient. The update is a
+    full-object PUT of the recipient's mutable fields, so you must retrieve the
+    recipient first to carry forward the current values of any required field
+    you aren't changing.
 
     Agent gotchas:
     - The path parameter is recipientId (an integer).
     - updateFundingRecipient is a full-object PUT that returns 204 No Content (no
       body); it does not return the updated resource. Significant changes may
       trigger re-approval (status returns to pending).
-    - owners and fundingAccounts are read-only summaries echoed back in the
-      payload from the retrieve step; the mutable fields are recipientType, taxId,
-      charityId, doingBusinessAs, address, contactMethods, and metadata.
+    - owners and fundingAccounts are read-only and are not part of the update
+      payload at all; the mutable fields are recipientType, taxId, charityId,
+      doingBusinessAs, address, contactMethods, and metadata.
 
     To remove a recipient instead, use the delete-a-funding-recipient workflow.
     Mutually exclusive with delete for the same recipient.
-  version: 1.0.0
+  version: 1.0.1
 
 sourceDescriptions:
   - name: payroc-api
@@ -31,9 +31,9 @@ workflows:
     summary: List, retrieve, then update (full PUT) a funding recipient.
     description: >
       Optionally list recipients (listRecipients), retrieve the target recipient
-      (getRecipient - required, as its owners/fundingAccounts summaries are echoed
-      into the PUT), then update it (updateRecipient). The list step is optional
-      when you already hold the recipientId.
+      (getRecipient - required, to carry forward the current values of the
+      full-object PUT's required fields), then update it (updateRecipient). The
+      list step is optional when you already hold the recipientId.
     inputs:
       type: object
       required:
@@ -81,9 +81,10 @@ workflows:
 
       - stepId: getRecipient
         description: >
-          Retrieve the target funding recipient. Required before the update: its
-          owners and fundingAccounts summaries are echoed back into the full-object
-          PUT payload.
+          Retrieve the target funding recipient. Required before the update: the
+          PUT replaces recipientType, taxId, doingBusinessAs, address, and
+          contactMethods as a full object, so you need their current values to
+          carry forward any of them you aren't changing.
         operationId: getFundingRecipient
         parameters:
           - name: recipientId
@@ -94,17 +95,15 @@ workflows:
         outputs:
           recipientId: $response.body#/recipientId
           status: $response.body#/status
-          owners: $response.body#/owners
-          fundingAccounts: $response.body#/fundingAccounts
 
       - stepId: updateRecipient
         description: >
           Update the recipient's details with a full-object PUT. Returns 204 No
           Content (no response body). Significant changes may require re-approval,
           which resets status to pending. owners and fundingAccounts are read-only
-          summaries echoed back from the retrieve step; the mutable fields are
-          recipientType, taxId, charityId, doingBusinessAs, address,
-          contactMethods, and metadata.
+          and are not part of the payload; the mutable fields are recipientType,
+          taxId, charityId, doingBusinessAs, address, contactMethods, and
+          metadata.
         operationId: updateFundingRecipient
         parameters:
           - name: recipientId
@@ -128,8 +127,6 @@ workflows:
                 value: $inputs.contactEmail
               - type: phone
                 value: "2025550110"
-            owners: $steps.getRecipient.outputs.owners
-            fundingAccounts: $steps.getRecipient.outputs.fundingAccounts
             metadata:
               responsiblePerson: Jane Doe
         successCriteria:
