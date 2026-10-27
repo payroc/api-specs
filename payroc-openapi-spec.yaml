@@ -33882,14 +33882,17 @@ paths:
                                         type: string
                                         description: |
                                           Type of notification method.  
-                                          **Note:** To receive notifications by webhook, your server must be able to handle POST requests.  
+                                          **Note:** To receive notifications by webhook, your server must be able to handle POST requests and respond within 15 seconds. We treat a request that takes longer as a failed delivery.  
                                         enum:
                                           - webhook
                                         example: webhook
                                       uri:
                                         type: string
-                                        description: Public endpoint that we send notifications to.
-                                        example: https://my-server/notification/endpoint
+                                        description: |
+                                          Public endpoint that we send notifications to.  
+                                          The value must be an absolute `https://` URI that resolves to a public host.
+                                        maxLength: 4000
+                                        example: https://webhooks.example.com/payroc
                                       secret:
                                         type: string
                                         description: |
@@ -33939,7 +33942,7 @@ paths:
                           - processingAccount.status.changed
                         notifications:
                           - type: webhook
-                            uri: https://my-server/notification/endpoint
+                            uri: https://webhooks.example.com/payroc
                             secret: '**********oP3456'
                             supportEmailAddress: jane.doe@example.com
                         metadata:
@@ -33951,7 +33954,7 @@ paths:
                           - processingAccount.riskStatus.changed
                         notifications:
                           - type: webhook
-                            uri: https://my-server/notification/endpoint
+                            uri: https://webhooks.example.com/payroc
                             secret: '**********oP3456'
                             supportEmailAddress: jane.doe@example.com
                         metadata:
@@ -34001,7 +34004,7 @@ paths:
                     - processingAccount.status.changed
                   notifications:
                     - type: webhook
-                      uri: https://my-server/notification/endpoint
+                      uri: https://webhooks.example.com/payroc
                       secret: aBcD1234eFgH5678iJkL9012mNoP3456
                       supportEmailAddress: jane.doe@example.com
                   metadata:
@@ -34015,7 +34018,7 @@ paths:
                     - processingAccount.status.changed
                   notifications:
                     - type: webhook
-                      uri: https://my-server/notification/endpoint
+                      uri: https://webhooks.example.com/payroc
                       secret: aBcD1234eFgH5678iJkL9012mNoP3456
                       supportEmailAddress: jane.doe@example.com
                   metadata:
@@ -34047,7 +34050,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-server/notification/endpoint
+                        uri: https://webhooks.example.com/payroc
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -34063,7 +34066,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-server/notification/endpoint
+                        uri: https://webhooks.example.com/payroc
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -34081,6 +34084,18 @@ paths:
                   summary: Bad Request
                   description: One or more validation errors occurred
                   value: *ref_11
+                invalidWebhookUri:
+                  summary: Invalid webhook URI
+                  description: The webhook URI is not an https URI that resolves to a public host
+                  value:
+                    type: https://docs.payroc.com/api/errors#bad-request
+                    title: Bad request
+                    status: 400
+                    detail: One or more validation errors occurred, see error section for more info
+                    errors:
+                      - parameter: notifications[0].uri
+                        detail: invalid value
+                        message: '''URI'' must be an absolute ''https://'' URI.'
                 idempotentKeyMissing:
                   summary: Idempotency key missing
                   description: Idempotency key must be supplied
@@ -34154,7 +34169,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-server/notification/endpoint
+                        uri: https://webhooks.example.com/payroc
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -34206,7 +34221,7 @@ paths:
                     - processingAccount.status.changed
                   notifications:
                     - type: webhook
-                      uri: https://my-server/notification/endpoint
+                      uri: https://webhooks.example.com/payroc
                       secret: aBcD1234eFgH5678iJkL9012mNoP3456
                       supportEmailAddress: jane.doe@example.com
                   metadata:
@@ -34334,7 +34349,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-server/notification/endpoint
+                        uri: https://webhooks.example.com/payroc
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -34351,7 +34366,7 @@ paths:
                       - terminalOrder.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-server/notification/endpoint
+                        uri: https://webhooks.example.com/payroc
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -34367,7 +34382,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-server/notification/endpoint
+                        uri: https://webhooks.example.com/payroc
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata: {}
@@ -34382,7 +34397,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-server/notification/endpoint
+                        uri: https://webhooks.example.com/payroc
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -34398,7 +34413,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-server/notification/endpoint
+                        uri: https://webhooks.example.com/payroc
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -34414,7 +34429,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-server/notification/endpoint
+                        uri: https://webhooks.example.com/payroc
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -34431,7 +34446,7 @@ paths:
                       - processingAccount.status.changed
                     notifications:
                       - type: webhook
-                        uri: https://my-server/notification/endpoint
+                        uri: https://webhooks.example.com/payroc
                         secret: '**********oP3456'
                         supportEmailAddress: jane.doe@example.com
                     metadata:
@@ -34449,6 +34464,18 @@ paths:
                   summary: Bad Request
                   description: One or more validation errors occurred
                   value: *ref_11
+                invalidWebhookUri:
+                  summary: Invalid webhook URI
+                  description: The webhook URI is not an https URI that resolves to a public host
+                  value:
+                    type: https://docs.payroc.com/api/errors#bad-request
+                    title: Bad request
+                    status: 400
+                    detail: One or more validation errors occurred, see error section for more info
+                    errors:
+                      - parameter: notifications[0].uri
+                        detail: invalid value
+                        message: '''URI'' must be an absolute ''https://'' URI.'
                 idempotentKeyMissing:
                   summary: Idempotency key missing
                   description: Idempotency key must be supplied
