@@ -64,7 +64,7 @@ workflows:
         notificationUri:
           type: string
           description: Public endpoint that Payroc sends webhook POST requests to.
-          example: https://my-server/notification/endpoint
+          example: https://webhooks.example.com/payroc
         secret:
           type: string
           description: 16-64 character shared secret returned (masked) in the Payroc-Secret header so you can verify deliveries.
