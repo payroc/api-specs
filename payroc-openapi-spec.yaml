@@ -10,8 +10,6 @@ info:
 servers:
   - url: https://api.payroc.com/v1
     description: Production
-  - url: https://api.uat.payroc.com/v1
-    description: UAT
 security:
   - bearerAuth: []
 tags:
