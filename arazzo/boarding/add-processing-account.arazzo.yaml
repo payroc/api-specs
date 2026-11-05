@@ -22,8 +22,10 @@ info:
     - The optional reminder step (Step 2) only works when signature.type is
       requestedViaEmail. If you request the signature via a direct link
       (signature.type: requestedViaDirectLink) you cannot send reminders and Step 2
-      must be skipped.
-  version: 1.0.0
+      must be skipped. The same applies when the owner already signed with your own
+      e-signature tool (signature.type: electronic): there is no Payroc signing link,
+      so Step 2 must be skipped.
+  version: 1.0.1
 
 sourceDescriptions:
   - name: payroc-api
@@ -42,7 +44,9 @@ workflows:
       Variant: contacts and owners are both supplied inline in Step 1's payload (the
       "add a contact" / "add an owner" flows are not separate operations). To board an
       account with a direct-link signature instead of email, set
-      signature.type to requestedViaDirectLink in Step 1 and skip Step 2.
+      signature.type to requestedViaDirectLink in Step 1 and skip Step 2. If the
+      owner already signed with your own e-signature tool, set signature.type to
+      electronic, supply the signing evidence, and skip Step 2.
     inputs:
       type: object
       required:
@@ -87,7 +91,8 @@ workflows:
           are supplied inline (no separate create operations exist). Exactly one owner
           is marked as the control prong. signature.type is requestedViaEmail here so
           the optional reminder step is available; use requestedViaDirectLink instead
-          if you generate a signing link (and skip Step 2). Returns 201 with a
+          if you generate a signing link, or electronic if the owner already signed
+          with your own e-signature tool (and skip Step 2 in both cases). Returns 201 with a
           top-level processingAccountId and status "entered".
         operationId: createProcessingAccount
         parameters:
@@ -192,8 +197,9 @@ workflows:
         description: >
           Optional. Prompt the merchant to sign the pricing agreement by sending another
           email. Only valid when Step 1 used signature.type: requestedViaEmail; skip this
-          step if the signature was requested via a direct link, if the contract is
-          already signed, or if no pricing agreement exists. Returns 201.
+          step if the signature was requested via a direct link, if the owner signed
+          with your own e-signature tool (signature.type: electronic), if the contract
+          is already signed, or if no pricing agreement exists. Returns 201.
         operationId: createReminder
         parameters:
           - name: processingAccountId

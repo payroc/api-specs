@@ -16,8 +16,9 @@ info:
     rather than inline pricing; and the optional reminder step only works when
     the processing account requested the merchant's signature by email
     (signature.type = requestedViaEmail) — it fails for a direct-link
-    signature.
-  version: 1.0.0
+    signature and for an electronic signature that you captured with your own
+    e-signature tool (signature.type = electronic).
+  version: 1.0.1
 
 sourceDescriptions:
   - name: payroc-api
@@ -33,7 +34,8 @@ workflows:
       OPTIONAL: only invoke it when the merchant was asked to sign the pricing
       agreement by email and has not responded — it re-sends the signature
       email for a single processing account and returns 400 if the signature
-      was requested via direct link or has already been signed.
+      was requested via direct link, was captured with your own e-signature
+      tool (electronic), or has already been signed.
     inputs:
       type: object
       required:
@@ -201,7 +203,8 @@ workflows:
           OPTIONAL. Re-send the pricing-agreement signature email for the
           processing account created in step 1. Only valid when that account's
           signature was requested by email (requestedViaEmail); returns 400 if
-          the signature was requested via direct link, if no pricing agreement
+          the signature was requested via direct link, if the owner signed with
+          your own e-signature tool (electronic), if no pricing agreement
           exists, or if the merchant has already signed.
         operationId: createReminder
         parameters:
