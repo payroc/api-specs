@@ -12187,7 +12187,7 @@ paths:
                         description: |
                           Token that the merchant can use in future transactions to represent the customer's payment details. The token:  
                           - Begins with the six-digit identification number **296753**.  
-                          - Contains up to 12 digits.  
+                          - Contains 12 to 19 digits.  
                           - Contains a single check digit that we calculate using the Luhn algorithm.  
                         example: '296753123456'
                       status:
@@ -15423,7 +15423,7 @@ paths:
                     description: |
                       Token that the merchant can use in future transactions to represent the customer's payment details. The token:  
                       - Begins with the six-digit identification number **296753**.
-                      - Contains up to 12 digits.  
+                      - Contains 12 to 19 digits.  
                       - Contains a single check digit that we calculate using the Luhn algorithm.
                     example: '296753123456'
                   status:
