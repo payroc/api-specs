@@ -3265,7 +3265,6 @@ paths:
                                                               title: percentage
                                                               type: number
                                                               format: double
-                                                              x-fern-type-hint: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -3301,7 +3300,6 @@ paths:
                                                                   title: percentage
                                                                   type: number
                                                                   format: double
-                                                                  x-fern-type-hint: decimal
                                                                   minimum: 0
                                                                   maximum: 100
                                                                   example: 1.25
@@ -3341,7 +3339,6 @@ paths:
                                                               title: percentage
                                                               type: number
                                                               format: double
-                                                              x-fern-type-hint: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -3385,7 +3382,6 @@ paths:
                                                               title: percentage
                                                               type: number
                                                               format: double
-                                                              x-fern-type-hint: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -3901,7 +3897,6 @@ paths:
                                                           title: percentage
                                                           type: number
                                                           format: double
-                                                          x-fern-type-hint: decimal
                                                           minimum: 0
                                                           maximum: 100
                                                           example: 1.25
@@ -3924,13 +3919,11 @@ paths:
                                                       description: Percentage of the total transaction amount that the processor charges the merchant.
                                                       type: number
                                                       format: double
-                                                      x-fern-type-hint: decimal
                                                       allOf:
                                                         - description: Percentage value up to 2 decimal places.
                                                           title: percentage
                                                           type: number
                                                           format: double
-                                                          x-fern-type-hint: decimal
                                                           minimum: 0
                                                           maximum: 100
                                                           example: 1.25
@@ -3974,7 +3967,6 @@ paths:
                                                               title: percentage
                                                               type: number
                                                               format: double
-                                                              x-fern-type-hint: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -4007,7 +3999,6 @@ paths:
                                                               title: percentage
                                                               type: number
                                                               format: double
-                                                              x-fern-type-hint: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -4021,7 +4012,6 @@ paths:
                                                               title: percentage
                                                               type: number
                                                               format: double
-                                                              x-fern-type-hint: decimal
                                                               minimum: 0
                                                               maximum: 100
                                                               example: 1.25
@@ -4092,7 +4082,6 @@ paths:
                                                       title: percentage
                                                       type: number
                                                       format: double
-                                                      x-fern-type-hint: decimal
                                                       minimum: 0
                                                       maximum: 100
                                                       example: 1.25
@@ -4103,7 +4092,6 @@ paths:
                                                       title: percentage
                                                       type: number
                                                       format: double
-                                                      x-fern-type-hint: decimal
                                                       minimum: 0
                                                       maximum: 100
                                                       example: 1.25
@@ -11031,7 +11019,6 @@ paths:
                                           rate:
                                             type: number
                                             format: double
-                                            x-fern-type-hint: decimal
                                             description: Tax percentage for the transaction.
                                             maximum: 99.99999
                                             minimum: 0
@@ -11973,7 +11960,6 @@ paths:
                                       rate:
                                         type: number
                                         format: double
-                                        x-fern-type-hint: decimal
                                         description: |
                                           Tax percentage for the transaction.
 
@@ -12275,7 +12261,6 @@ paths:
                                             exclusiveMinimum: 0
                                             type: number
                                             format: double
-                                            x-fern-type-hint: decimal
                                             readOnly: true
                                             description: If the merchant added a surcharge fee, this value indicates the surcharge percentage.
                                             example: 2
@@ -15409,7 +15394,6 @@ paths:
                                 maximum: 100
                                 type: number
                                 format: double
-                                x-fern-type-hint: decimal
                                 description: Surcharge rate that the merchant configures on their account.
                                 example: 3
                               disclosure:
@@ -17297,13 +17281,11 @@ paths:
                                   type: number
                                   description: Foreign exchange rate for the card's currency.
                                   format: double
-                                  x-fern-type-hint: decimal
                                   example: 1.37
                                 markup:
                                   type: number
                                   description: Markup percentage rate that the DCC provider applies to the foreign exchange rate.
                                   format: double
-                                  x-fern-type-hint: decimal
                                   example: 3.5
                                 markupText:
                                   type: string
@@ -17446,7 +17428,6 @@ paths:
                                           exclusiveMinimum: 0
                                           type: number
                                           format: double
-                                          x-fern-type-hint: decimal
                                           description: If the value for type is `percentage`, this value is the tip as a percentage.
                                           example: 10
                                     surcharge:
@@ -17470,7 +17451,6 @@ paths:
                                           exclusiveMinimum: 0
                                           type: number
                                           format: double
-                                          x-fern-type-hint: decimal
                                           description: |
                                             Percentage that our gateway applied to the total transaction amount to calculate the service fee.
 
@@ -17522,7 +17502,6 @@ paths:
                                             rate:
                                               type: number
                                               format: double
-                                              x-fern-type-hint: decimal
                                               description: |
                                                 If the customer used a card to pay for the transaction, this value indicates the percentage that our gateway added to the transaction amount.  
                                                 **Note:** Our gateway returns a value for **rate** only if the value for **applied** in the request is `true`.
@@ -17925,7 +17904,6 @@ paths:
                                           quantity:
                                             type: number
                                             format: double
-                                            x-fern-type-hint: decimal
                                             exclusiveMinimum: 0
                                             description: |
                                               Number of units.
@@ -17935,7 +17913,6 @@ paths:
                                           discountRate:
                                             type: number
                                             format: double
-                                            x-fern-type-hint: decimal
                                             description: |
                                               Discount rate that the merchant applies to the item.
 
@@ -23462,7 +23439,6 @@ paths:
                         maximum: 100
                         type: number
                         format: double
-                        x-fern-type-hint: decimal
                         description: |
                           Percentage that our gateway applies to the total transaction amount to calculate the service fee.
 
@@ -31787,7 +31763,6 @@ paths:
                                             title: percentage
                                             type: number
                                             format: double
-                                            x-fern-type-hint: decimal
                                             minimum: 0
                                             maximum: 100
                                             example: 1.25
@@ -31801,7 +31776,6 @@ paths:
                                             title: percentage
                                             type: number
                                             format: double
-                                            x-fern-type-hint: decimal
                                             minimum: 0
                                             maximum: 100
                                             example: 1.25
@@ -32597,7 +32571,6 @@ paths:
                                   description: Rate of tax that the terminal applies to each transaction.
                                   type: number
                                   format: double
-                                  x-fern-type-hint: decimal
                                   minimum: 0
                                   maximum: 99.999
                                 taxLabel:
@@ -33556,7 +33529,6 @@ paths:
                                     description: Rate of tax that the terminal applies to each transaction.
                                     type: number
                                     format: double
-                                    x-fern-type-hint: decimal
                                     minimum: 0
                                     maximum: 99.999
                                   taxLabel:
@@ -37463,7 +37435,6 @@ components:
       title: percentage
       type: number
       format: double
-      x-fern-type-hint: decimal
       minimum: 0
       maximum: 100
       example: 1.25
