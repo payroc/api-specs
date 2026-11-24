@@ -29,6 +29,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: adjust-a-refund
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to find, inspect, and adjust the refund.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: List, retrieve, then adjust a card refund.
     description: >
       Find the card refund (listRefunds -> getRefund), confirm from the retrieved
@@ -87,8 +96,11 @@ workflows:
             type: object
     steps:
       - stepId: listRefunds
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund search
         description: >
-          Optional. List card refunds filtered by terminal, order, status, and
+          OPTIONAL — list card refunds filtered by terminal, order, status, and
           date. The response is paginated - refunds are in the `data` array. This
           step extracts the first refund's `refundId` for the follow-on steps.
         operationId: listRefunds
@@ -115,8 +127,11 @@ workflows:
           hasMore: $response.body#/hasMore
 
       - stepId: getRefund
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund lookup
         description: >
-          Optional. Retrieve the full detail of the first card refund from the
+          OPTIONAL — retrieve the full detail of the first card refund from the
           list. Inspect `supportedOperations` and `transactionResult.status` to
           confirm the refund can be adjusted before acting.
         operationId: getRefund
@@ -132,6 +147,9 @@ workflows:
           supportedOperations: $response.body#/supportedOperations
 
       - stepId: adjustRefund
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: adjustment request
         description: >
           Adjust the refund in an open batch using the `refundId` from getRefund.
           The body is a polymorphic `adjustments` array discriminated by `type`:

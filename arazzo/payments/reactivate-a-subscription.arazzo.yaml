@@ -23,6 +23,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: reactivate-a-subscription
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to resume collection for the subscription.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: Reactivate a subscription to resume collection.
     description: >
       Restarts collection for the previously deactivated subscription identified
@@ -43,6 +52,9 @@ workflows:
           example: SubRef7654
     steps:
       - stepId: reactivateSubscription
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: reactivate request
         description: >
           Restarts collection for a previously deactivated subscription. POST with
           no request body; returns 200.

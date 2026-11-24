@@ -110,7 +110,9 @@ workflows:
           example: '053200983'
     steps:
       - stepId: runBankTransferSale
-        x-actor: customer
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: bank-transfer sale request
         description: >
           Run a bank-transfer sale by POSTing to /bank-transfer-payments with the
           customer's ACH (US) or PAD (Canada) bank details. The example uses an

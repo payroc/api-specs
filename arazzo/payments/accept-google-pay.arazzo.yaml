@@ -38,8 +38,8 @@ workflows:
       step. On success the gateway returns a paymentId and a transactionResult
       whose status is `ready`.
     x-actors:
-      - id: customer
-        name: Customer
+      - id: cardholder
+        name: Cardholder
         type: human
         description: Cardholder who authorizes the payment through Google Pay.
       - id: merchant
@@ -109,8 +109,25 @@ workflows:
           description: Hex-encoded encrypted payment details retrieved from the Google Pay API.
           example: A1B2C3D4E5F67890ABCD1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF
     steps:
+      - stepId: authorizeWithGooglePay
+        x-actor: cardholder
+        x-actor-to: google-pay
+        x-label: Google Pay authorization
+        description: >
+          The customer authorizes the payment through Google Pay, and the
+          client (web page or mobile app) obtains the customer's encrypted
+          payment details from the Google Pay API and converts them to
+          hexadecimal - there is no dedicated Payroc session or tokenization
+          call for Google Pay. The web and in-app variants differ only in how
+          the client acquires this token client-side; both feed the identical
+          payment request in the next step.
+        x-operation:
+          method: POST
+          url: https://{google-pay-api}
       - stepId: runGooglePaySale
-        x-actor: customer
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: wallet sale request
         description: >
           Run and capture a sale funded by Google Pay. Sends paymentMethod.type
           `digitalWallet` with serviceProvider `google` and the hex-encoded
@@ -139,7 +156,7 @@ workflows:
               encryptedData: $inputs.encryptedData
         successCriteria:
           - condition: $statusCode == 201
-          - condition: $response.body#/transactionResult/status == ready
+          - condition: $response.body#/transactionResult/status == 'ready'
         outputs:
           paymentId: $response.body#/paymentId
           transactionStatus: $response.body#/transactionResult/status

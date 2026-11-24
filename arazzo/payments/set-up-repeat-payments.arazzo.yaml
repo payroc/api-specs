@@ -194,6 +194,8 @@ workflows:
     steps:
       - stepId: setUpPaymentPlan
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: create plan request
         description: >
           Set up the reusable payment plan on the terminal by invoking the
           manage-payment-plans sub-workflow. The plan is the schedule template
@@ -221,10 +223,12 @@ workflows:
         successCriteria:
           - condition: $steps.setUpPaymentPlan.outputs.paymentPlanId == $inputs.paymentPlanId
         outputs:
-          paymentPlanId: $steps.setUpPaymentPlan.outputs.paymentPlanId
+          paymentPlanId: $outputs.paymentPlanId
 
       - stepId: savePaymentMethod
         x-actor: customer
+        x-actor-to: payroc-gateway
+        x-label: secure token request
         description: >
           Save the customer's payment method as a reusable secure token by
           invoking the save-a-payment-method sub-workflow. The primary path is
@@ -262,11 +266,13 @@ workflows:
         successCriteria:
           - condition: $steps.savePaymentMethod.outputs.token != null
         outputs:
-          secureTokenId: $steps.savePaymentMethod.outputs.secureTokenId
-          token: $steps.savePaymentMethod.outputs.token
+          secureTokenId: $outputs.secureTokenId
+          token: $outputs.token
 
       - stepId: subscribeCustomerToPlan
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: create subscription request
         description: >
           Assign the customer to the plan by invoking the manage-subscriptions
           sub-workflow. Links the plan (`paymentPlanId` from step 1) and the
@@ -294,9 +300,9 @@ workflows:
         successCriteria:
           - condition: $steps.subscribeCustomerToPlan.outputs.subscriptionId == $inputs.subscriptionId
         outputs:
-          subscriptionId: $steps.subscribeCustomerToPlan.outputs.subscriptionId
-          status: $steps.subscribeCustomerToPlan.outputs.status
-          paymentId: $steps.subscribeCustomerToPlan.outputs.paymentId
+          subscriptionId: $outputs.subscriptionId
+          status: $outputs.status
+          paymentId: $outputs.paymentId
     outputs:
       paymentPlanId: $steps.setUpPaymentPlan.outputs.paymentPlanId
       secureTokenId: $steps.savePaymentMethod.outputs.secureTokenId

@@ -8,7 +8,7 @@ info:
 
     The request must identify the processing terminal, the transaction currency,
     and the card. The `card` object is polymorphic (discriminated by `type`): use
-    `card` for raw card details (as modelled here) or `singleUseToken` when the
+    `card` for raw card details (as modeled here) or `singleUseToken` when the
     card is represented by a single-use token. For EBT specifically, set
     `card.cardDetails.ebtDetails.benefitCategory` (e.g. `cash` or `foodStamp`) to
     select which benefit balance to query.
@@ -27,6 +27,19 @@ sourceDescriptions:
 
 workflows:
   - workflowId: check-ebt-balance
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Submits the EBT balance inquiry to the Payroc API.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: EBT processor
+        type: external-system
+        description: Downstream processor that approves or declines the balance inquiry; not directly callable.
     summary: Submit an EBT balance inquiry and return the card's benefit balance.
     description: >
       Single-step workflow: POST the balance inquiry to /cards/balance. Inputs
@@ -68,6 +81,9 @@ workflows:
           example: cash
     steps:
       - stepId: balanceInquiry
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: balance inquiry
         description: >
           Submit the EBT balance inquiry. The card is sent as raw keyed card
           details (`card.type == card`); to query by token instead, send a
@@ -94,7 +110,7 @@ workflows:
                   benefitCategory: $inputs.benefitCategory
         successCriteria:
           - condition: $statusCode == 200
-          - condition: $response.body#/responseCode == A
+          - condition: $response.body#/responseCode == 'A'
         outputs:
           balances: $response.body#/card/balances
           responseCode: $response.body#/responseCode

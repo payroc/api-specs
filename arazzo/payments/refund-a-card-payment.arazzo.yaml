@@ -97,8 +97,10 @@ workflows:
     steps:
       - stepId: findCardPayment
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment search
         description: >
-          Optional. Searches for the original card payment when you do not have
+          OPTIONAL — searches for the original card payment when you do not have
           its paymentId (GET /payments), filtering by terminal and/or order id.
           Skip this step when you already hold the paymentId - use getCardPayment
           or go straight to refundCardPayment. Take the paymentId of the matching
@@ -117,8 +119,10 @@ workflows:
           foundPaymentId: $response.body#/data/0/paymentId
       - stepId: getCardPayment
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment lookup
         description: >
-          Optional. Retrieves the original card payment by paymentId (GET
+          OPTIONAL — retrieves the original card payment by paymentId (GET
           /payments/{paymentId}) to confirm its details and status before
           refunding. A referenced refund only returns funds when the payment is in
           a closed batch; an open-batch payment is reversed instead.
@@ -134,6 +138,8 @@ workflows:
           status: $response.body#/transactionResult/status
       - stepId: refundCardPayment
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund request
         description: >
           Refunds the referenced card payment (POST /payments/{paymentId}/refund).
           Requires the Idempotency-Key header and a body with `amount` and
@@ -155,7 +161,7 @@ workflows:
             operator: $inputs.operator
         successCriteria:
           - condition: $statusCode == 200
-          - condition: $response.body#/refunds/0/status == ready
+          - condition: $response.body#/refunds/0/status == 'ready'
         outputs:
           refundId: $response.body#/refunds/0/refundId
           refundStatus: $response.body#/refunds/0/status

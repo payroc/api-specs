@@ -32,6 +32,15 @@ workflows:
       funding-recipient owners; against a processing-account owner it is rejected
       with a 400. The list/retrieve steps are optional when you already hold the
       ownerId.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Finds and updates the owner; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required: [processingAccountId, ownerId]
@@ -52,8 +61,11 @@ workflows:
           example: 2
     steps:
       - stepId: listOwners
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list owners
         description: >
-          Optional. List the owners of the processing account to discover the
+          OPTIONAL — list the owners of the processing account to discover the
           numeric ownerId. Supports before/after/limit cursor pagination. Skip if
           you already hold the ownerId.
         operationId: listMerchantOwners
@@ -71,8 +83,11 @@ workflows:
           hasMore: $response.body#/hasMore
 
       - stepId: getOwner
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get owner
         description: >
-          Optional. Retrieve the full details of a single owner (name, date of
+          OPTIONAL — retrieve the full details of a single owner (name, date of
           birth, address, contact methods, and relationship) before updating.
         operationId: getOwner
         parameters:
@@ -87,6 +102,9 @@ workflows:
           isControlProng: $response.body#/relationship/isControlProng
 
       - stepId: updateOwner
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: update owner
         description: >
           Update an owner's personal, identification, contact, and relationship
           details. IMPORTANT: this only takes effect for an owner associated with

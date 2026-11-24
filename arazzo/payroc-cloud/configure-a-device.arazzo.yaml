@@ -23,8 +23,7 @@ info:
     The host-configuration step is optional: integrate with it only if you use
     your own gateway and want to validate the merchant/terminal processor
     settings (posMid, terminalId, sharing groups, and so on). This is a
-    single-actor lookup (the integrator is the only actor), so no actor
-    annotations are modelled.
+    single-actor lookup (the integrator is the only actor).
   version: 1.0.0
 
 sourceDescriptions:
@@ -41,6 +40,15 @@ workflows:
       reads the host processor configuration. Step 3 reads the configuration for
       a specific device model; supply the `model` for the family you are
       integrating (ID TECH, Ingenico, or Android/PAX).
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Runs the read-only configuration lookups; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required: [processingTerminalId, model]
@@ -58,6 +66,9 @@ workflows:
           example: idtechKioskV
     steps:
       - stepId: getProcessingTerminal
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: processing terminal lookup
         description: >
           Retrieve the processing terminal: its active/inactive status, gateway
           and application settings, features, receipt and security settings, and
@@ -76,8 +87,11 @@ workflows:
           deviceModel: $response.body#/devices/0/model
 
       - stepId: getProcessingTerminalHostConfiguration
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: host configuration lookup
         description: >
-          Optional. Retrieve the host processor configuration (merchant and
+          OPTIONAL — retrieve the host processor configuration (merchant and
           terminal settings such as posMid, chainNumber, terminalId, and sharing
           groups). Integrate with this step only if you use your own gateway and
           want to validate the processor configuration.
@@ -92,6 +106,9 @@ workflows:
           processingAccountId: $response.body#/processingAccountId
 
       - stepId: retrieveDeviceConfiguration
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: device configuration lookup
         description: >
           Retrieve the configuration for a specific device model on the terminal:
           supported features, applications, EMV certificates and revoked

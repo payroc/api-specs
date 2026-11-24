@@ -43,6 +43,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: manage-subscriptions
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to create, find, inspect, update, and manually pay the subscription.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: Create, list, retrieve, update, and manually pay a subscription
     description: >
       Step 1 creates the subscription, linking a stored secure token to a
@@ -144,6 +153,9 @@ workflows:
 
     steps:
       - stepId: createSubscription
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: create subscription request
         description: >
           Assign the customer to a payment plan by creating the subscription.
           The body links the payment plan (`paymentPlanId`) and the stored
@@ -178,8 +190,11 @@ workflows:
           type: $response.body#/type
 
       - stepId: listSubscriptions
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: subscription search
         description: >
-          Optional discovery step. Lists subscriptions on the terminal, filtered
+          OPTIONAL — lists subscriptions on the terminal, filtered
           by customer name, and extracts the first result's `subscriptionId`.
           The response is paginated — subscriptions are in the `data` array.
           Skip this step if you already hold the `subscriptionId`.
@@ -201,8 +216,11 @@ workflows:
           hasMore: $response.body#/hasMore
 
       - stepId: getSubscription
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: subscription lookup
         description: >
-          Optional. Retrieve the subscription to confirm its current state
+          OPTIONAL — retrieve the subscription to confirm its current state
           before acting. Surfaces the `status`, the collection `type` (`manual`
           vs `automatic`), and the `nextDueDate`.
         operationId: getSubscription
@@ -222,8 +240,11 @@ workflows:
           nextDueDate: $response.body#/currentState/nextDueDate
 
       - stepId: updateSubscription
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: JSON Patch update
         description: >
-          Optional. Partially updates the subscription with an RFC 6902 JSON
+          OPTIONAL — partially updates the subscription with an RFC 6902 JSON
           Patch document (the `patchDocument` input: an array of
           `op`/`path`/`value` operations), NOT a plain resource object. You
           cannot patch `currentState`, `type`, `frequency`, or `paymentPlan`,
@@ -250,6 +271,9 @@ workflows:
           status: $response.body#/currentState/status
 
       - stepId: paySubscription
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: manual payment request
         description: >
           Optional, and ONLY for a `manual`-type subscription. For an
           `automatic` subscription the terminal collects each payment itself, so

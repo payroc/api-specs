@@ -43,6 +43,15 @@ workflows:
       Step 1 creates the funding recipient with its inline owner and funding
       account and captures the recipientId. Steps 2 and 3 are optional and add an
       additional funding account and an additional owner to the same recipient.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Creates the funding recipient and its accounts and owners; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -83,6 +92,9 @@ workflows:
           example: '321831591'
     steps:
       - stepId: createFundingRecipient
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: create funding recipient
         description: >
           Create the funding recipient. Owners and funding accounts are supplied
           inline here - at least one owner and at least one credit funding
@@ -153,8 +165,11 @@ workflows:
           recipientId: $response.body#/recipientId
           fundingAccountId: $response.body#/fundingAccounts/0/fundingAccountId
       - stepId: addFundingAccount
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: add funding account
         description: >
-          OPTIONAL. Add an additional funding account to the recipient beyond the
+          OPTIONAL — add an additional funding account to the recipient beyond the
           one supplied inline at creation. A recipient's funding account accepts
           only use: credit. Reuses the recipientId from step 1.
         operationId: createFundRecipientFundingAccount
@@ -183,8 +198,11 @@ workflows:
         outputs:
           additionalFundingAccountId: $response.body#/fundingAccountId
       - stepId: addOwner
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: add owner
         description: >
-          OPTIONAL. Add an additional owner to the recipient beyond the one
+          OPTIONAL — add an additional owner to the recipient beyond the one
           supplied inline at creation. Only one owner across the recipient can be
           the control prong. Reuses the recipientId from step 1.
         operationId: createFundRecipientOwner

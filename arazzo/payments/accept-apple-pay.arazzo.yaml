@@ -4,12 +4,12 @@ info:
   summary: Enable a merchant for Apple Pay, validate the wallet session, then run a sale with the Apple Pay token.
   description: >
     Accept an Apple Pay payment through the Payroc gateway. This is the wallet
-    variant of "take a payment": the cardholder authorises the charge in Apple
+    variant of "take a payment": the cardholder authorizes the charge in Apple
     Pay, Apple returns encrypted payment data, and the integrator runs a standard
     payment with that data.
 
 
-    Two-step API flow modelled as ONE workflow family:
+    Two-step API flow modeled as ONE workflow family:
 
     - Step `startApplePaySession` (POST
       /processing-terminals/{processingTerminalId}/apple-pay-sessions,
@@ -80,7 +80,7 @@ workflows:
       - id: cardholder
         name: Cardholder
         type: human
-        description: Customer who authorises the charge in Apple Pay on their device.
+        description: Customer who authorizes the charge in Apple Pay on their device.
       - id: merchant
         name: Merchant / integrator
         type: client
@@ -150,8 +150,22 @@ workflows:
             converted to hexadecimal. 128–20480 characters.
           example: 7b2264617461223a2259314b37626731573479755568587473
     steps:
+      - stepId: registerApplePayDomain
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: domain registration
+        description: >
+          PREREQUISITE, done once: the merchant's domain is registered for
+          Apple Pay in the Self-Care Portal, which issues the `appleDomainId`
+          input used by `startApplePaySession`. There is no API operation for
+          this; it is an external-system step supplying an input.
+        x-operation:
+          method: POST
+          url: https://{payroc-self-care-portal}
       - stepId: startApplePaySession
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: session validation request
         description: >
           OPTIONAL — web flow only. Start and validate the Apple Pay merchant
           session by POSTing the `appleDomainId` and `appleValidationUrl` to the
@@ -174,8 +188,25 @@ workflows:
           - condition: $statusCode == 200
         outputs:
           startSessionResponse: $response.body#/startSessionResponse
-      - stepId: runApplePaySale
+      - stepId: authorizeWithApplePay
         x-actor: cardholder
+        x-actor-to: apple
+        x-label: Apple Pay authorization
+        description: >
+          The browser hands the `startSessionResponse` to the Apple Pay JS API
+          (web flow) at the validation URL supplied by the `appleValidationUrl`
+          input; the cardholder authorizes the charge in Apple Pay on their
+          device, and Apple releases the encrypted payment data used by
+          `runApplePaySale`. In the in-app (native PassKit) variant, the app
+          obtains this token directly from Apple, skipping
+          `startApplePaySession`.
+        x-operation:
+          method: POST
+          url: https://apple-pay-gateway.apple.com/paymentservices/startSession
+      - stepId: runApplePaySale
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: wallet sale request
         description: >
           Run the sale with the Apple Pay wallet data by POSTing to /payments.
           The payment method is a digital wallet: `type: digitalWallet`,

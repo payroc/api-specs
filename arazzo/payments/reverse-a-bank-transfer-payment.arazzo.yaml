@@ -39,7 +39,7 @@ workflows:
       - id: customer
         name: Customer
         type: human
-        description: Account holder who requested that the payment be cancelled.
+        description: Account holder who requested that the payment be canceled.
       - id: merchant
         name: Merchant / integrator
         type: client
@@ -77,10 +77,12 @@ workflows:
     steps:
       - stepId: listBankTransferPayments
         description: >
-          Optional. List bank transfer payments matching the search filters to
+          OPTIONAL — list bank transfer payments matching the search filters to
           find the paymentId to reverse. processingTerminalId is required for this
           list. Skip if you already hold the paymentId.
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment search
         operationId: $sourceDescriptions.payroc-api.listBankTransferPayments
         parameters:
           - name: processingTerminalId
@@ -101,6 +103,8 @@ workflows:
           endpoint has no request body (the amount cannot be varied here). Success
           returns transactionResult.status == reversal.
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: reversal request
         operationId: $sourceDescriptions.payroc-api.reverseBankTransferPayment
         parameters:
           - name: Idempotency-Key
@@ -111,7 +115,7 @@ workflows:
             value: $inputs.paymentId
         successCriteria:
           - condition: $statusCode == 200
-          - condition: $response.body#/transactionResult/status == "reversal"
+          - condition: $response.body#/transactionResult/status == 'reversal'
         outputs:
           paymentId: $response.body#/paymentId
           status: $response.body#/transactionResult/status

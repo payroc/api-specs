@@ -25,6 +25,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: delete-a-payment-plan
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to find and delete the payment plan.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: List, retrieve, then delete a payment plan.
     description: >
       Optionally list payment plans (listPaymentPlans) and retrieve one
@@ -51,8 +60,11 @@ workflows:
           example: 10
     steps:
       - stepId: listPaymentPlans
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: plan search
         description: >
-          Optional discovery step. Returns a paginated list of the terminal's
+          OPTIONAL — returns a paginated list of the terminal's
           payment plans and extracts the first result's `paymentPlanId`. Skip if
           you already hold the `paymentPlanId`.
         operationId: listPaymentPlans
@@ -70,8 +82,11 @@ workflows:
           hasMore: $response.body#/hasMore
 
       - stepId: getPaymentPlan
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: plan lookup
         description: >
-          Optional. Retrieve the payment plan to confirm its current state before
+          OPTIONAL — retrieve the payment plan to confirm its current state before
           deleting.
         operationId: getPaymentPlan
         parameters:
@@ -88,8 +103,11 @@ workflows:
           name: $response.body#/name
 
       - stepId: deletePaymentPlan
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: delete plan request
         description: >
-          Delete the payment plan. Irreversible — the plan cannot be recovered and
+          Delete the payment plan — irreversible: the plan cannot be recovered and
           no further subscriptions can be added to it. The plan's `onDelete` value
           (`complete` vs `continue`) determines whether existing subscriptions stop
           or keep running. Returns 204 with no body.

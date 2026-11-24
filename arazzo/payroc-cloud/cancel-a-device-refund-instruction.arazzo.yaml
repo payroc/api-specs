@@ -10,13 +10,13 @@ info:
     Agent gotchas captured here:
 
     - You can cancel an instruction with `deleteRefundInstruction` only while its
-      `status` is `inProgress`; once the instruction has `completed`, cancelling is
+      `status` is `inProgress`; once the instruction has `completed`, canceling is
       no longer possible. Confirm the status with `getRefundInstruction` first.
 
     - `deleteRefundInstruction` returns HTTP 204 (No Content) — there is no
       response body to capture.
 
-    - Cancelling is mutually exclusive with letting the instruction complete (see
+    - Canceling is mutually exclusive with letting the instruction complete (see
       the refund-on-a-device workflow, whose terminal outcome is a completed
       refund).
   version: 1.0.0
@@ -58,9 +58,11 @@ workflows:
     steps:
       - stepId: getRefundInstruction
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: instruction status check
         description: >
-          Optional. Confirm the instruction is still `inProgress` before
-          cancelling, via GET /refund-instructions/{refundInstructionId}. Cancel
+          OPTIONAL — confirm the instruction is still `inProgress` before
+          canceling, via GET /refund-instructions/{refundInstructionId}. Cancel
           is only allowed while the status is `inProgress`.
         operationId: getRefundInstruction
         parameters:
@@ -73,6 +75,8 @@ workflows:
           status: $response.body#/status
       - stepId: deleteRefundInstruction
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: instruction cancellation
         description: >
           Cancel the refund instruction via DELETE
           /refund-instructions/{refundInstructionId}. Allowed only while the

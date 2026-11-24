@@ -34,7 +34,7 @@ workflows:
       - id: customer
         name: Customer
         type: human
-        description: Cardholder who requested that the payment be cancelled.
+        description: Cardholder who requested that the payment be canceled.
       - id: merchant
         name: Merchant / integrator
         type: client
@@ -82,10 +82,12 @@ workflows:
     steps:
       - stepId: listPayments
         description: >
-          Optional. List card payments matching the search filters to find the
+          OPTIONAL — list card payments matching the search filters to find the
           paymentId of the transaction to reverse. Skip this step if you already
           hold the paymentId.
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment search
         operationId: $sourceDescriptions.payroc-api.listPayments
         parameters:
           - name: processingTerminalId
@@ -106,6 +108,8 @@ workflows:
           partial reversal, or omit it to reverse the full amount. Success returns
           transactionResult.status == reversal.
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: reversal request
         operationId: $sourceDescriptions.payroc-api.reversePayment
         parameters:
           - name: Idempotency-Key
@@ -121,7 +125,7 @@ workflows:
             amount: $inputs.amount
         successCriteria:
           - condition: $statusCode == 200
-          - condition: $response.body#/transactionResult/status == "reversal"
+          - condition: $response.body#/transactionResult/status == 'reversal'
         outputs:
           paymentId: $response.body#/paymentId
           status: $response.body#/transactionResult/status

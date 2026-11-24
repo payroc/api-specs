@@ -126,7 +126,9 @@ workflows:
           accounts. Requires an Idempotency-Key header. Remember: the token value in
           the response - not secureTokenId - is what later payment.paymentMethod.token
           expects.
-        x-actor: customer
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: secure token request
         operationId: $sourceDescriptions.payroc-api.createSecureToken
         parameters:
           - name: Idempotency-Key

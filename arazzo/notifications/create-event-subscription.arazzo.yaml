@@ -44,6 +44,15 @@ workflows:
       additive management lifecycle (list, retrieve, delete) and can be run as
       needed against the subscriptionId returned by create. To update a
       subscription, see update-an-event-subscription / patch-an-event-subscription.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Registers and manages the subscription, and hosts the webhook endpoint that receives event deliveries.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call; delivers event notifications to the subscribed endpoint.
     inputs:
       type: object
       required:
@@ -79,6 +88,9 @@ workflows:
           example: registered
     steps:
       - stepId: createSubscription
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: create event subscription
         description: >
           Create the event subscription. Sends the events to subscribe to plus the
           webhook notification target. Returns the subscriptionId at #/id, which
@@ -103,14 +115,31 @@ workflows:
               yourCustomField: abc123
         successCriteria:
           - condition: $statusCode == 201
-          - condition: $response.body#/status == "registered"
+          - condition: $response.body#/status == 'registered'
         outputs:
           subscriptionId: $response.body#/id
           status: $response.body#/status
 
-      - stepId: listSubscriptions
+      - stepId: deliverEventNotification
+        x-actor: payroc-gateway
+        x-actor-to: integrator
+        x-label: deliver event notification
         description: >
-          Optional discovery step. List event subscriptions, optionally filtered by
+          When a subscribed event occurs, Payroc sends a webhook POST carrying
+          the CloudEvents payload to the notificationUri registered in step 1.
+          The receiver is caller-side and not a Payroc API operation: verify
+          the Payroc-Secret header against your copy of the secret and return
+          a 200 to each delivery.
+        x-operation:
+          method: POST
+          url: https://{notification-uri}
+
+      - stepId: listSubscriptions
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list event subscriptions
+        description: >
+          OPTIONAL — list event subscriptions, optionally filtered by
           status or event type, to find a subscriptionId when you did not retain the
           one from create.
         operationId: listEventSubscriptions
@@ -127,6 +156,9 @@ workflows:
           subscriptions: $response.body#/data
 
       - stepId: getSubscription
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get event subscription
         description: Retrieve the full details of the subscription created above.
         operationId: getEventSubscription
         parameters:
@@ -140,8 +172,11 @@ workflows:
           status: $response.body#/status
 
       - stepId: deleteSubscription
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: delete event subscription
         description: >
-          Optional. Delete the subscription. This is irreversible and stops all
+          OPTIONAL — delete the subscription. This is irreversible and stops all
           notifications from it. To pause notifications without deleting, patch the
           subscription and set enabled to false instead (see
           patch-an-event-subscription). Returns 204 No Content.

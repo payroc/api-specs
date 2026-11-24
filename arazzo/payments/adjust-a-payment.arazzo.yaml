@@ -35,6 +35,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: adjust-a-payment
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to find, inspect, and adjust the payment.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: List payments, retrieve the target payment, then adjust it
     description: >
       Step 1 lists payments filtered by terminal, status, and date, and extracts
@@ -91,6 +100,9 @@ workflows:
 
     steps:
       - stepId: listPayments
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment search
         description: >
           List payments filtered by terminal, status, and date. The response is
           paginated — payments are in the `data` array. This step extracts the
@@ -116,6 +128,9 @@ workflows:
           hasMore: $response.body#/hasMore
 
       - stepId: getPayment
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment lookup
         description: >
           Retrieve the full detail of the first payment from the list. Inspect
           the returned `supportedOperations` to confirm the payment can be
@@ -132,6 +147,9 @@ workflows:
           supportedOperations: $response.body#/supportedOperations
 
       - stepId: adjustPayment
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: adjustment request
         description: >
           Adjust the payment using the `paymentId` from the retrieve step. The
           body is an `adjustments` array of polymorphic objects — choose the

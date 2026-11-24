@@ -34,6 +34,15 @@ workflows:
       update-a-funding-recipient / delete-a-funding-recipient workflows.
 
       Optional step: listRecipients (skip if the recipientId is already known).
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Reads the funding recipient and its nested resources; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -49,8 +58,11 @@ workflows:
           example: 25
     steps:
       - stepId: listRecipients
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list funding recipients
         description: >
-          Optional discovery step. Return a paginated list of funding recipients
+          OPTIONAL — return a paginated list of funding recipients
           linked to the account so the caller can find the target recipientId.
           Skip this step if the recipientId is already known.
         operationId: listFundingRecipients
@@ -64,6 +76,9 @@ workflows:
           firstRecipientId: $response.body#/data/0/recipientId
 
       - stepId: getRecipient
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get funding recipient
         description: >
           Retrieve the full detail of the target funding recipient by recipientId:
           legal information (taxId, doingBusinessAs), address, contact methods, and
@@ -82,6 +97,9 @@ workflows:
           fundingAccounts: $response.body#/fundingAccounts
 
       - stepId: listRecipientFundingAccounts
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list funding accounts
         description: >
           Return the funding accounts associated with the recipient: account
           holder name, ACH details, and status. Each entry carries a
@@ -97,6 +115,9 @@ workflows:
           firstFundingAccountId: $response.body#/0/fundingAccountId
 
       - stepId: listRecipientOwners
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list owners
         description: >
           Return the owners of the recipient: name, date of birth, address,
           contact details, and relationship. Each entry carries an ownerId for

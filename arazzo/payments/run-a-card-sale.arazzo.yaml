@@ -24,7 +24,7 @@ info:
       check (an external, non-API step at payments.payroc.com/merchant/mpi) and
       then pass the returned reference in a `threeDSecure` object with
       `serviceProvider: gateway` and `mpiReference`. The MPI call is not a Payroc
-      API operation, so it is documented, not modelled as a step.
+      API operation, so it is documented, not modeled as a step.
 
     - Surcharge / MOTO variants: a surcharge is added under
       `order.breakdown.surcharge`; a mail-order/telephone-order (card-not-present)
@@ -117,7 +117,9 @@ workflows:
           example: '1230'
     steps:
       - stepId: runCardSale
-        x-actor: customer
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: sale request
         description: >
           Run a card sale by POSTing to /payments. The default
           `autoCapture: true` and `processAsSale: false` produce a normal sale
@@ -133,7 +135,7 @@ workflows:
             payments.payroc.com/merchant/mpi, then add a `threeDSecure` object
             with `serviceProvider: gateway` and the returned `mpiReference` to
             this payload. The MPI call is an external-system step, so it is not
-            modelled here.
+            modeled here.
         operationId: payment
         parameters:
           - name: Idempotency-Key

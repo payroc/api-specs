@@ -106,6 +106,8 @@ workflows:
     steps:
       - stepId: runCardRefund
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: unreferenced refund request
         description: >
           Issues an unreferenced card refund (POST /refunds). Supply `channel`
           (pos or moto) and a `refundMethod` of type `card`.
@@ -135,7 +137,7 @@ workflows:
                   expiryDate: $inputs.cardExpiryDate
         successCriteria:
           - condition: $statusCode == 201
-          - condition: $response.body#/transactionResult/status == ready
+          - condition: $response.body#/transactionResult/status == 'ready'
         outputs:
           refundId: $response.body#/refundId
           status: $response.body#/transactionResult/status

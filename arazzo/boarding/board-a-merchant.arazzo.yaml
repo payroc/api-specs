@@ -193,10 +193,12 @@ workflows:
     steps:
       - stepId: pricingIntent
         description: >
-          OPTIONAL. Sub-workflow create-pricing-intent: build the reusable fee
+          OPTIONAL — sub-workflow create-pricing-intent: build the reusable fee
           template. Skip this step and supply an inline pricing agreement in the
           create-merchant payload instead. Captures pricingIntentId for step 2.
         x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: create pricing intent
         workflowId: $sourceDescriptions.create-pricing-intent.create-pricing-intent
         parameters:
           - name: idempotencyKey
@@ -216,6 +218,8 @@ workflows:
           intent from step 1. Returns merchantPlatformId and processingAccountId
           used by the later steps.
         x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: create merchant platform
         workflowId: $sourceDescriptions.create-merchant-platform.create-merchant-platform
         parameters:
           - name: idempotencyKey
@@ -233,13 +237,27 @@ workflows:
         outputs:
           merchantPlatformId: $outputs.merchantPlatformId
           processingAccountId: $outputs.processingAccountId
+      - stepId: signPricingAgreement
+        description: >
+          The merchant signs the pricing agreement out of band via the email or
+          direct link issued at boarding (see create-merchant-platform); the
+          API-side signing operation (submitSignedProcessingAgreement) is
+          x-internal and deliberately not modeled as a step here.
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: sign pricing agreement
+        x-operation:
+          method: GET
+          url: https://{pricing-agreement-signing-link}
       - stepId: additionalProcessingAccount
         description: >
-          OPTIONAL. Sub-workflow add-processing-account: add a further processing
+          OPTIONAL — sub-workflow add-processing-account: add a further processing
           account to the merchant platform created in step 2. Run this only for a
           business that operates more than one account; the create-merchant call
           already boarded the first one.
         x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: add processing account
         workflowId: $sourceDescriptions.add-processing-account.add-processing-account
         parameters:
           - name: merchantPlatformId
@@ -260,8 +278,10 @@ workflows:
         description: >
           Sub-workflow order-a-terminal: order a physical terminal for the
           processing account boarded in step 2. Returns a terminalOrderId that
-          fulfils asynchronously.
+          fulfills asynchronously.
         x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: order a terminal
         workflowId: $sourceDescriptions.order-a-terminal.order-a-terminal
         parameters:
           - name: processingAccountId
@@ -274,10 +294,12 @@ workflows:
           terminalOrderId: $outputs.terminalOrderId
       - stepId: supportingDocument
         description: >
-          OPTIONAL, repeatable. Sub-workflow add-attachment: upload a supporting
-          document (e.g. personal identification, banking evidence) to the
+          OPTIONAL, repeatable — sub-workflow add-attachment: upload a supporting
+          document (for example personal identification or banking evidence) to the
           processing account boarded in step 2. One attachment per invocation.
         x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: upload supporting document
         workflowId: $sourceDescriptions.add-attachment.add-attachment
         parameters:
           - name: processingAccountId
@@ -290,6 +312,18 @@ workflows:
             value: $inputs.attachmentDescription
         outputs:
           attachmentId: $outputs.attachmentId
+      - stepId: underwritingApproval
+        description: >
+          Payroc underwriting reviews and approves the boarded account before it
+          can process. This is an external, non-API step; the integrator
+          observes the outcome via the processingAccount.status.changed event
+          delivered to its subscribed webhook (see create-event-subscription).
+        x-actor: underwriting
+        x-actor-to: integrator
+        x-label: underwriting webhook
+        x-operation:
+          method: POST
+          url: https://{integrator-webhook-endpoint}
     outputs:
       pricingIntentId: $steps.pricingIntent.outputs.pricingIntentId
       merchantPlatformId: $steps.merchantPlatform.outputs.merchantPlatformId

@@ -16,7 +16,7 @@ info:
     contacts / owners / funding accounts / terminal orders / processing
     terminals. Two entry points collapse into this one family: you can discover
     ids from the top (list platforms, then list the platform's processing
-    accounts, as modelled) or, if you already hold a `processingAccountId`, skip
+    accounts, as modeled) or, if you already hold a `processingAccountId`, skip
     straight to `retrieveProcessingAccount` and the account-level reads. The
     listing steps are paginated (before/after/limit); this workflow reads the
     first page and selects the first record.
@@ -24,8 +24,7 @@ info:
     Boarding drift to note: contacts and owners are created inline in the
     create-merchant / create-processing-account payloads, so there are no
     standalone create operations here — only the list reads below. This is a
-    single-actor lifecycle review (the integrator is the only actor), so no
-    actor annotations are modelled.
+    single-actor lifecycle review (the integrator is the only actor).
   version: 1.0.0
 
 sourceDescriptions:
@@ -42,6 +41,15 @@ workflows:
       processing account. If a `processingAccountId` is already known, the
       account-level steps (4 onward) can run directly against it, bypassing the
       platform discovery steps.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Runs the read-only traversal; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       properties:
@@ -51,6 +59,9 @@ workflows:
           example: 20
     steps:
       - stepId: listMerchantPlatforms
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list merchant platforms
         description: >
           List the merchant platforms linked to the ISV account and select one
           to inspect. Paginated (before/after/limit); this reads the first page
@@ -66,6 +77,9 @@ workflows:
           merchantPlatformId: $response.body#/data/0/merchantPlatformId
 
       - stepId: retrieveMerchantPlatform
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get merchant platform
         description: >
           Retrieve the selected merchant platform's detail, including its legal
           and contact information and the status of each linked processing
@@ -81,6 +95,9 @@ workflows:
           merchantPlatformId: $response.body#/merchantPlatformId
 
       - stepId: listPlatformProcessingAccounts
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list processing accounts
         description: >
           List the processing accounts under the platform and select one to
           inspect. Paginated; reads the first page and takes the first account.
@@ -100,6 +117,9 @@ workflows:
           processingAccountId: $response.body#/data/0/processingAccountId
 
       - stepId: retrieveProcessingAccount
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get processing account
         description: >
           Retrieve the processing account's full detail: business information,
           MCC, status, processing configuration, and funding summary. The
@@ -117,6 +137,9 @@ workflows:
           accountStatus: $response.body#/status
 
       - stepId: retrieveProcessingAccountPricing
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get pricing agreement
         description: >
           Retrieve the pricing agreement applied to the processing account. The
           response is polymorphic — the `version` field (4.0, 5.0, or 5.2)
@@ -132,6 +155,9 @@ workflows:
           pricingVersion: $response.body#/version
 
       - stepId: listProcessingAccountContacts
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list contacts
         description: >
           List the contacts on the processing account. Contacts are created
           inline during boarding; this read confirms them post-boarding.
@@ -150,6 +176,9 @@ workflows:
           firstContactId: $response.body#/data/0/contactId
 
       - stepId: listMerchantOwners
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list owners
         description: >
           List the owners of the processing account, including their equity
           stake and whether they are a control prong or authorized signatory.
@@ -169,6 +198,9 @@ workflows:
           firstOwnerId: $response.body#/data/0/ownerId
 
       - stepId: listProcessingAccountFundingAccounts
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list funding accounts
         description: >
           List the funding accounts linked to the processing account and their
           approval status. The response is a top-level array (not paginated).
@@ -183,6 +215,9 @@ workflows:
           firstFundingAccountId: $response.body#/0/fundingAccountId
 
       - stepId: listProcessingAccountTerminalOrders
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list terminal orders
         description: >
           List the terminal orders for the processing account, including their
           status and shipping information. The response is a top-level array;
@@ -198,6 +233,9 @@ workflows:
           firstTerminalOrderId: $response.body#/0/terminalOrderId
 
       - stepId: listProcessingAccountProcessingTerminals
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list processing terminals
         description: >
           List the processing terminals configured for the processing account,
           including their active/inactive status and configuration. Paginated.

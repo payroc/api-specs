@@ -31,6 +31,15 @@ workflows:
       Apply an RFC 6902 JSON Patch to the event subscription identified by
       `subscriptionId` (patchEventSubscription). Requires the Idempotency-Key
       header. Returns 200 with the updated body.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Applies the JSON Patch; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -47,6 +56,9 @@ workflows:
           example: 1122334455
     steps:
       - stepId: patchSubscription
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: patch event subscription
         description: >
           Apply a partial change via PATCH (RFC 6902 JSON Patch) — here disabling
           notifications by setting enabled to false — and return 200 with the

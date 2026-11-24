@@ -47,11 +47,20 @@ workflows:
       The five branches are independent read-only reports: run any one, several,
       or all of them - they are additive, not mutually exclusive, and nothing is
       mutated. Required filters differ by branch (see each step): `getbatches`,
-      `getdisputes`, and `getAchDeposits` require `date`. Modelled with `date` as
+      `getdisputes`, and `getAchDeposits` require `date`. Modeled with `date` as
       the primary filter; `getTransactions`/`getAuthorizations` also accept a
       `batchId` in place of `date`, and `getAchDepositFees` accepts an
       `achDepositId` in place of `date`. These EITHER/OR filters are a
       parameter-level choice on a single GET, not separate steps.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Reads the settlement reports; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required: [date]
@@ -77,8 +86,11 @@ workflows:
     steps:
       # --- Branch 1: batches ---
       - stepId: listBatches
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list batches
         description: >
-          Batches branch, step 1. List the batches your merchants submitted to
+          Batches branch — list the batches your merchants submitted to
           the processor on `date` (a required query parameter). Each row reports
           transaction counts, sale/held/return totals, and the owning merchant.
           `merchantId` is an optional filter.
@@ -100,8 +112,11 @@ workflows:
           firstBatchId: $response.body#/data/0/batchId
 
       - stepId: retrieveBatch
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get batch
         description: >
-          Batches branch, step 2. Retrieve a single batch by its integer
+          Batches branch — retrieve a single batch by its integer
           `batchId`. Chains from listBatches by reading the first row's
           `batchId`; supply a known `batchId` directly if you have one.
         operationId: getbatch
@@ -116,9 +131,12 @@ workflows:
 
       # --- Branch 2: transactions ---
       - stepId: listTransactions
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list transactions
         description: >
-          Transactions branch, step 1. List merchant transactions. You must
-          provide EITHER `date` OR `batchId`; modelled here with `date`. Optional
+          Transactions branch — list merchant transactions. You must
+          provide EITHER `date` OR `batchId`; modeled here with `date`. Optional
           `merchantId` and `transactionType` (Capture/Return) filters also apply.
           Each row includes type, amount, batch, authorization, and settlement
           details.
@@ -140,8 +158,11 @@ workflows:
           firstTransactionId: $response.body#/data/0/transactionId
 
       - stepId: retrieveTransaction
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get transaction
         description: >
-          Transactions branch, step 2. Retrieve a single transaction by its
+          Transactions branch — retrieve a single transaction by its
           integer `transactionId`. Chains from listTransactions; supply a known
           `transactionId` directly if you have one.
         operationId: gettransaction
@@ -156,9 +177,12 @@ workflows:
 
       # --- Branch 3: authorizations ---
       - stepId: listAuthorizations
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list authorizations
         description: >
-          Authorizations branch, step 1. List authorizations. You must provide
-          EITHER `date` OR `batchId`; modelled here with `date`. Optional
+          Authorizations branch — list authorizations. You must provide
+          EITHER `date` OR `batchId`; modeled here with `date`. Optional
           `merchantId` filter. Each row shows the issuing bank's authorization
           response, the authorized amount, and card/transaction/batch details.
         operationId: getAuthorizations
@@ -179,8 +203,11 @@ workflows:
           firstAuthorizationId: $response.body#/data/0/authorizationId
 
       - stepId: retrieveAuthorization
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get authorization
         description: >
-          Authorizations branch, step 2. Retrieve a single authorization by its
+          Authorizations branch — retrieve a single authorization by its
           integer `authorizationId`. Chains from listAuthorizations; supply a
           known `authorizationId` directly if you have one.
         operationId: getAuthorization
@@ -195,8 +222,11 @@ workflows:
 
       # --- Branch 4: disputes ---
       - stepId: listDisputes
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list disputes
         description: >
-          Disputes branch, step 1. List disputes submitted on `date` (a required
+          Disputes branch — list disputes submitted on `date` (a required
           query parameter). Each row carries the dispute type, its `currentStatus`
           (status + statusDate), and the linked transaction. Optional `merchantId`
           filter.
@@ -218,8 +248,11 @@ workflows:
           firstDisputeId: $response.body#/data/0/disputeId
 
       - stepId: listDisputeStatuses
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list dispute statuses
         description: >
-          Disputes branch, step 2. List the full status history of one dispute by
+          Disputes branch — list the full status history of one dispute by
           its integer `disputeId` (each entry has a statusId, status, and
           statusDate). Chains from listDisputes; supply a known `disputeId`
           directly if you have one.
@@ -235,8 +268,11 @@ workflows:
 
       # --- Branch 5: ACH deposits ---
       - stepId: listAchDeposits
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list ACH deposits
         description: >
-          ACH-deposits branch, step 1. List ACH deposits paid to your merchants on
+          ACH-deposits branch — list ACH deposits paid to your merchants on
           `date` (a required query parameter). Each row breaks down sales,
           returns, fees, and the net amount paid. Optional `merchantId` filter.
         operationId: getAchDeposits
@@ -257,8 +293,11 @@ workflows:
           firstAchDepositId: $response.body#/data/0/achDepositId
 
       - stepId: retrieveAchDeposit
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get ACH deposit
         description: >
-          ACH-deposits branch, step 2. Retrieve a single ACH deposit by its
+          ACH-deposits branch — retrieve a single ACH deposit by its
           integer `achDepositId`. Chains from listAchDeposits; supply a known
           `achDepositId` directly if you have one.
         operationId: getAchDeposit
@@ -272,9 +311,12 @@ workflows:
           achDeposit: $response.body
 
       - stepId: listAchDepositFees
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list ACH deposit fees
         description: >
-          ACH-deposits branch, step 3 (optional). List the fee breakdown for an
-          ACH deposit. You must provide EITHER `date` OR `achDepositId`; modelled
+          ACH-deposits branch, OPTIONAL — list the fee breakdown for an
+          ACH deposit. You must provide EITHER `date` OR `achDepositId`; modeled
           here chaining `achDepositId` from retrieveAchDeposit so the fees line up
           with the retrieved deposit. Optional `merchantId` filter.
         operationId: getAchDepositFees

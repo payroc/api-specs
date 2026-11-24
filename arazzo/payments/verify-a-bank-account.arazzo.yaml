@@ -11,7 +11,7 @@ info:
     The gateway verifies two kinds of bank details, selected by the
     `bankAccount.type` discriminator:
       - `ach` — Automated Clearing House details (routingNumber + secCode). This
-        is the primary path modelled below.
+        is the primary path modeled below.
       - `pad` — Pre-Authorized Debit details (transitNumber + institutionNumber).
         Same operation and step; swap the `bankAccount` payload for the PAD shape,
         e.g. `{ type: pad, accountType: checking, nameOnAccount: Sarah Hazel
@@ -33,6 +33,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: verify-a-bank-account
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to verify the customer's bank account details before an ACH sale or funding setup.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: Verify a customer's ACH (or PAD) bank account details.
     description: >
       Single step: call verifyBankAccount with the terminal id and the customer's
@@ -65,6 +74,9 @@ workflows:
             secCode: web
     steps:
       - stepId: verifyBankAccount
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: bank verification request
         description: >
           Verify the customer's bank account details. Returns HTTP 200 with a
           `verified` flag indicating whether the details are valid. Inspect

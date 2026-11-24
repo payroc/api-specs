@@ -57,6 +57,19 @@ workflows:
       merchant's balance to the recipient's funding account. Model the single
       recipient path; for split funding, add further recipients entries to the
       instruction payload.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Sets up the recipient, checks the balance, and issues the funding instruction; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: recipient
+        name: Funding recipient
+        type: external-system
+        description: Business or organization whose credit funding account receives the distributed funds by ACH; not an API caller.
     inputs:
       type: object
       required:
@@ -107,6 +120,9 @@ workflows:
           example: 120000
     steps:
       - stepId: setUpRecipient
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: set up funding recipient
         description: >
           Compose the set-up-a-funding-recipient sub-workflow to create the
           funding recipient together with its inline owner and credit funding
@@ -130,8 +146,11 @@ workflows:
           recipientId: $outputs.recipientId
           fundingAccountId: $outputs.fundingAccountId
       - stepId: checkBalance
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: check available balance
         description: >
-          OPTIONAL. Read the merchant's funding balances and confirm sufficient
+          OPTIONAL — read the merchant's funding balances and confirm sufficient
           available funds before distributing them. The response reports funds,
           pending, and available separately - only the available amount can be
           sent in a funding instruction. Filter to the target merchant with the
@@ -146,6 +165,9 @@ workflows:
         outputs:
           availableBalance: $response.body#/data/0/available
       - stepId: createInstruction
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: create funding instruction
         description: >
           Create the funding instruction that moves funds from the merchant's
           balance to the recipient's funding account. The single merchants entry
@@ -176,7 +198,7 @@ workflows:
               instructionCreatedBy: Jane Doe
         successCriteria:
           - condition: $statusCode == 201
-          - condition: $response.body#/status == accepted
+          - condition: $response.body#/status == 'accepted'
         outputs:
           instructionId: $response.body#/instructionId
           status: $response.body#/status

@@ -34,6 +34,15 @@ workflows:
       Apply an RFC 6902 JSON Patch document to change only specific fields of the
       pricing intent identified by `pricingIntentId` (patchPricingIntent).
       Requires the `Idempotency-Key` header. Returns 200 with the updated body.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Applies the JSON Patch; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -50,6 +59,9 @@ workflows:
           example: '5'
     steps:
       - stepId: patchPricingIntent
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: patch pricing intent
         description: >
           Apply an RFC 6902 JSON Patch document to change only specific fields via
           PATCH. Requires the `Idempotency-Key` header. Returns 200 with the

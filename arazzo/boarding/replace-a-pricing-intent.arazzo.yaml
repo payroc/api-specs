@@ -31,6 +31,15 @@ workflows:
     description: >
       Overwrite the entire pricing intent identified by `pricingIntentId` with a
       complete MPA 5.2 payload (updatePricingIntent). Returns 204 No Content.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Replaces the pricing intent; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -46,6 +55,9 @@ workflows:
           example: Your-Unique-Identifier
     steps:
       - stepId: replacePricingIntent
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: replace pricing intent
         description: >
           Overwrite the entire pricing intent with a complete MPA 5.2 payload via
           PUT. Returns 204 No Content (no body). Does not affect already-onboarded

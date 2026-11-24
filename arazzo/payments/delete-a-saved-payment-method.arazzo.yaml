@@ -25,6 +25,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: delete-a-saved-payment-method
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to find and delete the stored secure token.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: List, retrieve, then delete a secure token.
     description: >
       Optionally list secure tokens (listSecureTokens) and retrieve one
@@ -55,8 +64,11 @@ workflows:
           example: 10
     steps:
       - stepId: listSecureTokens
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: token search
         description: >
-          Optional discovery step. Lists secure tokens on the terminal, filtered by
+          OPTIONAL — lists secure tokens on the terminal, filtered by
           customer name, and extracts the first result's `secureTokenId`. Skip if
           you already hold the `secureTokenId`.
         operationId: listSecureTokens
@@ -77,8 +89,11 @@ workflows:
           hasMore: $response.body#/hasMore
 
       - stepId: getSecureToken
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: token lookup
         description: >
-          Optional. Retrieve the secure token to confirm its current state before
+          OPTIONAL — retrieve the secure token to confirm its current state before
           deleting.
         operationId: getSecureToken
         parameters:
@@ -95,6 +110,9 @@ workflows:
           status: $response.body#/status
 
       - stepId: deleteSecureToken
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: delete token request
         description: >
           Delete the secure token and its stored payment details from the vault.
           Irreversible — the token and its `secureTokenId` cannot be recovered or

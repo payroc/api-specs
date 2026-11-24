@@ -19,7 +19,7 @@ info:
     2. OFF-API, client-side: the Hosted Fields JavaScript library renders the
        fields, the customer submits their details, and the client receives a
        single-use token in a `submissionSuccess` event. This is a browser/library
-       step, NOT a Payroc REST call, so it is documented here rather than modelled
+       step, NOT a Payroc REST call, so it is documented here rather than modeled
        as an Arazzo step. The single-use token it produces is the
        `singleUseToken` input to the next step.
 
@@ -51,7 +51,7 @@ info:
 
     - Bank accounts: the same flow works for ACH (US) / PAD (Canada) — run the
       sale against /bank-transfer-payments (a bank-transfer variant, out of scope
-      for the card steps modelled here) with the single-use token.
+      for the card steps modeled here) with the single-use token.
   version: 1.0.0
 
 sourceDescriptions:
@@ -67,7 +67,7 @@ workflows:
       `createHostedFieldsSession`), then run the sale server-side with the
       resulting single-use token (step `runSaleWithToken`). The client-side
       tokenization that produces the single-use token happens between these steps
-      in the browser and is not an API call, so it is described, not modelled.
+      in the browser and is not an API call, so it is described, not modeled.
     x-actors:
       - id: customer
         name: Customer
@@ -143,6 +143,8 @@ workflows:
     steps:
       - stepId: createHostedFieldsSession
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: session request
         description: >
           Create a Hosted Fields session for the terminal by POSTing to
           /processing-terminals/{processingTerminalId}/hosted-fields-sessions with
@@ -167,8 +169,24 @@ workflows:
         outputs:
           sessionToken: $response.body#/token
           expiresAt: $response.body#/expiresAt
-      - stepId: runSaleWithToken
+      - stepId: customerSubmitsPaymentDetails
         x-actor: customer
+        x-actor-to: payroc-gateway
+        x-label: hosted fields submit
+        description: >
+          OFF-API, client-side: the Hosted Fields JavaScript library renders
+          the embedded fields using the session token from the previous step,
+          the customer submits their card or bank details, and the client
+          receives a single-use token in a `submissionSuccess` event. The
+          token is single-use and expires ~30 minutes after issue; it is the
+          `singleUseToken` input consumed by the next step.
+        x-operation:
+          method: POST
+          url: https://{payroc-hosted-fields}
+      - stepId: runSaleWithToken
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: sale request
         description: >
           Run the sale server-side by POSTing to /payments with
           paymentMethod.type = singleUseToken and the single-use token the client

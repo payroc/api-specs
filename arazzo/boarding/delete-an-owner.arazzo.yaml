@@ -34,6 +34,15 @@ workflows:
       Delete only affects funding-recipient owners; against a processing-account
       owner it is rejected with a 400. The list/retrieve steps are optional when
       you already hold the ownerId.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Finds and deletes the owner; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required: [recipientId, ownerId]
@@ -50,8 +59,11 @@ workflows:
           example: 4564
     steps:
       - stepId: listOwners
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list owners
         description: >
-          Optional. List the owners of the funding recipient to discover the
+          OPTIONAL — list the owners of the funding recipient to discover the
           numeric ownerId. Skip if you already hold the ownerId.
         operationId: listFundRecipientOwners
         parameters:
@@ -64,8 +76,11 @@ workflows:
           firstOwnerId: $response.body#/0/ownerId
 
       - stepId: getOwner
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get owner
         description: >
-          Optional. Retrieve the full details of a single owner before deleting.
+          OPTIONAL — retrieve the full details of a single owner before deleting.
         operationId: getOwner
         parameters:
           - name: ownerId
@@ -79,8 +94,11 @@ workflows:
           isControlProng: $response.body#/relationship/isControlProng
 
       - stepId: deleteOwner
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: delete owner
         description: >
-          Delete an owner. Only valid for a funding recipient's owner — the API
+          Delete an owner from the funding recipient — only valid there; the API
           rejects attempts against a processing account's owner (400). The API
           also rejects this call if the owner is the last one on the funding
           recipient. Returns no body on success.

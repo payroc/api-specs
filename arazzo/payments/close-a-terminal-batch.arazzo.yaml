@@ -22,6 +22,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: close-a-terminal-batch
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to close the terminal's open batch.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: Close the current batch for a processing terminal.
     description: >
       Single step: call closeBatch for the given processingTerminalId. Supply a
@@ -43,6 +52,9 @@ workflows:
           example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
     steps:
       - stepId: closeBatch
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: close batch request
         description: >
           Manually close the open batch on the processing terminal. No request
           body is sent; the terminal is identified by the path parameter and the
