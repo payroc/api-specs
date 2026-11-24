@@ -154,7 +154,9 @@ workflows:
           example: Refund for order OrderRef6543
     steps:
       - stepId: createPreAuthorization
-        x-actor: customer
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: pre-authorization request
         description: >
           Create the pre-authorization to hold funds on the card. Sends both
           autoCapture=false and processAsSale=false so the gateway authorizes
@@ -194,8 +196,10 @@ workflows:
 
       - stepId: adjustAuthorizedAmount
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: adjustment request
         description: >
-          OPTIONAL. Adjust the authorized amount before capture using an
+          OPTIONAL — adjust the authorized amount before capture using an
           order-type adjustment. Only needed when the merchant must capture MORE
           than originally pre-authorized (for example, a hotel adds dinner to a
           room hold). Skip this step to capture the original amount or less. The
@@ -223,6 +227,8 @@ workflows:
 
       - stepId: capturePreAuthorization
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: capture request
         description: >
           Capture the pre-authorization to take the funds from the card. Sending
           an amount captures that value; omit amount to capture the full
@@ -251,8 +257,10 @@ workflows:
 
       - stepId: refundCapturedPayment
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund request
         description: >
-          OPTIONAL. Run a referenced refund against the captured payment once its
+          OPTIONAL — run a referenced refund against the captured payment once its
           batch is closed, returning funds to the cardholder. If the payment is
           still in an open batch this operation reverses it instead of refunding.
           Both amount and description are required. The new refund's id lives at

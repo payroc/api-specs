@@ -140,7 +140,9 @@ workflows:
           example: b2c3d4e5-f6a7-4890-8bcd-ef0123456789
     steps:
       - stepId: createSingleUseToken
-        x-actor: customer
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: single-use token request
         description: >
           Tokenize the customer's card into a single-use token. The response token is
           128 chars, single-use, and expires after 30 minutes — spend it immediately in
@@ -176,7 +178,9 @@ workflows:
           expiresAt: $response.body#/expiresAt
 
       - stepId: runPayment
-        x-actor: customer
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment request
         description: >
           Run the payment using the single-use token from step 1. Pass the 128-char value
           as paymentMethod.token with paymentMethod.type set to singleUseToken. This
@@ -203,14 +207,16 @@ workflows:
               token: $steps.createSingleUseToken.outputs.singleUseToken
         successCriteria:
           - condition: $statusCode == 201
-          - condition: $response.body#/transactionResult/status == "ready"
+          - condition: $response.body#/transactionResult/status == 'ready'
         outputs:
           paymentId: $response.body#/paymentId
 
       - stepId: reversePayment
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: reversal request
         description: >
-          Optional. Reverse (void) the payment before it settles, using the paymentId from
+          OPTIONAL — reverse (void) the payment before it settles, using the paymentId from
           step 2. Omit amount to reverse the full payment. This is a void of an open-batch
           payment — distinct from a refund, which returns funds after settlement. Returns 200.
         operationId: reversePayment

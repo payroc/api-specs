@@ -29,6 +29,15 @@ workflows:
     description: >
       Replace the entire event subscription identified by `subscriptionId` with a
       complete body (updateEventSubscription). Returns 204 No Content.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Replaces the subscription; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -60,6 +69,9 @@ workflows:
           example: jane.doe@example.com
     steps:
       - stepId: updateSubscription
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: replace event subscription
         description: >
           Replace the entire subscription with the supplied body via PUT — omitted
           fields are cleared. Returns 204 No Content, so there is no response body

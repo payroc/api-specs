@@ -32,13 +32,26 @@ sourceDescriptions:
 
 workflows:
   - workflowId: represent-ach-payment
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to read the return reason and re-present the payment.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: ach-network
+        name: ACH network
+        type: external-system
+        description: Returned the original bank-transfer payment; the re-presented payment is resubmitted to it for collection. Not directly callable.
     summary: Retrieve an ACH return reason and re-present the payment.
     description: >
       Two steps: (1) retrieve the returned bank transfer payment to read the
       return reason and the return's paymentId; (2) re-present the payment using
       that return paymentId. The optional third pass from the guide (a second and
       final re-presentment) is the same two steps repeated against the newly
-      returned paymentId, and is documented in the description rather than modelled
+      returned paymentId, and is documented in the description rather than modeled
       as duplicate steps.
     inputs:
       type: object
@@ -76,6 +89,9 @@ workflows:
           example: web
     steps:
       - stepId: viewPayment
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment lookup
         description: >
           Retrieve the returned ACH payment to read the return reason and, most
           importantly, the return's own paymentId from the `returns` array. Save
@@ -95,6 +111,9 @@ workflows:
           returnReason: $response.body#/returns/0/returnReason
           transactionStatus: $response.body#/transactionResult/status
       - stepId: representPayment
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: re-presentment request
         description: >
           Re-present the payment against the return's paymentId
           (`$steps.viewPayment.outputs.returnPaymentId`), NOT the original

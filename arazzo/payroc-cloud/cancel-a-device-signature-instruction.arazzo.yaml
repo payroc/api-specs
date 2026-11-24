@@ -14,7 +14,7 @@ info:
       (409), so confirm the status with `getSignatureInstruction` first and run
       this only while the instruction is `inProgress`.
 
-    - Cancelling is mutually exclusive with retrieving the signature (see the
+    - Canceling is mutually exclusive with retrieving the signature (see the
       capture-signature-on-a-device workflow, whose terminal outcome is a captured
       signature image).
   version: 1.0.0
@@ -40,8 +40,8 @@ workflows:
         name: Payroc gateway
         type: api
         description: The Payroc API surface these steps call.
-      - id: device
-        name: Payment device
+      - id: payment-device
+        name: Payroc Cloud payment device
         type: external-system
         description: In-person Payroc Cloud device that holds the pending instruction; not directly callable as an API step.
     inputs:
@@ -56,9 +56,11 @@ workflows:
     steps:
       - stepId: getSignatureInstruction
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: instruction status check
         description: >
-          Optional. Confirm the instruction is still `inProgress` before
-          cancelling, via GET /signature-instructions/{signatureInstructionId}.
+          OPTIONAL — confirm the instruction is still `inProgress` before
+          canceling, via GET /signature-instructions/{signatureInstructionId}.
           Cancel is only allowed while the status is `inProgress`.
         operationId: getSignatureInstruction
         parameters:
@@ -71,6 +73,8 @@ workflows:
           status: $response.body#/status
       - stepId: cancelSignatureInstruction
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: instruction cancellation
         description: >
           Cancel the signature instruction via DELETE
           /signature-instructions/{signatureInstructionId}. Valid only while the

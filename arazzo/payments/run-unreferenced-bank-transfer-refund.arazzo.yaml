@@ -111,6 +111,8 @@ workflows:
     steps:
       - stepId: runBankRefund
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: unreferenced refund request
         description: >
           Issues an unreferenced bank-transfer refund (POST
           /bank-transfer-refunds). There is no `channel` field; supply a

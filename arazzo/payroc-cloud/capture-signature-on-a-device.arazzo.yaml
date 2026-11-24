@@ -71,8 +71,8 @@ workflows:
       image. To abandon a signature the customer has not yet completed, use the
       cancel-a-device-signature-instruction workflow instead of the retrieve steps.
     x-actors:
-      - id: customer
-        name: Customer
+      - id: cardholder
+        name: Cardholder
         type: human
         description: Person at the point of sale who signs on the payment device.
       - id: merchant
@@ -83,8 +83,8 @@ workflows:
         name: Payroc gateway
         type: api
         description: The Payroc API surface these steps call.
-      - id: device
-        name: Payment device
+      - id: payment-device
+        name: Payroc Cloud payment device
         type: external-system
         description: In-person Payroc Cloud device that displays the prompt and captures the signature; driven via instructions, not directly callable.
     inputs:
@@ -117,6 +117,8 @@ workflows:
     steps:
       - stepId: submitSignatureInstruction
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: signature instruction
         description: >
           Submit an instruction to capture a signature on the device identified
           by `serialNumber` in the path; the target terminal is sent as
@@ -143,6 +145,8 @@ workflows:
           status: $response.body#/status
       - stepId: getSignatureInstruction
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: instruction status poll
         description: >
           Retrieve the signature instruction by its `signatureInstructionId`.
           Poll this step until `status` is `completed` (it stays `inProgress`
@@ -157,12 +161,14 @@ workflows:
             value: $steps.submitSignatureInstruction.outputs.signatureInstructionId
         successCriteria:
           - condition: $statusCode == 200
-          - condition: $response.body#/status == "completed"
+          - condition: $response.body#/status == 'completed'
         outputs:
           status: $response.body#/status
           signatureLink: $response.body#/link/href
       - stepId: retrieveSignature
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: signature retrieval
         description: >
           Retrieve the captured signature by its `signatureId` (the final path
           segment of the `signatureLink` from the previous step). Returns 200

@@ -12,13 +12,13 @@ info:
 
     - You can cancel an instruction with `deletePaymentInstruction` only while its
       `status` is `inProgress`; once it has `completed` (or `failure`/`canceled`),
-      cancelling is no longer possible. Confirm the status with
+      canceling is no longer possible. Confirm the status with
       `getPaymentInstruction` first.
 
     - `deletePaymentInstruction` returns HTTP 204 (No Content) — there is no
       response body to capture.
 
-    - Cancelling is mutually exclusive with letting the instruction complete (see
+    - Canceling is mutually exclusive with letting the instruction complete (see
       the run-a-sale-on-a-device workflow, whose terminal outcome is a completed
       payment).
   version: 1.0.0
@@ -37,15 +37,15 @@ workflows:
       `paymentInstructionId` returned when the instruction was submitted.
     x-actors:
       - id: merchant
-        name: Merchant / integrator POS
+        name: Merchant / integrator
         type: client
         description: The POS integration calling the Payroc API to abort the pending sale.
       - id: payroc-gateway
         name: Payroc gateway
         type: api
         description: The Payroc API surface these steps call.
-      - id: device
-        name: Payment device
+      - id: payment-device
+        name: Payroc Cloud payment device
         type: external-system
         description: Physical Payroc Cloud terminal that holds the pending instruction; not directly callable as an API step.
     inputs:
@@ -60,9 +60,11 @@ workflows:
     steps:
       - stepId: getPaymentInstruction
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: instruction status check
         description: >
-          Optional. Confirm the instruction is still `inProgress` before
-          cancelling, via GET /payment-instructions/{paymentInstructionId}. Cancel
+          OPTIONAL — confirm the instruction is still `inProgress` before
+          canceling, via GET /payment-instructions/{paymentInstructionId}. Cancel
           is only allowed while the status is `inProgress`.
         operationId: getPaymentInstruction
         parameters:
@@ -75,6 +77,8 @@ workflows:
           status: $response.body#/status
       - stepId: cancelPaymentInstruction
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: instruction cancellation
         description: >
           Cancel the payment instruction via DELETE
           /payment-instructions/{paymentInstructionId}. Valid only while the

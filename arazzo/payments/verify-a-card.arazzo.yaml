@@ -28,6 +28,19 @@ sourceDescriptions:
 
 workflows:
   - workflowId: verify-a-card
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to verify the customer's card with a zero-value authorization.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: processor
+        name: Payment processor
+        type: external-system
+        description: Downstream processor whose verification outcome is reported in transactionResult; not directly callable.
     summary: Verify a customer's card with a zero-value authorization.
     description: >
       Single-step workflow that POSTs the customer's card details to the
@@ -69,6 +82,9 @@ workflows:
           example: 1230
     steps:
       - stepId: verifyCard
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: card verification request
         description: >
           Verify the customer's card details with a zero-value authorization.
           Primary path shown is a keyed plain-text card (card.type = card,

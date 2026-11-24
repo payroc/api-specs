@@ -34,6 +34,15 @@ workflows:
       (getRecipient - required, to carry forward the current values of the
       full-object PUT's required fields), then update it (updateRecipient). The
       list step is optional when you already hold the recipientId.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Finds and updates the funding recipient; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -65,8 +74,11 @@ workflows:
           example: fred.nerk@example.com
     steps:
       - stepId: listRecipients
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list funding recipients
         description: >
-          Optional discovery step. Return a paginated list of funding recipients so
+          OPTIONAL — return a paginated list of funding recipients so
           the caller can find the target recipientId. Skip if the recipientId is
           already known.
         operationId: listFundingRecipients
@@ -80,6 +92,9 @@ workflows:
           firstRecipientId: $response.body#/data/0/recipientId
 
       - stepId: getRecipient
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get funding recipient
         description: >
           Retrieve the target funding recipient. Required before the update: the
           PUT replaces recipientType, taxId, doingBusinessAs, address, and
@@ -97,6 +112,9 @@ workflows:
           status: $response.body#/status
 
       - stepId: updateRecipient
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: update funding recipient
         description: >
           Update the recipient's details with a full-object PUT. Returns 204 No
           Content (no response body). Significant changes may require re-approval,

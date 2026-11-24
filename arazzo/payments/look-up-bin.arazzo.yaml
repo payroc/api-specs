@@ -29,6 +29,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: look-up-bin
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to look up card details from a BIN before taking a payment.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: Look up card details from a BIN.
     description: >
       Single-step lookup. Sends a card's BIN to the gateway and returns the
@@ -64,6 +73,9 @@ workflows:
           example: USD
     steps:
       - stepId: lookUpBin
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: BIN lookup
         description: >
           Look up the card's details from its BIN. The primary path uses the
           `cardBin` payload (type `cardBin` + `bin`). To check surcharge support,

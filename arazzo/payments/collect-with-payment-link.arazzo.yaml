@@ -141,6 +141,8 @@ workflows:
     steps:
       - stepId: createPaymentLink
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: create link request
         description: >
           Create the payment link on the processing terminal. Primary path: a
           reusable multiUse link where the customer enters the amount
@@ -175,7 +177,7 @@ workflows:
                 label: SUPPORT US
         successCriteria:
           - condition: $statusCode == 201
-          - condition: $response.body#/status == active
+          - condition: $response.body#/status == 'active'
         outputs:
           paymentLinkId: $response.body#/paymentLinkId
           paymentUrl: $response.body#/assets/paymentUrl
@@ -183,6 +185,8 @@ workflows:
 
       - stepId: sharePaymentLink
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: share link request
         description: >
           Email the payment link to the customer. Requires the paymentLinkId from
           step 1. Send sharingMethod = email plus a recipients array (name and
@@ -212,6 +216,8 @@ workflows:
 
       - stepId: listSharingEvents
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: sharing events lookup
         description: >
           List the sharing events for the payment link to confirm and track when
           and to whom it was sent. Paginated; filter by recipientName or
@@ -230,10 +236,27 @@ workflows:
           count: $response.body#/count
           firstSharingEventId: $response.body#/data/0/sharingEventId
 
+      - stepId: customerPaysThroughLink
+        x-actor: customer
+        x-actor-to: payroc-gateway
+        x-label: hosted link payment
+        description: >
+          The customer pays through the hosted payment link - the
+          assets.paymentUrl created in step 1, delivered by the email share.
+          This happens outside these API steps, on the Payroc-hosted page.
+          For a singleUse link the link moves to `completed` after the single
+          payment; the optional retrievePaymentLink step is how the merchant
+          checks whether the customer has paid.
+        x-operation:
+          method: POST
+          url: https://{payment-link-url}
+
       - stepId: retrievePaymentLink
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: link lookup
         description: >
-          OPTIONAL lifecycle read. Retrieve the current state of the payment link
+          OPTIONAL — retrieve the current state of the payment link
           by paymentLinkId - for example to check whether the customer has paid
           (status = completed). Returns the same polymorphic link object as create.
         operationId: retrievePaymentLink
@@ -248,6 +271,8 @@ workflows:
 
       - stepId: updatePaymentLink
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: JSON Patch update
         description: >
           OPTIONAL lifecycle update. Partially update the payment link with an RFC
           6902 JSON Patch document - the body is an ARRAY of patch operations, not
@@ -274,8 +299,10 @@ workflows:
 
       - stepId: listPaymentLinks
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: list links request
         description: >
-          OPTIONAL. List the payment links on the processing terminal, e.g. to find
+          OPTIONAL — list the payment links on the processing terminal, for example to find
           a link when you don't have its paymentLinkId. Paginated; filter by
           merchantReference, linkType, chargeType, status, recipient, or dates.
           Keyed by processingTerminalId (not paymentLinkId).
@@ -294,8 +321,10 @@ workflows:
 
       - stepId: deactivatePaymentLink
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: deactivate request
         description: >
-          OPTIONAL and TERMINAL. Deactivate the payment link so the customer can no
+          OPTIONAL and TERMINAL — deactivate the payment link so the customer can no
           longer use it. Takes no idempotency key. Deactivation cannot be reversed -
           the link can't be reactivated. Returns the link with status = deactivated.
         operationId: deactivatePaymentLink
@@ -305,7 +334,7 @@ workflows:
             value: $steps.createPaymentLink.outputs.paymentLinkId
         successCriteria:
           - condition: $statusCode == 200
-          - condition: $response.body#/status == deactivated
+          - condition: $response.body#/status == 'deactivated'
         outputs:
           status: $response.body#/status
     outputs:

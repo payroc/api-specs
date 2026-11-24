@@ -47,6 +47,23 @@ workflows:
       signature.type to requestedViaDirectLink in Step 1 and skip Step 2. If the
       owner already signed with your own e-signature tool, set signature.type to
       electronic, supply the signing evidence, and skip Step 2.
+    x-actors:
+      - id: merchant
+        name: Merchant / business owner
+        type: human
+        description: The business whose processing account is boarded; signs the pricing agreement out of band (email or direct link). Not an API caller.
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Calls the Payroc API on the merchant's behalf to board the additional processing account.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: underwriting
+        name: Payroc underwriting
+        type: external-system
+        description: Payroc's account review that runs after creation; not directly callable - observe it via the processingAccount.status.changed event.
     inputs:
       type: object
       required:
@@ -86,6 +103,9 @@ workflows:
           example: '6123'
     steps:
       - stepId: createProcessingAccount
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: create processing account
         description: >
           Create the processing account on the merchant platform. Owners and contacts
           are supplied inline (no separate create operations exist). Exactly one owner
@@ -189,13 +209,16 @@ workflows:
               type: requestedViaEmail
         successCriteria:
           - condition: $statusCode == 201
-          - condition: $response.body#/status == entered
+          - condition: $response.body#/status == 'entered'
         outputs:
           processingAccountId: $response.body#/processingAccountId
           status: $response.body#/status
       - stepId: createReminder
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: send signature reminder
         description: >
-          Optional. Prompt the merchant to sign the pricing agreement by sending another
+          OPTIONAL — prompt the merchant to sign the pricing agreement by sending another
           email. Only valid when Step 1 used signature.type: requestedViaEmail; skip this
           step if the signature was requested via a direct link, if the owner signed
           with your own e-signature tool (signature.type: electronic), if the contract
@@ -216,6 +239,32 @@ workflows:
           - condition: $statusCode == 201
         outputs:
           reminderId: $response.body#/reminderId
+      - stepId: signPricingAgreement
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: sign pricing agreement
+        description: >
+          The merchant signs the pricing agreement out of band via the
+          signature email sent when the processing account was created (or via
+          the direct link when Step 1 used signature.type
+          requestedViaDirectLink). Not a Payroc REST operation; the optional
+          reminder step above only re-sends the signature email.
+        x-operation:
+          method: GET
+          url: https://{pricing-agreement-signing-link}
+      - stepId: accountReview
+        x-actor: underwriting
+        x-actor-to: integrator
+        x-label: notify account status
+        description: >
+          Payroc reviews the processing account after creation - the create
+          call returns it in status "entered" while the review runs. External,
+          non-API step: observe the status transitions via the
+          processingAccount.status.changed event delivered to your subscribed
+          webhook endpoint.
+        x-operation:
+          method: POST
+          url: https://{integrator-webhook-endpoint}
     outputs:
       processingAccountId: $steps.createProcessingAccount.outputs.processingAccountId
       status: $steps.createProcessingAccount.outputs.status

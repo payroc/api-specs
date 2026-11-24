@@ -84,20 +84,20 @@ workflows:
       To cancel the instruction instead of letting it complete, use the
       cancel-a-device-payment-instruction workflow.
     x-actors:
-      - id: customer
-        name: Customer
+      - id: cardholder
+        name: Cardholder
         type: human
         description: Cardholder who taps, inserts, or swipes their card on the payment device.
       - id: merchant
-        name: Merchant / integrator POS
+        name: Merchant / integrator
         type: client
         description: The POS integration calling the Payroc API to drive the device.
       - id: payroc-gateway
         name: Payroc gateway
         type: api
         description: The Payroc API surface these steps call; relays instructions to the device.
-      - id: device
-        name: Payment device
+      - id: payment-device
+        name: Payroc Cloud payment device
         type: external-system
         description: Physical Payroc Cloud terminal that captures the card and completes the sale; reached via the gateway, not called directly.
     inputs:
@@ -149,8 +149,10 @@ workflows:
     steps:
       - stepId: findDevice
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: device lookup
         description: >
-          OPTIONAL. Confirm the target device by filtering the device list on its
+          OPTIONAL — confirm the target device by filtering the device list on its
           serial number. Skip this step if you already have a known-good serial
           number. Returns a paginated list; the matching device is the first
           entry in `data`.
@@ -166,6 +168,8 @@ workflows:
           matchedSerialNumber: $response.body#/data/0/serialNumber
       - stepId: submitPaymentInstruction
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment instruction
         description: >
           Push the sale to the device. POST the instruction to
           /devices/{serialNumber}/payment-instructions. The default
@@ -200,10 +204,12 @@ workflows:
           paymentInstructionId: $response.body#/paymentInstructionId
           status: $response.body#/status
       - stepId: pollPaymentInstruction
-        x-actor: customer
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: instruction status poll
         description: >
-          The cardholder completes the payment on the device. Long-poll the
-          instruction until its status leaves `inProgress`. Each GET blocks up to
+          Long-poll the instruction until its status leaves `inProgress` while
+          the cardholder taps, inserts, or swipes on the device. Each GET blocks up to
           ~1 minute for a status change; at runtime repeat this step until the
           status is `completed` (or `canceled` / `failure`). On completion the
           response includes a HATEOAS `link` whose `href` points at the created
@@ -222,8 +228,10 @@ workflows:
           paymentLink: $response.body#/link/href
       - stepId: retrievePayment
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment retrieval
         description: >
-          OPTIONAL. Retrieve the resulting payment to see whether the processor
+          OPTIONAL — retrieve the resulting payment to see whether the processor
           approved or declined the sale. Use the paymentId extracted from the
           completed instruction's HATEOAS `link.href` (supplied via inputs, since
           it is not a standalone response field).

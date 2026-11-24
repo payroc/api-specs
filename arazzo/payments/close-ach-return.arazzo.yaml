@@ -29,6 +29,19 @@ sourceDescriptions:
 
 workflows:
   - workflowId: close-ach-return
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to retrieve the returned payment and close the return.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
+      - id: ach-network
+        name: ACH network
+        type: external-system
+        description: Returned the original bank-transfer payment; not directly callable - closing the return is the alternative to re-presenting to it.
     summary: Retrieve a returned ACH payment, then close the return.
     description: >
       Two ordered steps. First retrieve the original bank transfer payment to read
@@ -58,6 +71,9 @@ workflows:
           example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
     steps:
       - stepId: retrievePayment
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment lookup
         description: >
           Retrieve the original bank transfer payment by its paymentId so the
           return's own paymentId can be read. The response returns array holds one
@@ -76,6 +92,9 @@ workflows:
           returnCode: $response.body#/returns/0/returnCode
 
       - stepId: closeReturn
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: close return request
         description: >
           Close the return permanently. Takes the return's paymentId in the path
           (from the previous step's returnPaymentId, i.e. returns/0/paymentId - not

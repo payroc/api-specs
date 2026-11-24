@@ -19,7 +19,7 @@ info:
       - The list/retrieve operations are GET (200). reverse is POST (200, not
         201) and requires a unique `Idempotency-Key` header in UUID v4 format.
 
-    To change a refund's status or customer details instead of cancelling it, use
+    To change a refund's status or customer details instead of canceling it, use
     the adjust-a-refund workflow. To reverse a bank-transfer refund, use the
     reverse-a-bank-transfer-refund workflow.
   version: 1.0.0
@@ -31,6 +31,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: reverse-a-refund
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to find, inspect, and reverse the refund.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: List, retrieve, then reverse (cancel) a card refund.
     description: >
       Find the card refund (listRefunds -> getRefund), confirm from the retrieved
@@ -74,8 +83,11 @@ workflows:
           example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
     steps:
       - stepId: listRefunds
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund search
         description: >
-          Optional. List card refunds filtered by terminal, order, status, and
+          OPTIONAL — list card refunds filtered by terminal, order, status, and
           date. The response is paginated - refunds are in the `data` array. This
           step extracts the first refund's `refundId` for the follow-on steps.
         operationId: listRefunds
@@ -102,8 +114,11 @@ workflows:
           hasMore: $response.body#/hasMore
 
       - stepId: getRefund
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund lookup
         description: >
-          Optional. Retrieve the full detail of the first card refund from the
+          OPTIONAL — retrieve the full detail of the first card refund from the
           list. Inspect `supportedOperations` and `transactionResult.status` to
           confirm the refund can be reversed before acting.
         operationId: getRefund
@@ -119,6 +134,9 @@ workflows:
           supportedOperations: $response.body#/supportedOperations
 
       - stepId: reverseRefund
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: reversal request
         description: >
           Cancel the card refund while it is in an open batch using the `refundId`
           from getRefund; no funds are returned to the cardholder. Requires a
@@ -134,7 +152,7 @@ workflows:
             value: $steps.getRefund.outputs.refundId
         successCriteria:
           - condition: $statusCode == 200
-          - condition: $response.body#/transactionResult/status == reversal
+          - condition: $response.body#/transactionResult/status == 'reversal'
         outputs:
           refundId: $response.body#/refundId
           status: $response.body#/transactionResult/status

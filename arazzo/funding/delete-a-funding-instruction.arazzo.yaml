@@ -47,6 +47,15 @@ workflows:
       The delete requires the instruction to still be in `accepted` status,
       otherwise the gateway returns 409. The list and retrieve steps are optional
       when you already hold the instructionId.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Finds and deletes the funding instruction; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -91,8 +100,11 @@ workflows:
 
     steps:
       - stepId: listInstructions
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list funding instructions
         description: >
-          Optional. List funding instructions sent within the required
+          OPTIONAL — list funding instructions sent within the required
           `dateFrom`/`dateTo` window, optionally paginated with
           `before`/`after`/`limit`. The response is paginated - instructions are
           in the `data` array. This step extracts the first instruction's integer
@@ -121,8 +133,11 @@ workflows:
           firstInstructionStatus: $response.body#/data/0/status
 
       - stepId: getInstruction
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get funding instruction
         description: >
-          Optional. Retrieve the full detail of the first funding instruction from
+          OPTIONAL — retrieve the full detail of the first funding instruction from
           the list. Inspect `status` (`accepted`, `pending`, or `completed`) to
           confirm the instruction can still be deleted - only an `accepted`
           instruction may be modified. `instructionId` is top-level here.
@@ -138,6 +153,9 @@ workflows:
           status: $response.body#/status
 
       - stepId: deleteInstruction
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: delete funding instruction
         description: >
           Delete the funding instruction retrieved above, using its integer
           `instructionId`. Only works while `status` is `accepted`; otherwise the

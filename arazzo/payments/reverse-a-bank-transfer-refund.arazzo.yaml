@@ -33,6 +33,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: reverse-a-bank-transfer-refund
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to find, inspect, and reverse the refund.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: List, retrieve, then reverse (cancel) a bank-transfer refund.
     description: >
       Find the bank-transfer refund (listBankTransferRefunds ->
@@ -78,8 +87,11 @@ workflows:
           example: f32c9ad6-c97f-4998-9356-f3b6718b1b68
     steps:
       - stepId: listBankTransferRefunds
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund search
         description: >
-          Optional. List bank-transfer refunds filtered by terminal, order,
+          OPTIONAL — list bank-transfer refunds filtered by terminal, order,
           status, and date. `processingTerminalId` is required here. The response
           is paginated - refunds are in the `data` array. Extracts the first
           refund's `refundId`.
@@ -107,8 +119,11 @@ workflows:
           hasMore: $response.body#/hasMore
 
       - stepId: getBankTransferRefund
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund lookup
         description: >
-          Optional. Retrieve the full detail of the first bank-transfer refund
+          OPTIONAL — retrieve the full detail of the first bank-transfer refund
           from the list. Check `transactionResult.status` to confirm the refund is
           still in an open batch before reversing it.
         operationId: getBankTransferRefund
@@ -123,6 +138,9 @@ workflows:
           status: $response.body#/transactionResult/status
 
       - stepId: reverseBankTransferRefund
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: reversal request
         description: >
           Cancel the bank-transfer refund while it is in an open batch using the
           `refundId` from getBankTransferRefund; no funds are returned. There is
@@ -139,7 +157,7 @@ workflows:
             value: $steps.getBankTransferRefund.outputs.refundId
         successCriteria:
           - condition: $statusCode == 200
-          - condition: $response.body#/transactionResult/status == reversal
+          - condition: $response.body#/transactionResult/status == 'reversal'
         outputs:
           refundId: $response.body#/refundId
           status: $response.body#/transactionResult/status

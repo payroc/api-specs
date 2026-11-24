@@ -34,6 +34,15 @@ workflows:
       attachmentId. Step 2 is optional: retrieve the attachment by its id to
       confirm the upload status. This is a single-actor workflow — the
       integrator calls both operations.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Uploads and retrieves the supporting document; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -62,6 +71,9 @@ workflows:
           example: Passport as identification for lease agreement
     steps:
       - stepId: uploadAttachment
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: upload document
         description: >
           Upload the document to the processing account. The request is
           multipart/form-data (NOT application/json): the `attachment` object
@@ -91,8 +103,11 @@ workflows:
           attachmentId: $response.body#/attachmentId
           uploadStatus: $response.body#/uploadStatus
       - stepId: getAttachment
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: check upload status
         description: >
-          Optional. Retrieve the attachment by its id to confirm the upload
+          OPTIONAL — retrieve the attachment by its id to confirm the upload
           status (expect uploadStatus to become `accepted`). Returns metadata
           about the file, not the file bytes.
         operationId: getAttachment

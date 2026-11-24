@@ -30,6 +30,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: update-a-saved-payment-method
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to find the secure token and patch its saved details.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: List, retrieve, then update a secure token via JSON Patch.
     description: >
       Optionally list secure tokens (listSecureTokens) and retrieve one
@@ -83,8 +92,11 @@ workflows:
             type: object
     steps:
       - stepId: listSecureTokens
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: token search
         description: >
-          Optional discovery step. Lists secure tokens on the terminal, filtered by
+          OPTIONAL — lists secure tokens on the terminal, filtered by
           customer name, and extracts the first result's `secureTokenId`. Skip if
           you already hold the `secureTokenId`.
         operationId: listSecureTokens
@@ -105,8 +117,11 @@ workflows:
           hasMore: $response.body#/hasMore
 
       - stepId: getSecureToken
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: token lookup
         description: >
-          Optional. Retrieve the secure token to confirm its current state before
+          OPTIONAL — retrieve the secure token to confirm its current state before
           patching. Surfaces the token `status` and the replayable `token` value.
         operationId: getSecureToken
         parameters:
@@ -124,6 +139,9 @@ workflows:
           token: $response.body#/token
 
       - stepId: updateSecureToken
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: JSON Patch update
         description: >
           Partially update the secure token with an RFC 6902 JSON Patch document
           (the `patchDocument` input), NOT a plain resource object. Immutable

@@ -36,6 +36,19 @@ workflows:
       email for a single processing account and returns 400 if the signature
       was requested via direct link, was captured with your own e-signature
       tool (electronic), or has already been signed.
+    x-actors:
+      - id: merchant
+        name: Merchant / business owner
+        type: human
+        description: The business being boarded; signs the pricing agreement out of band (email or direct link). Not an API caller.
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Calls the Payroc API on the merchant's behalf to board the business.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -76,8 +89,11 @@ workflows:
           example: pricingAgreement
     steps:
       - stepId: createMerchant
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: create merchant platform
         description: >
-          Board the business. Sends the legal business details plus a nested
+          Board the business — send the legal business details plus a nested
           processingAccounts array; each processing account nests its owners
           (one flagged isControlProng) and contacts inline. Returns the
           merchantPlatformId and, for each processing account, a
@@ -199,8 +215,11 @@ workflows:
           merchantPlatformId: $response.body#/merchantPlatformId
           processingAccountId: $response.body#/processingAccounts/0/processingAccountId
       - stepId: createReminder
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: send signature reminder
         description: >
-          OPTIONAL. Re-send the pricing-agreement signature email for the
+          OPTIONAL — re-send the pricing-agreement signature email for the
           processing account created in step 1. Only valid when that account's
           signature was requested by email (requestedViaEmail); returns 400 if
           the signature was requested via direct link, if the owner signed with
@@ -222,6 +241,19 @@ workflows:
           - condition: $statusCode == 201
         outputs:
           reminderId: $response.body#/reminderId
+      - stepId: signPricingAgreement
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: sign pricing agreement
+        description: >
+          The merchant signs the pricing agreement out of band via the
+          signature email sent at boarding (each processing account here uses
+          signature.type requestedViaEmail; a direct-link signature is signed
+          via its link instead). Not a Payroc REST operation; the optional
+          reminder step above only re-sends the signature email.
+        x-operation:
+          method: GET
+          url: https://{pricing-agreement-signing-link}
     outputs:
       merchantPlatformId: $steps.createMerchant.outputs.merchantPlatformId
       processingAccountId: $steps.createMerchant.outputs.processingAccountId

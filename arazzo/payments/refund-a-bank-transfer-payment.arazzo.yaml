@@ -103,8 +103,10 @@ workflows:
     steps:
       - stepId: findBankPayment
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment search
         description: >
-          Optional. Searches for the original bank-transfer payment when you do
+          OPTIONAL — searches for the original bank-transfer payment when you do
           not have its paymentId (GET /bank-transfer-payments).
           `processingTerminalId` is a required query parameter here. Skip this
           step when you already hold the paymentId. Take the paymentId of the
@@ -123,8 +125,10 @@ workflows:
           foundPaymentId: $response.body#/data/0/paymentId
       - stepId: getBankPayment
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: payment lookup
         description: >
-          Optional. Retrieves the original bank-transfer payment by paymentId (GET
+          OPTIONAL — retrieves the original bank-transfer payment by paymentId (GET
           /bank-transfer-payments/{paymentId}) to confirm its details and batch
           status before refunding. An open-batch payment is reversed rather than
           refunded. For ACH this step is not optional: a `transactionResult.status`
@@ -142,6 +146,8 @@ workflows:
           status: $response.body#/transactionResult/status
       - stepId: refundBankPayment
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund request
         description: >
           Refunds the referenced bank-transfer payment (POST
           /bank-transfer-payments/{paymentId}/refund). Requires the

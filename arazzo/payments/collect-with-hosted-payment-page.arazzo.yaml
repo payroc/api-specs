@@ -118,8 +118,50 @@ workflows:
           description: Amount to capture, in the currency's lowest denomination (cents). Omit to capture the full authorized amount.
           example: 4999
     steps:
+      - stepId: loadHostedPaymentPage
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: signed form POST
+        description: >
+          The merchant's website sends the authenticated, signed form POST that
+          redirects the customer's browser to Payroc's Hosted Payment Page - not
+          a documented Payroc REST operationId. This is the load-the-page step:
+          a signed form POST/redirect to the gateway's hosted checkout.
+        x-operation:
+          method: POST
+          url: https://{payroc-hosted-checkout}
+      - stepId: customerSubmitsPaymentDetails
+        x-actor: customer
+        x-actor-to: payroc-gateway
+        x-label: hosted page submit
+        description: >
+          The customer submits their payment details on the Payroc-hosted page;
+          the gateway processes the transaction with the processor. The HPP
+          request configures which variant runs here: a plain sale (default, no
+          further step required), a pre-authorization to be captured afterward
+          by captureHostedPreAuthorization, or tokenizing the card to save the
+          customer's payment details for repeat payments.
+        x-operation:
+          method: POST
+          url: https://{payroc-hosted-checkout}
+      - stepId: receivePaymentResult
+        x-actor: payroc-gateway
+        x-actor-to: merchant
+        x-label: payment result webhook
+        description: >
+          The gateway returns the transaction result to the merchant's
+          receipt/return URL and delivers it by webhook. This is where the
+          merchant obtains the paymentId used by the optional capture step; the
+          gateway returns it to the merchant's return URL and via webhook after
+          the customer completes the HPP - it is not obtained from a REST call
+          in this workflow.
+        x-operation:
+          method: POST
+          url: https://{merchant-return-url}
       - stepId: captureHostedPreAuthorization
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: capture request
         description: >
           OPTIONAL - pre-authorization variant only. After the customer completes
           the Hosted Payment Page as a pre-authorization, capture the held funds

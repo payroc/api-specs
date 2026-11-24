@@ -2715,7 +2715,7 @@ paths:
                                       - `pendingCancellation` - We haven't received payment for the terminal order, and we are going to cancel the terminal order unless we receive payment.  
                                       - `successful` - We received payment for the terminal order.  
                                       - `unsuccessful` - We attempted to take payment for a terminal order, but it was unsuccessful.  
-                                      - `cancelled` - We have cancelled the terminal order as we didn't receive payment.  
+                                      - `cancelled` - We have canceled the terminal order as we didn't receive payment.  
 
                                       **Note**: To receive notifications if we change the status of a payment intent, subscribe to our paymentIntent.status.changed event. For more information about how to subscribe to events, go to [Event Subscriptions](https://docs.payroc.com/guides/integrate/event-subscriptions).
                                     enum:
@@ -9380,9 +9380,7 @@ paths:
                     expiresOn:
                       type: string
                       format: date
-                      description: |
-                        Last date that the customer can use the payment link. The format of this value is **YYYY-MM-DD**.  
-                        **Note:** If you don't provide an expiration date, the default expiration period applies. You can change the default expiration period on the Self-Care Portal.  
+                      description: Last date that the customer can use the payment link. The format of this value is **YYYY-MM-DD**.
                       example: '2024-08-02'
                     credentialOnFile:
                       type: object
@@ -11714,7 +11712,7 @@ paths:
       tags:
         - Payment plans
       summary: Delete payment plan
-      description: "Use this method to delete a payment plan.  \n\n> **Important:** When you delete a payment plan, you can’t recover it. You also won’t be able to add subscriptions to the payment plan.  \n\nTo delete a payment plan, you need its paymentPlanId, which you sent in the request of the [Create Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/create) method.  \n\n**Note:** If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/list) method to search for the payment plan.  \n\nThe value you sent for the onDelete parameter when you created the payment plan indicates what happens to associated subscriptions when you delete the plan:  \n\n  -\t`complete` - Our gateway stops taking payments for the subscriptions associated with the payment plan.  \n  -\t`continue` - Our gateway continues to take payments for the subscriptions associated with the payment plan. To stop a subscription for a cancelled payment plan, go to the [Deactivate Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/deactivate) method.  \n"
+      description: "Use this method to delete a payment plan.  \n\n> **Important:** When you delete a payment plan, you can’t recover it. You also won’t be able to add subscriptions to the payment plan.  \n\nTo delete a payment plan, you need its paymentPlanId, which you sent in the request of the [Create Payment Plan](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/create) method.  \n\n**Note:** If you don't have the paymentPlanId, use our [List Payment Plans](https://docs.payroc.com/api/schema/repeat-payments/payment-plans/list) method to search for the payment plan.  \n\nThe value you sent for the onDelete parameter when you created the payment plan indicates what happens to associated subscriptions when you delete the plan:  \n\n  -\t`complete` - Our gateway stops taking payments for the subscriptions associated with the payment plan.  \n  -\t`continue` - Our gateway continues to take payments for the subscriptions associated with the payment plan. To stop a subscription for a canceled payment plan, go to the [Deactivate Subscription](https://docs.payroc.com/api/schema/repeat-payments/subscriptions/deactivate) method.  \n"
       operationId: deletePaymentPlan
       parameters:
         - name: processingTerminalId
@@ -18774,7 +18772,7 @@ paths:
                           - `complete` - Successful transaction. The funds have moved to the merchant's bank account. 
                           - `referral` - Unsuccessful transaction. The issuing bank identified an issue with the transaction. You should treat a `referral` status as a declined transaction. 
                           - `pickup` - Unsuccessful transaction. The issuing bank has reported that the card is lost or stolen. 
-                          - `reversal` - Transaction cancelled. The transaction was cancelled, and we removed the transaction from the open batch. 
+                          - `reversal` - Transaction canceled. The transaction was canceled, and we removed the transaction from the open batch. 
                           - `admin` - Transaction under review. We have flagged an issue with the transaction. 
                           - `expired` - Transaction expired. If a transaction stays in `pending` status for too long, it expires. 
                           - `accepted` - Transaction in progress. The transaction is in progress with the processor but we can't confirm the result yet. 
@@ -24250,7 +24248,7 @@ paths:
                         example: payment
                       status:
                         type: string
-                        description: "Status of the transaction. The value is one of the following:  \n- `ready` - Successful transaction. We added the payment to the open batch.  \n- `pending` - Successful transaction. We added the payment to the open batch, but we don’t collect the funds when the batch is closed.  \n-\t`declined` - Unsuccessful transaction. The customer's bank declined the transfer.  \n-\t`complete` - Successful transaction. The funds have moved to the merchant’s bank account.  \n-\t`admin` - Transaction under review. We have flagged an issue with the transaction.  \n-\t`reversal` - Transaction cancelled. The transaction was cancelled, and we removed the transaction from the open batch.  \n-\t`returned` - Unsuccessful transaction. Automated clearing house (ACH) returned the transaction due to an error. For more information about the error, view the **returns** object.  \n"
+                        description: "Status of the transaction. The value is one of the following:  \n- `ready` - Successful transaction. We added the payment to the open batch.  \n- `pending` - Successful transaction. We added the payment to the open batch, but we don’t collect the funds when the batch is closed.  \n-\t`declined` - Unsuccessful transaction. The customer's bank declined the transfer.  \n-\t`complete` - Successful transaction. The funds have moved to the merchant’s bank account.  \n-\t`admin` - Transaction under review. We have flagged an issue with the transaction.  \n-\t`reversal` - Transaction canceled. The transaction was canceled, and we removed the transaction from the open batch.  \n-\t`returned` - Unsuccessful transaction. Automated clearing house (ACH) returned the transaction due to an error. For more information about the error, view the **returns** object.  \n"
                         enum:
                           - ready
                           - pending
@@ -32492,7 +32490,7 @@ paths:
                                     description: Indicates if the terminal should prompt the clerk for a password when running a keyed sale.
                                   reversalPassword:
                                     type: boolean
-                                    description: Indicates if the terminal should prompt the clerk for a password when cancelling a transaction.
+                                    description: Indicates if the terminal should prompt the clerk for a password when canceling a transaction.
                           deviceSettings:
                             type: object
                             description: Object that contains the device settings if the solution includes a terminal or a peripheral device such as a printer.

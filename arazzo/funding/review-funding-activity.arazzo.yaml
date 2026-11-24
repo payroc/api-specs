@@ -31,6 +31,15 @@ workflows:
       over a required date window. Both steps accept an optional `merchantId`
       filter to scope results to one merchant; pagination is via the optional
       `before`/`after`/`limit` query parameters.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Payfac integrator reviewing balances and activity; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required: [dateFrom, dateTo]
@@ -57,6 +66,9 @@ workflows:
           example: 20
     steps:
       - stepId: getFundingBalance
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get funding balances
         description: >
           List the funding balance for each merchant linked to the account.
           Each row reports `funds` (total, including pending), `pending` (not
@@ -76,6 +88,9 @@ workflows:
           balances: $response.body#/data
 
       - stepId: getFundingActivity
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get funding activity
         description: >
           List the funding activity ledger over the required date window. Each
           `activityRecord` shows the merchant, `amount`, and `type` (`credit`

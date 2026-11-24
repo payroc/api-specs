@@ -27,6 +27,15 @@ workflows:
       Optionally list recipients (listRecipients) and retrieve the target
       recipient (getRecipient) to confirm it, then delete it (deleteRecipient).
       The list/retrieve steps are optional when you already hold the recipientId.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Finds and deletes the funding recipient; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -42,8 +51,11 @@ workflows:
           example: 25
     steps:
       - stepId: listRecipients
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list funding recipients
         description: >
-          Optional discovery step. Return a paginated list of funding recipients so
+          OPTIONAL — return a paginated list of funding recipients so
           the caller can find the target recipientId. Skip if the recipientId is
           already known.
         operationId: listFundingRecipients
@@ -57,8 +69,11 @@ workflows:
           firstRecipientId: $response.body#/data/0/recipientId
 
       - stepId: getRecipient
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get funding recipient
         description: >
-          Optional. Retrieve the target funding recipient to confirm it before
+          OPTIONAL — retrieve the target funding recipient to confirm it before
           deleting.
         operationId: getFundingRecipient
         parameters:
@@ -72,6 +87,9 @@ workflows:
           status: $response.body#/status
 
       - stepId: deleteRecipient
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: delete funding recipient
         description: >
           Delete the funding recipient. This is destructive and cascades - it also
           removes the recipient's funding accounts and owners. Returns 204 No

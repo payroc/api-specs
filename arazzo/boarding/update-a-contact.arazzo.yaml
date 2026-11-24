@@ -30,6 +30,15 @@ workflows:
       retrieve one (getContact) to confirm it, then replace it with a full PUT
       (updateContact). The list/retrieve steps are optional when you already hold
       the contactId.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Finds and replaces the contact; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -52,8 +61,11 @@ workflows:
           example: 2
     steps:
       - stepId: listContacts
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list contacts
         description: >
-          Optional. List the contacts associated with the processing account to
+          OPTIONAL — list the contacts associated with the processing account to
           discover the contactId. Supports before/after/limit cursor pagination.
           Skip if you already hold the contactId.
         operationId: listProcessingAccountContacts
@@ -70,8 +82,11 @@ workflows:
           firstContactId: $response.body#/data/0/contactId
 
       - stepId: getContact
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get contact
         description: >
-          Optional. Retrieve the full details of the contact by its contactId
+          OPTIONAL — retrieve the full details of the contact by its contactId
           (name, type/role, identifiers, and contact methods) before replacing it.
         operationId: getContact
         parameters:
@@ -85,8 +100,11 @@ workflows:
           type: $response.body#/type
 
       - stepId: updateContact
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: replace contact
         description: >
-          Update the contact. This is a full PUT replacement against the contact
+          Update the contact with a full PUT replacement against the contact
           schema — send the complete object, as omitted fields are not preserved.
           Required fields are type, firstName, lastName, and contactMethods; a
           contact must include at least one contact number (phone or mobile).

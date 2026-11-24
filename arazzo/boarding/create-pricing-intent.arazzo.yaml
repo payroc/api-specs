@@ -34,6 +34,15 @@ workflows:
       not a different operation. Capture the returned id to assign this pricing
       intent to a processing account (create-merchant-platform /
       add-processing-account).
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Creates the reusable fee template; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -59,6 +68,9 @@ workflows:
           example: "5.2"
     steps:
       - stepId: createPricingIntent
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: create pricing intent
         description: >
           Create the pricing intent. Sends base fees (required), processor card
           and ACH fees with the pricing program, and gateway fees. Returns 201
@@ -125,7 +137,7 @@ workflows:
                 enabled: true
         successCriteria:
           - condition: $statusCode == 201
-          - condition: $response.body#/status == pendingReview
+          - condition: $response.body#/status == 'pendingReview'
         outputs:
           pricingIntentId: $response.body#/id
           status: $response.body#/status

@@ -38,6 +38,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: manage-payment-plans
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to create, list, and retrieve the payment plan.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: Create, list, and retrieve a payment plan
     description: >
       Step 1 creates a payment plan on the terminal, supplying the
@@ -98,6 +107,9 @@ workflows:
 
     steps:
       - stepId: createPaymentPlan
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: create plan request
         description: >
           Create the payment plan on the terminal. Supply the merchant-assigned
           `paymentPlanId` in the body — the gateway does not generate it. This
@@ -149,8 +161,11 @@ workflows:
           paymentPlanId: $response.body#/paymentPlanId
 
       - stepId: listPaymentPlans
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: plan search
         description: >
-          Optional discovery step. Returns a paginated list of the terminal's
+          OPTIONAL — returns a paginated list of the terminal's
           payment plans and extracts the first result's `paymentPlanId`. Plans
           are in the `data` array. Skip this step if you already hold the
           `paymentPlanId`.
@@ -169,6 +184,9 @@ workflows:
           hasMore: $response.body#/hasMore
 
       - stepId: getPaymentPlan
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: plan lookup
         description: >
           Retrieve the payment plan to confirm its current state. Surfaces the
           plan `name`, `frequency`, and `type`.

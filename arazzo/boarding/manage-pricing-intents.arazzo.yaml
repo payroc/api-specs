@@ -40,6 +40,15 @@ workflows:
       captures its id. Steps 2-3 discover and retrieve it. Step 4 deletes it. The
       list and retrieve reads are convenience steps for an agent that does not
       already hold the pricingIntentId.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Manages the pricing-intent lifecycle; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -64,6 +73,9 @@ workflows:
           example: 10
     steps:
       - stepId: createPricingIntent
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: create pricing intent
         description: >
           Create a pricing intent (MPA 5.2 template) with base, processor
           (card + ACH), and gateway fees. Requires the `Idempotency-Key` header.
@@ -144,6 +156,9 @@ workflows:
           status: $response.body#/status
 
       - stepId: listPricingIntents
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list pricing intents
         description: >
           List the pricing intents associated with the ISV (paginated). Use this
           to discover a pricingIntentId when you do not already have one. All
@@ -160,6 +175,9 @@ workflows:
           pricingIntents: $response.body#/data
 
       - stepId: getPricingIntent
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get pricing intent
         description: >
           Retrieve a single pricing intent by id, including its fees and its
           approval `status` (`active`, `pendingReview`, or `rejected`).
@@ -174,6 +192,9 @@ workflows:
           status: $response.body#/status
 
       - stepId: deletePricingIntent
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: delete pricing intent
         description: >
           Permanently delete the pricing intent. Irreversible - it cannot be
           recovered or assigned to a boarding application afterwards. Does not

@@ -35,6 +35,15 @@ workflows:
       The list/retrieve steps are optional when you already hold the
       fundingAccountId. Delete is valid only for a funding account associated with
       a funding recipient.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Finds and deletes the funding account; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -50,8 +59,11 @@ workflows:
           example: 2
     steps:
       - stepId: listFundingAccounts
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list funding accounts
         description: >
-          Optional discovery step. List the funding accounts on your account to
+          OPTIONAL — list the funding accounts on your account to
           discover a fundingAccountId. Returns a paginated envelope; accounts are
           under `data`. Skip if you already hold the fundingAccountId.
         operationId: listFundingAccount
@@ -65,8 +77,11 @@ workflows:
           firstFundingAccountId: $response.body#/data/0/fundingAccountId
 
       - stepId: getFundingAccount
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get funding account
         description: >
-          Optional. Retrieve the full detail of the funding account by its
+          OPTIONAL — retrieve the full detail of the funding account by its
           fundingAccountId before deleting.
         operationId: getFundingAccount
         parameters:
@@ -81,6 +96,9 @@ workflows:
           use: $response.body#/use
 
       - stepId: deleteFundingAccount
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: delete funding account
         description: >
           Delete the funding account. Valid only for a funding account associated
           with a funding recipient - the API rejects deletes of a

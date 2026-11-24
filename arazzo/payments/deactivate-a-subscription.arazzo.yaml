@@ -23,6 +23,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: deactivate-a-subscription
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to stop collection for the subscription.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: Deactivate a subscription to stop collection.
     description: >
       Stops the gateway from taking further payments for the subscription
@@ -44,6 +53,9 @@ workflows:
           example: SubRef7654
     steps:
       - stepId: deactivateSubscription
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: deactivate request
         description: >
           Stops the gateway from taking further payments for the subscription.
           POST with no request body; returns 200.

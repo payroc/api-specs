@@ -32,7 +32,7 @@ info:
       link.
 
     - To abort a still-`inProgress` instruction instead of letting it complete, use
-      the cancel-a-device-refund-instruction workflow — cancelling is mutually
+      the cancel-a-device-refund-instruction workflow — canceling is mutually
       exclusive with completion.
 
 
@@ -62,8 +62,8 @@ workflows:
          processor approved it. Needs the `refundId` parsed from the completed
          instruction's `link.href`.
     x-actors:
-      - id: customer
-        name: Customer
+      - id: cardholder
+        name: Cardholder
         type: human
         description: Cardholder present at the payment device who receives the returned funds.
       - id: merchant
@@ -127,11 +127,14 @@ workflows:
           example: CD3HN88U9F
     steps:
       - stepId: sendRefundInstruction
-        x-actor: customer
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund instruction
         description: >
-          Required. Submit the refund instruction to the device via
-          POST /devices/{serialNumber}/refund-instructions. The cardholder is
-          present at the device to authorize the return of funds. Returns HTTP 202
+          Required — submit the refund instruction to the device via
+          POST /devices/{serialNumber}/refund-instructions. The device then
+          prompts the cardholder, who is present at the device, to authorize the
+          return of funds. Returns HTTP 202
           (Accepted) with a `refundInstructionId` and `status: inProgress` — the
           refund is not yet complete. Requires a UUID v4 Idempotency-Key header.
         operationId: sendRefundInstruction
@@ -161,8 +164,10 @@ workflows:
           status: $response.body#/status
       - stepId: getRefundInstruction
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: instruction status poll
         description: >
-          Required. Poll GET /refund-instructions/{refundInstructionId} until
+          Required — poll GET /refund-instructions/{refundInstructionId} until
           `status` becomes `completed`. The gateway holds each poll open for up to a
           minute waiting for a status change; wait for a response before polling
           again. When complete, the response includes a HATEOAS `link` to the
@@ -180,8 +185,10 @@ workflows:
           refundLink: $response.body#/link/href
       - stepId: getRefund
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: refund retrieval
         description: >
-          OPTIONAL. Retrieve the resulting refund via GET /refunds/{refundId} to
+          OPTIONAL — retrieve the resulting refund via GET /refunds/{refundId} to
           confirm the processor approved it and to read the refund details. Supply
           the refundId parsed from the completed instruction's link.href.
         operationId: getRefund

@@ -30,6 +30,15 @@ workflows:
       Optionally list the processing account's contacts (listContacts) and
       retrieve one (getContact) to confirm it, then delete it (deleteContact). The
       list/retrieve steps are optional when you already hold the contactId.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Finds and deletes the contact; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -52,8 +61,11 @@ workflows:
           example: 2
     steps:
       - stepId: listContacts
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: list contacts
         description: >
-          Optional. List the contacts associated with the processing account to
+          OPTIONAL — list the contacts associated with the processing account to
           discover the contactId. Supports before/after/limit cursor pagination.
           Skip if you already hold the contactId.
         operationId: listProcessingAccountContacts
@@ -70,8 +82,11 @@ workflows:
           firstContactId: $response.body#/data/0/contactId
 
       - stepId: getContact
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: get contact
         description: >
-          Optional. Retrieve the full details of the contact by its contactId
+          OPTIONAL — retrieve the full details of the contact by its contactId
           before deleting it.
         operationId: getContact
         parameters:
@@ -85,6 +100,9 @@ workflows:
           type: $response.body#/type
 
       - stepId: deleteContact
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: delete contact
         description: >
           Delete the contact from the processing account. Destructive and
           irreversible; run only when the contact should be removed. The API

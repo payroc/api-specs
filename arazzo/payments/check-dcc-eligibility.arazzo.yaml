@@ -14,12 +14,12 @@ info:
 
     - `baseAmount` / `baseCurrency` are the merchant-currency amount to convert;
       the response's `baseAmount` is restated in the local currency.
-    - Eligibility is signalled by `inquiryResult.dccOffered` (boolean), NOT by the
+    - Eligibility is signaled by `inquiryResult.dccOffered` (boolean), NOT by the
       HTTP status — a 200 is returned whether or not DCC is offered. When
       `dccOffered` is false, `inquiryResult.causeOfRejection` explains why and no
       `dccOffer` object is present.
     - When eligible, the `dccOffer` object carries the fields you must forward to a
-      subsequent sale or unreferenced refund to honour the quote: `offerReference`,
+      subsequent sale or unreferenced refund to honor the quote: `offerReference`,
       `fxAmount`, `fxCurrency`, `fxRate`, and `markup`.
     - `paymentMethod` is polymorphic (`card`, `secureToken`, or `digitalWallet`).
       The primary path below uses keyed `card` details; substitute a `secureToken`
@@ -33,6 +33,15 @@ sourceDescriptions:
 
 workflows:
   - workflowId: check-dcc-eligibility
+    x-actors:
+      - id: merchant
+        name: Merchant / integrator
+        type: client
+        description: Calls the Payroc API to check whether the customer's card is eligible for DCC and obtain a rate quote.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     summary: Verify DCC eligibility and retrieve a currency conversion quote for a card.
     description: >
       Single step: submit the terminal, transaction amount/currency, and payment
@@ -89,6 +98,9 @@ workflows:
           example: '1230'
     steps:
       - stepId: getFxRates
+        x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: DCC rate inquiry
         description: >
           Submit the DCC eligibility inquiry. Success is a 200 regardless of the
           eligibility outcome; branch on `inquiryResult.dccOffered`. When true,

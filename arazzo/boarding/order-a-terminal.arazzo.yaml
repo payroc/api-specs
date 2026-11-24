@@ -4,7 +4,7 @@ info:
   summary: Provision one or more physical terminals against a processing account.
   description: >
     Orders and configures terminals for an already-boarded processing account,
-    then optionally tracks the order to fulfilment. You need the
+    then optionally tracks the order to fulfillment. You need the
     processingAccountId of the target account before you start (obtain it from
     the merchant-platform / processing-account boarding flow).
 
@@ -25,7 +25,7 @@ info:
     asynchronously, so callers should either poll getTerminalOrder (step 2) or
     subscribe to the terminalOrder.status.changed event rather than expect a
     provisioned terminal from step 1. This is a single-actor workflow driven by
-    the integrator, so no actor annotations are used.
+    the integrator.
   version: 1.0.0
 
 sourceDescriptions:
@@ -40,8 +40,17 @@ workflows:
       Two steps. createTerminalOrder places the order against a known
       processingAccountId and returns a terminalOrderId plus an initial status.
       getTerminalOrder (optional) re-reads the order by that id to follow its
-      status to fulfilment; it is only needed when the caller wants to poll
+      status to fulfillment; it is only needed when the caller wants to poll
       rather than rely on the terminalOrder.status.changed webhook event.
+    x-actors:
+      - id: integrator
+        name: Integrator
+        type: client
+        description: Places and tracks the terminal order; the only API caller in this workflow.
+      - id: payroc-gateway
+        name: Payroc gateway
+        type: api
+        description: The Payroc API surface these steps call.
     inputs:
       type: object
       required:
@@ -62,6 +71,9 @@ workflows:
           example: Roc Services_DX8000
     steps:
       - stepId: createTerminalOrder
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: place terminal order
         description: >
           Place the terminal order against the processing account. Sends the
           order items (at least one solution), optional shipping details, the
@@ -148,8 +160,11 @@ workflows:
           terminalOrderId: $response.body#/terminalOrderId
           status: $response.body#/status
       - stepId: getTerminalOrder
+        x-actor: integrator
+        x-actor-to: payroc-gateway
+        x-label: track order status
         description: >
-          Optional. Re-read the terminal order by its id to track status as it
+          OPTIONAL — re-read the terminal order by its id to track status as it
           moves through open -> held -> dispatched -> fulfilled (or cancelled).
           Poll this step, or instead subscribe to the terminalOrder.status.changed
           event; it is not required to complete the order.

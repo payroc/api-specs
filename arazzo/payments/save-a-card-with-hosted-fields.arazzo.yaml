@@ -19,7 +19,7 @@ info:
     2. OFF-API, client-side: the Hosted Fields JavaScript library renders the
        fields, the customer submits their details, and the client receives a
        single-use token in a `submissionSuccess` event. This is a browser/library
-       step, NOT a Payroc REST call, so it is documented here rather than modelled
+       step, NOT a Payroc REST call, so it is documented here rather than modeled
        as an Arazzo step. The single-use token it produces is the
        `singleUseToken` input to the next step.
 
@@ -66,7 +66,7 @@ workflows:
       into a reusable secure token server-side (step `saveCardFromToken`). The
       client-side tokenization that produces the single-use token happens between
       these steps in the browser and is not an API call, so it is described, not
-      modelled. To UPDATE an already-saved card, also send the existing
+      modeled. To UPDATE an already-saved card, also send the existing
       secureTokenId in the session request.
     x-actors:
       - id: customer
@@ -135,6 +135,8 @@ workflows:
     steps:
       - stepId: createHostedFieldsSession
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: session request
         description: >
           Create a Hosted Fields session for the terminal by POSTing to
           /processing-terminals/{processingTerminalId}/hosted-fields-sessions with
@@ -161,8 +163,24 @@ workflows:
         outputs:
           sessionToken: $response.body#/token
           expiresAt: $response.body#/expiresAt
+      - stepId: customerSubmitsPaymentDetails
+        x-actor: customer
+        x-actor-to: payroc-gateway
+        x-label: hosted fields submit
+        description: >
+          OFF-API, client-side: the Hosted Fields JavaScript library renders
+          the embedded fields using the tokenization-scenario session token
+          from the previous step, the customer submits their card details, and
+          the client receives a single-use token in a `submissionSuccess`
+          event. The token is single-use and expires ~30 minutes after issue;
+          it is the `singleUseToken` input consumed by the next step.
+        x-operation:
+          method: POST
+          url: https://{payroc-hosted-fields}
       - stepId: saveCardFromToken
         x-actor: merchant
+        x-actor-to: payroc-gateway
+        x-label: secure token request
         description: >
           Convert a single-use token (from a session created with scenario
           `tokenization`) into a REUSABLE secure token by POSTing to
